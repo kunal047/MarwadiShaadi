@@ -38,7 +38,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.upgrademembership_toolbar);
-        toolbar.setTitle("MembershipActivity");
+        toolbar.setTitle("Membership Status");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -98,6 +98,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.exit,0);
         return true;
     }
 

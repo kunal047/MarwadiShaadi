@@ -2,37 +2,98 @@ package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import org.json.JSONArray;
+
 import java.util.List;
+
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 /**
  * Created by USER on 01-06-2017.
  */
 
-public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceivedAdapter.MyViewHolder>{
+public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceivedAdapter.MyViewHolder> {
 
+    private static final String TAG = "InterestReceivedAdapter";
     private RecyclerView rv;
     private Context context;
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<InterestReceivedModel> interestReceivedModelList;
-    private static final String TAG = "InterestReceivedAdapter";
+    private List<InterestReceivedModel> mInterestReceivedModelList;
+
+    public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
+        this.context = context;
+        this.mInterestReceivedModelList = interestReceivedModelList;
+        this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        this.rv = rv;
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_interest, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+
+        InterestReceivedModel interestReceivedModel = mInterestReceivedModelList.get(position);
+
+        String ag = interestReceivedModel.getName() + ", " + interestReceivedModel.getAge();
+
+        holder.customerNo.setText(interestReceivedModel.getCustomerId());
+
+        Glide.with(context).load(interestReceivedModel.getUserImage()).into(holder.userImage);
+        holder.name.setText(ag);
+        holder.highestDegree.setText(interestReceivedModel.getHighestDegree());
+        holder.location.setText(interestReceivedModel.getLocation());
+        if (interestReceivedModel.getStatus() == 0) {
+            holder.status.setText("Accepted");
+            holder.status.setBackgroundColor(Color.parseColor("#00c864"));
+            holder.accept.setVisibility(View.INVISIBLE);
+            holder.reject.setVisibility(View.INVISIBLE);
+        } else if (interestReceivedModel.getStatus() == 1) {
+            holder.status.setText("Rejected");
+            holder.status.setBackgroundColor(Color.parseColor("#ff0000"));
+            holder.accept.setVisibility(View.INVISIBLE);
+            holder.reject.setVisibility(View.INVISIBLE);
+        } else if (interestReceivedModel.getStatus() == 2) {
+            holder.status.setText("Pending");
+            holder.status.setBackgroundColor(Color.parseColor("#7faeff"));
+        }
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return mInterestReceivedModelList.size();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView userImage;
-        public TextView name, age, highestDegree, location, status;
+        public TextView name, age, highestDegree, location, status, customerNo;
         public ImageView accept, reject;
 
         public MyViewHolder(final View itemView) {
@@ -42,8 +103,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
             highestDegree = (TextView) itemView.findViewById(R.id.textviewHighestDegree);
             location = (TextView) itemView.findViewById(R.id.textviewLocation);
             status = (TextView) itemView.findViewById(R.id.interest_status);
-            accept = (ImageView)itemView.findViewById(R.id.interest_accept);
-            reject = (ImageView)itemView.findViewById(R.id.interest_reject);
+            accept = (ImageView) itemView.findViewById(R.id.interest_accept);
+            reject = (ImageView) itemView.findViewById(R.id.interest_reject);
+            customerNo = (TextView) itemView.findViewById(R.id.textViewCustomerNo);
 
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -53,9 +115,10 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     Analytics_Util.logAnalytic(mFirebaseAnalytics,"Interest Accepted","button");
 
                     final int position = getAdapterPosition();
-                    final InterestReceivedModel interestmodel = interestReceivedModelList.get(position);
+                    final InterestReceivedModel interestmodel = mInterestReceivedModelList.get(position);
                     interestmodel.setStatus(0);
                     notifyItemChanged(position);
+                    new PrepareInterest().execute(customerNo.getText().toString(), "Accepted");
                     Snackbar snackbar = Snackbar
                             .make(rv, "Interest Accepted !", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", new View.OnClickListener() {
@@ -63,8 +126,10 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                                 public void onClick(View view) {
                                     interestmodel.setStatus(2);
                                     notifyItemChanged(position);
-                                    Snackbar snackbar1 = Snackbar.make(rv, "Interest restored!", Snackbar.LENGTH_SHORT);
-                                    snackbar1.show();
+                                    new PrepareInterest().execute(customerNo.getText().toString(), "Pending");
+
+                                    Snackbar snackbar = Snackbar.make(rv, "Interest restored!", Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 }
                             });
 
@@ -81,11 +146,10 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     Analytics_Util.logAnalytic(mFirebaseAnalytics,"Interest Rejected","button");
 
                     final int position = getAdapterPosition();
-                    final InterestReceivedModel interestmodel = interestReceivedModelList.get(position);
+                    final InterestReceivedModel interestmodel = mInterestReceivedModelList.get(position);
                     interestmodel.setStatus(1);
                     notifyItemChanged(position);
-
-
+                    new PrepareInterest().execute(customerNo.getText().toString(), "Rejected");
                     Snackbar snackbar = Snackbar
                             .make(rv, "Interest Rejected !", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", new View.OnClickListener() {
@@ -93,8 +157,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                                 public void onClick(View view) {
                                     interestmodel.setStatus(2);
                                     notifyItemChanged(position);
-                                    Snackbar snackbar1 = Snackbar.make(rv, "Interest restored!", Snackbar.LENGTH_SHORT);
-                                    snackbar1.show();
+                                    new PrepareInterest().execute(customerNo.getText().toString(), "Pending");
+                                    Snackbar snackbar = Snackbar.make(rv, "Interest restored!", Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 }
                             });
 
@@ -104,53 +169,31 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         }
     }
 
-    public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
-        this.context = context;
-        this.interestReceivedModelList = interestReceivedModelList;
-        this.rv = rv;
-        this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-    }
+    private class PrepareInterest extends AsyncTask<String, Void, Void> {
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        @Override
+        protected Void doInBackground(String... params) {
 
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_interest, parent, false);
+            String clickedId = params[0];
+            String status = params[1];
+            AndroidNetworking.post(URL + "prepareInterest")
+                    .addBodyParameter("customerNo", "O1057")
+                    .addBodyParameter("clickedId", clickedId)
+                    .addBodyParameter("status", status)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-        return new MyViewHolder(itemView);
-    }
+                        }
 
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+                        @Override
+                        public void onError(ANError anError) {
 
-        InterestReceivedModel interestReceivedModel = interestReceivedModelList.get(position);
-
-        Log.d(TAG, "onBindViewHolder: values are " + interestReceivedModel.getAge().toString() + " " + interestReceivedModel.getLocation().toString() + " "+ interestReceivedModel.getName().toString() + " ");
-        String ag= interestReceivedModel.getName()+", "+ interestReceivedModel.getAge();
-        Glide.with(context).load(interestReceivedModel.getUserImage()).into(holder.userImage);
-        holder.name.setText(ag);
-        holder.highestDegree.setText(interestReceivedModel.getHighestDegree());
-        holder.location.setText(interestReceivedModel.getLocation());
-        if(interestReceivedModel.getStatus() == 0){
-            holder.status.setText("Accepted");
-            holder.status.setBackgroundColor(Color.parseColor("#00c864"));
-            holder.accept.setVisibility(View.INVISIBLE);
-            holder.reject.setVisibility(View.INVISIBLE);
-        }else if (interestReceivedModel.getStatus() == 1){
-            holder.status.setText("Rejected");
-            holder.status.setBackgroundColor(Color.parseColor("#ff0000"));
-            holder.accept.setVisibility(View.INVISIBLE);
-            holder.reject.setVisibility(View.INVISIBLE);
-        }else {
-            holder.status.setText("Pending");
-            holder.status.setBackgroundColor(Color.parseColor("#7faeff"));
+                        }
+                    });
+            return null;
         }
     }
-
-    @Override
-    public int getItemCount() {
-        return interestReceivedModelList.size();
-    }
-
-
 }

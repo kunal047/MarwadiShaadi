@@ -3,9 +3,12 @@ package com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -19,22 +22,27 @@ import android.widget.Toast;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-import com.example.sid.marwadishaadi.EditProfileBottomSheets;
+
 import com.example.sid.marwadishaadi.Otp_Verification.Otp_VerificationActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.R.string.view;
+
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
-    ImageView idoctor,iengineer,imbamca,icacs,ipg,ig,iug,illb;
-    boolean intdoctor=false,intengineer=false,intmbamca=false,intcacs=false,intpg=false,intg=false,intug=false,intllb=false;
-    TextView tdoctor,tengineer,tmbamca,tcacs,tpg,tg,tug,tllb;
-    LinearLayout ldoctor,lengineer,lmbamca,lcacs,lpg,lg,lug,lllb;
-    int colorg,colorb;
+    public static final String URL = "http://10.0.0.13:5050/";
+//    public static final String URL = "http://192.168.137.152:5050/";
+//    public static final String URL = "http://192.168.43.61:5050/";
+
+
+    ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
+    boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
+    TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
+    LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
+    int colorg, colorb;
 
     private  EditText maritalstatus;
     private EditText annualincome;
@@ -51,6 +59,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,33 +73,32 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         complete = (Button) findViewById(R.id.complete);
 
-        idoctor=(ImageView) findViewById(R.id.doctor);
-        iengineer=(ImageView)findViewById(R.id.engineer);
-        icacs=(ImageView)findViewById(R.id.ca_cs);
-        ipg=(ImageView)findViewById(R.id.pg);
-        ig=(ImageView)findViewById(R.id.g);
-        iug=(ImageView)findViewById(R.id.ug);
-        imbamca=(ImageView)findViewById(R.id.mba_mca);
-        illb=(ImageView)findViewById(R.id.llb);
+        idoctor = (ImageView) findViewById(R.id.doctor);
+        iengineer = (ImageView) findViewById(R.id.engineer);
+        icacs = (ImageView) findViewById(R.id.ca_cs);
+        ipg = (ImageView) findViewById(R.id.pg);
+        ig = (ImageView) findViewById(R.id.g);
+        iug = (ImageView) findViewById(R.id.ug);
+        imbamca = (ImageView) findViewById(R.id.mba_mca);
+        illb = (ImageView) findViewById(R.id.llb);
 
-        tdoctor=(TextView)findViewById(R.id.text_doctor);
-        tengineer=(TextView)findViewById(R.id.text_engineer);
-        tmbamca=(TextView)findViewById(R.id.text_mba_mca);
-        tcacs=(TextView)findViewById(R.id.text_ca_cs);
-        tllb=(TextView)findViewById(R.id.text_llb);
-        tpg=(TextView)findViewById(R.id.text_pg);
-        tg=(TextView)findViewById(R.id.text_g);
-        tug=(TextView)findViewById(R.id.text_ug);
+        tdoctor = (TextView) findViewById(R.id.text_doctor);
+        tengineer = (TextView) findViewById(R.id.text_engineer);
+        tmbamca = (TextView) findViewById(R.id.text_mba_mca);
+        tcacs = (TextView) findViewById(R.id.text_ca_cs);
+        tllb = (TextView) findViewById(R.id.text_llb);
+        tpg = (TextView) findViewById(R.id.text_pg);
+        tg = (TextView) findViewById(R.id.text_g);
+        tug = (TextView) findViewById(R.id.text_ug);
 
-        ldoctor=(LinearLayout)findViewById(R.id.list_doctor);
-        lengineer=(LinearLayout)findViewById(R.id.list_engineer);
-        lmbamca=(LinearLayout)findViewById(R.id.list_mab_mca);
-        lcacs=(LinearLayout)findViewById(R.id.list_ca_cs);
-        lllb=(LinearLayout)findViewById(R.id.list_llb);
-        lpg=(LinearLayout)findViewById(R.id.list_pg);
-        lg=(LinearLayout)findViewById(R.id.list_g);
-        lug=(LinearLayout)findViewById(R.id.list_ug);
-
+        ldoctor = (LinearLayout) findViewById(R.id.list_doctor);
+        lengineer = (LinearLayout) findViewById(R.id.list_engineer);
+        lmbamca = (LinearLayout) findViewById(R.id.list_mab_mca);
+        lcacs = (LinearLayout) findViewById(R.id.list_ca_cs);
+        lllb = (LinearLayout) findViewById(R.id.list_llb);
+        lpg = (LinearLayout) findViewById(R.id.list_pg);
+        lg = (LinearLayout) findViewById(R.id.list_g);
+        lug = (LinearLayout) findViewById(R.id.list_ug);
 
         ;
 
@@ -99,7 +107,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(getApplicationContext(),Otp_VerificationActivity.class);
+                Intent i = new Intent(getApplicationContext(), Otp_VerificationActivity.class);
                 startActivity(i);
             }
         });
@@ -129,8 +137,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
             }
         });
 
-        colorg= Color.parseColor("#"+"fb6542");
-        colorb= Color.parseColor("#"+"000000");
+        colorg = Color.parseColor("#" + "fb6542");
+        colorb = Color.parseColor("#" + "000000");
         tdoctor.setTextColor(colorb);
         tengineer.setTextColor(colorb);
         tmbamca.setTextColor(colorb);
@@ -139,6 +147,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         tpg.setTextColor(colorb);
         tg.setTextColor(colorb);
         tug.setTextColor(colorb);
+
 
 
 
@@ -175,17 +184,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(intdoctor)
-                {
-                    intdoctor=false;
+                if (intdoctor) {
+                    intdoctor = false;
                     tdoctor.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Doctor Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Doctor Removed", Toast.LENGTH_SHORT).show();
                     idoctor.setImageResource(R.drawable.doctor_black);
-                }
-                else if(!intdoctor) {
-                    intdoctor=true;
+                } else if (!intdoctor) {
+                    intdoctor = true;
                     tdoctor.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Doctor Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Doctor Added", Toast.LENGTH_SHORT).show();
                     idoctor.setImageResource(R.drawable.doctor);
                 }
             }
@@ -194,17 +201,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(intengineer)
-                {
-                    intengineer=false;
+                if (intengineer) {
+                    intengineer = false;
                     tengineer.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Engineer Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Engineer Removed", Toast.LENGTH_SHORT).show();
                     iengineer.setImageResource(R.drawable.engineer_black);
-                }
-                else if(!intengineer) {
-                    intengineer=true;
+                } else if (!intengineer) {
+                    intengineer = true;
                     tengineer.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Engineer Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Engineer Added", Toast.LENGTH_SHORT).show();
                     iengineer.setImageResource(R.drawable.engineer);
                 }
             }
@@ -214,17 +219,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intmbamca)
-                {
-                    intmbamca=false;
+                if (intmbamca) {
+                    intmbamca = false;
                     tmbamca.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"MBA/MCA Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "MBA/MCA Removed", Toast.LENGTH_SHORT).show();
                     imbamca.setImageResource(R.drawable.mba_black);
-                }
-                else if(!intmbamca) {
-                    intmbamca=true;
+                } else if (!intmbamca) {
+                    intmbamca = true;
                     tmbamca.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"MBA/MCA Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "MBA/MCA Added", Toast.LENGTH_SHORT).show();
                     imbamca.setImageResource(R.drawable.mba);
                 }
             }
@@ -234,17 +237,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intcacs)
-                {
-                    intcacs=false;
+                if (intcacs) {
+                    intcacs = false;
                     tcacs.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"CA/CS Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "CA/CS Removed", Toast.LENGTH_SHORT).show();
                     icacs.setImageResource(R.drawable.ca_black);
-                }
-                else if(!intcacs) {
-                    intcacs=true;
+                } else if (!intcacs) {
+                    intcacs = true;
                     tcacs.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"CA/CS Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "CA/CS Added", Toast.LENGTH_SHORT).show();
                     icacs.setImageResource(R.drawable.ca);
                 }
             }
@@ -254,17 +255,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intpg)
-                {
-                    intpg=false;
+                if (intpg) {
+                    intpg = false;
                     tpg.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"PostGraduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "PostGraduate Removed", Toast.LENGTH_SHORT).show();
                     ipg.setImageResource(R.drawable.mba_black);
-                }
-                else if(!intpg) {
-                    intpg=true;
+                } else if (!intpg) {
+                    intpg = true;
                     tpg.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"PostGraduate Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "PostGraduate Added", Toast.LENGTH_SHORT).show();
                     ipg.setImageResource(R.drawable.mba);
                 }
             }
@@ -274,17 +273,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intg)
-                {
-                    intg=false;
+                if (intg) {
+                    intg = false;
                     tg.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Graduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Graduate Removed", Toast.LENGTH_SHORT).show();
                     ig.setImageResource(R.drawable.grad_black);
-                }
-                else if(!intg) {
-                    intg=true;
+                } else if (!intg) {
+                    intg = true;
                     tg.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Graduate Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Graduate Added", Toast.LENGTH_SHORT).show();
                     ig.setImageResource(R.drawable.grad);
                 }
             }
@@ -294,16 +291,14 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intug)
-                {
-                    intug=false;
+                if (intug) {
+                    intug = false;
                     tug.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"UnderGraduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "UnderGraduate Removed", Toast.LENGTH_SHORT).show();
                     iug.setImageResource(R.drawable.undergrad_black);
-                }
-                else if(!intug) {
-                    intug=true;
-                    Toast.makeText(getApplicationContext(),"UnderGraduate Added", Toast.LENGTH_SHORT).show();
+                } else if (!intug) {
+                    intug = true;
+                    Toast.makeText(getApplicationContext(), "UnderGraduate Added", Toast.LENGTH_SHORT).show();
                     tug.setTextColor(colorg);
                     iug.setImageResource(R.drawable.undergrad);
                 }
@@ -314,16 +309,14 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intllb)
-                {
-                    intllb=false;
+                if (intllb) {
+                    intllb = false;
                     tllb.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"LLB Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "LLB Removed", Toast.LENGTH_SHORT).show();
                     illb.setImageResource(R.drawable.llb_black);
-                }
-                else if(!intllb) {
-                    intllb=true;
-                    Toast.makeText(getApplicationContext(),"LLB Added", Toast.LENGTH_SHORT).show();
+                } else if (!intllb) {
+                    intllb = true;
+                    Toast.makeText(getApplicationContext(), "LLB Added", Toast.LENGTH_SHORT).show();
                     tllb.setTextColor(colorg);
                     illb.setImageResource(R.drawable.llb);
                 }
@@ -333,17 +326,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(intdoctor)
-                {
-                    intdoctor=false;
+                if (intdoctor) {
+                    intdoctor = false;
                     tdoctor.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Doctor Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Doctor Removed", Toast.LENGTH_SHORT).show();
                     idoctor.setImageResource(R.drawable.doctor_black);
-                }
-                else if(!intdoctor) {
-                    intdoctor=true;
+                } else if (!intdoctor) {
+                    intdoctor = true;
                     tdoctor.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Doctor Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Doctor Added", Toast.LENGTH_SHORT).show();
                     idoctor.setImageResource(R.drawable.doctor);
                 }
             }
@@ -352,17 +343,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(intengineer)
-                {
-                    intengineer=false;
+                if (intengineer) {
+                    intengineer = false;
                     tengineer.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Engineer Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Engineer Removed", Toast.LENGTH_SHORT).show();
                     iengineer.setImageResource(R.drawable.engineer_black);
-                }
-                else if(!intengineer) {
-                    intengineer=true;
+                } else if (!intengineer) {
+                    intengineer = true;
                     tengineer.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Engineer Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Engineer Added", Toast.LENGTH_SHORT).show();
                     iengineer.setImageResource(R.drawable.engineer);
                 }
             }
@@ -372,17 +361,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intmbamca)
-                {
-                    intmbamca=false;
+                if (intmbamca) {
+                    intmbamca = false;
                     tmbamca.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"MBA/MCA Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "MBA/MCA Removed", Toast.LENGTH_SHORT).show();
                     imbamca.setImageResource(R.drawable.mba_black);
-                }
-                else if(!intmbamca) {
-                    intmbamca=true;
+                } else if (!intmbamca) {
+                    intmbamca = true;
                     tmbamca.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"MBA/MCA Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "MBA/MCA Added", Toast.LENGTH_SHORT).show();
                     imbamca.setImageResource(R.drawable.mba);
                 }
             }
@@ -392,17 +379,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intcacs)
-                {
-                    intcacs=false;
+                if (intcacs) {
+                    intcacs = false;
                     tcacs.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"CA/CS Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "CA/CS Removed", Toast.LENGTH_SHORT).show();
                     icacs.setImageResource(R.drawable.ca_black);
-                }
-                else if(!intcacs) {
-                    intcacs=true;
+                } else if (!intcacs) {
+                    intcacs = true;
                     tcacs.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"CA/CS Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "CA/CS Added", Toast.LENGTH_SHORT).show();
                     icacs.setImageResource(R.drawable.ca);
                 }
             }
@@ -412,17 +397,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intpg)
-                {
-                    intpg=false;
+                if (intpg) {
+                    intpg = false;
                     tpg.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"PostGraduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "PostGraduate Removed", Toast.LENGTH_SHORT).show();
                     ipg.setImageResource(R.drawable.mba_black);
-                }
-                else if(!intpg) {
-                    intpg=true;
+                } else if (!intpg) {
+                    intpg = true;
                     tpg.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"PostGraduate Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "PostGraduate Added", Toast.LENGTH_SHORT).show();
                     ipg.setImageResource(R.drawable.mba);
                 }
             }
@@ -432,17 +415,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intg)
-                {
-                    intg=false;
+                if (intg) {
+                    intg = false;
                     tg.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"Graduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Graduate Removed", Toast.LENGTH_SHORT).show();
                     ig.setImageResource(R.drawable.grad_black);
-                }
-                else if(!intg) {
-                    intg=true;
+                } else if (!intg) {
+                    intg = true;
                     tg.setTextColor(colorg);
-                    Toast.makeText(getApplicationContext(),"Graduate Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Graduate Added", Toast.LENGTH_SHORT).show();
                     ig.setImageResource(R.drawable.grad);
                 }
             }
@@ -452,16 +433,14 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intug)
-                {
-                    intug=false;
+                if (intug) {
+                    intug = false;
                     tug.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"UnderGraduate Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "UnderGraduate Removed", Toast.LENGTH_SHORT).show();
                     iug.setImageResource(R.drawable.undergrad_black);
-                }
-                else if(!intug) {
-                    intug=true;
-                    Toast.makeText(getApplicationContext(),"UnderGraduate Added", Toast.LENGTH_SHORT).show();
+                } else if (!intug) {
+                    intug = true;
+                    Toast.makeText(getApplicationContext(), "UnderGraduate Added", Toast.LENGTH_SHORT).show();
                     tug.setTextColor(colorg);
                     iug.setImageResource(R.drawable.undergrad);
                 }
@@ -472,16 +451,14 @@ public class EditPreferencesActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(intllb)
-                {
-                    intllb=false;
+                if (intllb) {
+                    intllb = false;
                     tllb.setTextColor(colorb);
-                    Toast.makeText(getApplicationContext(),"LLB Removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "LLB Removed", Toast.LENGTH_SHORT).show();
                     illb.setImageResource(R.drawable.llb_black);
-                }
-                else if(!intllb) {
-                    intllb=true;
-                    Toast.makeText(getApplicationContext(),"LLB Added", Toast.LENGTH_SHORT).show();
+                } else if (!intllb) {
+                    intllb = true;
+                    Toast.makeText(getApplicationContext(), "LLB Added", Toast.LENGTH_SHORT).show();
                     tllb.setTextColor(colorg);
                     illb.setImageResource(R.drawable.llb);
                 }
@@ -492,7 +469,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         return this.casebreak;
     }
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

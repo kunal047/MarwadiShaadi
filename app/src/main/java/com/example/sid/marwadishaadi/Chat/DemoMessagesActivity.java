@@ -1,7 +1,6 @@
 package com.example.sid.marwadishaadi.Chat;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -14,7 +13,6 @@ import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -45,14 +43,13 @@ public abstract class DemoMessagesActivity extends AppCompatActivity
                 Picasso.with(DemoMessagesActivity.this).load(url).into(imageView);
             }
         };
-
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        messagesAdapter.addToStart(MessagesFixtures.getTextMessage(), true);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        messagesAdapter.addToStart(MessagesFixtures.getTextMessage(), true);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,14 +97,17 @@ public abstract class DemoMessagesActivity extends AppCompatActivity
     }
 
     protected void loadMessages() {
-        new Handler().postDelayed(new Runnable() { //imitation of internet connection
-            @Override
-            public void run() {
-                ArrayList<Message> messages = MessagesFixtures.getMessages(lastLoadedDate);
-                lastLoadedDate = messages.get(messages.size() - 1).getCreatedAt();
-                messagesAdapter.addToEnd(messages, false);
-            }
-        }, 1000);
+
+
+//        new Handler().postDelayed(new Runnable() { //imitation of internet connection
+//            @Override
+//            public void run() {
+//                ArrayList<Message> messages = MessagesFixtures.getMessages(lastLoadedDate);
+//                lastLoadedDate = messages.get(messages.size() - 1).getCreatedAt();
+//                messagesAdapter.addToEnd(messages, false);
+//            }
+//        }, 1000);
+
     }
 
     private MessagesListAdapter.Formatter<Message> getMessageStringFormatter() {

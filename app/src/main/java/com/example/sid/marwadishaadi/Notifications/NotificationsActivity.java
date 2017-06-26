@@ -185,7 +185,8 @@ public class NotificationsActivity extends AppCompatActivity {
         });
 
 
-        ItemTouchHelper.SimpleCallback touchevents = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback touchevents = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -196,34 +197,15 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 int position = viewHolder.getAdapterPosition();
 
-                if(direction == ItemTouchHelper.RIGHT) {
+
+                if (direction == ItemTouchHelper.RIGHT | direction == ItemTouchHelper.LEFT) {
                     notificationsModelList.remove(position);
                     notificationsAdapter.notifyDataSetChanged();
                 }
             }
+            };
 
 
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
-                Bitmap icon;
-                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-
-                    View itemView = viewHolder.itemView;
-                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
-                    float width = height / 3;
-                    if(dX < 0){
-                        p.setColor(Color.parseColor("#D32F2F"));
-                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-                        c.drawRect(background,p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.mipmap.rejected);
-                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
-                        c.drawBitmap(icon,null,icon_dest,p);
-                    }
-                }
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchevents);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -257,6 +239,7 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.exit,0);
         return true;
     }
 }

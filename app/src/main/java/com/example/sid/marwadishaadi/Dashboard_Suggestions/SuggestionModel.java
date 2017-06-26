@@ -5,35 +5,10 @@ package com.example.sid.marwadishaadi.Dashboard_Suggestions;
  */
 
 public class SuggestionModel {
-    String imgAdd,name,cusId,highDeg,workLoc,height,company,annInc,mariSta,hometown,designation;
+    String imgAdd, name, cusId, highDeg, workLoc, height, company, annInc, mariSta, hometown, designation, favouriteStatus, interestStatus;
     int age;
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    public String getCompany() {
-
-        return company;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public SuggestionModel(int age, String imgAdd, String name, String cusId, String highDeg, String workLoc, String height, String comapany, String annInc, String mariSta, String hometown, String designation) {
+    public SuggestionModel(int age, String imgAdd, String name, String cusId, String highDeg, String workLoc, String height, String comapany, String annInc, String mariSta, String hometown, String designation, String favouriteStatus, String interestStatus) {
         this.imgAdd = imgAdd;
         this.age = age;
         this.name = name;
@@ -45,8 +20,51 @@ public class SuggestionModel {
         this.annInc = annInc;
         this.mariSta = mariSta;
         this.hometown = hometown;
-        this.designation=designation;
+        this.designation = designation;
+        this.favouriteStatus = favouriteStatus;
+        this.interestStatus = interestStatus;
 
+    }
+
+    public String getFavouriteStatus() {
+        return favouriteStatus;
+    }
+
+    public void setFavouriteStatus(String favouriteStatus) {
+        this.favouriteStatus = favouriteStatus;
+    }
+
+    public String getInterestStatus() {
+        return interestStatus;
+    }
+
+    public void setInterestStatus(String interestStatus) {
+        this.interestStatus = interestStatus;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getCompany() {
+
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public String getImgAdd() {

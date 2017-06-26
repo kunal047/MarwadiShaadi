@@ -5,16 +5,8 @@ package com.example.sid.marwadishaadi.Dashboard_Interest_Sent;
  */
 
 public class InterestSentModel {
-    String name,city,degree,imgAdd,reqStatus,date;
+    String name, city, degree, imgAdd, reqStatus, date;
     int age;
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public InterestSentModel(String name, String city, String degree, String imgAdd, String reqStatus, int age, String date) {
         this.name = name;
@@ -25,6 +17,14 @@ public class InterestSentModel {
         this.age = age;
         this.date = date;
 
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getName() {

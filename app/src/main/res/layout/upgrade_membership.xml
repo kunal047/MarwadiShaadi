@@ -60,7 +60,8 @@
             android:layout_marginTop="10dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"            >
+            app:cardUseCompatPadding="true"
+            >
             <LinearLayout
                 android:padding="16dp"
                 android:background="@color/maheshwari"
@@ -140,6 +141,7 @@
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView
             android:id="@+id/jain"
             android:layout_width="match_parent"
@@ -184,6 +186,7 @@
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView
             android:id="@+id/khandelwal"
             android:layout_width="match_parent"
@@ -227,6 +230,7 @@
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView
             android:id="@+id/others"
             android:layout_width="match_parent"
@@ -315,6 +319,63 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/no_membership"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You have not taken any membership yet\nHere are some perks of premium membership:"
+                android:textColor="@color/colorPrimary"
+                android:padding="2dp"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="Access verified contact numbers"
+                    android:drawableLeft="@drawable/tick"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="View photo album of profiles"
+                    android:drawableLeft="@drawable/tick"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="Send direct messages"
+                    android:drawableLeft="@drawable/tick"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+</android.support.v7.widget.CardView>
         <Button
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"

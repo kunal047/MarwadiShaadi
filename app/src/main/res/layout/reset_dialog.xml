@@ -71,31 +71,33 @@
                     android:textSize="12dp" />
 
                 <LinearLayout
+                    android:id="@+id/reset_call_us"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
                         android:text="CONTACT US:"
                         android:textSize="14dp"
-                        android:textColor="#000"/>
+                        android:textColor="#000"
+                        android:drawableLeft="@drawable/signup_phone"
+                        android:gravity="center_vertical"/>
 
                     <TextView
-                        android:id="@+id/call_us"
+                        android:id="@+id/reset_call_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="10dp"
-                        android:clickable="true"
                         android:text="90221 12277"
                         android:textSize="14dp"
                         android:textColor="#000"
+                        android:gravity="center_vertical"
                         />
                 </LinearLayout>
             </LinearLayout>

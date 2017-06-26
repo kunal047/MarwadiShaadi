@@ -5,42 +5,54 @@ package com.example.sid.marwadishaadi.Dashboard_Favourites;
  */
 
 public class FavouriteModel {
-    private String name,location,highest_degree,imageurl;
+    private String name, location, highest_degree, imageurl, customerId;
     private int age;
-    public FavouriteModel(String name, String location, String highest_degree, int age, String imageurl){
-        this.name=name;
-        this.location=location;
-        this.highest_degree=highest_degree;
-        this.age=age;
-        this.imageurl=imageurl;
+
+    public FavouriteModel(String customerId, String name, String location, String highest_degree, int age, String imageurl) {
+
+        this.customerId = customerId;
+        this.name = name;
+        this.location = location;
+        this.highest_degree = highest_degree;
+        this.age = age;
+        this.imageurl = imageurl;
+    }
+
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public int getAge() {
         return age;
     }
 
-    public String getHighest_degree() {
-        return highest_degree;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getHighest_degree() {
+        return highest_degree;
     }
 
     public void setHighest_degree(String highest_degree) {
         this.highest_degree = highest_degree;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {

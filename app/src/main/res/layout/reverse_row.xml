@@ -6,12 +6,12 @@
 
 
     <ImageView
+        android:clickable="true"
         android:id="@+id/user_profile_img"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile"
-        android:layout_alignTop="@+id/linearLayout"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
     <LinearLayout
@@ -24,6 +24,7 @@
     android:background="#66000000">
 
     <TextView
+        android:clickable="true"
         android:id="@+id/user_profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

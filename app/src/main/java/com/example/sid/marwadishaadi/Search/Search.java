@@ -48,6 +48,7 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Search extends AppCompatActivity {
+
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
@@ -1297,6 +1298,7 @@ public class Search extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        overridePendingTransition(R.anim.exit,0);
         return true;
     }
 
@@ -1328,7 +1330,7 @@ public class Search extends AppCompatActivity {
                                     user = response.getJSONArray(i);
                                     Calendar calender = Calendar.getInstance();
                                     int year = calender.get(Calendar.YEAR);
-                                    SuggestionModel suggestionModel= new SuggestionModel(year-(int)user.get(0),"http://www.marwadishaadi.com/uploads/cust_"+user.get(3).toString()+"/thumb/"+user.get(1).toString(),user.get(2).toString(),user.get(3).toString(),user.get(4).toString(),user.get(5).toString(),user.get(6).toString(),user.get(7).toString(),user.get(8).toString(),user.get(9).toString(),user.get(10).toString(),user.get(11).toString());
+                                    SuggestionModel suggestionModel= new SuggestionModel(year-(int)user.get(0),"http://www.marwadishaadi.com/uploads/cust_"+user.get(3).toString()+"/thumb/"+user.get(1).toString(),user.get(2).toString(),user.get(3).toString(),user.get(4).toString(),user.get(5).toString(),user.get(6).toString(),user.get(7).toString(),user.get(8).toString(),user.get(9).toString(),user.get(10).toString(),user.get(11).toString(), user.get(12).toString(), user.get(13).toString());
                                     suggestionModelList2.add(suggestionModel);
 
                                 }

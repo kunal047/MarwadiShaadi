@@ -2,8 +2,8 @@ package com.example.sid.marwadishaadi.Signup;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Otp_Verification.Otp_VerificationActivity;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -86,7 +85,7 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),first_name + last_name + gender + birthday,Toast.LENGTH_LONG).show();
 
                             // MUST GO TO dashboard
-                            Intent i = new Intent(SignupActivity.this,Otp_VerificationActivity.class);
+                            Intent i = new Intent(SignupActivity.this,SignupActivity.class);
                             startActivity(i);
 
                         } catch (JSONException e) {

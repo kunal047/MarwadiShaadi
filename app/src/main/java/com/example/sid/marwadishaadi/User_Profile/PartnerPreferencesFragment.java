@@ -29,7 +29,10 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
 public class PartnerPreferencesFragment extends Fragment {
 
     private TextView edit_prefs;
@@ -40,9 +43,12 @@ public class PartnerPreferencesFragment extends Fragment {
         // Required empty public constructor
     }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -204,6 +210,9 @@ public class PartnerPreferencesFragment extends Fragment {
 
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
 }

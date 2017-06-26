@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import java.util.List;
 
@@ -43,6 +45,8 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
                 .into(holder.dp);
         holder.name.setText(rev.getName());
         holder.age.setText(String.valueOf(rev.getAge()) + " yrs");
+        holder.education.setText(rev.getEducation());
+        holder.city.setText(rev.getCity());
     }
 
 
@@ -55,7 +59,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
 
         public ImageView dp;
         public TextView name;
-        public TextView age;
+        public TextView age,education,city;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -63,6 +67,26 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
             dp = (ImageView) itemView.findViewById(R.id.user_profile_img);
             name = (TextView) itemView.findViewById(R.id.user_profile_name);
             age = (TextView) itemView.findViewById(R.id.user_profile_age);
+            city = (TextView) itemView.findViewById(R.id.user_profile_city);
+            education = (TextView) itemView.findViewById(R.id.user_profile_education);
+
+            dp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, UserProfileActivity.class);
+                    context.startActivity(i);
+                }
+            });
+
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, UserProfileActivity.class);
+                    context.startActivity(i);
+                }
+            });
+
+
 
         }
 

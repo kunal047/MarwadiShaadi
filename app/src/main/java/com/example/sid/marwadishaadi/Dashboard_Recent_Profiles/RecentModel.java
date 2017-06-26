@@ -6,16 +6,24 @@ package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
 public class RecentModel {
 
-    private String recentName, recentAge, recentHighestDegree, recentLocation, recentOnline;
+    private String recentName, recentAge, recentHighestDegree, recentLocation, recentOnline, recentCustomerId;
     private String recentUserImage;
 
-    public RecentModel(String recentName, String recentAge, String recentHighestDegree, String recentLocation, String recentOnline, String recentUserImage) {
+    public RecentModel(String recentCustomerId, String recentName, String recentAge, String recentHighestDegree, String recentLocation, String recentOnline, String recentUserImage) {
         this.recentName = recentName;
         this.recentAge = recentAge;
         this.recentHighestDegree = recentHighestDegree;
         this.recentLocation = recentLocation;
         this.recentOnline = recentOnline;
         this.recentUserImage = recentUserImage;
+    }
+
+    public String getRecentCustomerId() {
+        return recentCustomerId;
+    }
+
+    public void setRecentCustomerId(String recentCustomerId) {
+        this.recentCustomerId = recentCustomerId;
     }
 
     public String getRecentName() {

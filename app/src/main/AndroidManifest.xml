@@ -5,22 +5,23 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:name=".App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen"
+        <activity
+            android:name=".SplashScreen"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait">
             >
@@ -35,10 +36,9 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <service
-            android:name=".MSFirebaseMessagingService">
+        <service android:name=".MSFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
@@ -59,41 +59,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name=".Forgot_Password.ForgotPasswordActivity"
-            android:label="Forgot Password ? " />
+            android:label="Forgot Password ? "
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".MainActivity"
             android:hardwareAccelerated="false"
-            android:name=".MainActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"
             android:name=".Signup.SignupActivity"
-            android:label="Signup" />
-
-        <activity
             android:hardwareAccelerated="false"
+            android:label="Signup"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Login.LoginActivity"
-            android:screenOrientation="portrait"
-            android:label="Login" />
-
+            android:hardwareAccelerated="false"
+            android:label="Login"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
-            android:name=".Otp_Verification.Otp_VerificationActivity" />
-
+            android:name=".Otp_Verification.Otp_VerificationActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
-            android:name=".Signup.SignupDetailsActivity" />
-
+            android:name=".Signup.SignupDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Signup.AdvancedSignupDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Membership.MembershipActivity"
-            android:screenOrientation="portrait"
-            android:label="Membership" />
+            android:label="Membership"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Dashboard.DashboardActivity"
             android:label="Dashboard"
@@ -101,84 +97,103 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Feedback.FeedbackActivity"
-            android:screenOrientation="portrait"
-            android:label="Feedback" />
+            android:label="Feedback"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Settings.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:label="Settings" />
+            android:label="Settings"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Blocked_Members.BlockedActivity"
-            android:screenOrientation="portrait"
-            android:label="Blocked" />
+            android:label="Blocked"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Privacy_Policy.PrivacyPolicyActivity"
-            android:screenOrientation="portrait"
-            android:label="Privacy Policy" />
+            android:label="Privacy Policy"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".User_Profile.UserProfileActivity"
-            android:label="@string/title_activity_user_profile"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="marwadishaadi.com"
+                    android:scheme="http"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Payment_Policy.PaymentPolicyActivity"
-            android:screenOrientation="portrait"
-            android:label="Payment Policy" />
+            android:label="Payment Policy"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Notifications.NotificationsActivity"
-            android:screenOrientation="portrait"
-            android:label="Notifications" />
+            android:label="Notifications"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Search.Search"
-            android:screenOrientation="portrait"
-            android:label="Search" />
+            android:label="Search"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Dashboard_Interest.InterestActivity"
-            android:screenOrientation="portrait"
-            android:label="Interest" />
+            android:label="Interest"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".About_Us.AboutUsActivity"
-            android:screenOrientation="portrait"
-            android:label="About Us" />
+            android:label="About Us"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Contact_Us.ContactUsActivity"
-            android:screenOrientation="portrait"
-            android:label="Contact Us" />
+            android:label="Contact Us"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Faq.FaqActivity"
-            android:screenOrientation="portrait"
-            android:label="Faq" />
+            android:label="Faq"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Membership.UpgradeMembershipActivity"
-            android:screenOrientation="portrait"
-            android:label="Membership" />
+            android:label="Membership"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".User_Profile.Edit_User_Profile.EditPreferencesActivity"
-            android:screenOrientation="portrait"
-            android:label="Edit Partner Preferences" />
+            android:label="Edit Partner Preferences"
+            android:screenOrientation="portrait" />
 
         <!-- Chat Activities -->
         <activity
             android:name=".Chat.DefaultDialogsActivity"
-            android:screenOrientation="portrait"
-            android:label="Inbox" />
-        <activity android:name=".Chat.DefaultMessagesActivity"
-            android:screenOrientation="portrait"/>
+            android:label="Inbox"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Chat.DefaultMessagesActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Search.SearchResultsActivity"
-            android:screenOrientation="portrait"
-            android:label="Search Results" />
-        <activity android:name=".User_Profile.Edit_User_Profile.EditPersonalDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".User_Profile.Edit_User_Profile.EditFamilyDetailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Similar_Profiles.SimilarActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Filter" android:screenOrientation="portrait" />
-        <activity android:name=".Upload_User_Photos.UploadPhotoActivity" android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"></activity>
-<activity android:name=".Payment.activity.WebViewActivity"/>
-        <activity android:name=".Payment.activity.StatusActivity"/>
+            android:label="Search Results"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".User_Profile.Edit_User_Profile.EditPersonalDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".User_Profile.Edit_User_Profile.EditFamilyDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Similar_Profiles.SimilarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Filter"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Upload_User_Photos.UploadPhotoActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Payment.activity.WebViewActivity" />
+        <activity android:name=".Payment.activity.StatusActivity" />
+        <activity android:name=".PdfViewActivity" />
+        <activity android:name=".UserProfilePdfActivity" />
     </application>
 
 </manifest>

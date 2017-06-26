@@ -52,8 +52,11 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -302,14 +305,21 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
         return age;
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
     public int getCasebreak()
     {
         return this.casebreak;
     }
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
 }

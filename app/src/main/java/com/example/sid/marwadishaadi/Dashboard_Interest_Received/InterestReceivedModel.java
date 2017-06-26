@@ -6,8 +6,32 @@ package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
 public class InterestReceivedModel {
 
+    private String customerId;
     private String name, age, highestDegree, location;
-    private  String userImage;
+    private String userImage;
+
+
+    private int status;
+
+    public InterestReceivedModel(String customerId, String name, String age, String highestDegree, String location, String userImage, int status) {
+
+        this.customerId = customerId;
+        this.name = name;
+        this.age = age;
+        this.highestDegree = highestDegree;
+        this.location = location;
+        this.userImage = userImage;
+        this.status = status;
+
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
 
     public int getStatus() {
         return status;
@@ -17,17 +41,6 @@ public class InterestReceivedModel {
         this.status = status;
     }
 
-    private int status;
-
-    public InterestReceivedModel(String name, String age, String highestDegree, String location, String userImage, int status) {
-
-        this.name = name;
-        this.age = age;
-        this.highestDegree = highestDegree;
-        this.location = location;
-        this.userImage = userImage;
-        this.status=status;
-    }
 
     public String getUserImage() {
         return userImage;

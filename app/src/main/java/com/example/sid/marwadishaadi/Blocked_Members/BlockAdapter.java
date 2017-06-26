@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import java.util.List;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by Sid on 31-May-17.
@@ -127,9 +130,11 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.MyViewHolder
 
             @Override
             protected String doInBackground(final String... strings) {
-                AndroidNetworking.post("http://192.168.43.61:5050/unBlock")
-                        .addBodyParameter("customer_id", strings[0])
-                        .addBodyParameter("unblock_id",strings[1])
+                String query="";
+                query+="update tbl_block set blocked_id=replace(blocked_id ,\""+strings[1]+"\" , '' ) where customer_no = \""+strings[0]+"\" ; ";
+                Log.e(TAG, "doInBackground: --- query of unblock is----"+query );
+                AndroidNetworking.post("http://10.0.0.3:5050/unblock")
+                        .addBodyParameter("query", query)
                         .setPriority(Priority.HIGH)
                         .build()
                         .getAsString(new StringRequestListener()
@@ -141,6 +146,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.MyViewHolder
                                     Toast.makeText(context, "Unblocked", Toast.LENGTH_SHORT).show();
                                     BlockModel b= blockModelList.get(Integer.parseInt(strings[2]));
                                     blockModelList.remove(Integer.parseInt(strings[2]));
+
                                 }
                                 else{
                                     Toast.makeText(context, "Try Again, Unable to remove", Toast.LENGTH_SHORT).show();

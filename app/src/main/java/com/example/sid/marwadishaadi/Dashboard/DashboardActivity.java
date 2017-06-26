@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,18 +39,22 @@ import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
+
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ViewPager.OnPageChangeListener
-       {
+        ViewPager.OnPageChangeListener {
 
+    private static final String TAG = "DashboardActivity";
     private DashboardSectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ImageView userdp;
     private LinearLayout interest;
     private LinearLayout inbox;
     private LinearLayout search;
-    private int click=0;
+    private int click = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -63,6 +69,11 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_no", "O1001");
+        customer_gender = sharedpref.getString("customer_gender", "Female");
+
+        Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,39 +89,39 @@ public class DashboardActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(DashboardActivity.this, UserProfileActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
-        interest = (LinearLayout)mview.findViewById(R.id.nav_interest);
+        interest = (LinearLayout) mview.findViewById(R.id.nav_interest);
         interest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DashboardActivity.this, InterestActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
 
-        inbox = (LinearLayout)mview.findViewById(R.id.nav_inbox);
+        inbox = (LinearLayout) mview.findViewById(R.id.nav_inbox);
         inbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DashboardActivity.this, DefaultDialogsActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
 
-        search = (LinearLayout)mview.findViewById(R.id.nav_search);
+        search = (LinearLayout) mview.findViewById(R.id.nav_search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DashboardActivity.this,Search.class);
+                Intent i = new Intent(DashboardActivity.this, Search.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
@@ -131,22 +142,22 @@ public class DashboardActivity extends AppCompatActivity
     public void onBackPressed() {
 
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                click++;
-                if (click == 1) {
-                    Toast.makeText(DashboardActivity.this, "Please press back button twice to exit", Toast.LENGTH_SHORT).show();
-                } else if (click >=2) {
-                    click=0;
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            click++;
+            if (click == 1) {
+                Toast.makeText(DashboardActivity.this, "Please press back button twice to exit", Toast.LENGTH_SHORT).show();
+            } else if (click >= 2) {
+                click = 0;
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
-                }
             }
+        }
 
 
     }
@@ -159,35 +170,33 @@ public class DashboardActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         int id = item.getItemId();
-       if (id == R.id.nav_home){
-                onBackPressed();
-        }else if (id == R.id.nav_interest){
-            Intent i = new Intent(DashboardActivity.this,InterestActivity.class);
+        if (id == R.id.nav_home) {
+            onBackPressed();
+        } else if (id == R.id.nav_interest) {
+            Intent i = new Intent(DashboardActivity.this, InterestActivity.class);
             startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }
-        else if (id == R.id.nav_notifications) {
-            Intent i = new Intent(DashboardActivity.this,NotificationsActivity.class);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (id == R.id.nav_notifications) {
+            Intent i = new Intent(DashboardActivity.this, NotificationsActivity.class);
             startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }else if(id == R.id.nav_membership){
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (id == R.id.nav_membership) {
             Intent i = new Intent(DashboardActivity.this, UpgradeMembershipActivity.class);
             startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }
-        else if (id == R.id.nav_settings) {
-            Intent i = new Intent(DashboardActivity.this,SettingsActivity.class);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (id == R.id.nav_settings) {
+            Intent i = new Intent(DashboardActivity.this, SettingsActivity.class);
             startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }else if (id == R.id.nav_feedback){
-            Intent i = new Intent(DashboardActivity.this,FeedbackActivity.class);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (id == R.id.nav_feedback) {
+            Intent i = new Intent(DashboardActivity.this, FeedbackActivity.class);
             startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        }
+           overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+       }
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
 
     }
 
@@ -200,8 +209,7 @@ public class DashboardActivity extends AppCompatActivity
     public void onPageSelected(int position) {
 
 
-
-        switch (position){
+        switch (position) {
             case 0:
                 getSupportActionBar().setTitle("Suggestions ");
                 break;
@@ -230,7 +238,6 @@ public class DashboardActivity extends AppCompatActivity
     public class DashboardSectionsPagerAdapter extends FragmentPagerAdapter {
 
 
-
         public DashboardSectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -238,18 +245,18 @@ public class DashboardActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
 
-            switch (position){
+            switch (position) {
                 case 0:
-                   SuggestionsFragment suggestionsFragment = new SuggestionsFragment();
+                    SuggestionsFragment suggestionsFragment = new SuggestionsFragment();
                     return suggestionsFragment;
                 case 1:
-                   RecentProfilesFragment recent_profilesFragment = new RecentProfilesFragment();
+                    RecentProfilesFragment recent_profilesFragment = new RecentProfilesFragment();
                     return recent_profilesFragment;
                 case 2:
                     Reverse_MatchingFragment reverse_matchingFragment = new Reverse_MatchingFragment();
                     return reverse_matchingFragment;
                 case 3:
-                   FavouritesFragment favouritesFragment = new FavouritesFragment();
+                    FavouritesFragment favouritesFragment = new FavouritesFragment();
                     return favouritesFragment;
                /*case 4:
                     SuperMatchFragment superMatchFragment = new SuperMatchFragment();
@@ -266,7 +273,7 @@ public class DashboardActivity extends AppCompatActivity
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return "Suggestions";
                 case 1:
@@ -283,8 +290,6 @@ public class DashboardActivity extends AppCompatActivity
             }
         }
     }
-
-
 
 
 }

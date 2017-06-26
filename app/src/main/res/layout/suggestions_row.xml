@@ -1,41 +1,45 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
     >
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:elevation="10dp"
         app:cardCornerRadius="10dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:layout_margin="6dp"
->
+        >
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:clipChildren="false"
             android:clipToPadding="false"
-            tools:layout_editor_absoluteY="8dp"
             tools:layout_editor_absoluteX="8dp"
-            android:layout_marginBottom="10dp">
+            tools:layout_editor_absoluteY="8dp">
 
             <ImageView
+                android:clickable="true"
                 android:id="@+id/imgAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="290dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                android:background="#1afb6542"
                 android:scaleType="centerCrop"
                 android:src="@drawable/profile"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:background="#1afb6542"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView"
@@ -46,11 +50,11 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="244dp"
-                app:cardCornerRadius="20dp"
-                android:elevation="10dp"
-                android:clipToPadding="false"
                 android:clipChildren="false"
+                android:clipToPadding="false"
+                android:elevation="10dp"
                 app:cardBackgroundColor="@color/colorHiya"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -63,23 +67,24 @@
                     android:clipToPadding="false"
                     >
 
-                     <TextView
+                    <TextView
+                        android:clickable="true"
                         android:id="@+id/name"
+                        fontPath="fonts/OpenSans-Bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                         tools:ignore="MissingPrefix"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
                         android:text="Saloni Khandelwal, 21"
                         android:textColor="#2d2d2d"
                         android:textSize="16dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="15dp"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        tools:ignore="MissingPrefix"/>
 
 
                     <TextView
-
+                        android:clickable="true"
                         android:id="@+id/cusId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -90,32 +95,32 @@
                         android:textColor="#000"
                         android:textSize="16dp"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <TextView
                         android:id="@+id/highDeg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
                         android:text="BTech"
                         android:textColor="#2d2d2d"
                         android:textSize="15dp"
-                        android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@+id/name"
-                        android:layout_marginLeft="15dp"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/name"/>
 
                     <TextView
                         android:id="@+id/workLoc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="2dp"
                         android:text="Mumbai"
                         android:textColor="#2d2d2d"
                         android:textSize="15dp"
-                        android:layout_marginTop="2dp"
-                        app:layout_constraintTop_toBottomOf="@+id/highDeg"
-                        android:layout_marginLeft="15dp"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/highDeg"/>
 
 
                 </android.support.constraint.ConstraintLayout>
@@ -126,152 +131,152 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
+                android:layout_marginTop="38dp"
                 android:text="TextView"
                 android:textSize="14dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="38dp"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView"/>
 
             <TextView
                 android:id="@+id/company"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="16dp"
                 android:text="TextView"
                 android:textSize="14dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/height"
-                android:layout_marginLeft="50dp"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/height"/>
 
             <TextView
                 android:id="@+id/annInc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:layout_marginTop="16dp"
-                android:textSize="14dp"
-                app:layout_constraintTop_toBottomOf="@+id/company"
                 android:layout_marginLeft="50dp"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                android:textSize="14dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/company"/>
 
             <TextView
                 android:id="@+id/mariSta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="16dp"
                 android:text="TextView"
                 android:textSize="14dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/annInc"
-                android:layout_marginLeft="50dp"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/annInc"/>
 
             <TextView
                 android:id="@+id/hometown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="16dp"
                 android:text="TextView"
                 android:textSize="14dp"
-                android:layout_marginLeft="50dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/mariSta" />
+                app:layout_constraintTop_toBottomOf="@+id/mariSta"/>
 
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/fav"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_marginLeft="89dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:elevation="10dp"
-                app:layout_constraintTop_toTopOf="@+id/cardView"
                 android:layout_marginTop="56dp"
+                android:elevation="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cardView"
                 app:sparkbutton_activeImage="@mipmap/heart_disable"
-                app:sparkbutton_inActiveImage="@mipmap/ic_fav"
                 app:sparkbutton_iconSize="56dp"
+                app:sparkbutton_inActiveImage="@mipmap/ic_fav"
                 app:sparkbutton_primaryColor="@color/fav_primary_color"
                 app:sparkbutton_secondaryColor="@color/fav_secondary_color"/>
 
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/chat"
                 android:layout_width="72dp"
-                android:clickable="true"
                 android:layout_height="72dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="56dp"
+                android:clickable="true"
+                android:elevation="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/fav"
+                app:layout_constraintTop_toTopOf="@+id/cardView"
                 app:sparkbutton_activeImage="@mipmap/ic_chat"
                 app:sparkbutton_iconSize="56dp"
-                app:layout_constraintLeft_toRightOf="@+id/fav"
-                android:layout_marginLeft="9dp"
-                android:elevation="10dp"
-                app:layout_constraintTop_toTopOf="@+id/cardView"
-                android:layout_marginTop="56dp"
                 app:sparkbutton_primaryColor="@color/chat_primary_color"
-                app:sparkbutton_secondaryColor="@color/chat_secondary_color" />
+                app:sparkbutton_secondaryColor="@color/chat_secondary_color"/>
 
 
             <com.varunest.sparkbutton.SparkButton
-                android:clickable="true"
                 android:id="@+id/interest"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                app:layout_constraintLeft_toRightOf="@+id/chat"
                 android:layout_marginLeft="7dp"
-                android:elevation="10dp"
-                app:layout_constraintTop_toTopOf="@+id/cardView"
                 android:layout_marginTop="56dp"
+                android:clickable="true"
+                android:elevation="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/chat"
+                app:layout_constraintTop_toTopOf="@+id/cardView"
                 app:sparkbutton_activeImage="@mipmap/heart_disable1"
-                app:sparkbutton_inActiveImage="@mipmap/ic_heart"
                 app:sparkbutton_iconSize="56dp"
+                app:sparkbutton_inActiveImage="@mipmap/ic_heart"
                 app:sparkbutton_primaryColor="@color/heart_primary_color"
-                app:sparkbutton_secondaryColor="@color/heart_secondary_color" />
+                app:sparkbutton_secondaryColor="@color/heart_secondary_color"/>
 
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="12dp"
-                app:layout_constraintRight_toLeftOf="@+id/mariSta"
-                app:srcCompat="@drawable/marital"
                 android:id="@+id/imageView2"
-                android:layout_marginTop="13dp"
-                app:layout_constraintTop_toBottomOf="@+id/annInc" />
-
-            <ImageView
                 android:layout_width="22dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="12dp"
-                app:layout_constraintRight_toLeftOf="@+id/company"
-                app:srcCompat="@drawable/companysugg"
+                android:layout_marginTop="13dp"
+                app:layout_constraintRight_toLeftOf="@+id/mariSta"
+                app:layout_constraintTop_toBottomOf="@+id/annInc"
+                app:srcCompat="@drawable/marital"/>
+
+            <ImageView
                 android:id="@+id/imageView"
-                android:layout_marginTop="13dp"
-                app:layout_constraintTop_toBottomOf="@+id/height" />
-
-            <ImageView
                 android:layout_width="22dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintRight_toLeftOf="@+id/company"
+                app:layout_constraintTop_toBottomOf="@+id/height"
+                app:srcCompat="@drawable/companysugg"/>
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="22dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="13dp"
                 app:layout_constraintRight_toLeftOf="@+id/annInc"
-                app:srcCompat="@drawable/income"
-                android:layout_marginTop="13dp"
                 app:layout_constraintTop_toBottomOf="@+id/company"
-                android:id="@+id/imageView3" />
+                app:srcCompat="@drawable/income"/>
 
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="12dp"
-                app:layout_constraintRight_toLeftOf="@+id/hometown"
-                app:srcCompat="@drawable/hometown"
                 android:layout_marginTop="14dp"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintRight_toLeftOf="@+id/hometown"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                app:srcCompat="@drawable/hometown"/>
 
             <ImageView
+                android:id="@+id/imageView4"
                 android:layout_width="22dp"
                 android:layout_height="20dp"
                 android:layout_marginRight="12dp"
-                app:layout_constraintRight_toLeftOf="@+id/height"
-                app:srcCompat="@drawable/height"
-                android:id="@+id/imageView4"
                 android:layout_marginTop="35dp"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintRight_toLeftOf="@+id/height"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:srcCompat="@drawable/height"/>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
