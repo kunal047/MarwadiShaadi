@@ -427,7 +427,7 @@
         <item>Widow</item>
         <item>Divorced</item>
         <item>Widower</item>
-        <item>Seperated</item>
+        <item>Separated</item>
     </string-array>
 
     <string-array name="status_search_array">

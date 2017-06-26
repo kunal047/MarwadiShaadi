@@ -55,13 +55,14 @@ import static com.example.sid.marwadishaadi.Search.Search.spinnerCastSearch;
 
 
 public class BottomSheet extends BottomSheetDialogFragment {
-    int content;
-    View contentView;
-    UsersAdapter usersAdapter;
-    static String s;
-    int coun;
-    static EditText fname, lname, id;
-    static int count = 0, size = 0;
+
+    private int content;
+    private View contentView;
+    private UsersAdapter adapter;
+    private static String s;
+    private int coun;
+    private static EditText fname, lname, id;
+    private static int count = 0, size = 0;
     public static ArrayList<SuggestionModel> sm;
     public static SuggestionAdapter SA;
     public static String err, success;
@@ -84,48 +85,54 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }else if (i==4){
             Filter mfilter = new Filter();
             content=mfilter.getCasebreak();
-        }
-        else if(i == 7)
+        } else if(i == 7)
         {
             Signup_Partner_Preferences_Fragment signupPartnerPreferencesFragment = new Signup_Partner_Preferences_Fragment();
             content = signupPartnerPreferencesFragment.getCasebreak();
-        }
-        else{
+        }else if(i==111){
+            content=111;
+        }else if(i==112){
+            content=112;
+        }else if(i==113){
+            content=113;
+        } else{
             ProfileFamilyDetailsFragment profile_family_detailsFragment = new ProfileFamilyDetailsFragment();
             content = profile_family_detailsFragment.getCasebreak();
         }
     }
 
-    public String getS() {
-        return s;
-    }
-
-    public void setS(String s) {
-        this.s = s;
-    }
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         switch (content) {
+
+            //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
+            case 111:
+                contentView = viewGetter(R.array.status_search_array);
+                count=2;
+                break;
+
+            case 112:
+                contentView = viewGetter(R.array.aincome_search_array);
+                count=2;
+                break;
+
+            case 113:
+                contentView = viewGetter(R.array.physicalstatus_search_array);
+                count=2;
+                break;
+
             case 0:
                 break;
-            // search
+
+            //----------------- SEARCH ----------------------------------------------------------
+
             case 1:
-                ArrayList<User> arrayOfUsers = new ArrayList<>();
-                String[] str = getResources().getStringArray(R.array.caste_array);
-                for (int i = 0; i < str.length; i++) {
-                    User user = new User(str[i], "null");
-                    arrayOfUsers.add(user);
-                }
-                UsersAdapter adapter = new UsersAdapter(getContext(), arrayOfUsers);
-                View mview = View.inflate(getContext(), R.layout.custom_list_view, null);
-                ListView listView = (ListView) mview.findViewById(R.id.list_view);
-                usersAdapter = adapter;
-                listView.setAdapter(adapter);
-                contentView = mview;
+                contentView =  viewGetter(R.array.caste_array);;
                 count = 2;
                 break;
+
             case 2:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_search, null);
                 count = 1;
@@ -134,80 +141,38 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
 
             case 3:
-                ArrayList<User> arrayOfUserss = new ArrayList<>();
-                String[] str1 = getResources().getStringArray(R.array.status_search_array);
-                for (int i = 0; i < str1.length; i++) {
-                    User user = new User(str1[i], "null");
-                    arrayOfUserss.add(user);
-                }
-                UsersAdapter adapters = new UsersAdapter(getContext(), arrayOfUserss);
-                View msview = View.inflate(getContext(), R.layout.custom_list_view, null);
-                ListView listView1 = (ListView) msview.findViewById(R.id.list_view);
-                listView1.setAdapter(adapters);
-                usersAdapter = adapters;
-                contentView = msview;
+                contentView = viewGetter(R.array.status_search_array);
                 count = 2;
                 break;
 
             case 4:
-                ArrayList<User> arrayOfUsersq = new ArrayList<>();
-                String[] strq = getResources().getStringArray(R.array.fstatus_search_array);
-                for (int i = 0; i < strq.length; i++) {
-                    User user = new User(strq[i], "null");
-                    arrayOfUsersq.add(user);
-                }
-                UsersAdapter adapterq = new UsersAdapter(getContext(), arrayOfUsersq);
-                View mwview = View.inflate(getContext(), R.layout.custom_list_view, null);
-                ListView listView3 = (ListView) mwview.findViewById(R.id.list_view);
-                listView3.setAdapter(adapterq);
+                contentView =viewGetter(R.array.fstatus_search_array);
                 count = 2;
-                usersAdapter = adapterq;
-                contentView = mwview;
                 break;
 
             case 5:
-                ArrayList<User> arrayOfUsersa = new ArrayList<>();
-                String[] stra = getResources().getStringArray(R.array.aincome_search_array);
-                for (int i = 0; i < stra.length; i++) {
-                    User user = new User(stra[i], "null");
-                    arrayOfUsersa.add(user);
-                }
-                UsersAdapter adaptera = new UsersAdapter(getContext(), arrayOfUsersa);
-                View mqview = View.inflate(getContext(), R.layout.custom_list_view, null);
-                ListView listView4 = (ListView) mqview.findViewById(R.id.list_view);
-                listView4.setAdapter(adaptera);
+                contentView = viewGetter(R.array.aincome_search_array);
                 count = 2;
-                usersAdapter = adaptera;
-                contentView = mqview;
                 break;
 
             case 6:
-                ArrayList<User> arrayOfUsersp = new ArrayList<>();
-                String[] strp = getResources().getStringArray(R.array.physicalstatus_search_array);
-                for (int i = 0; i < strp.length; i++) {
-                    User user = new User(strp[i], "null");
-                    arrayOfUsersp.add(user);
-                }
-                UsersAdapter adapterp = new UsersAdapter(getContext(), arrayOfUsersp);
-                View pview = View.inflate(getContext(), R.layout.custom_list_view, null);
-                ListView listView5 = (ListView) pview.findViewById(R.id.list_view);
-                listView5.setAdapter(adapterp);
-                usersAdapter = adapterp;
+                contentView = viewGetter(R.array.physicalstatus_search_array);
                 count = 2;
-                contentView = pview;
                 break;
 
 
-            // edit profile - personal details
+            //------------------ EDIT PROFILE -PERSONAL DETAILS -----------------------------
+
             case 12:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
-
                 break;
             case 13:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_profession, null);
                 break;
 
-            // edit profile - additional details
+
+            // ----------------- EDIT PROFILE - ADDITIONAL DETAILS --------------------------
+
             case 21:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_about_me, null);
                 break;
@@ -221,7 +186,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_horoscope, null);
                 break;
 
-            // edit profile - family
+            //-------------------- EDIT PROFILE - FAMILY DETAILS -----------------------------
+
             case 32:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_relatives, null);
                 break;
@@ -229,9 +195,20 @@ public class BottomSheet extends BottomSheetDialogFragment {
             default:
                 contentView = View.inflate(getContext(), R.layout.custom_list_view, null);
                 break;
+
         }
+
+
+
+        // SETTING VIEW
+
         dialog.setContentView(contentView);
+
+
+        //------------------ SEARCH -> BY ID/NAME ---------------------------------------
+
         if (count == 1) {
+
             Button srch = (Button) contentView.findViewById(R.id.search_by_id_name_search_button);
             srch.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -248,26 +225,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         fname.setText("");
                         lname.setText("");
                         id.setText("");
-                        strfname = null;
-                        strlname = null;
-                        strid = null;
                     } else if (!strid.trim().isEmpty()) {
                         new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no and tbl_user.customer_no=\"" + strid + "\" ; ");
                         if (success == "success") {
                             if (size == 0) {
                                 Toast.makeText(getContext(), "No result found on these query", Toast.LENGTH_SHORT).show();
                             } else {
-                                Log.d(TAG, "onClick: sizzw is ************************************* " + Integer.toString(size));
                                 Intent i = new Intent(getContext(), SearchResultsActivity.class);
                                 i.putExtra("COUNT", size);
                                 size = 0;
                                 fname.setText("");
                                 lname.setText("");
                                 id.setText("");
-                                strfname = null;
-                                strlname = null;
-                                strid = null;
-//                            i.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) sm);
                                 startActivity(i);
 
                             }
@@ -282,16 +251,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             } else {
                                 Intent i = new Intent(getContext(), SearchResultsActivity.class);
                                 i.putExtra("COUNT", size);
-                                Log.d(TAG, "onClick: sizzw is ************************************* " + Integer.toString(size));
-
                                 size = 0;
                                 fname.setText("");
                                 lname.setText("");
                                 id.setText("");
-                                strfname = null;
-                                strlname = null;
-                                strid = null;
-//                            i.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) sm);
                                 startActivity(i);
 
                             }
@@ -308,15 +271,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                     Toast.makeText(getContext(), "No result found on these query", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Intent i = new Intent(getContext(), SearchResultsActivity.class);
-//                            i.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) sm);
                                     i.putExtra("COUNT", size);
                                     Log.d(TAG, "onClick: sizzw is ************************************* " + Integer.toString(size));
                                     fname.setText("");
                                     lname.setText("");
                                     id.setText("");
-                                    strfname = null;
-                                    strlname = null;
-                                    strid = null;
                                     size = 0;
                                     startActivity(i);
                                 }
@@ -334,13 +293,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                                     Intent i = new Intent(getContext(), SearchResultsActivity.class);
                                     i.putExtra("COUNT", size);
-                                    Log.d(TAG, "onClick: sizzw is ************************************* " + Integer.toString(size));
                                     fname.setText("");
                                     lname.setText("");
                                     id.setText("");
-                                    strfname = null;
-                                    strlname = null;
-                                    strid = null;
                                     size = 0;
                                     i.putExtra("which","second");
                                     startActivity(i);
@@ -364,17 +319,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View view) {
                     List<String> result = new ArrayList<String>();
-
-                    for (User p : usersAdapter.getBox()) {
+                    for (User p : adapter.getBox()) {
                         if (p.box) {
                             coun++;
                             result.add(p.name);
 
                         }
                     }
-//                Toast.makeText(getContext(), result+"\n"+"Total Amount:="+totalAmount, Toast.LENGTH_LONG).show();
-                    Search srch = new Search();
-//                srch.setStr(result);
                     switch (content) {
                         case 1:
                             spinnerCastSearch.setText(result.toString());
@@ -433,9 +384,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             size = response.length();
                             for (int i = 0; i < response.length(); i++) {
                                 try {
-                                                    /*SuggestionModel(int age, String imgAdd, String name, String cusId, String highDeg, String workLoc, String height, String comapany, String annInc, String mariSta, String hometown, String designation)
-*/
-
                                     JSONArray user = response.getJSONArray(i);
 
                                     Calendar calender = Calendar.getInstance();
@@ -452,7 +400,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                         @Override
                         public void onError(ANError error) {
-//                        Toast.makeText(BottomSheet.this," ", Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "onError: --------------------- error is " + error);
                             err = "Network Error, Check Connection";
                         }
@@ -464,6 +411,29 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
         }
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
+    }
+
+    private View viewGetter(int array) {
+
+        ArrayList<User> arrayOfUsers = new ArrayList<>();
+        String[] str = getResources().getStringArray(array);
+        for (int i = 0; i < str.length; i++) {
+            User user = new User(str[i], "null");
+            arrayOfUsers.add(user);
+        }
+        adapter = new UsersAdapter(getContext(), arrayOfUsers);
+        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+        return view;
     }
 }
 

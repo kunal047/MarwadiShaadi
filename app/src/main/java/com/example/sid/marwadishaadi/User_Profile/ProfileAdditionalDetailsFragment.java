@@ -130,11 +130,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         }
     }*/
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+
 
     private class ProfileAdditionalDetails extends AsyncTask<Void,Void,Void>{
         @Override

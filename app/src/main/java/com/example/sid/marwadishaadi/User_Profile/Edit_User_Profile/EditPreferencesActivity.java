@@ -3,12 +3,14 @@ package com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,10 +19,14 @@ import android.widget.Toast;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.example.sid.marwadishaadi.EditProfileBottomSheets;
 import com.example.sid.marwadishaadi.Otp_Verification.Otp_VerificationActivity;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.Search.BottomSheet;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.sid.marwadishaadi.R.string.view;
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
@@ -30,7 +36,16 @@ public class EditPreferencesActivity extends AppCompatActivity {
     LinearLayout ldoctor,lengineer,lmbamca,lcacs,lpg,lg,lug,lllb;
     int colorg,colorb;
 
+    private  EditText maritalstatus;
+    private EditText annualincome;
+    private EditText physicalstatus;
+
+    private int casebreak;
     Button complete;
+
+    public EditPreferencesActivity(){
+
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -42,7 +57,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_preferences);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_prefs_toolbar);
-        toolbar.setTitle("Edit Partner Signup_Partner_Preferences_Fragment");
+        toolbar.setTitle("Edit Partner Preferences");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,6 +91,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
         lg=(LinearLayout)findViewById(R.id.list_g);
         lug=(LinearLayout)findViewById(R.id.list_ug);
 
+
+        ;
 
 
         complete.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +141,35 @@ public class EditPreferencesActivity extends AppCompatActivity {
         tug.setTextColor(colorb);
 
 
+
+        maritalstatus = (EditText) findViewById(R.id.edit_marital_status);
+        maritalstatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialogFragment btm= new BottomSheet(111);
+                btm.show(getSupportFragmentManager(),btm.getTag());
+            }
+        });
+
+
+
+        annualincome = (EditText) findViewById(R.id.edit_annual_income);
+        annualincome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialogFragment btm= new BottomSheet(112);
+                btm.show(getSupportFragmentManager(),btm.getTag());
+            }
+        });
+
+        physicalstatus = (EditText) findViewById(R.id.edit_physical_status) ;
+        physicalstatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialogFragment btm= new BottomSheet(113);
+                btm.show(getSupportFragmentManager(),btm.getTag());
+            }
+        });
 
         ldoctor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -442,10 +488,13 @@ public class EditPreferencesActivity extends AppCompatActivity {
             }
         });
     }
-
+    public int getCasebreak() {
+        return this.casebreak;
+    }
     @Override
     public boolean onSupportNavigateUp(){
         finish();
         return true;
     }
+
 }

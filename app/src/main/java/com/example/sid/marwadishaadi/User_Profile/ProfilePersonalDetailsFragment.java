@@ -52,32 +52,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfilePersonalDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfilePersonalDetailsFragment newInstance(String param1, String param2) {
-        ProfilePersonalDetailsFragment fragment = new ProfilePersonalDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -237,35 +212,33 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
                                 caste.setText(cast);
 
-                                double feet = Double.parseDouble(array.getString(9)) / 30.48;
-                                double inches = (Double.parseDouble(array.getString(9)) / 2.54) - ((int) feet * 12);
-                                String h = "Stands tall at "+(int) feet + "'" + (int) inches;
-                                height.setText(h);
-                                String w = "weighs "+array.getString(10)+" kgs";
+
+                                height.setText(array.getString(8));
+                                String w = "weighs "+array.getString(9)+" kgs";
                                 weight.setText(w);
 
-                                String cb=array.getString(11)+", "+array.getString(12);
+                                String cb=array.getString(10)+", "+array.getString(11);
 
                                 complexion_build.setText(cb);
-                                physicalStatus.setText(array.getString(13));
-                                education.setText(array.getString(14));
-                                educationDegree.setText(array.getString(15));
+                                physicalStatus.setText(array.getString(12));
+                                education.setText(array.getString(13));
+                                educationDegree.setText(array.getString(14));
 
-                                String cnl=array.getString(16)+", "+array.getString(17);
+                                String cnl=array.getString(15)+", "+array.getString(16);
                                 collegeName_collegeLocation.setText(cnl);
-                                currentOccupation.setText(array.getString(18));
+                                currentOccupation.setText(array.getString(17));
 
-                                String dc=array.getString(21)+" at "+array.getString(20);
+                                String dc=array.getString(20)+" at "+array.getString(19);
                                 designation_companyName.setText(dc);
 
-                                String cl="Located in " + array.getString(22);
+                                String cl="Located in " + array.getString(21);
                                 companyLocation.setText(cl);
 
 
 
 
 
-                                String annualI = array.getString(19);
+                                String annualI = array.getString(18);
                                 annualI = annualI.replaceAll("[^-?0-9]+", " ");
                                 List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
                                 Log.d(TAG, "onResponse: income array is " + incomeArray);
@@ -329,51 +302,14 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
         return age;
     }
-
-
-
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
     public int getCasebreak()
     {
         return this.casebreak;
     }
+
+
+
+
+
+
 }
