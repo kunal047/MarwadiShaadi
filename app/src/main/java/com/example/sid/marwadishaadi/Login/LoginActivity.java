@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText login_pass;
     protected Button login;
     protected TextView forgot;
-    public static String customer_id;
+public static String customer_id="A1001";
     public static String customer_gender;
     protected TextView signup;
     protected LoginButton fblogin;

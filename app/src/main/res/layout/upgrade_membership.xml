@@ -30,7 +30,8 @@
         android:layout_gravity="center"
         android:layout_width="144dp"
         android:layout_height="144dp"
-        android:src="@drawable/profile"/>
+        android:src="@drawable/profile"
+        android:id="@+id/membership_photo"/>
 
         <TextView
         android:layout_width="match_parent"
@@ -41,7 +42,8 @@
             android:textColor="@color/black"
              android:layout_marginTop="20dp"
             fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix"
+            android:id="@+id/membership_name"/>
 
 
         <TextView
@@ -50,7 +52,9 @@
             android:textAlignment="center"
             android:textColor="#000"
             android:text="Member ID : M123"
-            android:textSize="14dp"/>
+            android:textSize="14dp"
+            android:id="@+id/membership_id"
+            />
 
 
         <android.support.v7.widget.CardView
@@ -78,21 +82,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Type : "
+                    android:text="Duration : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/duration_maheshwari"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stated On : "
+                    android:text="Started On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/start_maheshwari"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ends On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/end_maheshwari"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -123,21 +130,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Type : "
+                    android:text="Duration : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/duration_agarwal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stated On : "
+                    android:text="Started On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/start_agarwal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ends On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/end_agarwal"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -168,21 +178,25 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Type : "
+                    android:text="Duration : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/duration_jain"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stated On : "
+                    android:text="Started On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/start_jain"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ends On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/end_jain"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -212,21 +226,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Type : "
+                    android:text="Duration : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/duration_khandelwal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stated On : "
+                    android:text="Started On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/start_khandelwal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ends On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/end_khandelwal"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -256,68 +273,29 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Type : "
+                    android:text="Duration : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/duration_others"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stated On : "
+                    android:text="Started On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/all"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@color/all"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="ALL "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Type : "
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Stated On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/start_others"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ends On : "
                     android:padding="2dp"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp"
+                    android:id="@+id/end_others"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
+
 
         <android.support.v7.widget.CardView
             android:id="@+id/no_membership"
@@ -327,6 +305,7 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
+
             >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -369,6 +348,15 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Send direct messages"
+                    android:drawableLeft="@drawable/tick"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="Initiate Chat"
                     android:drawableLeft="@drawable/tick"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
