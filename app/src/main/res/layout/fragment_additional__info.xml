@@ -80,26 +80,26 @@
                         android:layout_marginLeft="10dp"
                         />
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="Hobbies/Interest (Reading)"
-                        android:drawableLeft="@drawable/signup_hobby"
-                        android:scrollbars="vertical"
-                        android:maxLines="6"
-                        android:minLines="1"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="textMultiLine"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-
-                        />
+                        <EditText
+                            android:id="@+id/editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="#fff"
+                            android:drawableLeft="@drawable/signup_hobby"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:hint="Hobbies/Interests (Reading)"
+                            android:inputType="textMultiLine"
+                            android:maxLines="6"
+                            android:minLines="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:scrollbars="vertical"
+                            android:textColorHint="#747474"
+                            android:textSize="14dp"
+                            android:layout_marginLeft="10dp"
+                            />
 
                     <EditText
                         android:layout_width="match_parent"
@@ -173,7 +173,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Subcaste (Shwetambar)"
+                        android:hint="Subcaste (If any)"
                         android:drawableLeft="@drawable/signup_subcaste"
                         android:textSize="14dp"
                         android:textColorHint="#747474"
@@ -210,7 +210,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Education/Occupational Details"
+                        android:text="Education/Occupational Details *"
                         android:textSize="16dp"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         android:textColor="@color/colorPrimary"
@@ -279,7 +279,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lifestyle Details"
+                        android:text="Lifestyle Details *"
                         android:textSize="16dp"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         android:textColor="@color/colorPrimary"
@@ -337,7 +337,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Physical Details"
+                        android:text="Physical Details *"
                         android:textSize="16dp"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         android:textColor="@color/colorPrimary"
@@ -492,7 +492,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Relative Details"
+                        android:text="Relative Details *"
                         android:textSize="16dp"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         android:textColor="@color/colorPrimary"

@@ -38,10 +38,11 @@
                 fontPath="fonts/OpenSans-Bold.ttf"
                 tools:ignore="MissingPrefix"/>
 
-        <TextView
+            <!--Age-->
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Age"
+            android:text="Age *"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="#000000"
@@ -76,12 +77,7 @@
                 android:layout_alignTop="@+id/rangeSeekbar"
                 android:textSize="12dp" />
             </LinearLayout>
-
-
-
-
-
-                <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+            <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
                     android:id="@+id/rangeSeekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,9 +93,7 @@
                     app:right_thumb_color="#fb6542"
                     app:right_thumb_color_pressed="#fb6542" />
 
-
-
-
+            <!--Height-->
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,7 +103,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Height (From - To)"
+                android:text="Height (From - To) *"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:textColor="#000000"
@@ -120,7 +114,6 @@
                 fontPath="fonts/OpenSans-Bold.ttf"
                 tools:ignore="MissingPrefix"
                 />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,12 +137,407 @@
                     android:entries="@array/height_array"
                     />
             </LinearLayout>
-
-
         </LinearLayout>
 
+            <!--Education-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Educational Level *"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+            <HorizontalScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:scrollbarFadeDuration="2"
+                android:scrollbarSize="2dp"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="horizontal">
 
-        <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/list_doctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/doctor"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/doctor_black" />
+
+                        <TextView
+                            android:id="@+id/text_doctor"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Doctor"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_engineer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/engineer"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/engineer_black" />
+
+                        <TextView
+                            android:id="@+id/text_engineer"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Engineer"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_mab_mca"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/mba_mca"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/mba_black" />
+
+                        <TextView
+                            android:id="@+id/text_mba_mca"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="MBA/MCA"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_ca_cs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/ca_cs"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/ca_black" />
+
+                        <TextView
+                            android:id="@+id/text_ca_cs"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="CA/CS"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_llb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/llb"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/llb_black" />
+
+                        <TextView
+                            android:id="@+id/text_llb"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="LLB"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_pg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/pg"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/mba_black" />
+
+                        <TextView
+                            android:id="@+id/text_pg"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Post\nGraduate"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_g"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
+
+                        <ImageView
+                            android:id="@+id/g"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/grad_black" />
+
+                        <TextView
+                            android:id="@+id/text_g"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Graduate"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/list_ug"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="10dp">
+
+                        <ImageView
+                            android:id="@+id/ug"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:clickable="true"
+                            android:src="@drawable/undergrad_black" />
+
+                        <TextView
+                            android:id="@+id/text_ug"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Under\nGraduate"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!--Occupation-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Occupation"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:padding="10dp"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:text="Profession"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+
+                <CheckBox
+                    android:text="Job"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:padding="10dp"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:text="Retired"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+
+                <CheckBox
+                    android:text="Business"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:padding="10dp"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:text="Not Employed"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"/>
+
+                <CheckBox
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="Studying-Not Employed"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="fill"/>
+            </LinearLayout>
+            <LinearLayout
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:text="Doesn't Matter"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!--AI-->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Annual Income"
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    tools:ignore="MissingPrefix"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    />
+            <EditText
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/search_Annual_income"
+                    android:textSize="14dp"
+                    android:clickable="true"
+                    android:hint="Select Annual Income"
+                    android:background="#fff"
+                    android:layout_marginBottom="10dp"
+                    android:focusableInTouchMode="false"
+                    />
+
+            <!--Marital Status-->
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Marital Status *"
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    tools:ignore="MissingPrefix"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    />
+            <EditText
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/search_Marital_status"
+                    android:textSize="14dp"
+                    android:clickable="true"
+                    android:hint="Select Marital Status"
+                    android:background="#fff"
+                    android:layout_marginBottom="10dp"
+                    android:focusableInTouchMode="false"
+                    />
+
+            <!--Location-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Work Location"
+                android:textSize="14dp"
+                android:textColorHint="#747474"
+                android:background="#fff"
+                android:ems="10"
+                />
+
+            <!--Complexion-->
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Complexion"
@@ -162,9 +550,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             />
-
-
-        <LinearLayout
+            <LinearLayout
             android:layout_width="match_parent"
             android:weightSum="2"
             android:padding="10dp"
@@ -182,8 +568,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
-        <LinearLayout
+            <LinearLayout
             android:layout_width="match_parent"
             android:padding="10dp"
             android:weightSum="2"
@@ -203,8 +588,7 @@
                 android:layout_gravity="fill"/>
 
         </LinearLayout>
-
-        <LinearLayout
+            <LinearLayout
             android:padding="10dp"
             android:weightSum="2"
             android:layout_width="match_parent"
@@ -222,6 +606,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
+            <!--Body Type-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -235,41 +620,36 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 />
-
-
-        <LinearLayout
+            <LinearLayout
             android:weightSum="2"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <CheckBox
+                <CheckBox
                 android:text="Slim"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
-
-            <CheckBox
+                <CheckBox
                 android:text="Athletic"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
-        <LinearLayout
+            <LinearLayout
             android:weightSum="2"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <CheckBox
                 android:text="Average"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
-
-
             <CheckBox
                 android:text="Heavy"
                 android:layout_weight="1"
@@ -280,16 +660,13 @@
                 android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:text="Doesn't Matter"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-
-
+            <!--Physical Status-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -315,418 +692,6 @@
                 android:layout_marginTop="10dp"
                 android:focusableInTouchMode="false"
                 />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Location"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:hint="Work Location"
-            android:textSize="14dp"
-            android:textColorHint="#747474"
-            android:background="#fff"
-            android:ems="10"
-            />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Educational Level"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-
-        <HorizontalScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarFadeDuration="2"
-            android:scrollbarSize="2dp"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/list_doctor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/doctor"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/doctor_black" />
-
-                    <TextView
-                        android:id="@+id/text_doctor"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Doctor"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_engineer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/engineer"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/engineer_black" />
-
-                    <TextView
-                        android:id="@+id/text_engineer"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Engineer"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_mab_mca"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/mba_mca"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/mba_black" />
-
-                    <TextView
-                        android:id="@+id/text_mba_mca"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="MBA/MCA"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_ca_cs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/ca_cs"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/ca_black" />
-
-                    <TextView
-                        android:id="@+id/text_ca_cs"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="CA/CS"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_llb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/llb"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/llb_black" />
-
-                    <TextView
-                        android:id="@+id/text_llb"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="LLB"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_pg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/pg"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/mba_black" />
-
-                    <TextView
-                        android:id="@+id/text_pg"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Post\nGraduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_g"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/g"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/grad_black" />
-
-                    <TextView
-                        android:id="@+id/text_g"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Graduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_ug"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="10dp">
-
-                    <ImageView
-                        android:id="@+id/ug"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/undergrad_black" />
-
-                    <TextView
-                        android:id="@+id/text_ug"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Under\nGraduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Occupation"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-
-            <CheckBox
-                android:text="Profession"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-
-            <CheckBox
-                android:text="Job"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-
-            <CheckBox
-                android:text="Retired"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-
-            <CheckBox
-                android:text="Business"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:weightSum="2"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-            <CheckBox
-                android:text="Not Employed"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="fill"/>
-
-            <CheckBox
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:text="Studying-Not Employed"
-                android:layout_height="match_parent"
-                android:layout_gravity="fill"/>
-        </LinearLayout>
-
-            <LinearLayout
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:text="Doesn't Matter"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Marital Status"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-
-            <EditText
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/search_Marital_status"
-                android:textSize="14dp"
-                android:clickable="true"
-                android:hint="Select Marital Status"
-                android:background="#fff"
-                android:layout_marginBottom="10dp"
-                android:focusableInTouchMode="false"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Annual Income"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-
-
-            <EditText
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/search_Annual_income"
-                android:textSize="14dp"
-                android:clickable="true"
-                android:hint="Select Annual Income"
-                android:background="#fff"
-                android:layout_marginBottom="10dp"
-                android:focusableInTouchMode="false"
-                />
-
-
-        </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
