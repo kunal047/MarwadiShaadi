@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -79,17 +80,22 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                     }
                 }
 
-                // TODO: 28-Jun-17 upload selected photos in selected_photos arraylist
-                Intent i = new Intent(FbGalleryActivity.this, DashboardActivity.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                if(selectedphotos.size() > 0) {
+                    // TODO: 28-Jun-17 upload selected photos in selected_photos arraylist
+                    Intent i = new Intent(FbGalleryActivity.this, DashboardActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }else{
+                    Toast.makeText(FbGalleryActivity.this, "Please select atleast 1 photo to proceed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
     private void getData() {
-
+        
+        
         // all photos
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
