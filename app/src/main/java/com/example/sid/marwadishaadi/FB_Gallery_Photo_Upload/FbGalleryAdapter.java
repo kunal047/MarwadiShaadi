@@ -76,7 +76,6 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
                         {
                             onPicSelectedListener.updateToolbar(count);
                         }
-                        notifyItemChanged(position);
                     }else{
                         fbmodel.setSelected(false);
                         selected.setVisibility(View.GONE);
@@ -85,10 +84,13 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
                         {
                             onPicSelectedListener.updateToolbar(count);
                         }
-                        notifyItemChanged(position);
                     }
                 }
             });
         }
+    }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

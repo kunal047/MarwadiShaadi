@@ -24,6 +24,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -53,7 +54,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private CircleImageView photo1,photo2,photo3,photo4,photo5;
     CallbackManager callbackManager;
     protected LoginButton fblogin;
-    private boolean isfb=false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -66,13 +66,16 @@ public class UploadPhotoActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
+
+        if (Profile.getCurrentProfile() !=null || AccessToken.getCurrentAccessToken() != null){
+            fblogin.setText("Or Upload photos from Facebook");
+        }
+
         fblogin.setReadPermissions(Arrays.asList("email","user_photos"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                isfb=true;
-                
                 // getting user profile
                 GraphRequest request = GraphRequest.newMeRequest(
                         AccessToken.getCurrentAccessToken(),
@@ -82,7 +85,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                 try {
 
                                     String userid = object.getString("id");
-
+                                    fblogin.setText("Or upload photos from Facebook");
                                     Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
                                     i.putExtra("userid",userid);
                                     startActivity(i);
@@ -222,18 +225,14 @@ public class UploadPhotoActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (!isfb){
-            if (resultCode == Activity.RESULT_OK) {
                 if (requestCode == SELECT_FILE)
                     onSelectFromGalleryResult(data);
                 else if (requestCode == REQUEST_CAMERA)
                     onCaptureImageResult(data);
-            }
-        }else {
-            callbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-
+                else
+                    callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
 
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");

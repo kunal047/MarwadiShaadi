@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
@@ -32,10 +34,10 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 public class FbGalleryActivity extends AppCompatActivity implements OnPicSelectedListener{
 
     private RecyclerView recyclerView;
-    private List<FbGalleryModel> fbGalleryModelList;
+    private List<FbGalleryModel> fbGalleryModelList=new ArrayList<>();
     private FbGalleryAdapter fbGalleryAdapter;
     private String userid;
-    private List<FbGalleryModel> selectedphotos;
+    private List<FbGalleryModel> selectedphotos = new ArrayList<>();
 
 
     @Override
@@ -45,6 +47,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
 
         Intent data = getIntent();
         userid = data.getStringExtra("userid");
+        Log.d("userid", "userid: " + userid);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.fbgallery_toolbar);
         toolbar.setTitle("Select Photos");
@@ -53,16 +56,16 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.fb_gallery_recyclerview);
-        fbGalleryAdapter = new FbGalleryAdapter(FbGalleryActivity.this,fbGalleryModelList);
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager =new StaggeredGridLayoutManager(2,1);
         recyclerView.setLayoutManager(mLayoutManager);
+        fbGalleryAdapter = new FbGalleryAdapter(FbGalleryActivity.this,fbGalleryModelList);
         recyclerView.setAdapter(fbGalleryAdapter);
+        getData();
         fbGalleryAdapter.setListener(this);
 
-        getData();
 
         Button photo_upload = (Button) findViewById(R.id.fb_upload);
         photo_upload.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +99,8 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
 
+                        Toast.makeText(FbGalleryActivity.this, "response" + response.toString(), Toast.LENGTH_SHORT).show();
+
                         JSONObject obj = response.getJSONObject();
                         JSONArray data = null;
                         try {
@@ -119,11 +124,19 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                             public void onCompleted(GraphResponse response) {
 
                                                 JSONObject js = response.getJSONObject();
+                                                JSONArray pics = null;
+                                                try {
+                                                    pics = js.getJSONArray("images");
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                                 String url = null;
                                                 try {
-                                                    url = js.getString("picture");
+                                                    JSONObject requiredpic = pics.getJSONObject(0);
+                                                    url = requiredpic.getString("source");
                                                     FbGalleryModel fb = new FbGalleryModel(url,false);
                                                     fbGalleryModelList.add(fb);
+                                                    fbGalleryAdapter.notifyDataSetChanged();
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -131,7 +144,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                         });
 
                                 Bundle parameters = new Bundle();
-                                parameters.putString("fields", "picture");
+                                parameters.putString("fields", "images");
                                 request.setParameters(parameters);
                                 request.executeAsync();
 
@@ -139,7 +152,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                 e.printStackTrace();
                             }
 
-                            fbGalleryAdapter.notifyDataSetChanged();
                         }
                     }
                 }
