@@ -11,8 +11,12 @@
         android:src="@drawable/profile"
         android:layout_margin="2dp"/>
     <ImageView
+        android:id="@+id/is_selected"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/ti"/>
+        android:padding="70dp"
+        android:visibility="gone"
+        android:src="@drawable/tick_white"
+        android:background="#99000000"/>
 
 </RelativeLayout>

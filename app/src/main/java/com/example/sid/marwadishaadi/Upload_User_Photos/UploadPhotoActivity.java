@@ -10,15 +10,12 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
-import com.example.sid.marwadishaadi.Login.LoginActivity;
+import com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.AccessToken;
@@ -27,12 +24,10 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,6 +53,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private CircleImageView photo1,photo2,photo3,photo4,photo5;
     CallbackManager callbackManager;
     protected LoginButton fblogin;
+    private boolean isfb=false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -75,6 +71,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
+                isfb=true;
+                
                 // getting user profile
                 GraphRequest request = GraphRequest.newMeRequest(
                         AccessToken.getCurrentAccessToken(),
@@ -82,79 +80,19 @@ public class UploadPhotoActivity extends AppCompatActivity {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
+
                                     String userid = object.getString("id");
 
-                                    // all photos
-                                    new GraphRequest(
-                                            AccessToken.getCurrentAccessToken(),
-                                            "/"+userid+"/photos",
-                                            null,
-                                            HttpMethod.GET,
-                                            new GraphRequest.Callback() {
-                                                public void onCompleted(GraphResponse response) {
-                                                    Log.d("object--", "onCompleted: "+response.toString());
+                                    Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                                    i.putExtra("userid",userid);
+                                    startActivity(i);
+                                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
-                                                    JSONObject obj = response.getJSONObject();
-                                                    JSONArray data = null;
-                                                    try {
-                                                        data = obj.getJSONArray("data");
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                    for (int i=0;i<data.length();i++){
-
-                                                        try {
-                                                            JSONObject pic = data.getJSONObject(i);
-                                                            String photoid = pic.getString("id");
-
-                                                            // each individual photo
-                                                            GraphRequest request = GraphRequest.newGraphPathRequest(
-                                                                    AccessToken.getCurrentAccessToken(),
-                                                                    "/"+photoid,
-                                                                    new GraphRequest.Callback() {
-                                                                        @Override
-                                                                        public void onCompleted(GraphResponse response) {
-
-                                                                            JSONObject js = response.getJSONObject();
-                                                                            String url = null;
-                                                                            try {
-                                                                                url = js.getString("picture");
-                                                                                Glide.with(getApplicationContext())
-                                                                                        .load(url)
-                                                                                        .into(getImageview());
-                                                                            } catch (JSONException e) {
-                                                                                e.printStackTrace();
-                                                                            }
-                                                                            Toast.makeText(UploadPhotoActivity.this, "url" + url, Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    });
-
-                                                            Bundle parameters = new Bundle();
-                                                            parameters.putString("fields", "picture");
-                                                            request.setParameters(parameters);
-                                                            request.executeAsync();
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                    }
-
-
-                                                }
-                                            }
-                                    ).executeAsync();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-
-                            }
-                        });
-
+                            }});
                 request.executeAsync();
-
-
             }
 
             @Override
@@ -284,14 +222,17 @@ public class UploadPhotoActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (!isfb){
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == SELECT_FILE)
+                    onSelectFromGalleryResult(data);
+                else if (requestCode == REQUEST_CAMERA)
+                    onCaptureImageResult(data);
+            }
+        }else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
 
-       /* if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
-                onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
-        }*/
     }
 
     private void onCaptureImageResult(Intent data) {

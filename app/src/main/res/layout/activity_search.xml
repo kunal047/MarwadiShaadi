@@ -1,137 +1,124 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/search_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                />
-
+        >
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/search_toolbar"
+            android:layout_width="match_parent"
+            android:theme="@style/MyToolbartheme"
+            android:titleTextColor="@android:color/white"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/search_Submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="normal"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_action_search" />
-
     <ScrollView
-        android:id="@+id/scrollViewAdv1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollViewAdv1"
+        android:background="#ffede9"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:focusableInTouchMode="true"
-            android:orientation="vertical">
-
+            >
             <Button
-                android:id="@+id/search_by_id_name_open"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:id="@+id/search_by_id_name_open"
+                android:textColor="#fff"
                 android:layout_marginTop="10dp"
-                android:background="@layout/button_border_corner_circle_"
-                android:focusable="true"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp"
+                android:layout_gravity="center"
                 android:text="Search by ID/Name"
                 android:textAllCaps="false"
-                android:textColor="#fff"
-                android:textSize="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="Or"
-                android:textAlignment="center"
+                android:background="@layout/button_border_corner_circle_"
                 android:textSize="16dp"
-
                 />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Search partner with some details"
                 android:textAlignment="center"
-                android:textSize="16dp" />
+                android:text="Or"
+                android:layout_marginTop="10dp"
+                android:textSize="14dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Search partner with some details"
+                android:layout_marginTop="20dp"
+                android:textSize="14dp"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                android:gravity="center_horizontal"
+                />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/basic_search"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardBackgroundColor="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:elevation="10dp"
-                android:focusable="true"
-                app:cardCornerRadius="4dp">
-
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
 
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
                         android:text="Age"
-                        android:textAlignment="textStart"
-                        android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="14dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <TextView
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/textMin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:textColor="#000"
-                            android:textSize="16sp" />
-
+                            android:textSize="12dp"/>
                         <TextView
                             android:id="@+id/textMax"
+                            android:layout_weight="1"
+                            android:layout_marginRight="10dp"
+                            android:textAlignment="textEnd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_alignTop="@+id/rangeSeekbar"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
-                            android:textColor="#000"
-                            android:textSize="16dp" />
+                            android:textSize="12dp" />
                     </LinearLayout>
-
                     <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
                         android:id="@+id/rangeSeekbar"
                         android:layout_width="match_parent"
@@ -147,154 +134,159 @@
                         app:min_value="18"
                         app:right_thumb_color="@color/colorPrimary"
                         app:right_thumb_color_pressed="@color/colorPrimary" />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
+                        android:background="#59fb6542">
+                    </View>
                     <LinearLayout
                         android:id="@+id/spinner_partner_height"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        >
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginTop="20dp"
-                            android:focusable="true"
-                            android:text="Height ( From - To )"
                             android:textAlignment="textStart"
-                            android:textSize="16dp"
-                            android:textStyle="italic" />
+                            android:text="Height ( From - To )"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="6dp"
+                            android:focusable="true"
+                            android:textSize="14dp"
+                            android:textStyle="italic"
+                            />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2">
-
+                        android:weightSum="2"
+                        >
                         <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:id="@+id/height_from"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:entries="@array/height_search_array" />
+                            android:entries="@array/height_search_array"
+                            />
 
                         <Spinner
-                            android:id="@+id/height_to"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:entries="@array/height_search_array" />
+                            android:id="@+id/height_to"
+                            android:layout_marginTop="10dp"
+                            android:entries="@array/height_search_array"
+                            />
                     </LinearLayout>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
+                        android:background="#59fb6542">
+                    </View>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:focusable="true"
-                        android:text="Community"
                         android:textAlignment="textStart"
+                        android:text="Community"
+                        android:focusable="true"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:layout_marginLeft="6dp"
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        />
 
                     <EditText
-                        android:id="@+id/search_user_caste"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:background="#fff"
+                        android:id="@+id/search_user_caste"
                         android:focusable="false"
+                        android:layout_marginLeft="6dp"
+                        android:textSize="16dp"
                         android:hint="Choose community"
-                        android:textSize="16dp" />
+                        android:background="#fff"
+                        />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="State"
+                        android:textSize="16dp"
+                        android:textStyle="italic"
                         android:layout_marginLeft="6dp"
                         android:layout_marginTop="20dp"
-                        android:text="State"
-                        android:textAlignment="textStart"
-                        android:textSize="16dp"
-                        android:textStyle="italic" />
-
+                        />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="5">
-
+                        android:weightSum="5"
+                        >
                         <EditText
-                            android:id="@+id/search_state"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:background="#fff"
-                            android:clickable="true"
+                            android:hint="Type State"
+                            android:textSize="16dp"
                             android:drawableLeft="@drawable/userlocation"
                             android:drawablePadding="10dp"
-                            android:ems="10"
-                            android:hint="Type State"
+                            android:background="#fff"
                             android:inputType="text"
-                            android:textSize="16dp" />
-
+                            android:clickable="true"
+                            android:layout_weight="4"
+                            android:id="@+id/search_state"
+                            android:ems="10"
+                            />
                         <Button
-                            android:id="@+id/search_add_state"
                             android:layout_width="30sp"
                             android:layout_height="30sp"
-                            android:background="@layout/circular_button"
+                            android:id="@+id/search_add_state"
                             android:text="+"
                             android:textColor="#eee"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:background="@layout/circular_button"/>
 
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/text_view_search_add_state"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/text_view_search_add_state"
+                        android:textStyle="bold"
                         android:paddingLeft="10dp"
-                        android:textStyle="bold" />
+                        />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
+                        android:background="#59fb6542">
+                    </View>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Educational Level"
                         android:textAlignment="textStart"
+                        android:text="Educational Level"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <HorizontalScrollView
                         android:id="@+id/scrollView"
@@ -521,28 +513,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
+                        android:background="#59fb6542">
+                    </View>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Sort by"
                         android:textAlignment="textStart"
+                        android:text="Sort by"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <Spinner
-                        android:id="@+id/spinner_sort_by"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/spinner_sort_by"
                         android:layout_marginLeft="6dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
+                        android:textSize="16dp"
                         android:entries="@array/sort_by_array"
-                        android:textSize="16dp" />
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1" />
+
 
 
                 </LinearLayout>
@@ -550,15 +544,15 @@
 
 
             <android.support.v7.widget.CardView
-                android:id="@+id/advanced_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:id="@+id/advanced_search"
+                app:cardCornerRadius="4dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="20dp"
                 android:elevation="10dp"
-                app:cardCornerRadius="4dp">
-
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -568,373 +562,386 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="City"
                         android:textAlignment="textStart"
+                        android:text="City"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="5">
-
+                        android:weightSum="5"
+                        >
                         <EditText
-                            android:id="@+id/search_city"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:background="#fff"
-                            android:clickable="true"
+                            android:hint="Type City"
+                            android:textSize="16dp"
                             android:drawableLeft="@drawable/userlocation"
                             android:drawablePadding="10dp"
-                            android:ems="10"
-                            android:hint="Type City"
+                            android:background="#fff"
                             android:inputType="text"
-                            android:textSize="16dp" />
-
+                            android:clickable="true"
+                            android:layout_weight="4"
+                            android:id="@+id/search_city"
+                            android:ems="10"
+                            />
                         <Button
-                            android:id="@+id/search_add_city"
                             android:layout_width="30sp"
                             android:layout_height="30sp"
-                            android:background="@layout/circular_button"
+                            android:id="@+id/search_add_city"
                             android:text="+"
                             android:textColor="#eee"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:background="@layout/circular_button"/>
 
 
                     </LinearLayout>
-
                     <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:id="@+id/text_view_search_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:paddingLeft="10dp"
-                        android:textStyle="bold" />
-
+                        />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
+                        android:background="#59fb6542">
+                    </View>
                     <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:id="@+id/text_view_search_add_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:paddingLeft="10dp"
-                        android:textStyle="bold" />
-
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
+                        android:textAlignment="textStart"
                         android:text="Marital Status"
-                        android:textAlignment="textStart"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
-
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
                     <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/search_Marital_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:background="#fff"
+                        android:textSize="16dp"
                         android:clickable="true"
-                        android:focusableInTouchMode="false"
                         android:hint="Select Marital Status"
-                        android:textSize="16dp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Family Status"
-                        android:textAlignment="textStart"
-                        android:textSize="16dp"
-                        android:textStyle="italic" />
-
-                    <EditText
-                        android:id="@+id/search_Family_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
                         android:background="#fff"
-                        android:clickable="true"
-                        android:focusable="false"
+                        android:layout_marginTop="10dp"
+                        android:focusableInTouchMode="false"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="Family Status"
+                        android:textSize="16dp"
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/search_Family_status"
+                        android:textSize="16dp"
                         android:hint="Select Family Status"
-                        android:textSize="16dp" />
+                        android:clickable="true"
+                        android:background="#fff"
+                        android:layout_marginTop="10dp"
+                        android:focusable="false"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
+                        android:textAlignment="textStart"
                         android:text="Manglik"
-                        android:textAlignment="textStart"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
-
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
                     <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/search_manglik_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
+                        android:textSize="16dp"
                         android:entries="@array/manglik_search_array"
-                        android:textSize="16dp" />
+                        android:layout_marginTop="10dp" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Children"
                         android:textAlignment="textStart"
+                        android:text="Children"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <Spinner
-                        android:id="@+id/search_children"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
+                        android:id="@+id/search_children"
+                        android:textSize="16dp"
                         android:entries="@array/children_array"
-                        android:textSize="16dp" />
+                        android:layout_marginTop="10dp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Occupation"
                         android:textAlignment="textStart"
+                        android:text="Occupation"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/check_profession"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Profession"
                             android:layout_weight="1"
-                            android:text="Profession" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/check_job"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Job"
                             android:layout_weight="1"
-                            android:text="Job" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
 
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/check_retired"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Retired"
                             android:layout_weight="1"
-                            android:text="Retired" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
 
                         <CheckBox
                             android:id="@+id/check_business"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Business"
                             android:layout_weight="1"
-                            android:text="Business" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
-
+                        android:weightSum="2"
+                        android:layout_height="wrap_content">
                         <CheckBox
                             android:id="@+id/check_not_employed"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Not Employed"
                             android:layout_weight="1"
-                            android:text="Not Employed" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/check_studying_not_employed"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="Studying-Not Employed" />
+                            android:layout_width="0dp"
+                            android:text="Studying-Not Employed"
+                            android:layout_height="match_parent" />
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <CheckBox
                             android:id="@+id/occupation_doesnt_matter"
+                            android:text="Doesn't Matter"
+                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:checked="true"
-                            android:text="Doesn't Matter" />
+                            />
                     </LinearLayout>
 
 
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Annual Income"
                         android:textAlignment="textStart"
+                        android:text="Annual Income"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
-
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
                     <EditText
-                        android:id="@+id/search_Annual_income"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:background="#fff"
+                        android:id="@+id/search_Annual_income"
                         android:clickable="true"
-                        android:focusable="false"
                         android:hint="Select Annual Income"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:layout_marginTop="10dp"
+                        android:focusable="false"
+                        android:background="#fff"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Complexion"
                         android:textAlignment="textStart"
+                        android:text="Complexion"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
                     <LinearLayout
                         android:id="@+id/search_complexion"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/search_check_very_fair"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Very Fair"
                             android:layout_weight="1"
-                            android:text="Very Fair" />
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/search_check_fair"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Fair"
                             android:layout_weight="1"
-                            android:text="Fair" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:id="@+id/search_complexion2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/search_check_wheatish"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Wheatish"
                             android:layout_weight="1"
-                            android:text="Wheatish" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/search_check_wheatish_brown"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Wheatish Brown"
                             android:layout_weight="1"
-                            android:text="Wheatish Brown" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:id="@+id/search_complexion3"
+                        android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/search_check_dark"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Dark" />
+                            android:text="Dark"
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/complexion_doesnt_matter"
+                            android:text="Doesn't Matter"
+                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:checked="true"
-                            android:text="Doesn't Matter" />
+                            />
 
                     </LinearLayout>
 
@@ -943,75 +950,76 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Body Type"
                         android:textAlignment="textStart"
+                        android:text="Body Type"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        />
 
 
                     <LinearLayout
                         android:id="@+id/search_body_type"
+                        android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
+                        android:layout_height="wrap_content">
 
                         <CheckBox
                             android:id="@+id/search_check_slim"
+                            android:text="Slim"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Slim" />
+                            android:layout_height="wrap_content" />
 
 
                         <CheckBox
                             android:id="@+id/search_check_athletic"
+                            android:text="Athletic"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Athletic" />
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2">
-
+                        android:layout_height="wrap_content">
                         <CheckBox
                             android:id="@+id/search_check_average"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Average"
                             android:layout_weight="1"
-                            android:text="Average" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
 
 
                         <CheckBox
                             android:id="@+id/search_check_heavy"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:text="Heavy"
                             android:layout_weight="1"
-                            android:text="Heavy" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <CheckBox
                             android:id="@+id/bodytype_doesnt_matter"
+                            android:text="Doesn't Matter"
+                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:checked="true"
-                            android:text="Doesn't Matter" />
+                            />
                     </LinearLayout>
 
 
@@ -1019,30 +1027,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
-                        android:background="#59fb6542"></View>
+                        android:background="#59fb6542">
+                    </View>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Physical Status"
                         android:textAlignment="textStart"
+                        android:text="Physical Status"
                         android:textSize="16dp"
-                        android:textStyle="italic" />
-
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
                     <EditText
-                        android:id="@+id/search_physical_status"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="100dp"
-                        android:layout_marginTop="10dp"
-                        android:background="#fff"
-                        android:clickable="true"
-                        android:focusableInTouchMode="false"
-                        android:hint="Select Physical Status"
+                        android:id="@+id/search_physical_status"
                         android:textSize="16dp"
+                        android:clickable="true"
+                        android:hint="Select Physical Status"
+                        android:background="#fff"
+                        android:layout_marginTop="10dp"
+                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="100dp"
 
                         />
 
@@ -1054,4 +1063,13 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/search_Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_action_search" />
 </android.support.design.widget.CoordinatorLayout>

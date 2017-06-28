@@ -195,7 +195,7 @@
         <activity android:name=".Payment.activity.StatusActivity" />
         <activity android:name=".PdfViewActivity" />
         <activity android:name=".UserProfilePdfActivity" />
-        <activity android:name=".FbGalleryActivity"></activity>
+        <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity"></activity>
     </application>
 
 </manifest>

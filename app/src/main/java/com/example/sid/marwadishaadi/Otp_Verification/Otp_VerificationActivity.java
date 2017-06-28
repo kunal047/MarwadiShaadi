@@ -13,8 +13,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +42,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
     static int OTP=0;
     protected EditText otp;
     protected Button submit;
-    protected TextView call_us,resend_otp;
-
+    protected TextView otp_call,resend_otp;
+    protected LinearLayout otp_contact;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -50,14 +53,17 @@ public class Otp_VerificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_otp__verification);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         otp = (EditText) findViewById(R.id.user_otp);
         submit = (Button) findViewById(R.id.Submit_otp);
-        call_us = (TextView) findViewById(R.id.call_us);
+        otp_call = (TextView) findViewById(R.id.otp_call_number);
         resend_otp=(TextView)findViewById(R.id.resend_otp);
+        otp_contact=(LinearLayout)findViewById(R.id.otp_call_us);
         new SendingSMS().execute("8006467951");
 
 
@@ -96,7 +102,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             }
         });
 
-        call_us.setOnClickListener(new View.OnClickListener() {
+        otp_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -104,14 +110,14 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"OTP_Call_US","button");
 
                 final Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + call_us.getText().toString()));//change the number
+                callIntent.setData(Uri.parse("tel:" + otp_call.getText().toString()));//change the number
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
                     Toast.makeText(getApplicationContext(),"Permission for Call Denied!",Toast.LENGTH_LONG).show();
                     return;
                 }else{
                     AlertDialog.Builder discarduser = new AlertDialog.Builder(Otp_VerificationActivity.this);
-                    discarduser.setMessage("Do you want to call " + call_us.getText().toString() + " ? ")
+                    discarduser.setMessage("Do you want to call " + otp_call.getText().toString() + " ? ")
                             .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id)

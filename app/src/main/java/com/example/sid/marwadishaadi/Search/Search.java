@@ -1302,62 +1302,62 @@ public class Search extends AppCompatActivity {
         return true;
     }
 
-    private class BackEnd extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(Search.this);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setCancelable(false);
-            dialog.setMessage("Please Wait...");
-            dialog.show();
-        }
+        private class BackEnd extends AsyncTask<String, String, String> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                dialog = new ProgressDialog(Search.this);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCancelable(false);
+                dialog.setMessage("Please Wait...");
+                dialog.show();
+            }
 
-        @Override
-        protected String doInBackground(String... strings) {
-            AndroidNetworking.post("http://192.168.43.61:5050/searchById")
-                    .addBodyParameter("query", strings[0])
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+            @Override
+            protected String doInBackground(String... strings) {
+                AndroidNetworking.post("http://192.168.43.61:5050/searchById")
+                        .addBodyParameter("query", strings[0])
+                        .setPriority(Priority.HIGH)
+                        .build()
+                        .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: -------------- "+response.toString());
-                            for(int i=0;i<response.length();i++){
-                                JSONArray user= null;
-                                try {
-                                    user = response.getJSONArray(i);
-                                    Calendar calender = Calendar.getInstance();
-                                    int year = calender.get(Calendar.YEAR);
-                                    SuggestionModel suggestionModel= new SuggestionModel(year-(int)user.get(0),"http://www.marwadishaadi.com/uploads/cust_"+user.get(3).toString()+"/thumb/"+user.get(1).toString(),user.get(2).toString(),user.get(3).toString(),user.get(4).toString(),user.get(5).toString(),user.get(6).toString(),user.get(7).toString(),user.get(8).toString(),user.get(9).toString(),user.get(10).toString(),user.get(11).toString(), user.get(12).toString(), user.get(13).toString());
-                                    suggestionModelList2.add(suggestionModel);
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Log.e(TAG, "onResponse: -------------- "+response.toString());
+                                for(int i=0;i<response.length();i++){
+                                    JSONArray user= null;
+                                    try {
+                                        user = response.getJSONArray(i);
+                                        Calendar calender = Calendar.getInstance();
+                                        int year = calender.get(Calendar.YEAR);
+                                        SuggestionModel suggestionModel= new SuggestionModel(year-(int)user.get(0),"http://www.marwadishaadi.com/uploads/cust_"+user.get(3).toString()+"/thumb/"+user.get(1).toString(),user.get(2).toString(),user.get(3).toString(),user.get(4).toString(),user.get(5).toString(),user.get(6).toString(),user.get(7).toString(),user.get(8).toString(),user.get(9).toString(),user.get(10).toString(),user.get(11).toString(), user.get(12).toString(), user.get(13).toString());
+                                        suggestionModelList2.add(suggestionModel);
+
+                                    }
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                                 }
-                                catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
                             }
-                        }
 
-                        @Override
-                        public void onError(ANError error) {
-                            Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG);
-                        }
-                    });
+                            @Override
+                            public void onError(ANError error) {
+                                Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG);
+                            }
+                        });
 
-            return null;
-        }
+                return null;
+            }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            dialog.dismiss();
-            Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
-            intent.putExtra("which","advSearch");
-            startActivity(intent);
-            finish();
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                dialog.dismiss();
+                Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
+                intent.putExtra("which","advSearch");
+                startActivity(intent);
+                finish();
+            }
         }
     }
-}
