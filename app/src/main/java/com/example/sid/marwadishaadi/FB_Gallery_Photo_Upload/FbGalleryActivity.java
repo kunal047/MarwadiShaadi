@@ -48,7 +48,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
 
         Intent data = getIntent();
         userid = data.getStringExtra("userid");
-        Log.d("userid", "userid: " + userid);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.fbgallery_toolbar);
         toolbar.setTitle("Select Photos");
@@ -105,7 +104,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
 
-                        Toast.makeText(FbGalleryActivity.this, "response" + response.toString(), Toast.LENGTH_SHORT).show();
 
                         JSONObject obj = response.getJSONObject();
                         JSONArray data = null;
