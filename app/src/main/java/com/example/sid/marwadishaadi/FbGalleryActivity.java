@@ -1,0 +1,15 @@
+package com.example.sid.marwadishaadi;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class FbGalleryActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fb_gallery);
+
+
+    }
+}

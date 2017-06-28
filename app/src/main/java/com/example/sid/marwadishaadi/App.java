@@ -27,6 +27,9 @@ public class App extends Application {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate() {
+
+
+
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cl=Calendar.getInstance();
         String formattedDate = df.format( Calendar.getInstance().getTime());

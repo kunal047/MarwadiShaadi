@@ -97,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button ) findViewById(R.id.login);
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         login = (Button) findViewById(R.id.login);
-        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
 
+        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         fblogin.setReadPermissions(Arrays.asList("email"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override

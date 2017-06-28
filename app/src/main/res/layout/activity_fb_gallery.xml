@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.example.sid.marwadishaadi.FbGalleryActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/notify_toolbar"
@@ -12,10 +16,10 @@
         android:background="?attr/colorPrimary"
         >
         <Button
-            android:id="@+id/clearnotifications"
+            android:id="@+id/fb_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear"
+            android:text="Done"
             android:background="@color/colorPrimary"
             android:textAllCaps="false"
             android:layout_gravity="right"
@@ -23,9 +27,9 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
+        android:id="@+id/fb_gallery_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 
