@@ -6,6 +6,9 @@
 
     <string name="view">View</string>
 
+    <string name="please_wait">Generating Pdf</string>
+    <string name="pdf_file">Please wait ..</string>
+
     <string name="sample_title_default">Default view</string>
     <string name="sample_subtitle_default">Dialogs and messages with default style</string>
     <string name="sample_title_attrs">Styled view</string>

@@ -25,7 +25,7 @@
             android:screenOrientation="portrait">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />    
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -193,8 +193,6 @@
         </activity>
         <activity android:name=".Payment.activity.WebViewActivity" />
         <activity android:name=".Payment.activity.StatusActivity" />
-        <activity android:name=".PdfViewActivity" />
-        <activity android:name=".UserProfilePdfActivity" />
         <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity"></activity>
     </application>
 

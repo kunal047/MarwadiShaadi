@@ -20,6 +20,16 @@
                     android:layout_margin="20dp"
                     android:src="@drawable/reset" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/text3"
+                    android:text="Please enter the correct old password and the new password which you wish to set"
+                    android:textSize="14dp"
+                    android:layout_margin="10dp"
+                    />
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

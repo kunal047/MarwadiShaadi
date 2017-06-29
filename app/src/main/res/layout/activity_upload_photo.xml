@@ -18,17 +18,66 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    <TextView
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/fb_login_button"
+                android:layout_width="240dp"
+                facebook:com_facebook_login_text="Upload photos from Facebook"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center_vertical"
+                    >
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Or"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    >
+
+                </View>
+            </LinearLayout>
+
+            <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:text="TAP TO ADD A PHOTO"
+                android:text="Tap to add a photo"
         android:gravity="center_horizontal"
-        android:textSize="16dp"
+        android:textSize="14dp"
         android:textColor="@color/colorPrimary"
         fontPath="fonts/OpenSans-Bold.ttf"
         tools:ignore="MissingPrefix"
@@ -106,7 +155,7 @@
     </LinearLayout>
 
             <Button
-                android:layout_width="180dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/submit_photo"
                 android:text="Finish"
@@ -115,17 +164,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="30dp"/>
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/fb_login_button"
-                android:layout_width="240dp"
-                facebook:com_facebook_login_text="Or Upload photos from Facebook"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                />
 
         </LinearLayout>
     </ScrollView>

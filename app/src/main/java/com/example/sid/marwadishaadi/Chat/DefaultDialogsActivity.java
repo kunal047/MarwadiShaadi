@@ -41,4 +41,12 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
         dialogsList.setAdapter(super.dialogsAdapter);
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        overridePendingTransition(R.anim.exit,0);
+
+        return true;
+    }
+
 }

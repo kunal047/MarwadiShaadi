@@ -1,20 +1,30 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
@@ -22,9 +32,13 @@ import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.hendrix.pdfmyxml.PdfDocument;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+
+import java.io.File;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -158,6 +172,63 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             public void onClick(View v) {
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Save as PDF","button");
+
+
+                final NotificationCompat.Builder notification = new NotificationCompat.Builder(UserProfileActivity.this)
+                        .setContentTitle("Pdf Download")
+                        .setSmallIcon(R.drawable.ic_action_drawer_notification)
+                        .setAutoCancel(true)
+                        .setProgress(0,0,true)
+                        .setContentText("Download in progress");
+
+
+                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1,notification.build());
+
+                AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
+                    @Override
+                    protected void initView(View view) {}
+                };
+                page1.setReuseBitmap(true);
+
+
+                PdfDocument doc  = new PdfDocument(UserProfileActivity.this);
+                doc.addPage(page1);
+                doc.setRenderWidth(1072);
+                doc.setRenderHeight(2000);
+                doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
+                doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                doc.setFileName("SiddheshRaneProfile");
+                doc.setInflateOnMainThread(false);
+                doc.setListener(new PdfDocument.Callback() {
+                    @Override
+                    public void onComplete(File file) {
+                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
+
+                        Toast.makeText(UserProfileActivity.this, "SiddheshRaneProfile.pdf saved in Downloads Folder", Toast.LENGTH_SHORT).show();
+
+                        Uri targetUri = Uri.fromFile(file);
+
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setDataAndType(targetUri, "application/pdf");
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,i,PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification.setContentText("Download complete");
+                        notification.setContentIntent(pendingIntent);
+                        notification.setProgress(0,0,false);
+                        notificationManager.notify(1,notification.build());
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
+                    }
+                });
+
+                Toast.makeText(UserProfileActivity.this, "Download Started", Toast.LENGTH_SHORT).show();
+                doc.createPdf(UserProfileActivity.this);
 
             }
         });
