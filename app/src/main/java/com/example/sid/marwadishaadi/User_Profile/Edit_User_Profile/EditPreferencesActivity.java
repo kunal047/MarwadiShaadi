@@ -24,7 +24,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.0.0.7:5050/";
+    public static final String URL = "http://10.0.0.17:5050/";
 //    public static final String URL = "http://192.168.137.152:5050/";
 //    public static final String URL = "http://192.168.43.61:5050/";
 

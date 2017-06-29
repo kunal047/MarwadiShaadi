@@ -454,7 +454,8 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:text="Doesn't Matter"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="true"/>
             </LinearLayout>
 
             <!--AI-->
@@ -603,7 +604,8 @@
                 android:layout_width="0dp"
                 android:text="Doesn't Matter"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:checked="true"/>
         </LinearLayout>
 
             <!--Body Type-->
@@ -663,7 +665,8 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:text="Doesn't Matter"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="true"/>
             </LinearLayout>
 
             <!--Physical Status-->
