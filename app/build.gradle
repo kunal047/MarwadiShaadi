@@ -37,34 +37,56 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //for chat
-    
 
-    compile 'com.google.firebase:firebase-invites:11.0.1'
-    compile 'com.github.barteksc:android-pdf-viewer:2.0.3'
+    // standard google libs
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.synnapps:carouselview:0.1.4'
-    compile 'com.github.clans:fab:1.6.4'
-    compile 'com.google.firebase:firebase-messaging:11.0.1'
-    compile 'com.github.Cutta:GifView:1.1'
-    compile 'com.crystal:crystalrangeseekbar:1.1.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.github.stfalcon:chatkit:0.2.1'
-    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
-    compile 'com.stepstone.stepper:material-stepper:3.3.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.varunest:sparkbutton:1.0.5'
+
+    // firebase => notifications,sharing
     compile 'com.google.firebase:firebase-core:11.0.1'
+    compile 'com.google.firebase:firebase-messaging:11.0.1'
+    compile 'com.google.firebase:firebase-invites:11.0.1'
+
+    // for image loading
+    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // for Facebook auth
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
+
+    // for chat
+    compile 'com.github.stfalcon:chatkit:0.2.1'
+
+    // for custom fonts
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+
+    // for step-wise wizard in signup
+    compile 'com.stepstone.stepper:material-stepper:3.3.0'
+    compile 'com.github.varunest:sparkbutton:1.0.5'
+
+    // animations
     compile 'jp.wasabeef:recyclerview-animators:2.2.6'
     compile 'com.mostafagazar:customshapeimageview:1.0.4'
+
+    // networking
     compile 'com.amitshekhar.android:android-networking:1.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+
+    // for circular image view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    // for image carousel
+    compile 'com.synnapps:carouselview:0.1.4'
+
+    // for FAB
+    compile 'com.github.clans:fab:1.6.4'
+
+    // for scroll
+    compile 'com.crystal:crystalrangeseekbar:1.1.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

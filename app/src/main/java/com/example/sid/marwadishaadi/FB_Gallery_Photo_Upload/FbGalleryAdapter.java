@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.sid.marwadishaadi.OnPicSelectedListener;
 import com.example.sid.marwadishaadi.R;
 
 import java.util.List;

@@ -4,12 +4,20 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.LoginHistory.OnClearFromRecentService;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,13 +30,11 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
  * Created by Sid on 14-Jun-17.
  */
 
-public class App extends Application {
+public class App extends Application{
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate() {
-
-
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cl=Calendar.getInstance();
