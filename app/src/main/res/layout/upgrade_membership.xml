@@ -85,7 +85,7 @@
                     android:text="Duration : "
                     android:padding="2dp"
                     android:textSize="14dp"
-                    android:id="@+id/duration_maheshwari"/>
+                    android:id="@+id/duration_maheshwari"/> 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
