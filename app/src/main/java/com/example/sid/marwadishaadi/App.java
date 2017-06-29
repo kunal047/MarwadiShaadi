@@ -44,7 +44,6 @@ public class App extends Application{
         Log.e(TAG, "onCreate:--- "+ formattedDate+ "update is ------"+s2);
 
         super.onCreate();
-        Toast.makeText(getApplicationContext(),"App has Created "+getEmojiByUnicode(0x1F601),Toast.LENGTH_LONG).show();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -62,9 +61,6 @@ public class App extends Application{
                 startActivity(i);
             }
         }
-    public String getEmojiByUnicode(int unicode){
-        return new String(Character.toChars(unicode));
-    }
 
 
 }

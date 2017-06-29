@@ -16,8 +16,6 @@ public class Intro1Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         return inflater.inflate(R.layout.fragment_intro1, container, false);
     }

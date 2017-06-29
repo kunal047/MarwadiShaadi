@@ -88,5 +88,6 @@ dependencies {
     // for scroll
     compile 'com.crystal:crystalrangeseekbar:1.1.1'
 
+    compile project(path: ':lib')
 }
 apply plugin: 'com.google.gms.google-services'
