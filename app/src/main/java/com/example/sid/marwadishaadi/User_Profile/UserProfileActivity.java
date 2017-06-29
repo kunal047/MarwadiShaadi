@@ -10,8 +10,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +33,14 @@ import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.synnapps.carouselview.CarouselView;
@@ -61,6 +70,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
+    private String userid_from_deeplink;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -78,6 +88,15 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle("Siddhesh Rane");
+
+
+        Intent data = getIntent();
+        String deeplink = data.getStringExtra("deeplink");
+
+        if (deeplink!=null) {
+            userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
+            Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
+        }
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
 
@@ -147,25 +166,42 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             public void onClick(View v) {
 
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Share Profile","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Share Profile", "button");
 
-                // TODO: 23-Jun-17 Replace caste and id of user you want to share #kunal
                 String caste = "Maheshwari";
                 String userid = "M13725";
-                String username = "Siddhesh";
+                final String username = "Siddhesh";
                 String packageName = getPackageName();
-                String weblink="http://www.marwadishaadi.com/"+caste+"/user/candidate/"+userid;
+                String weblink = "http://www.marwadishaadi.com/" + caste + "/user/candidate/" + userid;
                 String domain = "https://bf5xe.app.goo.gl/";
-                String link = domain + "?link="+weblink+"&apn="+packageName+"&ibi=com.example.ios&isi=12345";
-                Intent sendIntent = new Intent();
-                String msg = "Hey, Check this cool profile of "+username+":\n"+ link;
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&afl="+weblink+"&dfl="+weblink;
 
-            }
-        });
+                OnCompleteListener onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+
+                            Intent sendIntent = new Intent();
+                            String msg = "Hey, Check this cool profile of " + username + ":" + shortLink.toString();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT,msg);
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+
+                        }
+                    }
+                };
+
+                Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                        .setLongLink(Uri.parse(link))
+                        .buildShortDynamicLink();
+                shortLinkTask.addOnCompleteListener(onCompleteListener);
+
+
+            }});
 
         sharesave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +234,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                 doc.setRenderHeight(2000);
                 doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
                 doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
-                doc.setFileName("SiddheshRaneProfile");
+                doc.setFileName("Siddhesh-Rane-Profile");
                 doc.setInflateOnMainThread(false);
                 doc.setListener(new PdfDocument.Callback() {
                     @Override
