@@ -67,7 +67,7 @@
                     android:textSize="16dp"
                     android:hint="Gotra"
                     android:textColorHint="#747474"
-                    android:drawableLeft="@drawable/gotra"
+                    android:drawableLeft="@drawable/signup_gotra"
                     android:drawablePadding="10dp"
                     android:padding="6dp"
                     android:inputType="textPersonName"

@@ -59,7 +59,7 @@
                     android:textSize="16dp"
                     android:hint="Institute Name (IIT, BITS)"
                     android:textColorHint="#747474"
-                    android:drawableLeft="@drawable/institute"
+                    android:drawableLeft="@drawable/signup_institute"
                     android:drawablePadding="10dp"
                     android:padding="6dp"
                     android:inputType="textPersonName"
