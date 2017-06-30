@@ -26,14 +26,7 @@
             />
     </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Please double tap to select one profile photo and then you can tap to select upto 4 more photos"
-        android:layout_margin="5dp"
-        android:textColor="@color/colorPrimary"
-        fontPath="fonts/OpenSans-Bold.ttf"
-        tools:ignore="MissingPrefix"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fb_gallery_recyclerview"
         android:layout_width="match_parent"

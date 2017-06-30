@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -32,8 +34,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
     private List<FbGalleryModel> fbGalleryModelList=new ArrayList<>();
     private FbGalleryAdapter fbGalleryAdapter;
     private String userid;
-    private List<FbGalleryModel> selectedphotos = new ArrayList<>();
-
+    private ArrayList<String> selected_photos_url = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,93 +70,129 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                 // getting all selected photos
                 for (FbGalleryModel fb:fbGalleryModelList){
                     if (fb.isSelected()){
-                        selectedphotos.add(fb);
+                        selected_photos_url.add(fb.getUrl());
                     }
                 }
 
-                if(selectedphotos.size() > 0) {
-                    // TODO: 28-Jun-17 upload selected photos in selected_photos arraylist
-                    Intent i = new Intent(FbGalleryActivity.this, DashboardActivity.class);
-                    startActivity(i);
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                }else{
-                    Toast.makeText(FbGalleryActivity.this, "Please select atleast 1 photo to proceed", Toast.LENGTH_SHORT).show();
+                for (String url : selected_photos_url) {
+                    Log.d("urls from gallery", "onCreate: " + url);
                 }
+
+                if (selected_photos_url.size() <= 5) {
+                     Bundle b = new Bundle();
+                     b.putStringArrayList("selected_photos_url", selected_photos_url);
+                     Intent i = new Intent(FbGalleryActivity.this, UploadPhotoActivity.class);
+                     i.putExtras(b);
+                     startActivity(i);
+                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                 }else{
+                     selected_photos_url.clear();
+                     Toast.makeText(FbGalleryActivity.this, "Select only 5 photos", Toast.LENGTH_SHORT).show();
+                 }
             }
         });
 
     }
 
-    private void getData() {
-        
-        
-        // all photos
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/"+userid+"/photos",
-                null,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
+    private void getData(){
 
+        // access token
+        final AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        // getting all albums
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                accessToken,
+                "/"+userid+"/albums",
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
 
                         JSONObject obj = response.getJSONObject();
                         JSONArray data = null;
                         try {
                             data = obj.getJSONArray("data");
-                        } catch (JSONException e) {
+                        }catch (JSONException e){
                             e.printStackTrace();
                         }
 
+                        // getting album id of profile pictures
+                        String album_id = null;
                         for (int i=0;i<data.length();i++){
 
                             try {
-                                JSONObject pic = data.getJSONObject(i);
-                                String photoid = pic.getString("id");
-
-                                // each individual photo
-                                GraphRequest request = GraphRequest.newGraphPathRequest(
-                                        AccessToken.getCurrentAccessToken(),
-                                        "/"+photoid,
-                                        new GraphRequest.Callback() {
-                                            @Override
-                                            public void onCompleted(GraphResponse response) {
-
-                                                JSONObject js = response.getJSONObject();
-                                                JSONArray pics = null;
-                                                try {
-                                                    pics = js.getJSONArray("images");
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                String url = null;
-                                                try {
-                                                    JSONObject requiredpic = pics.getJSONObject(0);
-                                                    url = requiredpic.getString("source");
-                                                    FbGalleryModel fb = new FbGalleryModel(url,false);
-                                                    fbGalleryModelList.add(fb);
-                                                    fbGalleryAdapter.notifyDataSetChanged();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-
-                                Bundle parameters = new Bundle();
-                                parameters.putString("fields", "images");
-                                request.setParameters(parameters);
-                                request.executeAsync();
-
-                            } catch (JSONException e) {
+                                JSONObject album = data.getJSONObject(i);
+                                if (album.getString("name").equals("Profile Pictures")){
+                                    album_id = album.getString("id");
+                                }
+                            }catch (JSONException e){
                                 e.printStackTrace();
                             }
-
                         }
-                    }
-                }
-        ).executeAsync();
-    }
 
+                        // get all profile picture album photos
+                        GraphRequest request = GraphRequest.newGraphPathRequest(
+                                accessToken,
+                                "/" + album_id+"/photos",
+                                new GraphRequest.Callback() {
+                                    @Override
+                                    public void onCompleted(GraphResponse response) {
+
+
+                                        JSONObject data = response.getJSONObject();
+                                        try {
+
+                                            final JSONArray photos = data.getJSONArray("data");
+
+                                            for (int i=0;i<photos.length();i++){
+
+                                                JSONObject photonode = photos.getJSONObject(i);
+                                                String photoid = photonode.getString("id");
+
+
+                                                // getting photo finally :)
+                                                GraphRequest request = GraphRequest.newGraphPathRequest(
+                                                        accessToken,
+                                                        "/"+photoid,
+                                                        new GraphRequest.Callback() {
+                                                            @Override
+                                                            public void onCompleted(GraphResponse response) {
+
+                                                                JSONObject photo = response.getJSONObject();
+                                                                try {
+                                                                    JSONArray webp_images = photo.getJSONArray("webp_images");
+                                                                    String url = webp_images.getJSONObject(0).getString("source");
+                                                                    FbGalleryModel fb = new FbGalleryModel(url, false);
+                                                                    fbGalleryModelList.add(fb);
+                                                                    fbGalleryAdapter.notifyDataSetChanged();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+
+                                                Bundle parameters = new Bundle();
+                                                parameters.putString("fields", "webp_images");
+                                                request.setParameters(parameters);
+                                                request.executeAsync();
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                    }
+                                });
+
+                        request.executeAsync();
+
+
+                    }
+                });
+
+        request.executeAsync();
+
+    }
 
     @Override
     public boolean onSupportNavigateUp(){

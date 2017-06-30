@@ -19,16 +19,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.facebook.login.widget.LoginButton
+            <Button
                 android:id="@+id/fb_login_button"
-                android:layout_width="240dp"
-                facebook:com_facebook_login_text="Upload photos from Facebook"
-                android:layout_height="wrap_content"
+                android:layout_width="280dp"
+                android:layout_height="35dp"
+                android:text="Upload photos from Facebook"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
+                android:textSize="12dp"
                 android:layout_marginTop="20dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
+                style="@style/com_facebook_button"
+                android:drawableLeft="@drawable/com_facebook_button_icon"
                 />
 
             <LinearLayout
@@ -94,6 +95,7 @@
             android:layout_height="120dp"
             android:layout_marginTop="10dp"
             android:clickable="true"
+            android:tag="default"
             android:id="@+id/photo1"
             android:scaleType="centerCrop"
             android:src="@drawable/photo"
@@ -113,6 +115,7 @@
         android:layout_height="96dp"
         android:layout_margin="10dp"
         android:clickable="true"
+        android:tag="default"
         android:id="@+id/photo2"
         android:src="@drawable/photo"/>
 
@@ -120,6 +123,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:id="@+id/photo3"
+        android:tag="default"
         android:layout_margin="10dp"
         android:clickable="true"
         android:src="@drawable/photo"/>
@@ -141,6 +145,7 @@
             android:layout_height="96dp"
             android:layout_margin="10dp"
             android:id="@+id/photo4"
+            android:tag="default"
             android:clickable="true"
             android:src="@drawable/photo"/>
 
@@ -149,6 +154,7 @@
             android:layout_height="96dp"
             android:layout_margin="10dp"
             android:clickable="true"
+            android:tag="default"
             android:id="@+id/photo5"
             android:src="@drawable/photo"/>
     </LinearLayout>

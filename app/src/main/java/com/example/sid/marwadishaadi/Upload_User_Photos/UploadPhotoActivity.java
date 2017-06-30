@@ -5,17 +5,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
@@ -24,12 +27,15 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,10 +45,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.sid.marwadishaadi.R.id.count;
 
 public class UploadPhotoActivity extends AppCompatActivity {
 
@@ -55,7 +64,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private boolean isSelected = false;
     private CircleImageView photo1,photo2,photo3,photo4,photo5;
     CallbackManager callbackManager;
-    protected LoginButton fblogin;
+    protected Button fblogin;
+    LoginManager loginManager;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -67,53 +77,76 @@ public class UploadPhotoActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_upload_photo);
-        callbackManager = CallbackManager.Factory.create();
 
-        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
+        callbackManager = CallbackManager.Factory.create();
+        fblogin = (Button) findViewById(R.id.fb_login_button);
 
         if (Profile.getCurrentProfile() !=null || AccessToken.getCurrentAccessToken() != null){
-            fblogin.setText("Or Upload photos from Facebook");
+            fblogin.setText("Upload photos from Facebook");
         }
 
-        fblogin.setReadPermissions(Arrays.asList("email","user_photos"));
-        fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        fblogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onClick(View v) {
 
-                // getting user profile
-                GraphRequest request = GraphRequest.newMeRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                try {
+                if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                                    String userid = object.getString("id");
-                                    fblogin.setText("Or upload photos from Facebook");
-                                    Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                                    i.putExtra("userid",userid);
-                                    startActivity(i);
-                                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                ArrayList<String> permissionsFB = new ArrayList<>();
+                permissionsFB.add("email");
+                permissionsFB.add("user_photos");
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }});
-                request.executeAsync();
+                loginManager = LoginManager.getInstance();
+                loginManager.logInWithPublishPermissions(UploadPhotoActivity.this, permissionsFB);
+
+                loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+
+                        // getting user profile
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        try {
+
+                                            String userid = object.getString("id");
+                                            fblogin.setText("Or upload photos from Facebook");
+                                            Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                                            i.putExtra("userid",userid);
+                                            startActivity(i);
+                                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }});
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+
+                    }
+                });
+                }else{
+
+                    Profile profile = Profile.getCurrentProfile();
+                    String userid = profile.getId();
+                    Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                    i.putExtra("userid",userid);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                }
+
             }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-
-
         });
+
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         submit= (Button)findViewById(R.id.submit_photo);
@@ -185,16 +218,54 @@ public class UploadPhotoActivity extends AppCompatActivity {
         });
 
 
+
+        if (this.getIntent().getExtras()!=null){
+            Bundle b =this.getIntent().getExtras();
+            ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
+
+            for (String url : urls) {
+                Log.d("urls from upload", "onCreate: " + url);
+            }
+
+            for (int i=0;i<urls.size();i++){
+
+                Picasso.with(UploadPhotoActivity.this)
+                        .load(urls.get(i))
+                        .into(getImageviewInstance(i));
+
+            }
+
+        }
+
+
     }
 
+    private CharSequence[] getItems(){
+
+        String tag = getImageview().getTag().toString();
+        if(tag.equals("default")){
+            CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
+            return items;
+        }else if (getImageview() == photo1){
+            if (!tag.equals("default")) {
+                CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
+                return items;
+            }else{
+                CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+                return items;
+            }
+        }else{
+            final CharSequence[] items = { "Take Photo", "Choose from Library","Set as Profile picture","Remove Photo",
+                    "Cancel" };
+            return items;
+        }
+    }
 
     private void selectImage() {
 
-
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = getItems();
         AlertDialog.Builder builder = new AlertDialog.Builder(UploadPhotoActivity.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Choose Photos !");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
@@ -202,7 +273,28 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         cameraIntent();
                 } else if (items[item].equals("Choose from Library")) {
                         galleryIntent();
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Set as Profile picture")){
+
+                         Drawable temp = getImageview().getDrawable();
+                         Drawable photo = photo1.getDrawable();
+
+                         String temp_tag = getImageview().getTag().toString();
+                         String photo_tag = photo1.getTag().toString();
+
+                         photo1.setImageDrawable(temp);
+                         if (temp_tag.equals("changed")){
+                             photo1.setTag("changed");
+                         }
+
+                        if (photo_tag.equals("default")){
+                            getImageview().setTag("default");
+                        }
+                         getImageview().setImageDrawable(photo);
+
+                } else if (items[item].equals("Remove Photo")){
+                        getImageview().setImageResource(R.drawable.photo);
+                        getImageview().setTag("default");
+                }else if (items[item].equals("Cancel")) {
                         dialog.dismiss();
                 }
             }
@@ -210,7 +302,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
 
         AlertDialog image = builder.create();
-        image.setTitle("Add photo !");
+        image.setTitle("Choose Photos !");
         image.show();
     }
 
@@ -257,6 +349,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
         img = getImageview();
         img.setImageBitmap(thumbnail);
+        img.setTag("changed");
         isSelected=true;
 
     }
@@ -274,6 +367,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         img = getImageview();
         img.setImageBitmap(bm);
+        img.setTag("changed");
         isSelected=true;
     }
 
@@ -294,5 +388,26 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
     }
 
-
+    private CircleImageView getImageviewInstance(int number){
+        switch (number){
+            case 0:
+                photo1.setTag("changed");
+                return photo1;
+            case 1:
+                photo2.setTag("changed");
+                return photo2;
+            case 2:
+                photo3.setTag("changed");
+                return photo3;
+            case 3:
+                photo4.setTag("changed");
+                return photo4;
+            case 4:
+                photo5.setTag("changed");
+                return photo5;
+            default:
+                photo1.setTag("changed");
+                return photo1;
+        }
+    }
 }
