@@ -73,7 +73,7 @@
                     android:hint="Work Location"
                     android:textSize="16dp"
                     android:textColorHint="#747474"
-                    android:drawableLeft="@drawable/userlocation"
+                    android:drawableLeft="@drawable/signup_location"
                     android:drawablePadding="10dp"
                     android:padding="6dp"
                     android:background="#fff"
