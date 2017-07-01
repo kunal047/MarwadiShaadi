@@ -8,16 +8,17 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginTop="40dp"
+        android:id="@+id/user_dp"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_marginTop="50dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile"
-        android:id="@+id/user_dp"
         app:civ_border_color="@android:color/white"
         app:civ_border_width="0.5dp" />
 
     <TextView
+        android:id="@+id/name_drawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Siddhesh Rane"

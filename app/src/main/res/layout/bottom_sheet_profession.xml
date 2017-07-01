@@ -27,6 +27,7 @@
                 android:orientation="vertical">
 
                 <Spinner
+                    android:id="@+id/profession"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -36,6 +37,7 @@
                     android:layout_weight="1" />
 
                 <EditText
+                    android:id="@+id/job_company"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -50,23 +52,21 @@
                     android:background="#fff"
                     />
 
-
-                <EditText
+                <Spinner
+                    android:id="@+id/occupation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textSize="16dp"
-                    android:hint="Working as "
-                    android:textColorHint="#747474"
-                    android:drawablePadding="10dp"
+                    android:layout_height="match_parent"
                     android:padding="10dp"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:layout_marginLeft="10dp"
-                    android:background="#fff"
-                    />
+                    android:entries="@array/occupation_array"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1" />
+
+
+
 
                 <AutoCompleteTextView
+                    android:id="@+id/job_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -81,6 +81,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/edit_annual_income"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -92,7 +93,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advnext"
+                    android:id="@+id/professionUpdate"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:layout_marginRight="5dp"

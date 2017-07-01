@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,49 +46,44 @@ public class ProfilePersonalDetailsFragment extends Fragment {
     private static int casebreak;
     private Button similar;
 
-    TextView name_age,maritalStatus, birthdate, gender, address, mobileNo, caste, height, weight, complexion_build, physicalStatus, education, educationDegree, collegeName_collegeLocation, currentOccupation, designation_companyName, companyLocation, annualIncome;
+
+    TextView name_age, maritalStatus, birthdate, gender, address, mobileNo, caste, height, weight, complexion_build, physicalStatus, education, educationDegree, collegeName_collegeLocation, currentOccupation, designation_companyName, companyLocation, annualIncome;
 
 
     public ProfilePersonalDetailsFragment() {
         // Required empty public constructor
     }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View mview =  inflater.inflate(R.layout.fragment_profile__personal__details, container, false);
+        final View mview = inflater.inflate(R.layout.fragment_profile__personal__details, container, false);
 
         edit_individual = (TextView) mview.findViewById(R.id.individual_clear);
         edit_education = (TextView) mview.findViewById(R.id.edu_clear);
         edit_profession = (TextView) mview.findViewById(R.id.profession_clear);
         similar = (Button) mview.findViewById(R.id.similar);
 
-        name_age=(TextView) mview.findViewById(R.id.name_age);
-        maritalStatus=(TextView) mview.findViewById(R.id.marital_status);
-        birthdate=(TextView) mview.findViewById(R.id.birthdate);
-        gender=(TextView) mview.findViewById(R.id.gender);
-        address=(TextView) mview.findViewById(R.id.address);
-        mobileNo=(TextView) mview.findViewById(R.id.contact_mob);
-        caste=(TextView) mview.findViewById(R.id.caste);
-        height=(TextView) mview.findViewById(R.id.height);
-        weight=(TextView) mview.findViewById(R.id.weight);
-        complexion_build=(TextView) mview.findViewById(R.id.complexion_build);
-        physicalStatus=(TextView) mview.findViewById(R.id.physical_status);
-        education=(TextView) mview.findViewById(R.id.degree);
-        educationDegree=(TextView) mview.findViewById(R.id.edu_degree);
-        collegeName_collegeLocation=(TextView) mview.findViewById(R.id.collegeName_collegeLocation);
-        currentOccupation=(TextView) mview.findViewById(R.id.current_occup);
-        designation_companyName=(TextView) mview.findViewById(R.id.occupDesignation_occupCompany);
-        companyLocation=(TextView) mview.findViewById(R.id.occup_location);
-        annualIncome=(TextView) mview.findViewById(R.id.annual_income);
-
-
+        name_age = (TextView) mview.findViewById(R.id.name_age);
+        maritalStatus = (TextView) mview.findViewById(R.id.marital_status);
+        birthdate = (TextView) mview.findViewById(R.id.birthdate);
+        gender = (TextView) mview.findViewById(R.id.gender);
+        address = (TextView) mview.findViewById(R.id.address);
+        mobileNo = (TextView) mview.findViewById(R.id.contact_mob);
+        caste = (TextView) mview.findViewById(R.id.caste);
+        height = (TextView) mview.findViewById(R.id.height);
+        weight = (TextView) mview.findViewById(R.id.weight);
+        complexion_build = (TextView) mview.findViewById(R.id.complexion_build);
+        physicalStatus = (TextView) mview.findViewById(R.id.physical_status);
+        education = (TextView) mview.findViewById(R.id.degree);
+        educationDegree = (TextView) mview.findViewById(R.id.edu_degree);
+        collegeName_collegeLocation = (TextView) mview.findViewById(R.id.collegeName_collegeLocation);
+        currentOccupation = (TextView) mview.findViewById(R.id.current_occup);
+        designation_companyName = (TextView) mview.findViewById(R.id.occupDesignation_occupCompany);
+        companyLocation = (TextView) mview.findViewById(R.id.occup_location);
+        annualIncome = (TextView) mview.findViewById(R.id.annual_income);
 
 
 
@@ -100,25 +96,29 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
                 startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
         edit_individual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(),EditPersonalDetailsActivity.class);
+                Intent i = new Intent(getContext(), EditPersonalDetailsActivity.class);
                 startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
         edit_education.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=12;
-                BottomSheetDialogFragment btm= new BottomSheet(1);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 12;
+
+
+
+
+                BottomSheetDialogFragment btm = new BottomSheet(1);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
 
@@ -126,22 +126,21 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         edit_profession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=13;
-                BottomSheetDialogFragment btm= new BottomSheet(1);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 13;
+                BottomSheetDialogFragment btm = new BottomSheet(1);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
 
         return mview;
     }
 
-    class PersonalDetails extends AsyncTask<String,String,String>
-    {
+    class PersonalDetails extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo","A1028")
+                    .addBodyParameter("customerNo", "A1028")
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -177,7 +176,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 Calendar cal = Calendar.getInstance();
                                 cal.setTime(date);
                                 String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-                                String strDate = cal.get(Calendar.DATE) + " " + str[(cal.get(Calendar.MONTH) )] + " " + cal.get(Calendar.YEAR);
+                                String strDate = cal.get(Calendar.DATE) + " " + str[(cal.get(Calendar.MONTH))] + " " + cal.get(Calendar.YEAR);
 
                                 String[] partsOfDate = formatedDate.split("-");
                                 int day = Integer.parseInt(partsOfDate[0]);
@@ -185,7 +184,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 int year = Integer.parseInt(partsOfDate[2]);
                                 int a = getAge(year, month, day);
 
-                                String na=array.getString(0)+ " "+array.getString(1)+", "+ a + " yrs";
+                                String na = array.getString(0) + " " + array.getString(1) + ", " + a + " yrs";
                                 name_age.setText(na);
                                 maritalStatus.setText(array.getString(3));
                                 birthdate.setText(strDate);
@@ -193,61 +192,53 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 address.setText(array.getString(5));
                                 mobileNo.setText(array.getString(6));
 
-                                String[] c=array.getString(7).split("");
-                                String cast="";
-                                if(c[1].equals("A")){
-                                    cast="Agarwal";
+                                String[] c = array.getString(7).split("");
+                                String cast = "";
+                                if (c[1].equals("A")) {
+                                    cast = "Agarwal";
+                                } else if (c[1].equals("K")) {
+                                    cast = "Khandelwal";
+                                } else if (c[1].equals("J")) {
+                                    cast = "Jain";
+                                } else if (c[1].equals("M")) {
+                                    cast = "Maheshwari";
+                                } else if (c[1].equals("O")) {
+                                    cast = "Other";
                                 }
-                                else if(c[1].equals("K")){
-                                    cast="Khandelwal";
-                                }
-                                else if(c[1].equals("J")) {
-                                    cast="Jain";
-                                }
-                                else if(c[1].equals("M")){
-                                    cast="Maheshwari";
-                                }
-                                else if(c[1].equals("O")){
-                                    cast="Other";
-                                }
-
 
 
                                 caste.setText(cast);
 
 
                                 height.setText(array.getString(8));
-                                String w = "weighs "+array.getString(9)+" kgs";
+                                String w = "weighs " + array.getString(9) + " kgs";
                                 weight.setText(w);
 
-                                String cb=array.getString(10)+", "+array.getString(11);
+                                String cb = array.getString(10) + ", " + array.getString(11);
 
                                 complexion_build.setText(cb);
                                 physicalStatus.setText(array.getString(12));
                                 education.setText(array.getString(13));
                                 educationDegree.setText(array.getString(14));
 
-                                String cnl=array.getString(15)+", "+array.getString(16);
+                                String cnl = array.getString(15) + ", " + array.getString(16);
                                 collegeName_collegeLocation.setText(cnl);
                                 currentOccupation.setText(array.getString(17));
 
-                                String dc=array.getString(20)+" at "+array.getString(19);
+                                String dc = array.getString(20) + " at " + array.getString(19);
                                 designation_companyName.setText(dc);
 
-                                String cl="Located in " + array.getString(21);
+                                String cl = "Located in " + array.getString(21);
                                 companyLocation.setText(cl);
-
-
-
 
 
                                 String annualI = array.getString(18);
                                 annualI = annualI.replaceAll("[^-?0-9]+", " ");
                                 List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
                                 Log.d(TAG, "onResponse: income array is " + incomeArray);
-                                if (annualI.contains("Upto")) {
+                                if (array.getString(18).contains("Upto")) {
                                     annualI = "Upto 3L";
-                                } else if (annualI.contains("Above")) {
+                                } else if (array.getString(18).contains("Above")) {
                                     annualI = "Above 50L";
 
                                 } else if (incomeArray.size() == 3) {
@@ -256,19 +247,14 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                     double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                                     annualI = (int) first + "L - " + (int) second + "L";
                                 } else {
-                                    annualI= "No Income mentioned.";
+                                    annualI = "No Income mentioned.";
                                 }
+                                Log.d(TAG, "onResponse: Annual Income ----------- "+array.getString(18) );
 
-                                annualIncome.setText(annualI );
-
-
-
+                                annualIncome.setText(annualI);
 
 
-
-                            }
-                            catch (JSONException e)
-                            {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
@@ -305,21 +291,12 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
         return age;
     }
-<<<<<<< HEAD
-=======
-    
->>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
-    public int getCasebreak()
-    {
+
+    public int getCasebreak() {
         return this.casebreak;
     }
-<<<<<<< HEAD
+
+    //Edit Educational details of User Personal Details
 
 
-
-
-
-
-=======
->>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
 }

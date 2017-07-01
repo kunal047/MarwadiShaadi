@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -23,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
@@ -35,16 +41,21 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+import com.synnapps.carouselview.ViewListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-
-public class  UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ImageListener, GoogleApiClient.OnConnectionFailedListener {
+public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,GoogleApiClient.OnConnectionFailedListener {
 
     private static LinearLayout linearlayout;
     private ProgressDialog progessdialog;
@@ -54,7 +65,6 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     private CarouselView carouselView;
     protected ImageView pref;
     private GoogleApiClient mGoogleApiClient;
-    private int[] sampleImages = {R.drawable.profile, R.drawable.profile, R.drawable.profile};
     private FloatingActionButton fav;
     private FloatingActionButton sendmsg;
     private FloatingActionButton sendinterest;
@@ -65,6 +75,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
     private FrameLayout frameLayout;
+    CollapsingToolbarLayout toolbarLayout;
 
  /*   AndroidNetworking.post(URL + "prepareUserProfile")
             .addBodyParameter("customerNo", "O1057")
@@ -153,22 +164,23 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                                     // Extract deep link from Intent
                                     Intent intent = result.getInvitationIntent();
                                     String deepLink = AppInviteReferral.getDeepLink(intent);
-                                    Toast.makeText(UserProfileActivity.this,deepLink, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserProfileActivity.this, deepLink, Toast.LENGTH_SHORT).show();
                                 } else {
                                     Log.d("Deep link", "getInvitation: no deep link found.");
                                 }
                             }
                         });
 
-
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle("Siddhesh Rane");
+
+        toolbarLayout.setTitle("Pranay Parmar");
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
         frameLayout = (FrameLayout) findViewById(R.id.fabmenu);
+
 
         fab = (FloatingActionMenu) findViewById(R.id.menu_yellow);
         fav = (FloatingActionButton) findViewById(R.id.fab_favourite);
@@ -183,15 +195,13 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Edit photos","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Edit photos", "button");
 
-                Intent i = new Intent(UserProfileActivity.this,UploadPhotoActivity.class);
+                Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
-
-
 
 
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -202,17 +212,16 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                 } else {
                     coordinatorLayout.setBackgroundColor(Color.TRANSPARENT);
                 }
-                Toast.makeText(getApplicationContext(),"yay", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "yay", Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "button");
             }
         });
 
@@ -220,7 +229,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Sent Message","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Message", "button");
             }
         });
 
@@ -228,7 +237,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Sent Interest","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest", "button");
             }
         });
 
@@ -236,18 +245,18 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Share Profile","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Share Profile", "button");
 
                 // TODO: 23-Jun-17 Replace caste and id of user you want to share #kunal
                 String caste = "Maheshwari";
                 String userid = "M13725";
                 String username = "Siddhesh";
                 String packageName = getPackageName();
-                String weblink="http://www.marwadishaadi.com/"+caste+"/user/candidate/"+userid;
+                String weblink = "http://www.marwadishaadi.com/" + caste + "/user/candidate/" + userid;
                 String domain = "https://bf5xe.app.goo.gl/";
-                String link = domain + "?link="+weblink+"&apn="+packageName+"&ibi=com.example.ios&isi=12345";
+                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&ibi=com.example.ios&isi=12345";
                 Intent sendIntent = new Intent();
-                String msg = "Hey, Check this cool profile of "+username+":\n"+ link;
+                String msg = "Hey, Check this cool profile of " + username + ":\n" + link;
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
                 sendIntent.setType("text/plain");
@@ -260,7 +269,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Save as PDF","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
 
           /*      progessdialog = new ProgressDialog(UserProfileActivity.this);
                 progessdialog.setMessage("Please Wait");
@@ -276,14 +285,8 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
 
         carouselView = (CarouselView) findViewById(R.id.carouselView);
-        carouselView.setPageCount(sampleImages.length);
-        carouselView.setImageListener(this);
-        carouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
-            }
-        });
 
+        new ProfilePicture().execute();
 
 
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
@@ -294,7 +297,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
         tabLayout.setupWithViewPager(userinfo);
 
-      /*  pref= (ImageView) findViewById(R.id.profile_user_preferences);
+       /*pref= (ImageView) findViewById(R.id.profile_user_preferences);
         pref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -329,11 +332,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
     }
 
-    @Override
-    public void setImageForPosition(int position, ImageView imageView) {
-        imageView.setImageResource(sampleImages[position]);
 
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -341,7 +340,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     }
 
 
-    public static class ProfilePageAdapter extends FragmentPagerAdapter{
+    public static class ProfilePageAdapter extends FragmentPagerAdapter {
 
         public ProfilePageAdapter(FragmentManager fm) {
             super(fm);
@@ -350,18 +349,18 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         @Override
         public Fragment getItem(int position) {
 
-            switch (position){
+            switch (position) {
                 case 0:
                     ProfilePersonalDetailsFragment profile_personal_detailsFragment = new ProfilePersonalDetailsFragment();
                     return profile_personal_detailsFragment;
                 case 1:
-                   ProfileAdditionalDetailsFragment profile_additional_detailsFragment = new ProfileAdditionalDetailsFragment();
+                    ProfileAdditionalDetailsFragment profile_additional_detailsFragment = new ProfileAdditionalDetailsFragment();
                     return profile_additional_detailsFragment;
                 case 2:
                     ProfileFamilyDetailsFragment profile_family_detailsFragment = new ProfileFamilyDetailsFragment();
                     return profile_family_detailsFragment;
                 case 3:
-                    PartnerPreferencesFragment partnerPreferencesFragment= new PartnerPreferencesFragment();
+                    PartnerPreferencesFragment partnerPreferencesFragment = new PartnerPreferencesFragment();
                     return partnerPreferencesFragment;
             }
             return null;
@@ -374,7 +373,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return "Personal Details";
                 case 1:
@@ -452,4 +451,60 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
     }*/
+
+    class ProfilePicture extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            AndroidNetworking.post("http://192.168.43.143:5050/fetchProfilePicture")
+                    .addBodyParameter("customerNo", "A1028")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+
+
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            try {
+                                JSONArray array = response.getJSONArray(0);
+                                String name = array.getString(1)+ " "+array.getString(2);
+                                final ArrayList<String> images = new ArrayList<>();
+                                for(int i =0;i<response.length();i++)
+                                {
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
+                                    Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
+
+                                }
+
+                                toolbarLayout.setTitle(name);
+
+                                carouselView.setPageCount(images.size());
+                                carouselView.setImageListener(new ImageListener() {
+                                    @Override
+                                    public void setImageForPosition(int position, ImageView imageView) {
+                                        Picasso.with(UserProfileActivity.this)
+                                                .load(images.get(position))
+                                                .fit()
+                                                .into(imageView);
+                                    }
+                                });
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+            return null;
+        }
+    }
 }

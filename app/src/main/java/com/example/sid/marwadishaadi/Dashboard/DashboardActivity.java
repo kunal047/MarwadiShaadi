@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -21,8 +22,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.example.sid.marwadishaadi.Dashboard_Favourites.FavouritesFragment;
 import com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
@@ -36,6 +43,12 @@ import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.Search;
 import com.example.sid.marwadishaadi.Settings.SettingsActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -55,6 +68,7 @@ public class DashboardActivity extends AppCompatActivity
     private LinearLayout inbox;
     private LinearLayout search;
     private int click = 0;
+    TextView nameDrawer;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -83,6 +97,7 @@ public class DashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View mview = navigationView.getHeaderView(0);
+        nameDrawer = (TextView) mview.findViewById((R.id.name_drawer));
         userdp = (ImageView) mview.findViewById(R.id.user_dp);
         userdp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +107,8 @@ public class DashboardActivity extends AppCompatActivity
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
-
+    //fetch dp and name
+        new FetchDrawer().execute();
         interest = (LinearLayout) mview.findViewById(R.id.nav_interest);
         interest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,8 +207,8 @@ public class DashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_feedback) {
             Intent i = new Intent(DashboardActivity.this, FeedbackActivity.class);
             startActivity(i);
-           overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-       }
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -292,4 +308,44 @@ public class DashboardActivity extends AppCompatActivity
     }
 
 
+    public class FetchDrawer extends AsyncTask<Void, Void, Void>
+
+    {
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            AndroidNetworking.post("http://192.168.43.143:5050/fetchProfilePictureDrawer")
+                    .addBodyParameter("customerNo", "A1028")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            try {
+                                JSONArray array = response.getJSONArray(0);
+                                String name = array.getString(1) + " " + array.getString(2);
+
+                                Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + array.getString(0)).into(userdp);
+                                nameDrawer.setText(name);
+
+                            }catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+
+            return null;
+        }
+    }
 }

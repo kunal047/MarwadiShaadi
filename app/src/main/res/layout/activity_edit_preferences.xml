@@ -131,6 +131,7 @@
                             android:weightSum="2"
                             >
                             <Spinner
+                                android:id="@+id/height_from"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -140,6 +141,7 @@
                                 />
 
                             <Spinner
+                                android:id="@+id/height_to"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -173,12 +175,14 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
+                            android:id="@+id/very_fair"
                             android:layout_width="0dp"
                             android:text="Very Fair"
                             android:layout_weight="1"
                             android:layout_height="wrap_content" />
 
                         <CheckBox
+                            android:id="@+id/fair"
                             android:text="Fair"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -192,12 +196,14 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
+                            android:id="@+id/wheatish"
                             android:text="Wheatish"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
 
                         <CheckBox
+                            android:id="@+id/wheatish_brown"
                             android:text="Wheatish Brown"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -208,12 +214,23 @@
                     <LinearLayout
                         android:padding="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:weightSum="2">
 
                         <CheckBox
-                            android:layout_width="wrap_content"
+                            android:id="@+id/dark"
+                            android:layout_width="0dp"
                             android:text="Dark"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+
+                            android:layout_weight="1"/>
+
+                        <CheckBox
+                            android:id="@+id/complexion_doesntMatter"
+                            android:layout_width="0dp"
+                            android:text="Doesn't Matter"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
                     </LinearLayout>
 
                     <TextView
@@ -236,6 +253,7 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
+                            android:id="@+id/slim"
                             android:text="Slim"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -243,6 +261,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/athletic"
                             android:text="Athletic"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -256,6 +275,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <CheckBox
+                            android:id="@+id/average"
                             android:text="Average"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -263,11 +283,28 @@
 
 
                         <CheckBox
+                            android:id="@+id/heavy"
                             android:text="Heavy"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
+
+                <LinearLayout
+                    android:weightSum="2"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <CheckBox
+                        android:id="@+id/bodyType_doesntMatter"
+                        android:text="Doesn't Matter"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -280,7 +317,8 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         />
-                    <EditText
+                    <Spinner
+                        android:entries="@array/physicalstatus_array"
                         android:id="@+id/edit_physical_status"
                         android:layout_marginLeft="10dp"
                         android:layout_width="match_parent"
@@ -294,6 +332,7 @@
                         />
 
                     <AutoCompleteTextView
+                        android:id="@+id/work_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
@@ -482,7 +521,7 @@
                                     android:layout_width="50dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="Post\nGraduate"
+                                    android:text="Postgraduate"
                                     android:textSize="12dp"
                                     android:textStyle="bold" />
                             </LinearLayout>
@@ -558,13 +597,15 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
-                            android:text="Profession"
+                            android:id="@+id/professional"
+                            android:text="Professional"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
 
 
                         <CheckBox
+                            android:id="@+id/job"
                             android:text="Job"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -582,6 +623,7 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
+                            android:id="@+id/retired"
                             android:text="Retired"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -589,6 +631,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/business"
                             android:text="Business"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -602,16 +645,33 @@
                         android:padding="10dp"
                         android:layout_height="wrap_content">
                         <CheckBox
+                            android:id="@+id/not_employed"
                             android:text="Not Employed"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
 
                         <CheckBox
+                            android:id="@+id/studying_not_employed"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:text="Studying-Not Employed"
+                            android:text="Studying - Not Employed"
                             android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:weightSum="2"
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:id="@+id/occup_doesntMatter"
+                            android:text="Doesn't Matter"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -634,7 +694,8 @@
                             android:paddingBottom="10dp"
                             />
 
-                        <EditText
+                        <Spinner
+                            android:entries="@array/status_array"
                             android:id="@+id/edit_marital_status"
                             android:layout_marginLeft="10dp"
                             android:layout_width="match_parent"

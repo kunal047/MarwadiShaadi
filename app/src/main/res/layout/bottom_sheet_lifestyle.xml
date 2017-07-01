@@ -28,6 +28,7 @@
                 android:orientation="vertical">
 
                 <Spinner
+                    android:id="@+id/eating_habits"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -35,17 +36,8 @@
                     android:entries="@array/diet_array"
                     android:layout_marginTop="20dp"
                     android:layout_weight="1" />
-
                 <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:textSize="20dp"
-                    android:entries="@array/smoking_array"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
-
-                <Spinner
+                    android:id="@+id/drinking_habit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -54,10 +46,22 @@
                     android:layout_marginTop="20dp"
                     android:layout_weight="1" />
 
+                <Spinner
+                    android:id="@+id/smoking_habits"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:entries="@array/smoking_array"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1" />
+
+
+
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advnext"
+                    android:id="@+id/lifestyle_update"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:layout_marginRight="5dp"

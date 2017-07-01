@@ -74,7 +74,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
                 ms = maritalStatus.getSelectedItem().toString();
                 h = height.getSelectedItem().toString();
-                Toast.makeText(EditPersonalDetailsActivity.this, h, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(EditPersonalDetailsActivity.this, h, Toast.LENGTH_SHORT).show();
                 c = contactNumber.getText().toString();
                 l = location.getText().toString();
                 w = weight.getText().toString();
@@ -194,35 +194,35 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
     }
 
     public class EditIndividualDetails extends AsyncTask<Void,Void,Void>{
-        @Override
-        protected Void doInBackground(Void... params){
+                @Override
+                protected Void doInBackground(Void... params){
 
 
 
-            AndroidNetworking.post("http://192.168.43.143:5050/editPersonalIndividualDetails")
-                    .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("marrital_status",ms)
-                    .addBodyParameter("height",h)
-                    .addBodyParameter("mobile_phone",c)
-                    .addBodyParameter("address",l)
-                    .addBodyParameter("weight",w)
-                    .addBodyParameter("special_cases",ps)
-                    .addBodyParameter("complexion",co)
-                    .addBodyParameter("body_structure",b)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.d(TAG, "onResponse: height is *************"+h);
-                        }
+                    AndroidNetworking.post("http://192.168.43.143:5050/editPersonalIndividualDetails")
+                            .addBodyParameter("customerNo", "A1028")
+                            .addBodyParameter("marrital_status",ms)
+                            .addBodyParameter("height",h)
+                            .addBodyParameter("mobile_phone",c)
+                            .addBodyParameter("address",l)
+                            .addBodyParameter("weight",w)
+                            .addBodyParameter("special_cases",ps)
+                            .addBodyParameter("complexion",co)
+                            .addBodyParameter("body_structure",b)
+                            .setTag(this)
+                            .setPriority(Priority.HIGH)
+                            .build()
+                            .getAsJSONArray(new JSONArrayRequestListener() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.d(TAG, "onResponse: height is *************"+h);
+                                }
 
-                        @Override
-                        public void onError(ANError anError) {
+                                @Override
+                                public void onError(ANError anError) {
 
-                        }
-                    });
+                                }
+                            });
 
 
 
@@ -231,3 +231,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
     }
 }
+
+
+
+

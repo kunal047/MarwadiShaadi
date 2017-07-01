@@ -25,10 +25,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-<<<<<<< HEAD
 
-=======
->>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
 import com.example.sid.marwadishaadi.R;
 
 import org.json.JSONArray;

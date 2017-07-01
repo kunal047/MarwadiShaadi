@@ -1,11 +1,14 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
@@ -29,6 +31,7 @@ import static android.content.ContentValues.TAG;
 
 public class ProfileAdditionalDetailsFragment extends Fragment {
 
+    public static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
     private TextView edit_about;
     private TextView edit_hobbies;
     private TextView edit_lifestyle;
@@ -40,6 +43,64 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
     public ProfileAdditionalDetailsFragment() {
         // Required empty public constructor
+    }
+
+    private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String hobby= bundle.getString("hobbies");
+            String am=bundle.getString("aboutMe");
+            String eh=bundle.getString("eatingHabit");
+            String dh=bundle.getString("drinkingHabit");
+            String sh=bundle.getString("smokingHabit");
+            String bt=bundle.getString("birthTime");
+            String bp=bundle.getString("birthPlace");
+            String g=bundle.getString("gotra");
+            String m=bundle.getString("manglik");
+            String mh=bundle.getString("matchHoroscope");
+
+            if(hobby!=null)
+                hobbies.setText(hobby);
+
+            if(am!=null)
+                aboutMe.setText(am);
+
+            if(eh!=null) {
+                eatingHabits.setText(eh);
+            }
+
+            if(dh!=null)
+                drinkingHabits.setText(dh);
+
+            if(sh!=null)
+                smokingHabits.setText(sh);
+
+            if(bt!=null || bp!=null)
+                birthtime.setText(bt+" at "+bp);
+
+            if(g!=null)
+                gotra.setText(g);
+
+            if(m!=null)
+                manglik.setText(m);
+
+            if(mh!=null)
+                matchHoroscope.setText(mh);
+
+
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(someBroadcastReceiver,
+                new IntentFilter(SOME_INTENT_FILTER_NAME));
+    }
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(someBroadcastReceiver);
+        super.onPause();
     }
 
 

@@ -149,8 +149,8 @@
     <string-array name="diet_array">
         <item>Select Diet</item>
         <item>Jain</item>
-        <item>Veg</item>
-        <item>Non-Veg</item>
+        <item>Vegetarian</item>
+        <item>Non-Vegetarian</item>
         <item>Eggetarian</item>
     </string-array>
 
@@ -183,21 +183,19 @@
         <item>Select Physical Status</item>
         <item>Normal</item>
         <item>Physically Challenged</item>
-
     </string-array>
 
     <string-array name="physicalstatus_search_array">
         <item>Doesn\'t Matter</item>
         <item>Normal</item>
         <item>Physically Challenged</item>
-
     </string-array>
 
     <string-array name="manglik_array">
         <item>Manglik ?</item>
         <item>Yes</item>
         <item>No</item>
-        <item>Don\'t know</item>
+        <item>Don\'t Know</item>
     </string-array>
 
     <string-array name="manglik_search_array">
@@ -224,7 +222,7 @@
         <item>Match Horoscope ?</item>
         <item>Yes</item>
         <item>No</item>
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
     </string-array>
 
 
@@ -238,6 +236,7 @@
         <item>Consultant</item>
         <item>Other</item>
     </string-array>
+
 
 
     <string-array name="height_array">
@@ -353,10 +352,6 @@
         <item>10L - 15L</item>
         <item>15L - 20L</item>
         <item>20L - 30L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
         <item>30L - 50L</item>
         <item>Above 50L</item>
     </string-array>
@@ -369,10 +364,6 @@
         <item>6L - 10L</item>
         <item>10L - 15L</item>
         <item>15L - 20L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
-        <item>20L - 30L</item>
         <item>20L - 30L</item>
         <item>30L - 50L</item>
         <item>Above 50L</item>
@@ -392,22 +383,20 @@
     </string-array>
 
     <string-array name="occupation_array">
-        <item>Occupation</item>
-        <item>Self Employed</item>
-        <item>Profession</item>
+        <item>Select Occupation</item>
+        <item>Professional</item>
         <item>Job</item>
         <item>Not Employed</item>
-        <item>Studying Not Employed</item>
+        <item>Studying - Not Employed</item>
         <item>Retired</item>
         <item>Business</item>
     </string-array>
     <string-array name="father_occupation_array">
-        <item> Father\'s Occupation</item>
-        <item>Self Employed</item>
-        <item>Profession</item>
+        <item>Father\'s Occupation</item>
+        <item>Professional</item>
         <item>Job</item>
         <item>Not Employed</item>
-        <item>Studying Not Employed</item>
+        <item>Studying - Not Employed</item>
         <item>Retired</item>
         <item>Business</item>
     </string-array>

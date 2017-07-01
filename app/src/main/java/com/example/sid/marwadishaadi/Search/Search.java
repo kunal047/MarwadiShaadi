@@ -1027,23 +1027,7 @@ public class Search extends AppCompatActivity {
                 }
             }
         });
-        very_fair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                if (int_very_fair) {
-                    int_very_fair = false;
-                    complexion.remove(very_fair.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
-
-                } else if (!int_very_fair) {
-                    int_very_fair = true;
-                    complexion.add(very_fair.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
         dark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

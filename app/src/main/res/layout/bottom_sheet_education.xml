@@ -29,7 +29,7 @@
 
 
                 <Spinner
-                    android:id="@+id/education"
+                    android:id="@+id/edit_education"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -39,7 +39,7 @@
                     android:layout_weight="1" />
 
                 <EditText
-                    android:id="@+id/highest_degree"
+                    android:id="@+id/edit_highest_degree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -55,7 +55,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/institute_name"
+                    android:id="@+id/edit_institute_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -72,7 +72,7 @@
 
 
                 <Button
-                    android:id="@+id/update"
+                    android:id="@+id/education_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"

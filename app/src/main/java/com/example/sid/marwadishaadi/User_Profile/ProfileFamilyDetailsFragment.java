@@ -1,17 +1,22 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -33,6 +38,7 @@ import static android.content.ContentValues.TAG;
 
 public class ProfileFamilyDetailsFragment extends Fragment {
 
+    private static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
     private static int casebreak;
     private TextView edit_family;
     private TextView edit_relatives;
@@ -44,10 +50,49 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-<<<<<<< HEAD
+    private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String r= bundle.getString("relation");
+            String rn=bundle.getString("relationName");
+            String ro=bundle.getString("relationOccupation");
+            String rl=bundle.getString("relationLocation");
+            String rm=bundle.getString("relationMobile");
 
-=======
->>>>>>> 53ce3f69073faeed4c224e2c49f7e71abf118eb9
+
+            if(r!=null)
+                relation.setText(r);
+
+            if(rn!=null)
+                relativeName.setText(rn);
+
+            if(ro!=null) {
+                relativeOccupation.setText(ro);
+            }
+
+            if(rl!=null)
+                relativeLocation.setText(rl);
+
+            if(rm!=null)
+                relativeMobile.setText(rm);
+
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(someBroadcastReceiver,
+                new IntentFilter(SOME_INTENT_FILTER_NAME));
+    }
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(someBroadcastReceiver);
+        super.onPause();
+    }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
