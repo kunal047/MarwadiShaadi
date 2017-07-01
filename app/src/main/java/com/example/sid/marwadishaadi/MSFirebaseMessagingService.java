@@ -12,8 +12,12 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sid on 19-Jun-17.
@@ -21,33 +25,28 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MSFirebaseMessagingService extends FirebaseMessagingService {
 
-    final static String GROUP_SUGGESTIONS = "Suggestions";
-    final public static int notifyid=1;
+
+    final List<Notif_Message> allmsg = new ArrayList<>();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        createNotification(remoteMessage);
+
+
+        //// TODO: 01-Jul-17 #KUNAL below is the sample notification..u can get the title and body from remoteMessage object
+
+       /* Notif_Message message = new Notif_Message("Mervin","first");
+        Notif_Message message1 = new Notif_Message("Maitree","second");
+        Notif_Message message2 = new Notif_Message("Siddhesh","third");
+
+        allmsg.add(message);
+        allmsg.add(message1);
+        allmsg.add(message2);
+
+
+        Notification.Builder notification = Notifications_Util.createNotification("Message","first","hello",this,1);
+        Notifications_Util.stackNotification(notification,3,this,allmsg,"Message",1);
+*/
     }
 
-    public void createNotification(RemoteMessage remoteMessage){
-
-
-        Intent i = new Intent(this, DashboardActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,i,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Uri notifsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setSmallIcon(R.drawable.notif_suggestion)
-                .setAutoCancel(true)
-                .setContentText(remoteMessage.getNotification().getBody())
-                .setSound(notifsound)
-                .setGroup(GROUP_SUGGESTIONS)
-                .setContentIntent(pendingIntent);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(notifyid,notification.build());
-    }
 }

@@ -153,10 +153,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Location"
                 android:textSize="12dp"
+                android:completionThreshold="1"
                 android:drawableLeft="@drawable/signup_location"
                 android:drawablePadding="10dp"
                 android:padding="6dp"
-                android:id="@+id/location"
+                android:id="@+id/signup_location"
                 android:background="@layout/signup_gradient"
                 android:layout_marginTop="10dp"
                 />
