@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText login_pass;
     protected Button login;
     protected TextView forgot;
-public static String customer_id="A1001";
+    public static String customer_id;
     public static String customer_gender;
     protected TextView signup;
     protected LoginButton fblogin;
@@ -274,9 +274,15 @@ public static String customer_id="A1001";
         }
 
     }
-
-}
-class BackGround extends AsyncTask<String,String,String> {
+     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        super.onBackPressed();
+    }
+    class BackGround extends AsyncTask<String,String,String> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onPreExecute() {
@@ -328,6 +334,7 @@ class BackGround extends AsyncTask<String,String,String> {
     protected void onPostExecute(String s) {
         dialog.dismiss();
         super.onPostExecute(s);
+        }
     }
 }
 
