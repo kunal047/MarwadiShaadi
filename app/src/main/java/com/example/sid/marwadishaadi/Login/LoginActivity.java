@@ -223,13 +223,6 @@ public class LoginActivity extends AppCompatActivity {
                                          // @TODO to be changed
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Login","button");
-
-                email = login_email.getText().toString();
-                 pass = login_pass.getText().toString();
-                // @TODO to be changed
-                Intent intent = new Intent(LoginActivity.this,DashboardActivity.class);
-                startActivity(intent);
-
                                          // rest
                                      }
                                  }
@@ -242,8 +235,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
-
     }
     boolean EmailChecker(String s)
     {
