@@ -145,17 +145,17 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     public void onLoadMore(int page, int totalItemsCount) {
         super.onLoadMore(page, totalItemsCount);
     }
- @Override
+ /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.chat_toolbar_block,menu);
         this.menu =menu;
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-         case R.id.blocked:
+         /*case R.id.blocked:
 
                  Snackbar snackbar = Snackbar.make(relative, "Added to Blocked List", Snackbar.LENGTH_LONG).setAction("UNBLOCK", new View.OnClickListener() {
                         @Override
@@ -165,12 +165,11 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                     });
                     snackbar.show();
              onBlockPressed(id);
-                return true;
+                return true;*/
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 private void onUnblockPressed(int id) {
@@ -228,7 +227,6 @@ private void onUnblockPressed(int id) {
                         // do anything with response TODO
                         Log.e(TAG, "onResponse: ----------response of creating list is \n"+response);
                     }
-
                     @Override
                     public void onError(ANError error) {
                         // handle error TODO
@@ -238,5 +236,4 @@ private void onUnblockPressed(int id) {
         Log.d(TAG, "onSubmit: message from id is " + messageFromId);
         return true;
     }
-
 }
