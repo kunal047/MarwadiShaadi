@@ -1,18 +1,23 @@
 package com.example.sid.marwadishaadi.Settings;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,20 +25,40 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.About_Us.AboutUsActivity;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
 import com.example.sid.marwadishaadi.Contact_Us.ContactUsActivity;
+import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Faq.FaqActivity;
 import com.example.sid.marwadishaadi.Login.LoginActivity;
 import com.example.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity;
 import com.example.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.Search.Search;
+import com.example.sid.marwadishaadi.Search.SearchResultsActivity;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.Calendar;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.HashConverter;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.str;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -51,6 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected TextView paymentpolicy;
     protected LinearLayout morelinearlayout;
     protected TextView more;
+    String query="",old_pass_encrypt, user_old_pass,user_new_pass;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -233,10 +259,13 @@ public class SettingsActivity extends AppCompatActivity {
                         // analytics
                         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Reset Password","textview");
 
-                        String user_old_pass = oldpass.getText().toString();
-                        String user_new_pass = newpass.getText().toString();
+                         user_old_pass = oldpass.getText().toString();
+                         user_new_pass = newpass.getText().toString();
 
-                        Toast.makeText(SettingsActivity.this, "yayay", Toast.LENGTH_SHORT).show();
+                        customer_id="J1001";
+                         query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
+                        new BackEnd().execute(query);
+
                     }
                 });
 
@@ -366,4 +395,86 @@ public class SettingsActivity extends AppCompatActivity {
 
         return true;
     }
+
+
+private class BackEnd extends AsyncTask<String, String, String> {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        dialog = new ProgressDialog(SettingsActivity.this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.setMessage("Please Wait...");
+        dialog.show();
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+        Log.d(TAG, "doInBackground: -----query s "+ query);
+        AndroidNetworking.post(URL + "ResetPassword")
+                .addBodyParameter("query", strings[0])
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse1: --------- "+response);
+                            JSONArray user= null;
+                            try {
+                                user = response.getJSONArray(0);
+                                old_pass_encrypt=HashConverter(user_old_pass);
+                                if(user.getString(0).contains(old_pass_encrypt)){
+                                    Log.d(TAG, "onResponse2: ------ old password is --"+old_pass_encrypt);
+                                    final String quer="update tbl_login set password = \""+HashConverter(user_new_pass)+"\" where customer_no=\""+customer_id+"\";";
+                                    AndroidNetworking.post(URL + "ResetPassword")
+                                            .addBodyParameter("query", quer)
+                                            .setPriority(Priority.HIGH)
+                                            .build()
+                                            .getAsJSONArray(new JSONArrayRequestListener() {
+                                                @Override
+                                                public void onResponse(JSONArray response) {
+                                                    Log.d(TAG, "onResponse: ********** new passord ***      "+quer);
+                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG);
+
+                                                }
+
+                                                @Override
+                                                public void onError(ANError anError) {
+                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG);
+                                                    Log.d(TAG, "onError: ----network error  88"+ anError);
+
+                                                }
+                                            });
+                                }
+
+                                else
+                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG);
+
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG);
+                        Log.d(TAG, "onError: ----network error  88  "+error);
+
+                    }
+                });
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        dialog.dismiss();
+
+    }
+}
 }

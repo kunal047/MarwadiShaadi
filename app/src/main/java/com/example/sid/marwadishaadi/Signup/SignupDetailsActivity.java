@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -20,6 +22,8 @@ import android.view.WindowManager;
 import android.widget.*;
 import android.widget.DatePicker;
 
+import com.example.sid.marwadishaadi.Place;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -33,11 +37,10 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     protected EditText mobile;
     protected ArrayAdapter<String> casteSpinnerAdapter;
     protected Button next;
-
+    protected List<Place> placeslist = new ArrayList<Place>();
     protected  Spinner caste;
-
     protected AutoCompleteTextView location;
-
+    protected PlacesAdapter placesAdapter;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -61,8 +64,11 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         caste = (Spinner) findViewById(R.id.user_caste);
 
-
-        location = (AutoCompleteTextView) findViewById(R.id.location);
+        location = (AutoCompleteTextView) findViewById(R.id.signup_location);
+        location.setThreshold(1);
+        getData();
+        placesAdapter  = new PlacesAdapter(SignupDetailsActivity.this,R.layout.activity_signup_details,R.id.place_name,placeslist);
+        location.setAdapter(placesAdapter);
 
         next = (Button) findViewById(R.id.advnext);
 
@@ -92,6 +98,19 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
                 DOBPICKER.show(getSupportFragmentManager(),"dob");
             }
         });
+
+    }
+
+    public void getData(){
+
+        Place place = new Place("Mumbai","Maharashtra","India");
+        placeslist.add(place);
+
+        Place place1 = new Place("Mumbra","Maharashtra","India");
+        placeslist.add(place1);
+
+        Place place2 = new Place("Kanpur","UP","India");
+        placeslist.add(place2);
 
     }
 

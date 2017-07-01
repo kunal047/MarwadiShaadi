@@ -237,7 +237,7 @@
                 android:layout_marginTop="13dp"
                 app:layout_constraintRight_toLeftOf="@+id/mariSta"
                 app:layout_constraintTop_toBottomOf="@+id/annInc"
-                app:srcCompat="@drawable/marital"/>
+                app:srcCompat="@drawable/profile_marital"/>
 
             <ImageView
                 android:id="@+id/imageView"
@@ -247,7 +247,7 @@
                 android:layout_marginTop="13dp"
                 app:layout_constraintRight_toLeftOf="@+id/company"
                 app:layout_constraintTop_toBottomOf="@+id/height"
-                app:srcCompat="@drawable/companysugg"/>
+                app:srcCompat="@drawable/profile_designation"/>
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -257,7 +257,7 @@
                 android:layout_marginTop="13dp"
                 app:layout_constraintRight_toLeftOf="@+id/annInc"
                 app:layout_constraintTop_toBottomOf="@+id/company"
-                app:srcCompat="@drawable/income"/>
+                app:srcCompat="@drawable/profile_income"/>
 
             <ImageView
                 android:layout_width="22dp"
@@ -266,7 +266,7 @@
                 android:layout_marginTop="14dp"
                 app:layout_constraintRight_toLeftOf="@+id/hometown"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:srcCompat="@drawable/hometown"/>
+                app:srcCompat="@drawable/profile_home"/>
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -275,8 +275,8 @@
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="35dp"
                 app:layout_constraintRight_toLeftOf="@+id/height"
-                app:layout_constraintTop_toBottomOf="@+id/cardView"
-                app:srcCompat="@drawable/height"/>
+               app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:srcCompat="@drawable/profile_height"/>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

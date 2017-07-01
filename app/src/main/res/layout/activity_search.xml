@@ -1,29 +1,30 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/search_toolbar"
-                android:layout_width="match_parent"
-                android:theme="@style/MyToolbartheme"
-                android:titleTextColor="@android:color/white"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/search_toolbar"
+            android:layout_width="match_parent"
+            android:theme="@style/MyToolbartheme"
+            android:titleTextColor="@android:color/white"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            />
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollViewAdv1"
+        android:background="#ffede9"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
             android:focusableInTouchMode="true"
             >
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/search_by_id_name_open"
                 android:textColor="#fff"
@@ -40,9 +41,6 @@
                 android:layout_gravity="center"
                 android:text="Search by ID/Name"
                 android:textAllCaps="false"
-                android:paddingLeft="6dp"
-                android:focusable="true"
-                android:paddingRight="6dp"
                 android:background="@layout/button_border_corner_circle_"
                 android:textSize="16dp"
                 />
@@ -53,217 +51,218 @@
                 android:textAlignment="center"
                 android:text="Or"
                 android:layout_marginTop="10dp"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:textAlignment="center"
                 android:text="Search partner with some details"
-                android:layout_marginTop="10dp"
-                android:textSize="16dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:textSize="14dp"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                tools:ignore="MissingPrefix"
+                android:gravity="center_horizontal"
                 />
 
-                <android.support.v7.widget.CardView
+            <android.support.v7.widget.CardView
+                android:id="@+id/basic_search"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardBackgroundColor="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/basic_search"
-                    app:cardCornerRadius="4dp"
-                    android:focusable="true"
-                    android:layout_margin="8dp"
-                    android:elevation="10dp"
-                    >
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Age"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="14dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
+                        android:orientation="horizontal">
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerHorizontal="true"
-                            android:textAlignment="textStart"
-                            android:text="Age"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginTop="10dp"
-                            android:textSize="16dp"
-                            android:textStyle="italic"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/textMin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_marginLeft="10dp"
-                                android:id="@+id/textMin"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentStart="true"
-                                android:textColor="#000"
-                                android:textSize="16sp" />
-                            <TextView
-                                android:id="@+id/textMax"
-                                android:layout_weight="1"
-                                android:layout_marginRight="10dp"
-                                android:textAlignment="textEnd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignTop="@+id/rangeSeekbar"
-                                android:textColor="#000"
-                                android:textSize="16dp" />
-                        </LinearLayout>
-                        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-                            android:id="@+id/rangeSeekbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            app:bar_color="#1a000000"
-                            app:bar_highlight_color="#fb6542"
-                            app:corner_radius="2"
-                            app:data_type="_integer"
-                            app:left_thumb_color="@color/colorPrimary"
-                            app:left_thumb_color_pressed="@color/colorPrimary"
-                            app:max_value="71"
-                            app:min_value="18"
-                            app:right_thumb_color="@color/colorPrimary"
-                            app:right_thumb_color_pressed="@color/colorPrimary" />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_margin="10dp"
-                            android:background="#59fb6542">
-                        </View>
-                        <LinearLayout
-                            android:id="@+id/spinner_partner_height"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:textAlignment="textStart"
-                                android:text="Height ( From - To )"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="6dp"
-                                android:focusable="true"
-                                android:textSize="16dp"
-                                android:textStyle="italic"
-                                />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            >
-                            <Spinner
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:id="@+id/height_from"
-                                android:layout_marginTop="10dp"
-                                android:entries="@array/height_search_array"
-                                />
-
-                            <Spinner
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:id="@+id/height_to"
-                                android:layout_marginTop="10dp"
-                                android:entries="@array/height_search_array"
-                                />
-                        </LinearLayout>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_margin="10dp"
-                            android:background="#59fb6542">
-                        </View>
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentStart="true"
+                            android:textSize="12dp"/>
                         <TextView
+                            android:id="@+id/textMax"
+                            android:layout_weight="1"
+                            android:layout_marginRight="10dp"
+                            android:textAlignment="textEnd"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignTop="@+id/rangeSeekbar"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+                    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                        android:id="@+id/rangeSeekbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:bar_color="#1a000000"
+                        app:bar_highlight_color="#fb6542"
+                        app:corner_radius="2"
+                        app:data_type="_integer"
+                        app:left_thumb_color="@color/colorPrimary"
+                        app:left_thumb_color_pressed="@color/colorPrimary"
+                        app:max_value="71"
+                        app:min_value="18"
+                        app:right_thumb_color="@color/colorPrimary"
+                        app:right_thumb_color_pressed="@color/colorPrimary" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+                    <LinearLayout
+                        android:id="@+id/spinner_partner_height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:textAlignment="textStart"
-                            android:text="Community"
+                            android:text="Height ( From - To )"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="6dp"
                             android:focusable="true"
-                            android:textSize="16dp"
-                            android:layout_marginLeft="6dp"
+                            android:textSize="14dp"
                             android:textStyle="italic"
-                            android:layout_marginTop="20dp"
                             />
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/search_user_caste"
-                            android:focusable="false"
-                            android:layout_marginLeft="6dp"
-                            android:textSize="16dp"
-                            android:hint="Choose community"
-                            android:background="#fff"
-                            />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_margin="10dp"
-                            android:background="#59fb6542">
-                        </View>
-
-                        <TextView
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        >
+                        <Spinner
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textAlignment="textStart"
-                            android:text="State"
-                            android:textSize="16dp"
-                            android:textStyle="italic"
-                            android:layout_marginLeft="6dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_weight="1"
+                            android:id="@+id/height_from"
+                            android:layout_marginTop="10dp"
+                            android:entries="@array/height_search_array"
                             />
-                        <LinearLayout
-                            android:layout_width="match_parent"
+
+                        <Spinner
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="5"
-                            >
-                            <EditText
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Type State"
-                                android:textSize="16dp"
-                                android:drawableLeft="@drawable/userlocation"
-                                android:drawablePadding="10dp"
-                                android:background="#fff"
-                                android:inputType="text"
-                                android:clickable="true"
-                                android:layout_weight="4"
-                                android:id="@+id/search_state"
-                                android:ems="10"
-                                />
-                            <Button
-                                android:layout_width="30sp"
-                                android:layout_height="30sp"
-                                android:id="@+id/search_add_state"
-                                android:text="+"
-                                android:textColor="#eee"
-                                android:textSize="20sp"
-                                android:background="@layout/circular_button"/>
+                            android:layout_weight="1"
+                            android:id="@+id/height_to"
+                            android:layout_marginTop="10dp"
+                            android:entries="@array/height_search_array"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="Community"
+                        android:focusable="true"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="6dp"
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/search_user_caste"
+                        android:focusable="false"
+                        android:layout_marginLeft="6dp"
+                        android:textSize="16dp"
+                        android:hint="Choose community"
+                        android:background="#fff"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="State"
+                        android:textSize="16dp"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="20dp"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="5"
+                        >
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Type State"
+                            android:textSize="16dp"
+                            android:drawableLeft="@drawable/signup_location"
+                            android:drawablePadding="10dp"
+                            android:background="#fff"
+                            android:inputType="text"
+                            android:clickable="true"
+                            android:layout_weight="4"
+                            android:id="@+id/search_state"
+                            android:ems="10"
+                            />
+                        <Button
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:id="@+id/search_add_state"
+                            android:text="+"
+                            android:textColor="#eee"
+                            android:textSize="20sp"
+                            android:background="@layout/circular_button"/>
 
 
-                        </LinearLayout>
+                    </LinearLayout>
 
-                        <TextView
+                    <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:id="@+id/text_view_search_add_state"
@@ -271,289 +270,290 @@
                         android:paddingLeft="10dp"
                         />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_margin="10dp"
-                            android:background="#59fb6542">
-                        </View>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textAlignment="textStart"
-                            android:text="Educational Level"
-                            android:textSize="16dp"
-                            android:textStyle="italic"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="6dp"
-                            />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="Educational Level"
+                        android:textSize="16dp"
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
 
-                        <HorizontalScrollView
-                            android:id="@+id/scrollView"
+                    <HorizontalScrollView
+                        android:id="@+id/scrollView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        android:scrollbarFadeDuration="2"
+                        android:scrollbarSize="2dp"
+                        android:scrollbarStyle="insideOverlay"
+                        android:scrollbars="horizontal">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:scrollbarAlwaysDrawHorizontalTrack="true"
-                            android:scrollbarFadeDuration="2"
-                            android:scrollbarSize="2dp"
-                            android:scrollbarStyle="insideOverlay"
-                            android:scrollbars="horizontal">
+                            android:clickable="true"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:id="@+id/list_doctor"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
-                                android:orientation="horizontal">
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
 
-                                <LinearLayout
-                                    android:id="@+id/list_doctor"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                <ImageView
+                                    android:id="@+id/doctor"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
                                     android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
+                                    android:src="@drawable/doctor_black" />
 
-                                    <ImageView
-                                        android:id="@+id/doctor"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/doctor_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_doctor"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="Doctor"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_engineer"
-                                    android:layout_width="wrap_content"
+                                <TextView
+                                    android:id="@+id/text_doctor"
+                                    android:layout_width="50dp"
                                     android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/engineer"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/engineer_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_engineer"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="Engineer"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_mab_mca"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/mba_mca"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/mba_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_mba_mca"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="MBA/MCA"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_ca_cs"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/ca_cs"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/ca_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_ca_cs"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="CA/CS"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_llb"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/llb"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/llb_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_llb"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="LLB"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_pg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/pg"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/mba_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_pg"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="Post\nGraduate"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_g"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp">
-
-                                    <ImageView
-                                        android:id="@+id/g"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/grad_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_g"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="Graduate"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/list_ug"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="20dp"
-                                    android:paddingRight="10dp">
-
-                                    <ImageView
-                                        android:id="@+id/ug"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        android:clickable="true"
-                                        android:src="@drawable/undergrad_black" />
-
-                                    <TextView
-                                        android:id="@+id/text_ug"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:text="Under\nGraduate"
-                                        android:textSize="12dp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
+                                    android:gravity="center"
+                                    android:text="Doctor"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
-                        </HorizontalScrollView>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_margin="10dp"
-                            android:background="#59fb6542">
-                        </View>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textAlignment="textStart"
-                            android:text="Sort by"
-                            android:textSize="16dp"
-                            android:textStyle="italic"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="6dp"
-                            />
+                            <LinearLayout
+                                android:id="@+id/list_engineer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
 
-                        <Spinner
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/spinner_sort_by"
-                            android:layout_marginLeft="6dp"
-                            android:textSize="16dp"
-                            android:entries="@array/sort_by_array"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1" />
+                                <ImageView
+                                    android:id="@+id/engineer"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/engineer_black" />
+
+                                <TextView
+                                    android:id="@+id/text_engineer"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Engineer"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_mab_mca"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
+
+                                <ImageView
+                                    android:id="@+id/mba_mca"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/mba_black" />
+
+                                <TextView
+                                    android:id="@+id/text_mba_mca"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="MBA/MCA"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_ca_cs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
+
+                                <ImageView
+                                    android:id="@+id/ca_cs"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/ca_black" />
+
+                                <TextView
+                                    android:id="@+id/text_ca_cs"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="CA/CS"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_llb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
+
+                                <ImageView
+                                    android:id="@+id/llb"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/llb_black" />
+
+                                <TextView
+                                    android:id="@+id/text_llb"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="LLB"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_pg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
+
+                                <ImageView
+                                    android:id="@+id/pg"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/mba_black" />
+
+                                <TextView
+                                    android:id="@+id/text_pg"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Post\nGraduate"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_g"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp">
+
+                                <ImageView
+                                    android:id="@+id/g"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/grad_black" />
+
+                                <TextView
+                                    android:id="@+id/text_g"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Graduate"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/list_ug"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="10dp">
+
+                                <ImageView
+                                    android:id="@+id/ug"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:clickable="true"
+                                    android:src="@drawable/undergrad_black" />
+
+                                <TextView
+                                    android:id="@+id/text_ug"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Under\nGraduate"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_margin="10dp"
+                        android:background="#59fb6542">
+                    </View>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="textStart"
+                        android:text="Sort by"
+                        android:textSize="16dp"
+                        android:textStyle="italic"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="6dp"
+                        />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner_sort_by"
+                        android:layout_marginLeft="6dp"
+                        android:textSize="16dp"
+                        android:entries="@array/sort_by_array"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1" />
 
 
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
 
             <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/advanced_search"
-                app:cardCornerRadius="4dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="20dp"
-                android:elevation="10dp"
-                >
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:cardBackgroundColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -582,7 +582,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Type City"
                             android:textSize="16dp"
-                            android:drawableLeft="@drawable/userlocation"
+                            android:drawableLeft="@drawable/signup_location"
                             android:drawablePadding="10dp"
                             android:background="#fff"
                             android:inputType="text"
@@ -935,14 +935,14 @@
                             android:text="Dark"
                             android:layout_height="wrap_content" />
 
-                            <CheckBox
-                                android:id="@+id/complexion_doesnt_matter"
-                                android:text="Doesn't Matter"
-                                android:layout_weight="1"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:checked="true"
-                                />
+                        <CheckBox
+                            android:id="@+id/complexion_doesnt_matter"
+                            android:text="Doesn't Matter"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            />
 
                     </LinearLayout>
 
@@ -1058,10 +1058,7 @@
 
                 </LinearLayout>
 
-
             </android.support.v7.widget.CardView>
-
-
         </LinearLayout>
     </ScrollView>
 

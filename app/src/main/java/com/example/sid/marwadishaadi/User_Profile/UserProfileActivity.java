@@ -1,12 +1,14 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
-import android.app.ProgressDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,6 +16,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,50 +24,45 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.appinvite.AppInviteInvitationResult;
-import com.google.android.gms.appinvite.AppInviteReferral;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
+import com.hendrix.pdfmyxml.PdfDocument;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
-import com.synnapps.carouselview.ViewListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.io.File;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,GoogleApiClient.OnConnectionFailedListener {
 
-    private static LinearLayout linearlayout;
-    private ProgressDialog progessdialog;
-    private Bitmap bitmap;
+public class  UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener{
+
+
     private ProfilePageAdapter profilePageAdapter;
     private ViewPager userinfo;
     private CarouselView carouselView;
     protected ImageView pref;
-    private GoogleApiClient mGoogleApiClient;
     private FloatingActionButton fav;
     private FloatingActionButton sendmsg;
     private FloatingActionButton sendinterest;
@@ -74,7 +72,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
-    private FrameLayout frameLayout;
     CollapsingToolbarLayout toolbarLayout;
 
  /*   AndroidNetworking.post(URL + "prepareUserProfile")
@@ -136,6 +133,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
     });*/
 
+    private String userid_from_deeplink;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -148,29 +146,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(AppInvite.API)
-                .build();
-
-
-        boolean autoLaunchDeepLink = false;
-        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
-                .setResultCallback(
-                        new ResultCallback<AppInviteInvitationResult>() {
-                            @Override
-                            public void onResult(@NonNull AppInviteInvitationResult result) {
-                                if (result.getStatus().isSuccess()) {
-                                    // Extract deep link from Intent
-                                    Intent intent = result.getInvitationIntent();
-                                    String deepLink = AppInviteReferral.getDeepLink(intent);
-                                    Toast.makeText(UserProfileActivity.this, deepLink, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.d("Deep link", "getInvitation: no deep link found.");
-                                }
-                            }
-                        });
-
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -178,8 +153,16 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         toolbarLayout.setTitle("Pranay Parmar");
 
+
+        Intent data = getIntent();
+        String deeplink = data.getStringExtra("deeplink");
+
+        if (deeplink!=null) {
+            userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
+            Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
+        }
+
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
-        frameLayout = (FrameLayout) findViewById(R.id.fabmenu);
 
 
         fab = (FloatingActionMenu) findViewById(R.id.menu_yellow);
@@ -212,7 +195,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 } else {
                     coordinatorLayout.setBackgroundColor(Color.TRANSPARENT);
                 }
-                Toast.makeText(getApplicationContext(), "yay", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -244,26 +226,44 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         shareprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Share Profile", "button");
 
-                // TODO: 23-Jun-17 Replace caste and id of user you want to share #kunal
                 String caste = "Maheshwari";
                 String userid = "M13725";
-                String username = "Siddhesh";
+                final String username = "Siddhesh";
                 String packageName = getPackageName();
                 String weblink = "http://www.marwadishaadi.com/" + caste + "/user/candidate/" + userid;
                 String domain = "https://bf5xe.app.goo.gl/";
-                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&ibi=com.example.ios&isi=12345";
-                Intent sendIntent = new Intent();
-                String msg = "Hey, Check this cool profile of " + username + ":\n" + link;
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&afl="+weblink+"&dfl="+weblink;
 
-            }
-        });
+                OnCompleteListener onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+
+                            Intent sendIntent = new Intent();
+                            String msg = "Hey, Check this cool profile of " + username + ":" + shortLink.toString();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT,msg);
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+
+                        }
+                    }
+                };
+
+                Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                        .setLongLink(Uri.parse(link))
+                        .buildShortDynamicLink();
+                shortLinkTask.addOnCompleteListener(onCompleteListener);
+
+
+            }});
 
         sharesave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,14 +271,62 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
 
-          /*      progessdialog = new ProgressDialog(UserProfileActivity.this);
-                progessdialog.setMessage("Please Wait");
-                View mview = getLayoutInflater().inflate(R.layout.dummy,null);
-                linearlayout = (LinearLayout) mview.findViewById(R.id.pdfdata);
-                linearlayout.measure(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-                        bitmap = loadBitmapFromView(linearlayout.getMeasuredWidth(),linearlayout.getMeasuredHeight());
-                        createPdf();
-*/
+
+                final NotificationCompat.Builder notification = new NotificationCompat.Builder(UserProfileActivity.this)
+                        .setContentTitle("Pdf Download")
+                        .setSmallIcon(R.drawable.ic_action_drawer_notification)
+                        .setAutoCancel(true)
+                        .setProgress(0,0,true)
+                        .setContentText("Download in progress");
+
+
+                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1,notification.build());
+
+                AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
+                    @Override
+                    protected void initView(View view) {}
+                };
+                page1.setReuseBitmap(true);
+
+
+                PdfDocument doc  = new PdfDocument(UserProfileActivity.this);
+                doc.addPage(page1);
+                doc.setRenderWidth(1072);
+                doc.setRenderHeight(2000);
+                doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
+                doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                doc.setFileName("Siddhesh-Rane-Profile");
+                doc.setInflateOnMainThread(false);
+                doc.setListener(new PdfDocument.Callback() {
+                    @Override
+                    public void onComplete(File file) {
+                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
+
+                        Toast.makeText(UserProfileActivity.this, "SiddheshRaneProfile.pdf saved in Downloads Folder", Toast.LENGTH_SHORT).show();
+
+                        Uri targetUri = Uri.fromFile(file);
+
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setDataAndType(targetUri, "application/pdf");
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,i,PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification.setContentText("Download complete");
+                        notification.setContentIntent(pendingIntent);
+                        notification.setProgress(0,0,false);
+                        notificationManager.notify(1,notification.build());
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
+                    }
+                });
+
+                Toast.makeText(UserProfileActivity.this, "Download Started", Toast.LENGTH_SHORT).show();
+                doc.createPdf(UserProfileActivity.this);
 
             }
         });
@@ -288,7 +336,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         new ProfilePicture().execute();
 
-
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
         userinfo = (ViewPager) findViewById(R.id.profile_container);
         userinfo.setAdapter(profilePageAdapter);
@@ -296,25 +343,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
         tabLayout.setupWithViewPager(userinfo);
-
-       /*pref= (ImageView) findViewById(R.id.profile_user_preferences);
-        pref.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                View preferences_view = getLayoutInflater().inflate(R.layout.profile_preferences,null);
-
-                AlertDialog.Builder prefs = new AlertDialog.Builder(UserProfileActivity.this);
-                prefs.setTitle("Partner Signup_Partner_Preferences_Fragment");
-                prefs.setView(preferences_view);
-
-                // creating
-                AlertDialog uprefs = prefs.create();
-                uprefs.setTitle("Partner Signup_Partner_Preferences_Fragment");
-                uprefs.show();
-            }
-        });*/
-
     }
 
     @Override
@@ -332,10 +360,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
     }
 
-
-
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void setImageForPosition(int position, ImageView imageView) {
 
     }
 
@@ -388,59 +414,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
-  /*  public static Bitmap loadBitmapFromView(int width,int height) {
-        Bitmap b = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        linearlayout.draw(c);
-
-        return b;
-    }
-    private void createPdf(){
-
-
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-
-        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-
-        float height = displaymetrics.heightPixels ;
-        float width = displaymetrics.widthPixels ;
-
-        int convertHeight = (int) height, convertWidth = (int) width;
-
-        PdfDocument document = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(convertWidth,convertHeight, 1).create();
-        PdfDocument.Page page = document.startPage(pageInfo);
-
-        Canvas canvas = page.getCanvas();
-
-        Paint paint = new Paint();
-        canvas.drawPaint(paint);
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, convertWidth, convertHeight, true);
-        paint.setColor(Color.BLUE);
-
-        canvas.drawBitmap(bitmap, 0, 0 , null);
-        document.finishPage(page);
-
-        // write the document content
-        String targetPdf = "/sdcard/test.pdf";
-        File filePath = new File(targetPdf);
-        try {
-            document.writeTo(new FileOutputStream(filePath));
-            progessdialog.dismiss();
-            Toast.makeText(UserProfileActivity.this, "PDF created", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(UserProfileActivity.this, PdfViewActivity.class);
-            startActivity(i);
-            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // close the document
-        document.close();
-    }
 
     public static void shareApp(Context context)
     {
@@ -450,7 +423,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
-    }*/
+    }
 
     class ProfilePicture extends AsyncTask<Void, Void, Void> {
 

@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:text="Clear"
             android:background="@color/colorPrimary"
-            android:textStyle="bold"
             android:textAllCaps="false"
             android:layout_gravity="right"
             android:stateListAnimator="@null"

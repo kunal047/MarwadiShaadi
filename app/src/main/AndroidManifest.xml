@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,11 +23,19 @@
             android:name=".SplashScreen"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait">
-            >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="marwadishaadi.com"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
 
@@ -115,15 +122,6 @@
             android:name=".User_Profile.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="marwadishaadi.com"
-                    android:scheme="http"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".Payment_Policy.PaymentPolicyActivity"
@@ -189,11 +187,11 @@
         <activity
             android:name=".Upload_User_Photos.UploadPhotoActivity"
             android:hardwareAccelerated="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".Payment.activity.WebViewActivity" />
         <activity android:name=".Payment.activity.StatusActivity" />
-        <activity android:name=".PdfViewActivity" />
-        <activity android:name=".UserProfilePdfActivity" />
+        <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity"></activity>
     </application>
 
 </manifest>

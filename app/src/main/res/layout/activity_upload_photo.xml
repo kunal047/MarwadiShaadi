@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:background="@drawable/uploadimage"
     android:fitsSystemWindows="true"
@@ -17,17 +18,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    <TextView
+
+            <Button
+                android:id="@+id/fb_login_button"
+                android:layout_width="280dp"
+                android:layout_height="35dp"
+                android:text="Upload photos from Facebook"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:textSize="12dp"
+                android:layout_marginTop="20dp"
+                style="@style/com_facebook_button"
+                android:drawableLeft="@drawable/com_facebook_button_icon"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center_vertical"
+                    >
+
+                </View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Or"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    >
+
+                </View>
+            </LinearLayout>
+
+            <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:text="TAP TO ADD A PHOTO"
+                android:text="Tap to add a photo"
         android:gravity="center_horizontal"
-        android:textSize="16dp"
+        android:textSize="14dp"
         android:textColor="@color/colorPrimary"
         fontPath="fonts/OpenSans-Bold.ttf"
         tools:ignore="MissingPrefix"
@@ -44,6 +95,7 @@
             android:layout_height="120dp"
             android:layout_marginTop="10dp"
             android:clickable="true"
+            android:tag="default"
             android:id="@+id/photo1"
             android:scaleType="centerCrop"
             android:src="@drawable/photo"
@@ -63,6 +115,7 @@
         android:layout_height="96dp"
         android:layout_margin="10dp"
         android:clickable="true"
+        android:tag="default"
         android:id="@+id/photo2"
         android:src="@drawable/photo"/>
 
@@ -70,6 +123,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:id="@+id/photo3"
+        android:tag="default"
         android:layout_margin="10dp"
         android:clickable="true"
         android:src="@drawable/photo"/>
@@ -91,6 +145,7 @@
             android:layout_height="96dp"
             android:layout_margin="10dp"
             android:id="@+id/photo4"
+            android:tag="default"
             android:clickable="true"
             android:src="@drawable/photo"/>
 
@@ -99,14 +154,14 @@
             android:layout_height="96dp"
             android:layout_margin="10dp"
             android:clickable="true"
+            android:tag="default"
             android:id="@+id/photo5"
             android:src="@drawable/photo"/>
     </LinearLayout>
     </LinearLayout>
 
-
             <Button
-                android:layout_width="180dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/submit_photo"
                 android:text="Finish"
@@ -114,6 +169,8 @@
                 android:background="@layout/button_border_corner_circle_"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="30dp"/>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

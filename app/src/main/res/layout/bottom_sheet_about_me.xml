@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/text3"
-                    android:drawableLeft="@drawable/aboutme"
+                    android:drawableLeft="@drawable/signup_name"
                     android:drawablePadding="10dp"
                     android:padding="6dp"
                     android:focusable="false"

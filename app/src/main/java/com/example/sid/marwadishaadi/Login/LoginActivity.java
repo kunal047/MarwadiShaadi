@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText login_pass;
     protected Button login;
     protected TextView forgot;
-    public static String customer_id;
+public static String customer_id="A1001";
     public static String customer_gender;
     protected TextView signup;
     protected LoginButton fblogin;
@@ -97,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button ) findViewById(R.id.login);
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         login = (Button) findViewById(R.id.login);
-        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
 
+        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         fblogin.setReadPermissions(Arrays.asList("email"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
