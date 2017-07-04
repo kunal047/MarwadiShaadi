@@ -49,28 +49,45 @@ import java.util.regex.Pattern;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.str;
 
 
 public class LoginActivity extends AppCompatActivity {
     static public ProgressDialog dialog;
+    public static String customer_id;
+    public static String customer_gender;
+    public static String str = "";
     protected EditText login_email;
     protected EditText login_pass;
     protected Button login;
     protected TextView forgot;
-    public static String customer_id;
-    public static String customer_gender;
     protected TextView signup;
     protected LoginButton fblogin;
-    public static String str="";
-
+    CallbackManager callbackManager;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    CallbackManager callbackManager;
+    //    anita.k@makindia.com
+    public static String HashConverter(String pswrd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(pswrd.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+            // Now we need to zero pad it if you actually want the full 32 chars.
+            while (hashtext.length(
+
+
+            ) < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -94,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
         login_email = (EditText) findViewById(R.id.login_email);
         login_pass = (EditText) findViewById(R.id.login_password);
-        login = (Button ) findViewById(R.id.login);
+        login = (Button) findViewById(R.id.login);
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         login = (Button) findViewById(R.id.login);
 
@@ -108,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                        Log.d("object",object.toString());
+                        Log.d("object", object.toString());
 
                         try {
                             String first_name = object.getString("first_name");
@@ -119,10 +136,10 @@ public class LoginActivity extends AppCompatActivity {
                             // check must be performed here
                             //String email = object.getString("email");
                             String birthday = object.getString("birthday");
-                            Toast.makeText(getApplicationContext(),first_name + last_name + gender + birthday, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), first_name + last_name + gender + birthday, Toast.LENGTH_LONG).show();
 
                             // MUST GO TO dashboard
-                            Intent i = new Intent(LoginActivity.this,DashboardActivity.class);
+                            Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                             startActivity(i);
 
                         } catch (JSONException e) {
@@ -164,8 +181,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Forgot","button");
-                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Forgot", "button");
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
@@ -178,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Signup","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Signup", "button");
                 Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -221,8 +238,8 @@ public class LoginActivity extends AppCompatActivity {
                                          }
 
                                          // @TODO to be changed
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Login","button");
+                                         // analytics
+                                         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
                                          // rest
                                      }
                                  }
@@ -236,36 +253,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-    boolean EmailChecker(String s)
-    {
+
+    boolean EmailChecker(String s) {
         String EMAIL_REGEX = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(s);
         return matcher.matches();
     }
-    //    anita.k@makindia.com
-    public  static String HashConverter(String pswrd)
-    {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(pswrd.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String hashtext = number.toString(16);
-            // Now we need to zero pad it if you actually want the full 32 chars.
-            while (hashtext.length(
 
-
-            ) < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-     @Override
+    @Override
     public void onBackPressed() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -273,60 +269,59 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         super.onBackPressed();
     }
-    class BackGround extends AsyncTask<String,String,String> {
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        dialog.setMessage("Please Wait...");
-        dialog.create();
-        dialog.show();
-    }
 
-    @Override
-    protected String doInBackground(String... strings) {
-        Log.d(TAG, "doInBackground:---------------------- email--" + strings[1] + "---pass is ---" + strings[2]);
-        AndroidNetworking.post("http://10.0.0.13:5050/checkLogin")
-                .addBodyParameter("email", strings[1])
-                .addBodyParameter("password", strings[2])
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+    class BackGround extends AsyncTask<String, String, String> {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage("Please Wait...");
+            dialog.create();
+            dialog.show();
+        }
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            Log.d(TAG, "onResponse: response is ------------- " + response.toString());
-                            str = response.getString(0);
-                            if (str == "success") {
-                                customer_id = response.getString(1);
-                                customer_gender = response.getString(2);
-                                Log.d(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.d(TAG, "doInBackground:---------------------- email--" + strings[1] + "---pass is ---" + strings[2]);
+            AndroidNetworking.post("http://10.0.0.13:5050/checkLogin")
+                    .addBodyParameter("email", strings[1])
+                    .addBodyParameter("password", strings[2])
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                Log.d(TAG, "onResponse: response is ------------- " + response.toString());
+                                str = response.getString(0);
+                                if (str == "success") {
+                                    customer_id = response.getString(1);
+                                    customer_gender = response.getString(2);
+                                    Log.d(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 //                        Log.d(TAG, "onResponse: -------------"+response.toString());
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
-                    }
-                });
+                        @Override
+                        public void onError(ANError error) {
+                            // handle error
+                            Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
+                        }
+                    });
 
-        return null;
-    }
+            return null;
+        }
 
 
-    @Override
-    protected void onPostExecute(String s) {
-        dialog.dismiss();
-        super.onPostExecute(s);
+        @Override
+        protected void onPostExecute(String s) {
+            dialog.dismiss();
+            super.onPostExecute(s);
         }
     }
 }
-
-
