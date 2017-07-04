@@ -4,10 +4,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:elevation="10dp"
-    app:cardCornerRadius="10dp"
     android:clipChildren="false"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:elevation="10dp"
+    app:cardCornerRadius="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,13 +33,13 @@
             android:src="@drawable/profile"/>
 
         <TextView
-            android:clickable="true"
             android:id="@+id/recentTextViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/recentUserImage"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
+            android:clickable="true"
             android:text="Siddhesh Khandelwal,"
             android:textColor="#2d2d2d"
             android:textSize="16dp"
