@@ -64,6 +64,8 @@ public class InterestReceivedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                interestReceivedModelList.clear();
                 new PrepareReceivedInterest().execute();
                 interestReceivedAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
