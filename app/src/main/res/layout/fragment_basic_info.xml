@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentBasicInfo"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerHeight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
@@ -52,6 +54,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/editTextWeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -66,6 +69,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerBuilt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -75,6 +79,7 @@
                     android:textSize="14dp"/>
 
                 <Spinner
+                    android:id="@+id/spinnerMaritalStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -116,6 +121,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerEducation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
@@ -125,6 +131,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/editTextHighestDegree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -139,6 +146,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerOccupation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -148,6 +156,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/editTextCompanyName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -163,6 +172,7 @@
 
 
                 <Spinner
+                    android:id="@+id/spinnerDesignation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -172,6 +182,7 @@
                     android:textSize="14dp"/>
 
                 <Spinner
+                    android:id="@+id/spinnerAnnualIncome"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -213,6 +224,7 @@
                     />
 
                 <EditText
+                    android:id="@+id/editTextFatherName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -227,6 +239,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerFatherOccupation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -236,6 +249,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/editTextFatherOccupationDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -250,6 +264,7 @@
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerFamilyStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
