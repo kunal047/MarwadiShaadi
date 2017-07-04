@@ -79,6 +79,7 @@ public class InterestSentFragment extends Fragment {
 
     private void refreshData() {
 
+        interestListSent.clear();
         new PrepareSentInterest().execute();
         interestSentAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -185,5 +186,4 @@ public class InterestSentFragment extends Fragment {
             return null;
         }
     }
-
 }
