@@ -45,8 +45,8 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
                 .into(holder.dp);
         holder.name.setText(rev.getName());
         holder.age.setText(String.valueOf(rev.getAge()) + " yrs");
-        holder.education.setText(rev.getEducation());
-        holder.city.setText(rev.getCity());
+        holder.education.setText(rev.getEducationDegree());
+        holder.city.setText(rev.getLocation());
     }
 
 
@@ -85,8 +85,6 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
                     context.startActivity(i);
                 }
             });
-
-
 
         }
 
