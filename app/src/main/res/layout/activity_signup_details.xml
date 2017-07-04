@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activitySignupDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff">
+    android:background="#fff"
+    android:focusableInTouchMode="true">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,97 +16,101 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_margin="25dp"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical"
             >
+
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Signup"
-                android:textSize="20dp"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/colorPrimary"/>
+                android:text="Signup"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp"
+                tools:ignore="MissingPrefix"/>
+
             <View
                 android:layout_width="80dp"
                 android:layout_height="0.5dp"
-                android:background="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                ></View>
+                android:background="@color/colorPrimary"
+                />
 
             <EditText
+                android:id="@+id/first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@layout/signup_gradient"
+                android:drawableLeft="@drawable/signup_name"
+                android:drawablePadding="10dp"
                 android:hint="First Name"
-                android:drawableLeft="@drawable/signup_name"
-                android:drawablePadding="10dp"
+                android:inputType="textPersonName"
                 android:padding="6dp"
                 android:textSize="12dp"
-                android:id="@+id/first_name"
-                android:inputType="textPersonName"
-                android:background="@layout/signup_gradient"
                 />
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Last Name"
-                android:drawableLeft="@drawable/signup_name"
-                android:drawablePadding="10dp"
-                android:padding="6dp"
-                android:textSize="12dp"
                 android:id="@+id/last_name"
-                android:inputType="textPersonName"
-                android:background="@layout/signup_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient"
+                android:drawableLeft="@drawable/signup_name"
+                android:drawablePadding="10dp"
+                android:hint="Last Name"
+                android:inputType="textPersonName"
+                android:padding="6dp"
+                android:textSize="12dp"
                 />
 
 
             <EditText
-                android:windowSoftInputMode="stateHidden"
-                android:focusableInTouchMode="false"
+                android:id="@+id/dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Date Of Birth"
-                android:textSize="12dp"
+                android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient"
+                android:clickable="true"
                 android:drawableLeft="@drawable/signup_dob"
                 android:drawablePadding="10dp"
+                android:focusableInTouchMode="false"
+                android:hint="Date Of Birth"
                 android:padding="6dp"
-                android:id="@+id/dob"
-                android:clickable="true"
-                android:background="@layout/signup_gradient"
-                android:layout_marginTop="10dp"
+                android:textSize="12dp"
+                android:windowSoftInputMode="stateHidden"
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient"
                 android:orientation="horizontal"
                 android:weightSum="3"
-                android:background="@layout/signup_gradient"
-                android:layout_marginTop="10dp"
                 >
+
                 <EditText
+                    android:id="@+id/text3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/text3"
+                    android:layout_weight="1"
+                    android:background="#00ffffff"
                     android:drawableLeft="@drawable/signup_gender"
                     android:drawablePadding="10dp"
-                    android:padding="6dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:padding="6dp"
                     android:text="Gender"
                     android:textSize="12dp"
-                    android:background="#00ffffff"
                     />
 
                 <RadioGroup
+                    android:id="@+id/radioGroupGender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -115,18 +119,18 @@
                     >
 
                     <RadioButton
-                        android:text="Male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="6dp"
+                        android:text="Male"
                         />
 
                     <RadioButton
-                        android:text="Female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:text="Female"
                         />
                 </RadioGroup>
 
@@ -134,46 +138,48 @@
 
 
             <EditText
+                android:id="@+id/mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text3"
-                android:hint="Mobile Number"
-                android:textSize="12dp"
+                android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient"
                 android:drawableLeft="@drawable/signup_phone"
                 android:drawablePadding="10dp"
-                android:padding="6dp"
-                android:id="@+id/mobile"
+                android:hint="Mobile Number"
                 android:inputType="phone"
-                android:background="@layout/signup_gradient"
-                android:layout_marginTop="10dp"
+                android:padding="6dp"
+                android:textSize="12dp"
                 />
 
             <AutoCompleteTextView
+                android:id="@+id/signup_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location"
-                android:textSize="12dp"
+                android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient"
                 android:completionThreshold="1"
                 android:drawableLeft="@drawable/signup_location"
                 android:drawablePadding="10dp"
+                android:hint="Location"
                 android:padding="6dp"
-                android:id="@+id/signup_location"
-                android:background="@layout/signup_gradient"
-                android:layout_marginTop="10dp"
+                android:textSize="12dp"
                 />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@layout/signup_gradient"
-                android:layout_marginTop="10dp">
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_caste"
-                android:padding="12dp"
-                android:textSize="12dp"
-                android:entries="@array/caste_array"
-                android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:background="@layout/signup_gradient">
+
+                <Spinner
+                    android:id="@+id/user_caste"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@array/caste_array"
+                    android:padding="12dp"
+                    android:textSize="12dp"
                     />
             </LinearLayout>
 
@@ -181,13 +187,13 @@
                 android:id="@+id/advnext"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@layout/button_border_corner_circle_"
                 android:text="Next"
+                android:textAllCaps="false"
                 android:textColor="#fff"
                 android:textSize="16dp"
-                android:textAllCaps="false"
-                android:background="@layout/button_border_corner_circle_"
                 />
 
         </LinearLayout>
