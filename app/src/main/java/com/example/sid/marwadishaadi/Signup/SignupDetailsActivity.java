@@ -133,7 +133,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         caste = (Spinner) findViewById(R.id.user_caste);
 
-        location = (AutoCompleteTextView) findViewById(R.id.location);
+        location = (AutoCompleteTextView) findViewById(R.id.signup_location);
         location.setThreshold(1);
         getData();
         placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, placeslist);
