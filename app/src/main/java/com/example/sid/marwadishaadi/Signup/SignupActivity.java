@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Signup;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
-import com.example.sid.marwadishaadi.Notif_Message;
-import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,9 +26,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -44,13 +38,14 @@ public class SignupActivity extends AppCompatActivity {
     protected Button next;
 
     protected LoginButton fblogin;
-    private FirebaseAnalytics mFirebaseAnalytics;
     CallbackManager callbackManager;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +55,9 @@ public class SignupActivity extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        email=(EditText)findViewById(R.id.signup_email);
-        pass=(EditText)findViewById(R.id.signup_password);
-        confirm=(EditText)findViewById(R.id.confirm_password);
+        email = (EditText) findViewById(R.id.signup_email);
+        pass = (EditText) findViewById(R.id.signup_password);
+        confirm = (EditText) findViewById(R.id.confirm_password);
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -77,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                        Log.d("object",object.toString());
+                        Log.d("object", object.toString());
 
                         try {
                             String first_name = object.getString("first_name");
@@ -88,10 +83,10 @@ public class SignupActivity extends AppCompatActivity {
                             // check must be performed here
                             //String email = object.getString("email");
                             String birthday = object.getString("birthday");
-                            Toast.makeText(getApplicationContext(),first_name + last_name + gender + birthday,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), first_name + last_name + gender + birthday, Toast.LENGTH_LONG).show();
 
                             // MUST GO TO dashboard
-                            Intent i = new Intent(SignupActivity.this,SignupActivity.class);
+                            Intent i = new Intent(SignupActivity.this, SignupActivity.class);
                             startActivity(i);
 
                         } catch (JSONException e) {
@@ -118,24 +113,26 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        next=(Button)findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener(){
+        next = (Button) findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"SignupNext","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "SignupNext", "button");
 
                 String uemail = email.getText().toString();
-                String upass =pass.getText().toString();
+                String upass = pass.getText().toString();
                 String cpass = confirm.getText().toString();
 
-                Intent i = new Intent(SignupActivity.this,SignupDetailsActivity.class);
+                Intent i = new Intent(SignupActivity.this, SignupDetailsActivity.class);
                 startActivity(i);
 
                 // rest
-        }});
+            }
+        });
     }
+
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
