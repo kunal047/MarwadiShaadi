@@ -47,6 +47,7 @@
                     />
 
                 <EditText
+                    android:id="@+id/about_me"
                     android:layout_marginTop="15dp"
                     android:textSize="16dp"
                     android:hint="I am a very loving person. I love animals. I am foodie. I am hard working and loyal ..."
@@ -67,7 +68,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advnext"
+                    android:id="@+id/aboutMe_update"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:layout_marginRight="5dp"

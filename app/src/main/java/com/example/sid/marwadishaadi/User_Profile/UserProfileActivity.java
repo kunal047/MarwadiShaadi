@@ -1,66 +1,68 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.RingtoneManager;
+import android.os.AsyncTask;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.squareup.picasso.Picasso;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.io.File;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 
-public class  UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ImageListener{
+public class  UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener{
 
 
     private ProfilePageAdapter profilePageAdapter;
     private ViewPager userinfo;
     private CarouselView carouselView;
-    private int[] sampleImages = {R.drawable.profile, R.drawable.profile, R.drawable.profile};
+    protected ImageView pref;
     private FloatingActionButton fav;
     private FloatingActionButton sendmsg;
     private FloatingActionButton sendinterest;
@@ -70,6 +72,67 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
+    CollapsingToolbarLayout toolbarLayout;
+
+ /*   AndroidNetworking.post(URL + "prepareUserProfile")
+            .addBodyParameter("customerNo", "O1057")
+.setPriority(Priority.HIGH)
+.build()
+.getAsJSONArray(new JSONArrayRequestListener() {
+        public void onResponse(JSONArray response) {
+// do anything with response
+            try {
+                FavouriteModel[] favouriteModel = new FavouriteModel[response.length()];
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONArray array = response.getJSONArray(i);
+                    String customerNo = array.getString(0);
+                    String name = array.getString(1);
+                    String dateOfBirth = array.getString(2);
+// Thu, 18 Jan 1990 00:00:00 GMT
+                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                    Date date = formatter.parse(dateOfBirth);
+                    System.out.println(date);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                    String[] partsOfDate = formatedDate.split("-");
+                    int day = Integer.parseInt(partsOfDate[0]);
+                    int month = Integer.parseInt(partsOfDate[1]);
+                    int year = Integer.parseInt(partsOfDate[2]);
+                    int a = getAge(year, month, day);
+                    String age = Integer.toString(a);
+                    String education = array.getString(3);
+                    String occupationLocation = array.getString(4);
+                    String imageUrl = array.getString(5);
+
+
+                    favouriteModel[i] = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
+
+                    favouritesList.add(favouriteModel[i]);
+                    favouritesAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "onResponse: age of the user " + age);
+                    Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(ANError error) {
+            Log.d(TAG, "onResponse: json response array is " + error.toString());
+// handle error
+        }
+    });*/
+
     private String userid_from_deeplink;
 
     @Override
@@ -83,11 +146,12 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle("Siddhesh Rane");
+
+        toolbarLayout.setTitle("Pranay Parmar");
 
 
         Intent data = getIntent();
@@ -99,6 +163,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         }
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
+
 
         fab = (FloatingActionMenu) findViewById(R.id.menu_yellow);
         fav = (FloatingActionButton) findViewById(R.id.fab_favourite);
@@ -113,15 +178,13 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Edit photos","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Edit photos", "button");
 
-                Intent i = new Intent(UserProfileActivity.this,UploadPhotoActivity.class);
+                Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
-
-
 
 
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -136,12 +199,11 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         });
 
 
-
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "button");
             }
         });
 
@@ -149,7 +211,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Sent Message","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Message", "button");
             }
         });
 
@@ -157,7 +219,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Sent Interest","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest", "button");
             }
         });
 
@@ -207,7 +269,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
             @Override
             public void onClick(View v) {
                 // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Save as PDF","button");
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
 
 
                 final NotificationCompat.Builder notification = new NotificationCompat.Builder(UserProfileActivity.this)
@@ -271,14 +333,8 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
 
         carouselView = (CarouselView) findViewById(R.id.carouselView);
-        carouselView.setPageCount(sampleImages.length);
-        carouselView.setImageListener(this);
-        carouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
-            }
-        });
 
+        new ProfilePicture().execute();
 
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
         userinfo = (ViewPager) findViewById(R.id.profile_container);
@@ -306,12 +362,11 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void setImageForPosition(int position, ImageView imageView) {
-        imageView.setImageResource(sampleImages[position]);
 
     }
 
 
-    public static class ProfilePageAdapter extends FragmentPagerAdapter{
+    public static class ProfilePageAdapter extends FragmentPagerAdapter {
 
         public ProfilePageAdapter(FragmentManager fm) {
             super(fm);
@@ -320,18 +375,18 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         @Override
         public Fragment getItem(int position) {
 
-            switch (position){
+            switch (position) {
                 case 0:
                     ProfilePersonalDetailsFragment profile_personal_detailsFragment = new ProfilePersonalDetailsFragment();
                     return profile_personal_detailsFragment;
                 case 1:
-                   ProfileAdditionalDetailsFragment profile_additional_detailsFragment = new ProfileAdditionalDetailsFragment();
+                    ProfileAdditionalDetailsFragment profile_additional_detailsFragment = new ProfileAdditionalDetailsFragment();
                     return profile_additional_detailsFragment;
                 case 2:
                     ProfileFamilyDetailsFragment profile_family_detailsFragment = new ProfileFamilyDetailsFragment();
                     return profile_family_detailsFragment;
                 case 3:
-                    PartnerPreferencesFragment partnerPreferencesFragment= new PartnerPreferencesFragment();
+                    PartnerPreferencesFragment partnerPreferencesFragment = new PartnerPreferencesFragment();
                     return partnerPreferencesFragment;
             }
             return null;
@@ -344,7 +399,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return "Personal Details";
                 case 1:
@@ -368,5 +423,61 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
+    }
+
+    class ProfilePicture extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            AndroidNetworking.post("http://192.168.43.143:5050/fetchProfilePicture")
+                    .addBodyParameter("customerNo", "A1028")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+
+
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            try {
+                                JSONArray array = response.getJSONArray(0);
+                                String name = array.getString(1)+ " "+array.getString(2);
+                                final ArrayList<String> images = new ArrayList<>();
+                                for(int i =0;i<response.length();i++)
+                                {
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
+                                    Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
+
+                                }
+
+                                toolbarLayout.setTitle(name);
+
+                                carouselView.setPageCount(images.size());
+                                carouselView.setImageListener(new ImageListener() {
+                                    @Override
+                                    public void setImageForPosition(int position, ImageView imageView) {
+                                        Picasso.with(UserProfileActivity.this)
+                                                .load(images.get(position))
+                                                .fit()
+                                                .into(imageView);
+                                    }
+                                });
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+            return null;
+        }
     }
 }

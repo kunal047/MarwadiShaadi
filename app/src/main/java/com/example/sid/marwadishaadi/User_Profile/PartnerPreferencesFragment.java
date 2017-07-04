@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -22,12 +23,13 @@ import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferen
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.Text;
+
 
 import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+
 
 public class PartnerPreferencesFragment extends Fragment {
 
@@ -38,6 +40,7 @@ public class PartnerPreferencesFragment extends Fragment {
     public PartnerPreferencesFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,65 +100,54 @@ public class PartnerPreferencesFragment extends Fragment {
                         public void onResponse(JSONArray response) {
 
                             try {
-                                JSONArray array;
+                                String str;
                                 String a = response.getString(0)+" yrs to "+response.getString(1)+" yrs";
                                 age.setText(a);
 
-                                double feet = Double.parseDouble(response.getString(2)) / 30.48 ;
-                                double inches = (Double.parseDouble(response.getString(2)) / 2.54) - ((int) feet * 12);
-                                double feet1 = Double.parseDouble(response.getString(3)) / 30.48;
-                                double inches1 = (Double.parseDouble(response.getString(3)) / 2.54) - ((int) feet * 12);
-                                String h = (int)feet+" ft "+inches+" inch to "+(int)feet1+" ft "+inches1+" inch ";
+
+                                String h = response.getString(2)+" - "+response.getString(3);
                                 height.setText(h);
 
-                                array = response.getJSONArray(4);
-                                String c = array.getString(0);
-                                for (int i = 1; i<array.length();i++)
+
+
+                                str = response.getString(4).replace("[","").replace("]","");
+                                String c=str ;
+                                for (int i = 1; i<str.length();i++)
                                 {
-                                    c = c+ "/ "+array.getString(i);
                                 }
                                 complexion.setText(c);
 
-                                array = response.getJSONArray(5);
-                                String b = array.getString(0);
-                                for (int i = 1; i<array.length();i++)
+
+                                str = response.getString(5).replace("[","").replace("]","");
+                                String b=str;
+                                for (int i = 1; i<str.length();i++)
                                 {
-                                    b = b+ "/ "+array.getString(i);
                                 }
                                 build.setText(b);
 
                                 physicalStatus.setText(response.getString(6));
                                 city.setText(response.getString(7));
 
-                                array=response.getJSONArray(8);
-                                String hd=array.getString(0);
-                                for (int i = 1; i<array.length();i++)
+                                str=response.getString(8).replace("[","").replace("]","");
+
+                                String hd=str;
+                                for (int i = 1; i<str.length();i++)
                                 {
-                                    hd = hd+ "/ "+array.getString(i);
                                 }
                                 highestDegree.setText(hd);
 
-                                array = response.getJSONArray(9);
-                                String o=array.getString(0);
-                                for (int i = 1; i<array.length();i++)
+
+                                str = response.getString(9).replace("[","").replace("]","");
+                                 String o=str;
+                                for (int i = 1; i<str.length();i++)
                                 {
-                                    o = o+ "/ "+array.getString(i);
+
                                 }
                                 occup.setText(o);
 
-                                array = response.getJSONArray(10);
-                                String m = array.getString(0);
-                                for (int i = 1; i<array.length();i++)
-                                {
-                                    m = m+ "/ "+array.getString(i);
-                                }
-                                maritalStatus.setText(m);
 
-
-
-
-
-                                annualIncome.setText(response.getString(11));
+                                maritalStatus.setText(response.getString(10));
+                                annualIncome.setText(response.getString(11).replace("[","").replace("]",""));
                             }
                             catch (JSONException e)
                             {
@@ -180,7 +172,7 @@ public class PartnerPreferencesFragment extends Fragment {
             String annualI = aincome;
             annualI = annualI.replaceAll("[^-?0-9]+", " ");
             List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-            Log.d(TAG, "onResponse: income array is " + incomeArray);
+            Log.d(TAG, "onResponse: income str is " + incomeArray);
             if (annualI.contains("Upto")) {
                 annualI = "Upto 3L";
             } else if (annualI.contains("Above")) {
@@ -199,5 +191,6 @@ public class PartnerPreferencesFragment extends Fragment {
 
 
     }
+
 
 }

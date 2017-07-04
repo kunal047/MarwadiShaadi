@@ -45,6 +45,7 @@
                 android:orientation="vertical">
 
                 <Spinner
+                    android:id="@+id/marital_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -54,6 +55,7 @@
                     android:layout_weight="1" />
 
                 <Spinner
+                    android:id="@+id/edit_height"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -63,6 +65,7 @@
                     android:layout_weight="1" />
 
                 <EditText
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -113,17 +116,10 @@
                     android:ems="10"
                     />
 
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/user_caste"
-                    android:padding="10dp"
-                    android:textSize="16dp"
-                    android:entries="@array/caste_array"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1" />
+
 
                 <Spinner
+                    android:id="@+id/physical_status"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -133,6 +129,7 @@
                     android:layout_weight="1" />
 
                 <Spinner
+                    android:id="@+id/edit_complexion"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -142,6 +139,7 @@
                     android:layout_weight="1" />
 
                 <Spinner
+                    android:id="@+id/built"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"

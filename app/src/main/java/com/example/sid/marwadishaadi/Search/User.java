@@ -28,4 +28,19 @@ public class User {
         this.name = name;
         this.hometown = hometown;
     }
+
+    public boolean isBox() {
+
+        return box;
+    }
+
+    public void setBox(boolean box) {
+        this.box = box;
+    }
+
+    public User(String name, String hometown, boolean box) {
+        this.name = name;
+        this.hometown = hometown;
+        this.box = box;
+    }
 }

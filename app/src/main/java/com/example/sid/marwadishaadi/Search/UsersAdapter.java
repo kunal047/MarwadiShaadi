@@ -49,28 +49,14 @@ public class UsersAdapter extends ArrayAdapter<User> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
 
-        User user = getItem(position);
+        final User user = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
 
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_multiple_select, parent, false);
-
-
-
         }
 
-
-        // Lookup view for data population
-
-
-
-
-
-//        TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-        // Populate the data into the template view using the data object
-//        Log.d(TAG, "getView: get name is ------------------------------------ " +  user.getName());
         checkbox=(CheckBox)convertView.findViewById(R.id.checkBox);
-
         checkbox.setText(user.getName());
 
         checkbox.setOnCheckedChangeListener(myCheckChangList);
@@ -80,11 +66,8 @@ public class UsersAdapter extends ArrayAdapter<User> {
         {
             checkbox.setChecked(true);
         }
-
 //        tvHome.setText(user.hometown);
         // Return the completed view to render on screen
-
-
         return convertView;
     }
 

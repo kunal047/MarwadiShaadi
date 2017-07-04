@@ -54,27 +54,12 @@
                     android:layout_marginLeft="10dp"
                     android:textColorHint="#747474"
                     android:textSize="16dp"
-                    android:id="@+id/first_name"
+                    android:id="@+id/edit_father_name"
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:background="#fff"
                     />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Mama's Surname"
-                    android:drawablePadding="10dp"
-                    android:padding="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:textColorHint="#747474"
-                    android:textSize="16dp"
-                    android:id="@+id/mama_surname"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:background="#fff"
-                    />
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -82,7 +67,8 @@
                     android:entries="@array/father_occupation_array"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:id="@+id/edit_father_occupation"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,12 +79,11 @@
                     android:layout_marginLeft="10dp"
                     android:textColorHint="#747474"
                     android:textSize="16dp"
-                    android:id="@+id/father_occupation"
+                    android:id="@+id/edit_father_occupation_details"
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:background="#fff"
                     />
-
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -106,24 +91,8 @@
                     android:textSize="20dp"
                     android:entries="@array/fstatus_array"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textSize="16dp"
-                    android:hint="Grandfather's Name"
-                    android:textColorHint="#747474"
-                    android:drawableLeft="@drawable/signup_grandpa"
-                    android:drawablePadding="10dp"
-                    android:padding="6dp"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:background="#fff"
-                    />
-
-
+                    android:layout_weight="1"
+                    android:id="@+id/edit_family_status"/>
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -131,8 +100,8 @@
                     android:entries="@array/ftype_array"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
-
+                    android:layout_weight="1"
+                    android:id="@+id/edit_family_type"/>
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -140,18 +109,8 @@
                     android:textSize="16dp"
                     android:entries="@array/fvalues_array"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
-
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:entries="@array/father_occupation_array"
-                    android:textSize="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1" />
-
+                    android:layout_weight="1"
+                    android:id="@+id/edit_family_values"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -165,9 +124,8 @@
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:background="#fff"
+                    android:id="@+id/edit_native_place"
                     />
-
-
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -181,12 +139,44 @@
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:background="#fff"
+                    android:id="@+id/edit_subcaste"
                     />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textSize="16dp"
+                    android:hint="Grandfather's Name"
+                    android:textColorHint="#747474"
+                    android:drawableLeft="@drawable/signup_grandpa"
+                    android:drawablePadding="10dp"
+                    android:padding="6dp"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:background="#fff"
+                    android:id="@+id/edit_grandfather_name"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Mama's Surname"
+                    android:drawablePadding="10dp"
+                    android:padding="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="16dp"
+                    android:id="@+id/edit_mama_surname"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:background="#fff"
+                    />
+
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advnext"
+                    android:id="@+id/update_family"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:layout_marginRight="5dp"
