@@ -86,8 +86,6 @@ public class InterestReceivedFragment extends Fragment {
         recyclerView.setAdapter(interestReceivedAdapter);
         new PrepareReceivedInterest().execute();
 
-//        prepareInterest();
-
         return mview;
     }
 

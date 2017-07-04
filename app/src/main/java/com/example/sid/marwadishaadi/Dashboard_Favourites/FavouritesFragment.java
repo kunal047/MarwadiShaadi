@@ -86,6 +86,7 @@ public class FavouritesFragment extends Fragment {
 
     private void refreshContent() {
 
+        favouritesList.clear();
         new PrepareFavourites().execute();
         favouritesAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
