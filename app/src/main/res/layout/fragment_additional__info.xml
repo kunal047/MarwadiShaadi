@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     >
 
     <LinearLayout
@@ -14,568 +14,591 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Additional Personal Details"
-                        android:textSize="16dp"
-                        android:textColor="@color/colorPrimary"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        tools:ignore="MissingPrefix"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:id="@+id/text3"
-                        android:drawableLeft="@drawable/signup_name"
-                        android:drawablePadding="10dp"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:textColor="#000"
-                        android:background="@null"
-                        android:layout_marginTop="20dp"
-                        android:text="About Me"
-                        android:textSize="14dp"
-                        android:layout_gravity="center_vertical"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <EditText
-                        android:layout_marginTop="5dp"
-                        android:textSize="12dp"
-                        android:hint="I am a very loving person. I love animals. I am foodie. I am hard working and loyal ..."
-                        android:textColorHint="#747474"
-                        android:padding="6dp"
-                        android:lines="8"
-                        android:minLines="4"
-                        android:gravity="top|left"
-                        android:maxLines="6"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:scrollbars="vertical"
-                        android:inputType="textMultiLine"
-                        android:background="#fff"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                        <EditText
-                            android:id="@+id/editText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="#fff"
-                            android:drawableLeft="@drawable/signup_hobby"
-                            android:drawablePadding="10dp"
-                            android:gravity="center_vertical"
-                            android:hint="Hobbies/Interests (Reading)"
-                            android:inputType="textMultiLine"
-                            android:maxLines="6"
-                            android:minLines="1"
-                            android:paddingBottom="10dp"
-                            android:paddingTop="10dp"
-                            android:scrollbars="vertical"
-                            android:textColorHint="#747474"
-                            android:textSize="14dp"
-                            android:layout_marginLeft="10dp"
-                            />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Grandfather's Name"
-                        android:drawableLeft="@drawable/signup_grandpa"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="textPersonName"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Mama's Surname"
-                        android:drawableLeft="@drawable/signup_name"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="text"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/ftype_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp"/>
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/fvalues_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Native Place"
-                        android:drawableLeft="@drawable/signup_location"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="text"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Subcaste (If any)"
-                        android:drawableLeft="@drawable/signup_subcaste"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="text"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-                <LinearLayout
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Additional Personal Details"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
+
+                <EditText
+                    android:id="@+id/text3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/signup_name"
+                    android:drawablePadding="10dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="About Me"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Education/Occupational Details *"
-                        android:textSize="16dp"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        android:textColor="@color/colorPrimary"
-                        tools:ignore="MissingPrefix"
-                        />
+                <EditText
+                    android:id="@+id/editTextAboutMe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#fff"
+                    android:gravity="top|left"
+                    android:hint="I am a very loving person. I love animals. I am foodie. I am hard working and loyal ..."
+                    android:inputType="textMultiLine"
+                    android:lines="8"
+                    android:maxLines="6"
+                    android:minLines="4"
+                    android:padding="6dp"
+                    android:scrollbars="vertical"
+                    android:textColorHint="#747474"
+                    android:textSize="12dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextHobbies"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_hobby"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Hobbies/Interest (Reading)"
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:minLines="1"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:scrollbars="vertical"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+
+                    />
+
+                <EditText
+                    android:id="@+id/editTextGrandfatherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_grandpa"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Grandfather's Name"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextMamaSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_name"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Mama's Surname"
+                    android:inputType="text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerFamilyType"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/ftype_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerFamilyValues"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/fvalues_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Institute Name (IIT, BITS)"
-                        android:drawableLeft="@drawable/signup_institute"
-                        android:inputType="textPersonName"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                <EditText
+                    android:id="@+id/editTextNativePlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_location"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Native Place"
+                    android:inputType="text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Work Location"
-                        android:drawableLeft="@drawable/signup_location"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawablePadding="10dp"
-                        android:inputType="text"
-                        android:background="#fff"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                <EditText
+                    android:id="@+id/editTextSubcaste"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_subcaste"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Subcaste (Shwetambar)"
+                    android:inputType="text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
-
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Education/Occupational Details *"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editTextInstituteName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_institute"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Institute Name (IIT, BITS)"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextWorkLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_location"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="Work Location"
+                    android:inputType="text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lifestyle Details *"
-                        android:textSize="16dp"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        android:textColor="@color/colorPrimary"
-                        tools:ignore="MissingPrefix"
-                        />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/diet_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="20dp"/>
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/smoking_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/drinking_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp"/>
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-                <LinearLayout
-                    android:layout_width="match_parent"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:text="Lifestyle Details *"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
 
+                <Spinner
+                    android:id="@+id/spinnerDietStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:entries="@array/diet_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Physical Details *"
-                        android:textSize="16dp"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        android:textColor="@color/colorPrimary"
-                        tools:ignore="MissingPrefix"
-                        />
+                <Spinner
+                    android:id="@+id/spinnerSmokeStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/smoking_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
+                <Spinner
+                    android:id="@+id/spinnerDrinkStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/drinking_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/complexion_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="20dp" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/physicalstatus_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:text="Physical Details *"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Horoscope Details"
-                        android:textSize="16dp"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        android:textColor="@color/colorPrimary"
-                        tools:ignore="MissingPrefix"
-                        />
+                <Spinner
+                    android:id="@+id/spinnerComplexionStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:entries="@array/complexion_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
+                <Spinner
+                    android:id="@+id/spinnerPhysicalStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/physicalstatus_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:hint="Birth Time"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_dob"
-                        android:focusableInTouchMode="false"
-                        android:windowSoftInputMode="stateHidden"
-                        android:drawablePadding="10dp"
-                        android:id="@+id/dob"
-                        android:inputType="datetime"
-                        android:clickable="true"
-                        android:ems="10"
-                        android:background="#fff"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="Birth Place"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_location"
-                        android:drawablePadding="10dp"
-                        android:background="#fff"
-                        android:id="@+id/location"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textSize="14dp"
-                        android:hint="Gotra"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_gotra"
-                        android:drawablePadding="10dp"
-                        android:inputType="textPersonName"
-                        android:background="#fff"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/manglik_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp" />
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/horoscope_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-                <LinearLayout
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Horoscope Details"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
+
+
+                <EditText
+                    android:id="@+id/editTextBirthTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/signup_dob"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:hint="Birth Time"
+                    android:inputType="datetime"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    android:windowSoftInputMode="stateHidden"
+                    />
+
+                <AutoCompleteTextView
+                    android:id="@+id/editTextBirthPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_location"
+                    android:drawablePadding="10dp"
+                    android:hint="Birth Place"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextGotra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_gotra"
+                    android:drawablePadding="10dp"
+                    android:hint="Gotra"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerManglikStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/manglik_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerHoroscopeStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/horoscope_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:cardBackgroundColor="#fff"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Relative Details *"
-                        android:textSize="16dp"
-                        fontPath="fonts/OpenSans-Bold.ttf"
-                        android:textColor="@color/colorPrimary"
-                        tools:ignore="MissingPrefix"
-                        />
+                <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Relative Details"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    tools:ignore="MissingPrefix"
+                    />
 
 
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:entries="@array/relation_name_array"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="20dp" />
+                <Spinner
+                    android:id="@+id/spinner_relation_name_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:entries="@array/relation_name_array"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"/>
 
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="Name"
-                        android:drawableLeft="@drawable/signup_name"
-                        android:drawablePadding="10dp"
-                        android:textColorHint="#747474"
-                        android:textSize="14dp"
-                        android:id="@+id/first_name"
-                        android:inputType="textPersonName"
-                        android:background="#fff"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                <EditText
+                    android:id="@+id/editTextRelationFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_name"
+                    android:drawablePadding="10dp"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textSize="14dp"
-                        android:hint="Occupation"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_job"
-                        android:drawablePadding="10dp"
-                        android:inputType="textPersonName"
-                        android:background="#fff"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                <EditText
+                    android:id="@+id/editTextRelationOccupation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_job"
+                    android:drawablePadding="10dp"
+                    android:hint="Occupation"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="Location"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_location"
-                        android:drawablePadding="10dp"
-                        android:background="#fff"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                <AutoCompleteTextView
+                    android:id="@+id/editTextRelationLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_location"
+                    android:drawablePadding="10dp"
+                    android:hint="Location"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_below="@+id/text3"
-                        android:hint="Mobile Number"
-                        android:textSize="14dp"
-                        android:textColorHint="#747474"
-                        android:drawableLeft="@drawable/signup_phone"
-                        android:drawablePadding="10dp"
-                        android:background="#fff"
-                        android:id="@+id/mobile"
-                        android:inputType="phone"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                <EditText
+                    android:id="@+id/editTextRelationMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_phone"
+                    android:drawablePadding="10dp"
+                    android:hint="Mobile Number"
+                    android:inputType="phone"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>
