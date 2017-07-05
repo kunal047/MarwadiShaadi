@@ -93,7 +93,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.mariSta.setText(suggest.getMariSta());
         holder.company.setText(cd);
         holder.highDeg.setText(suggest.getHighDeg());
+        Log.d(TAG, "onBindViewHolder: $$$$$$$$$$$$$$$$$$$$$$$$$$ valus " + suggest.getFavouriteStatus());
         if (suggest.getFavouriteStatus().toCharArray()[0] == '1') {
+            Log.d(TAG, "onBindViewHolder: heart is faslse ****************************************** ");
             holder.sparkButtonFav.setChecked(false);
             holder.sparkButtonFav.setInactiveImage(R.mipmap.heart_disable);
         }
