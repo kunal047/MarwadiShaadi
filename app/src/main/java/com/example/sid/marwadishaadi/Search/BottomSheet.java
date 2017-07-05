@@ -1,7 +1,6 @@
 package com.example.sid.marwadishaadi.Search;
 
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +9,6 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,7 +25,6 @@ import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Filter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment;
-import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
 import com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment;
 import com.example.sid.marwadishaadi.User_Profile.ProfileFamilyDetailsFragment;
 import com.example.sid.marwadishaadi.User_Profile.ProfilePersonalDetailsFragment;
@@ -57,7 +54,9 @@ import static com.example.sid.marwadishaadi.Search.Search.maritalstatusList;
 import static com.example.sid.marwadishaadi.Search.Search.physicalstatus;
 import static com.example.sid.marwadishaadi.Search.Search.physicalstatusList;
 import static com.example.sid.marwadishaadi.Search.Search.spinnerCastSearch;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.prefannualincome;
+import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceAnnualincome;
+import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceMaritalstatus;
+import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 /**
@@ -67,79 +66,70 @@ import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetail
 
 public class BottomSheet extends BottomSheetDialogFragment {
 
-    private int content;
-    private View contentView;
-    private UsersAdapter adapter;
-    private static String s;
-    private int coun;
-    private static EditText fname, lname, id;
-    private static int count = 0, size = 0;
     public static ArrayList<SuggestionModel> sm;
     public static SuggestionAdapter SA;
     public static String err, success;
+    private static String s;
+    private static EditText fname, lname, id;
+    private static int count = 0, size = 0;
     public ProgressDialog dialog;
     //Edit Educational details
     Spinner editEducation;
     TextView eduDegree, eduInstituteLocation;
     Button updateEducation;
-
     String e, hd, in;
     //-------------------------------------------
 //Edit Professional details of User Profile
     Spinner designation, annualIncome, occupation;
     TextView companyName, companyLocation;
     Button updateProfession;
-
     String d, cn, o, cl, ai;
+    EditText aboutMe;
+    Button aboutMe_update;
+    String am;
+    //Hobbies additional details
+    EditText hobbies;
 
     //-------------------------------------------
 
 
     //About Me additional details
-
-    EditText aboutMe;
-    Button aboutMe_update;
-    String am;
-
-    //Hobbies additional details
-    EditText hobbies;
     Button hobbies_update;
     String h;
-
     //LifeStyle additional details
-    Spinner eatingHabit,smokingHabit,drinkingHabit;
-    String eh,dh,sh;
+    Spinner eatingHabit, smokingHabit, drinkingHabit;
+    String eh, dh, sh;
     Button lifestyleUpdate;
-
     //Horoscope additional details
-    Spinner manglik,matchHoroscope;
-    EditText birthTime,birthPlace,gotra;
-    String m,bt,bp,g,mh;
+    Spinner manglik, matchHoroscope;
+    EditText birthTime, birthPlace, gotra;
+    String m, bt, bp, g, mh;
     Button horoscopeUpdate;
-
     //Relation Family Details
     Spinner relation;
     EditText relativeName, relativeOccupation, relativeLocation, relativeMobile;
     Button relationUpdate;
-
-    String r,rn,ro,rl,rm;
+    String r, rn, ro, rl, rm;
     String[] array;
     Bundle bundle;
+    private int content;
+    private View contentView;
+    private UsersAdapter adapter;
+    private int coun;
 
     public BottomSheet() {
 
     }
 
-    public BottomSheet(int i ,String[] array)
-    {
-        this.array=array;
+    public BottomSheet(int i, String[] array) {
+        this.array = array;
         if (i == 111) {
-        content = 111;
-    } else if (i == 112) {
-        content = 5;
-    } else if (i == 113) {
-        content = 113;
-    }
+            content = 111;
+        } else if (i == 112) {
+            content = 5;
+        } else if (i == 113) {
+            content = 113;
+        }
 
     }
     public BottomSheet(int i) {
@@ -154,9 +144,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
             content = profile_additional_detailsFragment.getCasebreak();
         } else if (i == 4) {
             Filter mfilter = new Filter();
-            content = mfilter.getCasebreak();
+            content = Filter.getCasebreak();
         } else if (i == 7) {
             Signup_Partner_Preferences_Fragment signupPartnerPreferencesFragment = new Signup_Partner_Preferences_Fragment();
+
             content = signupPartnerPreferencesFragment.getCasebreak();
         } else {
             ProfileFamilyDetailsFragment profile_family_detailsFragment = new ProfileFamilyDetailsFragment();
@@ -171,8 +162,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
         switch (content) {
 
             //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
-            case 112:contentView=viewGetterEditPref(R.array.aincome_array,array);
-                Toast.makeText(getContext(),"incase",Toast.LENGTH_LONG).show();
+            case 112:
+                contentView = viewGetterEditPref(R.array.aincome_array, array);
+                Toast.makeText(getContext(), "incase", Toast.LENGTH_LONG).show();
 
                 count = 2;
                 break;
@@ -248,10 +240,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
 
                 });
+                count = 2;
 
                 break;
             case 13:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_profession, null);
+                count = 2;
+
 
                 designation = (Spinner) contentView.findViewById(R.id.profession);
                 annualIncome = (Spinner) contentView.findViewById(R.id.edit_annual_income);
@@ -267,7 +262,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     @Override
                     public void onClick(View v) {
                         d = designation.getSelectedItem().toString();
-                        ai= annualIncome.getSelectedItem().toString();
+                        ai = annualIncome.getSelectedItem().toString();
 
                         ai = ai.replace("L", "00000");
 
@@ -290,9 +285,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 21:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_about_me, null);
+                count = 2;
+
 
                 aboutMe = (EditText) contentView.findViewById(R.id.about_me);
-                aboutMe_update=(Button) contentView.findViewById(R.id.aboutMe_update);
+                aboutMe_update = (Button) contentView.findViewById(R.id.aboutMe_update);
 
                 new FetchAdditionalAboutMeDetails().execute();
 
@@ -300,11 +297,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        am=aboutMe.getText().toString();
+                        am = aboutMe.getText().toString();
 
                         new EditAdditionalAboutMeDetails().execute();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                        someIntent.putExtra("aboutMe",am);
+                        someIntent.putExtra("aboutMe", am);
 
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
                         dialog.dismiss();
@@ -315,9 +312,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 22:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_hobbies, null);
+                count = 2;
 
                 hobbies = (EditText) contentView.findViewById(R.id.hobbies);
-                hobbies_update=(Button) contentView.findViewById(R.id.hobbiesUpdate);
+                hobbies_update = (Button) contentView.findViewById(R.id.hobbiesUpdate);
 
                 new FetchAdditionalHobbiesDetails().execute();
 
@@ -325,12 +323,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        h=hobbies.getText().toString();
+                        h = hobbies.getText().toString();
 
                         new EditAdditionalHobbiesDetails().execute();
 
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                        someIntent.putExtra("hobbies",h);
+                        someIntent.putExtra("hobbies", h);
 
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
                         dialog.dismiss();
@@ -341,10 +339,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 23:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_lifestyle, null);
-                eatingHabit = (Spinner)contentView.findViewById(R.id.eating_habits);
-                drinkingHabit = (Spinner)contentView.findViewById(R.id.drinking_habit);
-                smokingHabit = (Spinner)contentView.findViewById(R.id.smoking_habits);
-                lifestyleUpdate=(Button)contentView.findViewById(R.id.lifestyle_update);
+                count = 2;
+
+                eatingHabit = (Spinner) contentView.findViewById(R.id.eating_habits);
+                drinkingHabit = (Spinner) contentView.findViewById(R.id.drinking_habit);
+                smokingHabit = (Spinner) contentView.findViewById(R.id.smoking_habits);
+                lifestyleUpdate = (Button) contentView.findViewById(R.id.lifestyle_update);
 
                 new FetchAdditionalLifeStyleDetails().execute();
 
@@ -352,15 +352,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     @Override
 
                     public void onClick(View v) {
-                        eh=eatingHabit.getSelectedItem().toString();
-                        dh=drinkingHabit.getSelectedItem().toString();
-                        sh=smokingHabit.getSelectedItem().toString();
+                        eh = eatingHabit.getSelectedItem().toString();
+                        dh = drinkingHabit.getSelectedItem().toString();
+                        sh = smokingHabit.getSelectedItem().toString();
 
                         new EditAdditionalLifeStyleDetails().execute();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                        someIntent.putExtra("eatingHabit",eh);
-                        someIntent.putExtra("drinkingHabit",dh);
-                        someIntent.putExtra("smokingHabit",sh);
+                        someIntent.putExtra("eatingHabit", eh);
+                        someIntent.putExtra("drinkingHabit", dh);
+                        someIntent.putExtra("smokingHabit", sh);
 
 
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
@@ -373,33 +373,34 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 24:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_horoscope, null);
+                count = 2;
 
-                birthTime = (EditText)contentView.findViewById(R.id.birthtime);
-                birthPlace = (EditText)contentView.findViewById(R.id.birth_location);
-                gotra = (EditText)contentView.findViewById(R.id.gotra);
-                manglik = (Spinner)contentView.findViewById(R.id.manglik);
-                matchHoroscope = (Spinner)contentView.findViewById(R.id.match_horoscope);
-                horoscopeUpdate = (Button)contentView.findViewById(R.id.horoscope_update);
+
+                birthTime = (EditText) contentView.findViewById(R.id.birthtime);
+                birthPlace = (EditText) contentView.findViewById(R.id.birth_location);
+                gotra = (EditText) contentView.findViewById(R.id.gotra);
+                manglik = (Spinner) contentView.findViewById(R.id.manglik);
+                matchHoroscope = (Spinner) contentView.findViewById(R.id.match_horoscope);
+                horoscopeUpdate = (Button) contentView.findViewById(R.id.horoscope_update);
 
                 new FetchAdditionalHoroscopeDetails().execute();
 
                 horoscopeUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        bt=birthTime.getText().toString();
-                        bp=birthPlace.getText().toString();
-                        g=gotra.getText().toString();
-                        m =manglik.getSelectedItem().toString();
-                        mh=matchHoroscope.getSelectedItem().toString();
+                        bt = birthTime.getText().toString();
+                        bp = birthPlace.getText().toString();
+                        g = gotra.getText().toString();
+                        m = manglik.getSelectedItem().toString();
+                        mh = matchHoroscope.getSelectedItem().toString();
 
                         new EditAdditionalHoroscopeDetails();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                        someIntent.putExtra("birthTime",bt);
-                        someIntent.putExtra("birthPlace",bp);
-                        someIntent.putExtra("gotra",g);
+                        someIntent.putExtra("birthTime", bt);
+                        someIntent.putExtra("birthPlace", bp);
+                        someIntent.putExtra("gotra", g);
                         someIntent.putExtra("manglik", m);
-                        someIntent.putExtra("matchHoroscope",mh);
-
+                        someIntent.putExtra("matchHoroscope", mh);
 
 
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
@@ -415,33 +416,34 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 32:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_relatives, null);
+                count = 2;
+
 
                 relation = (Spinner) contentView.findViewById(R.id.relation);
-                relativeName=(EditText) contentView.findViewById(R.id.relative_name);
-                relativeOccupation=(EditText)contentView.findViewById(R.id.relative_occupation);
-                relativeLocation=(EditText)contentView.findViewById(R.id.relative_location);
-                relativeMobile=(EditText)contentView.findViewById(R.id.relative_mobile);
-                relationUpdate=(Button)contentView.findViewById(R.id.relation_update);
+                relativeName = (EditText) contentView.findViewById(R.id.relative_name);
+                relativeOccupation = (EditText) contentView.findViewById(R.id.relative_occupation);
+                relativeLocation = (EditText) contentView.findViewById(R.id.relative_location);
+                relativeMobile = (EditText) contentView.findViewById(R.id.relative_mobile);
+                relationUpdate = (Button) contentView.findViewById(R.id.relation_update);
 
                 new FetchFamilyRelationDetails().execute();
 
                 relationUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        rn=relativeName.getText().toString();
-                        rl=relativeLocation.getText().toString();
-                        ro=relativeOccupation.getText().toString();
-                        r=relation.getSelectedItem().toString();
-                        rm=relativeMobile.getText().toString();
+                        rn = relativeName.getText().toString();
+                        rl = relativeLocation.getText().toString();
+                        ro = relativeOccupation.getText().toString();
+                        r = relation.getSelectedItem().toString();
+                        rm = relativeMobile.getText().toString();
 
                         new EditFamilyRelationDetails().execute();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                        someIntent.putExtra("relation",r);
-                        someIntent.putExtra("relationName",rn);
-                        someIntent.putExtra("relationOccupation",ro);
-                        someIntent.putExtra("relationLocation",rl);
-                        someIntent.putExtra("relationMobile",rm);
-
+                        someIntent.putExtra("relation", r);
+                        someIntent.putExtra("relationName", rn);
+                        someIntent.putExtra("relationOccupation", ro);
+                        someIntent.putExtra("relationLocation", rl);
+                        someIntent.putExtra("relationMobile", rm);
 
 
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
@@ -456,6 +458,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             default:
                 contentView = View.inflate(getContext(), R.layout.custom_list_view, null);
+                count = 2;
+
                 break;
 
         }
@@ -596,37 +600,48 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             countspinnerCastSearch = coun;
                             break;
                         case 3:
-                            maritalstatus.setText(result.toString());
-                            maritalstatusList = result;
-                            countmaritalstatus = coun;
-                            break;
+                            if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
+
+                                preferenceMaritalstatus.setText(result.toString());
+                                break;
+                            } else {
+                                maritalstatus.setText(result.toString());
+                                maritalstatusList = result;
+                                countmaritalstatus = coun;
+                                break;
+                            }
                         case 4:
                             familystatus.setText(result.toString());
                             familystatusList = result;
                             countfamilystatus = coun;
                             break;
                         case 5:
-                            if(getContext().toString().contains("Edit_User_Profile.EditPreferencesActivity"))
-                            {
-                                prefannualincome.setText(result.toString());
-                                Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
-                                someIntent.putExtra("annualIncome",result.toString());
+                            if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
 
-                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(someIntent);
-                                dialog.dismiss();
+                                preferenceAnnualincome.setText(result.toString());
 
 
-                            }else{
-                            prefannualincome.setText(result.toString());
-                            AIList = result;
-                            countannualincome = coun;
+                            } else {
+                                annualincome.setText(result.toString());
+                                AIList = result;
+                                countannualincome = coun;
+
                             }
                             break;
                         case 6:
-                            physicalstatus.setText(result.toString());
-                            physicalstatusList = (result);
-                            countphysicalstatus = coun;
-                            break;
+                            if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
+
+                                preferencePhysicalstatus.setText(result.toString());
+                                break;
+
+                            } else {
+                                physicalstatus.setText(result.toString());
+                                physicalstatusList = (result);
+                                countphysicalstatus = coun;
+                                break;
+                            }
+
+
                     }
                     dialog.dismiss();
                 }
@@ -634,6 +649,54 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
 
         }
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        BottomSheet.s = s;
+    }
+
+    private View viewGetter(int array) {
+
+        ArrayList<User> arrayOfUsers = new ArrayList<>();
+        String[] str = getResources().getStringArray(array);
+        for (int i = 0; i < str.length; i++) {
+            User user = new User(str[i], "null");
+            arrayOfUsers.add(user);
+        }
+        adapter = new UsersAdapter(getContext(), arrayOfUsers);
+        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+        return view;
+    }
+
+    private View viewGetterEditPref(int array, String[] arr) {
+
+        ArrayList<User> arrayOfUsers = new ArrayList<>();
+        boolean b = true;
+        String[] str = getResources().getStringArray(array);
+        for (int i = 0; i < str.length; i++) {
+           /* if(Arrays.asList(arr).indexOf(str[i]) == -1)
+            {
+                b=false;
+            }
+            else
+                b=true;*/
+
+            User user = new User(str[i], "null", false);
+            user.setBox(true);
+            arrayOfUsers.add(user);
+        }
+        adapter = new UsersAdapter(getContext(), arrayOfUsers);
+        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        Toast.makeText(getContext(), "here", Toast.LENGTH_LONG).show();
+        listView.setAdapter(adapter);
+        return view;
     }
 
     class BackNd extends AsyncTask<String, String, String> {
@@ -659,6 +722,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             size = response.length();
                             for (int i = 0; i < response.length(); i++) {
                                 try {
+                                                    /*SuggestionModel(int age, String imgAdd, String name, String cusId, String highDeg, String workLoc, String height, String comapany, String annInc, String mariSta, String hometown, String designation)
+*/
+
                                     JSONArray user = response.getJSONArray(i);
 
                                     Calendar calender = Calendar.getInstance();
@@ -675,6 +741,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                         @Override
                         public void onError(ANError error) {
+//                        Toast.makeText(BottomSheet.this," ", Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "onError: --------------------- error is " + error);
                             err = "Network Error, Check Connection";
                         }
@@ -686,54 +753,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
         }
-    }
-
-    public String getS() {
-        return s;
-    }
-
-    public void setS(String s) {
-        this.s = s;
-    }
-
-    private View viewGetter(int array) {
-
-        ArrayList<User> arrayOfUsers = new ArrayList<>();
-        String[] str = getResources().getStringArray(array);
-        for (int i = 0; i < str.length; i++) {
-            User user = new User(str[i], "null");
-            arrayOfUsers.add(user);
-        }
-        adapter = new UsersAdapter(getContext(), arrayOfUsers);
-        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        listView.setAdapter(adapter);
-        return view;
-    }
-
-    private View viewGetterEditPref(int array,String[] arr) {
-
-        ArrayList<User> arrayOfUsers = new ArrayList<>();
-        boolean b=true;
-        String[] str = getResources().getStringArray(array);
-        for (int i = 0; i < str.length; i++) {
-           /* if(Arrays.asList(arr).indexOf(str[i]) == -1)
-            {
-                b=false;
-            }
-            else
-                b=true;*/
-
-            User user = new User(str[i], "null",false);
-            user.setBox(true);
-            arrayOfUsers.add(user);
-        }
-        adapter = new UsersAdapter(getContext(), arrayOfUsers);
-        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        Toast.makeText(getContext(),"here",Toast.LENGTH_LONG).show();
-        listView.setAdapter(adapter);
-        return view;
     }
 
     class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
@@ -960,7 +979,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsAboutMe")
                     .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("aboutMe",am)
+                    .addBodyParameter("aboutMe", am)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1021,7 +1040,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHobbies")
                     .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("hobbies",h)
+                    .addBodyParameter("hobbies", h)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1040,7 +1059,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-
 
 
     class FetchAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
@@ -1065,7 +1083,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : dietArray) {
                                     if (jsonArray.getString(2).equals(s)) {
                                         eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------eating----"+s);
+                                        Log.d(TAG, "onResponse: ---------eating----" + s);
                                     }
                                 }
 
@@ -1074,7 +1092,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : drinkingArray) {
                                     if (jsonArray.getString(3).equals(s)) {
                                         drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------drinking----"+s);
+                                        Log.d(TAG, "onResponse: ---------drinking----" + s);
 
                                     }
                                 }
@@ -1084,11 +1102,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : smokingArray) {
                                     if (jsonArray.getString(4).equals(s)) {
                                         smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------smoking----"+s);
+                                        Log.d(TAG, "onResponse: ---------smoking----" + s);
 
                                     }
                                 }
-
 
 
                             } catch (JSONException e) {
@@ -1114,9 +1131,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsLifestyle")
                     .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("smokingHabit",sh)
-                    .addBodyParameter("eatingHabit",eh)
-                    .addBodyParameter("drinkingHabit",dh)
+                    .addBodyParameter("smokingHabit", sh)
+                    .addBodyParameter("eatingHabit", eh)
+                    .addBodyParameter("drinkingHabit", dh)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1177,9 +1194,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 }
 
 
-
-
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -1203,11 +1217,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHoroscope")
                     .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("birthTime",bt)
-                    .addBodyParameter("birthPlace",bp)
-                    .addBodyParameter("gotra",g)
-                    .addBodyParameter("manglik",m)
-                    .addBodyParameter("matchHoroscope",mh)
+                    .addBodyParameter("birthTime", bt)
+                    .addBodyParameter("birthPlace", bp)
+                    .addBodyParameter("gotra", g)
+                    .addBodyParameter("manglik", m)
+                    .addBodyParameter("matchHoroscope", mh)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1277,11 +1291,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsRelation")
                     .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("relation",r)
-                    .addBodyParameter("relativeName",rn)
-                    .addBodyParameter("relativeOccupation",ro)
-                    .addBodyParameter("relativeLocation",rl)
-                    .addBodyParameter("relativeMobile",rm)
+                    .addBodyParameter("relation", r)
+                    .addBodyParameter("relativeName", rn)
+                    .addBodyParameter("relativeOccupation", ro)
+                    .addBodyParameter("relativeLocation", rl)
+                    .addBodyParameter("relativeMobile", rm)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1300,7 +1314,4 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-
-
 }
-

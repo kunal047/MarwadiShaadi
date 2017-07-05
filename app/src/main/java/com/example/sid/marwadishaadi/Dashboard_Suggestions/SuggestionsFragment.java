@@ -109,6 +109,8 @@ public class SuggestionsFragment extends Fragment {
     }
 
     private void refreshContent() {
+
+        suggestionModelList.clear();
         new PrepareSuggestions().execute();
         suggestionAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);

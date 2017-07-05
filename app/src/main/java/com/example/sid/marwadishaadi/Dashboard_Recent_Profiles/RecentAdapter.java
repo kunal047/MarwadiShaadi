@@ -61,8 +61,17 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         Glide.with(context).load(recentModel.getRecentUserImage()).into(holder.recentUserImage);
         holder.recentName.setText(recentModel.getRecentName());
         holder.recentAge.setText(recentModel.getRecentAge());
+        holder.recentOnline.setText(recentModel.getRecentOnline());
         holder.recentHighestDegree.setText(recentModel.getRecentHighestDegree());
         holder.recentLocation.setText(recentModel.getRecentLocation());
+        if (recentModel.getRecentFavouriteStatus().toCharArray()[0] == '1') {
+            holder.sparkButtonFavourite.setChecked(false);
+            holder.sparkButtonFavourite.setInactiveImage(R.mipmap.heart_disable);
+        }
+        if (!recentModel.getRecentInterestStatus().contains("Not")) {
+            holder.sparkButtonInterest.setChecked(false);
+            holder.sparkButtonInterest.setInactiveImage(R.mipmap.heart_disable1);
+        }
     }
 
     @Override

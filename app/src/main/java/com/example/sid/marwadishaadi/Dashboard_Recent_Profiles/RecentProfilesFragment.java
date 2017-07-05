@@ -101,6 +101,7 @@ public class RecentProfilesFragment extends Fragment {
 
     private void refreshData() {
 
+        recentList.clear();
         new PrepareRecent().execute();
         recentAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -120,7 +121,7 @@ public class RecentProfilesFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
                             try {
-                                RecentModel[] recentModel = new RecentModel[response.length()];
+
                                 for (int i = 0; i < response.length(); i++) {
 
                                     JSONArray array = response.getJSONArray(i);
@@ -130,6 +131,7 @@ public class RecentProfilesFragment extends Fragment {
 
                                     // Thu, 18 Jan 1990 00:00:00 GMT - Date Format
                                     DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                    Date now = new Date();
                                     Date date = formatter.parse(dateOfBirth);
                                     System.out.println(date);
 
@@ -148,12 +150,35 @@ public class RecentProfilesFragment extends Fragment {
                                     String location = array.getString(3);
                                     String imageUrl = array.getString(4);
                                     String customerNo = array.getString(5);
-                                    String lastOnline = array.getString(6);
-                                    Log.d(TAG, "onResponse: lastonline is ------------------ " + lastOnline);
+                                    String createdOn = array.getString(6);
+                                    String favouriteStatus = array.getString(7);
+                                    String recentStatus = array.getString(8);
 
+                                    date = formatter.parse(createdOn);
+                                    long diff = now.getTime() - date.getTime();
+                                    long diffSeconds = diff / 1000 % 60;
+                                    long diffMinutes = diff / (60 * 1000) % 60;
+                                    long diffHours = diff / (60 * 60 * 1000);
+                                    int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-                                    recentModel[i] = new RecentModel(customerNo, name, age, education, location, lastOnline, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
-                                    recentList.add(recentModel[i]);
+                                    if (diffInDays >= 365) {
+                                        createdOn = "More than a year ago";
+                                    } else if (diffInDays > 1) {
+//                                        System.err.println("Difference in number of days (2) : " + diffInDays);
+                                        createdOn = diffInDays + " days ago";
+                                    } else if (diffHours >= 1) {
+                                        createdOn = diffHours + " hours ago";
+                                    } else if ((diffHours < 1) && (diffMinutes >= 1)) {
+//                                        System.err.println("minutes");
+                                        createdOn = diffMinutes + " minutes ago";
+                                    } else if (diffSeconds < 60) {
+                                        createdOn = diffSeconds + " seconds ago";
+                                    }
+
+                                    Log.d(TAG, "onResponse: created on *************************** " +  createdOn);
+
+                                    RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
+                                    recentList.add(recentModel);
                                     recentAdapter.notifyDataSetChanged();
 
                                 }
@@ -177,4 +202,3 @@ public class RecentProfilesFragment extends Fragment {
         }
     }
 }
-

@@ -7,32 +7,32 @@ package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 public class ReverseModel {
 
     private String img_url;
-    private String name,city,education;
+    private String name;
     private int age;
+    private String educationDegree, location;
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
-    }
-
-    public ReverseModel(String img_url, String name, String city, String education, int age) {
-
+    public ReverseModel(String img_url, String name, int age, String educationDegree, String location) {
         this.img_url = img_url;
         this.name = name;
-        this.city = city;
-        this.education = education;
         this.age = age;
+        this.educationDegree = educationDegree;
+        this.location = location;
+    }
+
+    public String getEducationDegree() {
+        return educationDegree;
+    }
+
+    public void setEducationDegree(String educationDegree) {
+        this.educationDegree = educationDegree;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getImg_url() {
@@ -58,6 +58,4 @@ public class ReverseModel {
     public void setAge(int age) {
         this.age = age;
     }
-
-
 }

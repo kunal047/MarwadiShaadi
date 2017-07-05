@@ -2,9 +2,9 @@ package com.example.sid.marwadishaadi.Signup;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,16 +18,17 @@ import com.stepstone.stepper.VerificationError;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class AdvancedSignupDetailsActivity extends AppCompatActivity implements StepperLayout.StepperListener{
 
+public class AdvancedSignupDetailsActivity extends AppCompatActivity implements StepperLayout.StepperListener {
+
+    private static final String TAG = "AdvancedSignupDetailsAc";
     private FirebaseAnalytics mFirebaseAnalytics;
+    private StepperLayout mStepperLayout;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-    private StepperLayout mStepperLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,11 @@ public class AdvancedSignupDetailsActivity extends AppCompatActivity implements 
     public void onCompleted(View completeButton) {
 
         // analytics
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Signup Complete","button");
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Signup Complete", "button");
 
-        Intent i = new Intent(AdvancedSignupDetailsActivity.this,Otp_VerificationActivity.class);
+        Intent i = new Intent(AdvancedSignupDetailsActivity.this, Otp_VerificationActivity.class);
         startActivity(i);
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override
@@ -60,13 +61,14 @@ public class AdvancedSignupDetailsActivity extends AppCompatActivity implements 
 
     @Override
     public void onStepSelected(int newStepPosition) {
+        Log.d(TAG, "onStepSelected: selected step is - --------------------- " + newStepPosition);
 
     }
 
     @Override
     public void onReturn() {
-        Intent i = new Intent(AdvancedSignupDetailsActivity.this,SignupDetailsActivity.class);
+        Intent i = new Intent(AdvancedSignupDetailsActivity.this, SignupDetailsActivity.class);
         startActivity(i);
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }
