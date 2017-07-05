@@ -91,13 +91,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                 if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                ArrayList<String> permissionsFB = new ArrayList<>();
-                permissionsFB.add("email");
-                permissionsFB.add("user_photos");
-
-                loginManager = LoginManager.getInstance();
-                loginManager.logInWithPublishPermissions(UploadPhotoActivity.this, permissionsFB);
-
+                loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this,Arrays.asList("email","user_photos"));
                 loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {

@@ -36,7 +36,8 @@ public class PartnerPreferencesFragment extends Fragment {
     private TextView edit_prefs;
     private Button similar;
 
-    private TextView age,height,build,complexion,physicalStatus,highestDegree,occup,maritalStatus,annualIncome,city;
+    private TextView age, height, build, complexion, physicalStatus, highestDegree, occup, maritalStatus, annualIncome, city;
+
     public PartnerPreferencesFragment() {
         // Required empty public constructor
     }
@@ -46,20 +47,20 @@ public class PartnerPreferencesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View mview= inflater.inflate(R.layout.fragment_partner_preferences, container, false);
+        View mview = inflater.inflate(R.layout.fragment_partner_preferences, container, false);
         edit_prefs = (TextView) mview.findViewById(R.id.partner_prefs_clear);
         similar = (Button) mview.findViewById(R.id.similar);
 
-        age = (TextView)mview.findViewById(R.id.age);
-        height = (TextView)mview.findViewById(R.id.height);
-        complexion = (TextView)mview.findViewById(R.id.complexion);
-        build = (TextView)mview.findViewById(R.id.build);
-        physicalStatus = (TextView)mview.findViewById(R.id.physical_status);
-        city = (TextView)mview.findViewById(R.id.city);
-        highestDegree = (TextView)mview.findViewById(R.id.highest_degree);
-        occup = (TextView)mview.findViewById(R.id.occup);
-        maritalStatus = (TextView)mview.findViewById(R.id.marital_status);
-        annualIncome = (TextView)mview.findViewById(R.id.annual_income);
+        age = (TextView) mview.findViewById(R.id.age);
+        height = (TextView) mview.findViewById(R.id.height);
+        complexion = (TextView) mview.findViewById(R.id.complexion);
+        build = (TextView) mview.findViewById(R.id.build);
+        physicalStatus = (TextView) mview.findViewById(R.id.physical_status);
+        city = (TextView) mview.findViewById(R.id.city);
+        highestDegree = (TextView) mview.findViewById(R.id.highest_degree);
+        occup = (TextView) mview.findViewById(R.id.occup);
+        maritalStatus = (TextView) mview.findViewById(R.id.marital_status);
+        annualIncome = (TextView) mview.findViewById(R.id.annual_income);
 
         new PartnerPreference().execute();
 
@@ -68,7 +69,7 @@ public class PartnerPreferencesFragment extends Fragment {
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
                 startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
         edit_prefs.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +78,7 @@ public class PartnerPreferencesFragment extends Fragment {
 
                 Intent i = new Intent(getContext(), EditPreferencesActivity.class);
                 startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
             }
         });
@@ -86,7 +87,7 @@ public class PartnerPreferencesFragment extends Fragment {
     }
 
 
-    class PartnerPreference extends AsyncTask<Void,Void,Void>{
+    class PartnerPreference extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -101,56 +102,49 @@ public class PartnerPreferencesFragment extends Fragment {
 
                             try {
                                 String str;
-                                String a = response.getString(0)+" yrs to "+response.getString(1)+" yrs";
+                                String a = response.getString(0) + " yrs to " + response.getString(1) + " yrs";
                                 age.setText(a);
 
 
-                                String h = response.getString(2)+" - "+response.getString(3);
+                                String h = response.getString(2) + " - " + response.getString(3);
                                 height.setText(h);
 
 
-
-                                str = response.getString(4).replace("[","").replace("]","");
-                                String c=str ;
-                                for (int i = 1; i<str.length();i++)
-                                {
+                                str = response.getString(4).replace("[", "").replace("]", "");
+                                String c = str;
+                                for (int i = 1; i < str.length(); i++) {
                                 }
                                 complexion.setText(c);
 
 
-                                str = response.getString(5).replace("[","").replace("]","");
-                                String b=str;
-                                for (int i = 1; i<str.length();i++)
-                                {
+                                str = response.getString(5).replace("[", "").replace("]", "");
+                                String b = str;
+                                for (int i = 1; i < str.length(); i++) {
                                 }
                                 build.setText(b);
 
                                 physicalStatus.setText(response.getString(6));
                                 city.setText(response.getString(7));
 
-                                str=response.getString(8).replace("[","").replace("]","");
+                                str = response.getString(8).replace("[", "").replace("]", "");
 
-                                String hd=str;
-                                for (int i = 1; i<str.length();i++)
-                                {
+                                String hd = str;
+                                for (int i = 1; i < str.length(); i++) {
                                 }
                                 highestDegree.setText(hd);
 
 
-                                str = response.getString(9).replace("[","").replace("]","");
-                                 String o=str;
-                                for (int i = 1; i<str.length();i++)
-                                {
+                                str = response.getString(9).replace("[", "").replace("]", "");
+                                String o = str;
+                                for (int i = 1; i < str.length(); i++) {
 
                                 }
                                 occup.setText(o);
 
 
                                 maritalStatus.setText(response.getString(10));
-                                annualIncome.setText(response.getString(11).replace("[","").replace("]",""));
-                            }
-                            catch (JSONException e)
-                            {
+                                annualIncome.setText(response.getString(11).replace("[", "").replace("]", ""));
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
@@ -163,9 +157,9 @@ public class PartnerPreferencesFragment extends Fragment {
                         }
                     });
 
-                                            return null;
+            return null;
 
-    }
+        }
 
         public String income(String aincome) {
 
@@ -186,7 +180,7 @@ public class PartnerPreferencesFragment extends Fragment {
             } else {
                 annualI = "No Income mentioned.";
             }
-            return  annualI;
+            return annualI;
         }
 
 
