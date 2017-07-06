@@ -5,17 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-
-import android.os.Bundle;
-
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,8 +29,6 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-
-import com.example.sid.marwadishaadi.Otp_Verification.Otp_VerificationActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -50,11 +43,6 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.R.id.complexion;
-import static com.example.sid.marwadishaadi.R.id.manglik;
-import static com.example.sid.marwadishaadi.R.id.professional;
-import static com.example.sid.marwadishaadi.R.id.text_doctor;
-import static com.example.sid.marwadishaadi.Search.Search.annualincome;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 
@@ -63,19 +51,12 @@ public class EditPreferencesActivity extends AppCompatActivity {
     public static final String URL = "http://208.91.199.50:5000/";
 //    public static final String URL = "http://192.168.137.152:5050/";
 //    public static final String URL = "http://192.168.43.61:5050/";
-
-
+    public static EditText prefannualincome;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
     LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
     int colorg, colorb;
-
-    private Spinner maritalstatus;
-    public static EditText prefannualincome;
-    private Spinner physicalstatus;
-
-    private int casebreak;
     CheckBox veryFair, fair, wheatish, wheatishBrown, dark, slim, athletic, heavy, average, professional, job, retired, business, notEmployed, studying, complexionDontMatter, occupationDontMatter, bodyTypeDontMatter;
     EditText workLocation;
     Spinner heightTo, heightFrom;
@@ -83,39 +64,42 @@ public class EditPreferencesActivity extends AppCompatActivity {
     TextView tvMin;
     TextView tvMax;
     Button complete;
-    String mina, maxa, hf, ht, wp,ps,ms,ai;
+    String mina, maxa, hf, ht, wp, ps, ms, ai;
     String uai;
     Bundle bundle;
-
     List<String> cp = new ArrayList<>();
     List<String> bt = new ArrayList<>();
     List<String> ep = new ArrayList<>();
     List<String> op = new ArrayList<>();
     String strAnnual;
     String[] strArrayAnnual;
-
+    private Spinner maritalstatus;
+    private Spinner physicalstatus;
+    private int casebreak;
     private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
             Bundle bundle = intent.getExtras();
-            uai= bundle.getString("annualIncome");
+            uai = bundle.getString("annualIncome");
         }
     };
+
+    public EditPreferencesActivity() {
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(someBroadcastReceiver,
                 new IntentFilter(SOME_INTENT_FILTER_NAME));
     }
+
     @Override
     public void onPause() {
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(someBroadcastReceiver);
         super.onPause();
-    }
-
-    public EditPreferencesActivity() {
-
     }
 
     @Override
@@ -135,7 +119,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(someBroadcastReceiver,new IntentFilter(SOME_INTENT_FILTER_NAME));
+        LocalBroadcastManager.getInstance(this).registerReceiver(someBroadcastReceiver, new IntentFilter(SOME_INTENT_FILTER_NAME));
 
 
         age = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
@@ -229,7 +213,6 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 }
 
 
-
                 if (slim.isChecked()) {
                     bt.add(slim.getText().toString());
                 }
@@ -242,7 +225,6 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 if (heavy.isChecked()) {
                     bt.add(heavy.getText().toString());
                 }
-
 
 
                 if (professional.isChecked()) {
@@ -264,7 +246,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                     op.add(studying.getText().toString());
                 }
 
-                wp=workLocation.getText().toString();
+                wp = workLocation.getText().toString();
 
                 if (intdoctor) {
                     ep.add(tdoctor.getText().toString());
@@ -291,19 +273,18 @@ public class EditPreferencesActivity extends AppCompatActivity {
                     ep.add(tug.getText().toString());
                 }
 
-                ps=physicalstatus.getSelectedItem().toString();
-                if(ps.equals("Select Physical Status"))
-                    ps="";
+                ps = physicalstatus.getSelectedItem().toString();
+                if (ps.equals("Select Physical Status"))
+                    ps = "";
 
-                ms=maritalstatus.getSelectedItem().toString();
-                if(ms.equals("Select Marital Status"))
-                    ms="";
+                ms = maritalstatus.getSelectedItem().toString();
+                if (ms.equals("Select Marital Status"))
+                    ms = "";
 
-                ai=uai;
+                ai = uai;
 
 
                 new EditPartnerPreferences().execute();
-
 
 
             }
@@ -348,10 +329,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
         maritalstatus = (Spinner) findViewById(R.id.edit_marital_status);
 
         prefannualincome = (EditText) findViewById(R.id.edit_annual_income);
-      prefannualincome.setOnClickListener(new View.OnClickListener() {
+        prefannualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"inOnclick",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "inOnclick", Toast.LENGTH_LONG).show();
 
                 BottomSheetDialogFragment btm = new BottomSheet(112, strArrayAnnual);
                 btm.show(getSupportFragmentManager(), btm.getTag());
@@ -697,8 +678,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                String str = response.getString(4).replace("[","").replace("]","");
-                                String[] strArray=str.split(",");
+                                String str = response.getString(4).replace("[", "").replace("]", "");
+                                String[] strArray = str.split(",");
 
 
                                 if (strArray == null) {
@@ -729,8 +710,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
 
 
-                                str = response.getString(5).replace("[","").replace("]","");
-                                strArray=str.split(",");
+                                str = response.getString(5).replace("[", "").replace("]", "");
+                                strArray = str.split(",");
 
                                 if (strArray == null) {
 
@@ -739,19 +720,19 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     for (int j = 0; j < strArray.length; j++) {
 
 
-                                                if (strArray[j].contains(slim.getText().toString())) {
-                                                    slim.setChecked(true);
+                                        if (strArray[j].contains(slim.getText().toString())) {
+                                            slim.setChecked(true);
 
-                                                } else if (strArray[j].contains(athletic.getText().toString())) {
-                                                    athletic.setChecked(true);
+                                        } else if (strArray[j].contains(athletic.getText().toString())) {
+                                            athletic.setChecked(true);
 
-                                                } else if (strArray[j].contains(heavy.getText().toString())) {
-                                                    heavy.setChecked(true);
+                                        } else if (strArray[j].contains(heavy.getText().toString())) {
+                                            heavy.setChecked(true);
 
-                                                } else if (strArray[j].contains(average.getText().toString())) {
-                                                    average.setChecked(true);
+                                        } else if (strArray[j].contains(average.getText().toString())) {
+                                            average.setChecked(true);
 
-                                                }
+                                        }
 
                                     }
 
@@ -759,61 +740,61 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                 workLocation.setText(response.getString(7));
 
 
-                                str = response.getString(8).replace("[","").replace("]","");
-                                strArray=str.split(",");
+                                str = response.getString(8).replace("[", "").replace("]", "");
+                                strArray = str.split(",");
 
                                 if (strArray == null) {
 
 
-                                }else
+                                } else
                                     for (int j = 0; j < strArray.length; j++) {
 
-                                            if (strArray[j].contains(tdoctor.getText().toString())) {
-                                                intdoctor=true;
-                                                tdoctor.setTextColor(colorg);
-                                                idoctor.setImageResource(R.drawable.doctor);
-                                            } else if (strArray[j].contains(tengineer.getText().toString())) {
-                                                intengineer=true;
-                                                tengineer.setTextColor(colorg);
-                                                iengineer.setImageResource(R.drawable.engineer);
-                                            } else if (strArray[j].contains(tcacs.getText().toString())) {
-                                                intcacs=true;
-                                                tcacs.setTextColor(colorg);
-                                                icacs.setImageResource(R.drawable.ca);
-                                            } else if (strArray[j].contains(tmbamca.getText().toString())) {
-                                                intmbamca=true;
-                                                tmbamca.setTextColor(colorg);
-                                                imbamca.setImageResource(R.drawable.mba);
+                                        if (strArray[j].contains(tdoctor.getText().toString())) {
+                                            intdoctor = true;
+                                            tdoctor.setTextColor(colorg);
+                                            idoctor.setImageResource(R.drawable.doctor);
+                                        } else if (strArray[j].contains(tengineer.getText().toString())) {
+                                            intengineer = true;
+                                            tengineer.setTextColor(colorg);
+                                            iengineer.setImageResource(R.drawable.engineer);
+                                        } else if (strArray[j].contains(tcacs.getText().toString())) {
+                                            intcacs = true;
+                                            tcacs.setTextColor(colorg);
+                                            icacs.setImageResource(R.drawable.ca);
+                                        } else if (strArray[j].contains(tmbamca.getText().toString())) {
+                                            intmbamca = true;
+                                            tmbamca.setTextColor(colorg);
+                                            imbamca.setImageResource(R.drawable.mba);
 
-                                            } else if (strArray[j].contains(tllb.getText().toString())) {
-                                                intllb=true;
-                                                tllb.setTextColor(colorg);
-                                                illb.setImageResource(R.drawable.llb);
+                                        } else if (strArray[j].contains(tllb.getText().toString())) {
+                                            intllb = true;
+                                            tllb.setTextColor(colorg);
+                                            illb.setImageResource(R.drawable.llb);
 
-                                            } else if (strArray[j].contains(tpg.getText().toString())) {
-                                                intpg=true;
-                                                tpg.setTextColor(colorg);
-                                                ipg.setImageResource(R.drawable.mba);
+                                        } else if (strArray[j].contains(tpg.getText().toString())) {
+                                            intpg = true;
+                                            tpg.setTextColor(colorg);
+                                            ipg.setImageResource(R.drawable.mba);
 
-                                            } else if (strArray[j].contains(tg.getText().toString())) {
-                                                intg=true;
-                                                tg.setTextColor(colorg);
-                                                ig.setImageResource(R.drawable.grad);
+                                        } else if (strArray[j].contains(tg.getText().toString())) {
+                                            intg = true;
+                                            tg.setTextColor(colorg);
+                                            ig.setImageResource(R.drawable.grad);
 
-                                            } else if (strArray[j].contains(tug.getText().toString())) {
-                                                intug=true;
-                                                tug.setTextColor(colorg);
-                                                iug.setImageResource(R.drawable.undergrad);
+                                        } else if (strArray[j].contains(tug.getText().toString())) {
+                                            intug = true;
+                                            tug.setTextColor(colorg);
+                                            iug.setImageResource(R.drawable.undergrad);
 
-                                            }
+                                        }
 
-                                }
+                                    }
 
 
-                                str = response.getString(9).replace("[","").replace("]","");
-                                strArray=str.split(",");
+                                str = response.getString(9).replace("[", "").replace("]", "");
+                                strArray = str.split(",");
                                 Log.d(TAG, "occupation is***************" + professional.getText().toString());
-                                if (strArray == null ) {
+                                if (strArray == null) {
 
                                     occupationDontMatter.setChecked(true);
                                 } else
@@ -861,9 +842,9 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                strAnnual = response.getString(11).replace("[","").replace("]","");
+                                strAnnual = response.getString(11).replace("[", "").replace("]", "");
                                 prefannualincome.setText(strAnnual);
-                                strArrayAnnual=strAnnual.split(",");
+                                strArrayAnnual = strAnnual.split(",");
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -901,18 +882,17 @@ public class EditPreferencesActivity extends AppCompatActivity {
             String education = ep.toString();
             String occupation = op.toString();
             String bodytype = bt.toString();
-            String annualincome=null;
-            if (ai == null){
-                 annualincome = "";
-            }
-            else annualincome=ai;
+            String annualincome = null;
+            if (ai == null) {
+                annualincome = "";
+            } else annualincome = ai;
             AndroidNetworking.post("http://192.168.43.143:5050/editl")
                     .addBodyParameter("customerNo", "A1002")
                     .addBodyParameter("minAge", mina)
                     .addBodyParameter("maxAge", maxa)
                     .addBodyParameter("heightFrom", hf)
                     .addBodyParameter("heightTo", ht)
-                    .addBodyParameter("complexionPref",complexion)
+                    .addBodyParameter("complexionPref", complexion)
                     .addBodyParameter("bodyType", bodytype)
                     .addBodyParameter("physicalStatus", ps)
                     .addBodyParameter("workLocationPref", wp)

@@ -199,12 +199,12 @@ public class LoginActivity extends AppCompatActivity {
                                          email = login_email.getText().toString();
                                          pass = login_pass.getText().toString();
 
-                                         if (EmailChecker(email)) {
+                                         if (EmailChecker(email)&!pass.trim().isEmpty()) {
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
-                                             new BackGround().execute("", email, pass);
-                                             ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                             new BackGround().execute("email", email, pass);
+                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
                                              scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                                                  @Override
                                                  public void run() {
@@ -232,11 +232,18 @@ public class LoginActivity extends AppCompatActivity {
                                                                  startActivity(i);
                                                              } else if (str.equals("failure")) {
                                                                  Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
                                                              } else if (str.equals("----")) {
 //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
                                                                  Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+
                                                              } else {
                                                                  Toast.makeText(getApplicationContext(), " Please Enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
                                                              }
                                                              Looper.loop();
                                                          }
@@ -257,6 +264,66 @@ public class LoginActivity extends AppCompatActivity {
                                              startActivity(intent);*/
 
                                              // rest
+                                         }
+                                         else if((email.trim().contains("M")|email.trim().contains("m")|email.trim().contains("a")|email.trim().contains("A")|email.trim().contains("o")|email.trim().contains("O")|email.trim().contains("J")|email.trim().contains("j")|email.trim().contains("K")|email.trim().contains("k"))&!pass.trim().isEmpty()){
+                                             dialog.setMessage("Please Wait...");
+                                             dialog.show();
+                                             pass = HashConverter(pass);
+                                             new BackGround().execute("user_id", email, pass);
+                                             Toast.makeText(getApplicationContext(),"Please use ID ",Toast.LENGTH_SHORT).show();
+                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     try {
+                                                         Log.e(TAG, "run: checker is "+checker);
+                                                         if (!checker) {
+                                                             Log.e(TAG, "run: --I am running after 3 second");
+                                                         } else {
+                                                             if (Looper.myLooper() == null) {
+                                                                 Looper.prepare();
+                                                             }
+                                                             Log.e(TAG, "run: -- pro t next step");
+
+                                                             if (str.equals("success")) {
+                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                 SharedPreferences.Editor editor = sharedpref.edit();
+                                                                 editor.putBoolean("isLoggedIn", true);
+                                                                 editor.putString("email", email);
+                                                                 editor.putString("password", pass);
+                                                                 editor.putString("customer_id", customer_id);
+                                                                 editor.putString("gender", customer_gender);
+                                                                 editor.apply();
+                                                                 dialog.dismiss();
+                                                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                                 startActivity(i);
+                                                             } else if (str.equals("failure")) {
+                                                                 Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             } else if (str.equals("----")) {
+//                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
+                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+
+                                                             } else {
+                                                                 Toast.makeText(getApplicationContext(), " Please Enter correct password or User ID", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             }
+                                                             Looper.loop();
+                                                         }
+                                                     } catch (Exception e) {
+                                                         Log.e(TAG, "run: exception si " + e);
+                                                     }
+                                                 }
+                                             }, 1, 3, TimeUnit.SECONDS);
+                                             Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
+
+                                         }
+                                         else {
+                                             Toast.makeText(LoginActivity.this, "Enter right email address or userId", Toast.LENGTH_SHORT).show();
                                          }
                                      }
                                  }
@@ -311,24 +378,26 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             Log.d(TAG, "doInBackground:---------------------- email--" + strings[1] + "---pass is ---" + strings[2]);
-            AndroidNetworking.post("http://208.91.199.50:5000/checkLogin")
-                    .addBodyParameter("email", strings[1])
-                    .addBodyParameter("password", strings[2])
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+            if(strings[0].contains("email")) {
+                AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
+                        .addPathParameter("check", "email")
+                        .addBodyParameter("email", strings[1])
+                        .addBodyParameter("password", strings[2])
+                        .setPriority(Priority.HIGH)
+                        .build()
+                        .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                Log.d(TAG, "onResponse: response is ------------- " + response.toString());
-                                str = response.getString(0);
-                                checker=true;
-                                if (str == "success") {
-                                    customer_id = response.getString(1);
-                                    customer_gender = response.getString(2);
-                                    Log.d(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
-                                }
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    Log.e(TAG, "onResponse: response is ------------- " + response.toString());
+                                    str = response.getString(0);
+                                    checker = true;
+                                    if (str.contains("success")) {
+                                        customer_id = response.getString(1);
+                                        customer_gender = response.getString(2);
+                                        Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+                                    }
                                /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
                                 scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                                     @Override
@@ -337,20 +406,62 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 },1,1)*/
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                }catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
 //                        Log.d(TAG, "onResponse: -------------"+response.toString());
-                        }
+                            }
 
-                        @Override
-                        public void onError(ANError error) {
-                            // handle error
-                            Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
-                        }
-                    });
+                            @Override
+                            public void onError(ANError error) {
+                                // handle error
+                                Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
+                            }
+                        });
+            }
+            else {
+                AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
+                        .addPathParameter("check", "id")
+                        .addBodyParameter("email", strings[1])
+                        .addBodyParameter("password", strings[2])
+                        .setPriority(Priority.HIGH)
+                        .build()
+                        .getAsJSONArray(new JSONArrayRequestListener() {
 
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    Log.e(TAG, "onResponse: response is ------------- " + response.toString());
+                                    str = response.getString(0);
+                                    checker = true;
+                                    if (str.contains("success")) {
+                                        customer_id = response.getString(1);
+                                        customer_gender = response.getString(2);
+                                        Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+                                    }
+                               /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
+                                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                },1,1)*/
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+//                        Log.d(TAG, "onResponse: -------------"+response.toString());
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // handle error
+                                Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
+                            }
+                        });
+            }
             return null;
         }
 

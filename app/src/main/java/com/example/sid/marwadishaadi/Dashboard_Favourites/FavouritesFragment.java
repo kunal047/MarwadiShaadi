@@ -65,6 +65,7 @@ public class FavouritesFragment extends Fragment {
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList);
+
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
@@ -79,6 +80,7 @@ public class FavouritesFragment extends Fragment {
 
             }
         });
+
 
         new PrepareFavourites().execute();
         return mview;
@@ -184,9 +186,6 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (favouritesAdapter.getItemCount() == 0) {
-//                favouriteZero.setVisibility(View.VISIBLE);
-            }
         }
     }
 
