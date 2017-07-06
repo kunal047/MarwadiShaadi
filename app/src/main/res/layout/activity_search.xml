@@ -65,6 +65,7 @@
                 android:gravity="center_horizontal"
                 />
 
+            <!--Basic Search-->
             <android.support.v7.widget.CardView
                 android:id="@+id/basic_search"
                 app:cardCornerRadius="10dp"
@@ -82,7 +83,7 @@
                     android:orientation="vertical"
                     android:layout_margin="10dp">
 
-
+                    <!--Age-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -91,32 +92,29 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:textSize="14dp"
+                        android:textColor="#000000"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         tools:ignore="MissingPrefix"
                         />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <TextView
-                            android:layout_marginLeft="10dp"
                             android:id="@+id/textMin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentStart="true"
-                            android:textSize="12dp"/>
+                            android:textSize="12dp"
+                            />
                         <TextView
                             android:id="@+id/textMax"
-                            android:layout_weight="1"
-                            android:layout_marginRight="10dp"
-                            android:textAlignment="textEnd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignTop="@+id/rangeSeekbar"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:textAlignment="textEnd"
                             android:textSize="12dp" />
                     </LinearLayout>
                     <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
@@ -140,6 +138,8 @@
                         android:layout_margin="10dp"
                         android:background="#59fb6542">
                     </View>
+
+                    <!--Height-->
                     <LinearLayout
                         android:id="@+id/spinner_partner_height"
                         android:layout_width="match_parent"
@@ -147,40 +147,44 @@
                         android:orientation="vertical"
                         >
                         <TextView
+                            fontPath="fonts/OpenSans-Bold.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#fff"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="Height (From - To) "
+                            android:textColor="#000000"
+                            android:textSize="14dp"
+                            tools:ignore="MissingPrefix"
+                            />
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textAlignment="textStart"
-                            android:text="Height ( From - To )"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="6dp"
-                            android:focusable="true"
-                            android:textSize="14dp"
-                            android:textStyle="italic"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        >
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/height_from"
-                            android:layout_marginTop="10dp"
-                            android:entries="@array/height_search_array"
-                            />
+                            android:weightSum="2"
+                            android:layout_marginLeft="2dp"
+                            >
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/height_from"
+                                android:layout_marginTop="10dp"
+                                android:entries="@array/height_search_array"
+                                />
 
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/height_to"
-                            android:layout_marginTop="10dp"
-                            android:entries="@array/height_search_array"
-                            />
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/height_to"
+                                android:layout_marginTop="10dp"
+                                android:entries="@array/height_search_array"
+                                />
+                        </LinearLayout>
+
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
@@ -188,30 +192,31 @@
                         android:layout_margin="10dp"
                         android:background="#59fb6542">
                     </View>
+
+                    <!--Community-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Community"
                         android:focusable="true"
-                        android:textSize="16dp"
-                        android:layout_marginLeft="6dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/search_user_caste"
                         android:focusable="false"
-                        android:layout_marginLeft="6dp"
-                        android:textSize="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="12dp"
                         android:hint="Choose community"
+                        android:layout_marginTop="10dp"
                         android:background="#fff"
                         />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -219,28 +224,30 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--State-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="State"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#000"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
                         />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="5"
+                        android:layout_marginTop="10dp"
                         >
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="Type State"
-                            android:textSize="16dp"
+                            android:textSize="12dp"
                             android:drawableLeft="@drawable/signup_location"
                             android:drawablePadding="10dp"
                             android:background="#fff"
@@ -251,17 +258,15 @@
                             android:ems="10"
                             />
                         <Button
-                            android:layout_width="30sp"
-                            android:layout_height="30sp"
+                            android:layout_width="20sp"
+                            android:layout_height="20sp"
                             android:id="@+id/search_add_state"
                             android:text="+"
-                            android:textColor="#eee"
-                            android:textSize="20sp"
+                            android:textColor="#fff"
                             android:background="@layout/circular_button"/>
 
 
                     </LinearLayout>
-
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -269,25 +274,25 @@
                         android:textStyle="bold"
                         android:paddingLeft="10dp"
                         />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
                         android:background="#59fb6542">
                     </View>
+
+                    <!--Educational level-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Educational Level"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <HorizontalScrollView
                         android:id="@+id/scrollView"
                         android:layout_width="match_parent"
@@ -298,7 +303,8 @@
                         android:scrollbarFadeDuration="2"
                         android:scrollbarSize="2dp"
                         android:scrollbarStyle="insideOverlay"
-                        android:scrollbars="horizontal">
+                        android:scrollbars="horizontal"
+                        android:layout_marginTop="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -508,80 +514,80 @@
                             </LinearLayout>
                         </LinearLayout>
                     </HorizontalScrollView>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_margin="10dp"
                         android:background="#59fb6542">
                     </View>
+
+                    <!--Sort by-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Sort by"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/spinner_sort_by"
-                        android:layout_marginLeft="6dp"
-                        android:textSize="16dp"
+                        android:layout_marginLeft="2dp"
+                        android:textSize="12dp"
                         android:entries="@array/sort_by_array"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1" />
 
-
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-
+            <!--Advanced Search-->
             <android.support.v7.widget.CardView
                 android:id="@+id/advanced_search"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            android:layout_margin="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardBackgroundColor="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
 
+                    <!--City-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="City"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="5"
+                        android:layout_marginTop="10dp"
                         >
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="Type City"
-                            android:textSize="16dp"
+                            android:textSize="12dp"
                             android:drawableLeft="@drawable/signup_location"
                             android:drawablePadding="10dp"
                             android:background="#fff"
@@ -589,26 +595,17 @@
                             android:clickable="true"
                             android:layout_weight="4"
                             android:id="@+id/search_city"
-                            android:ems="10"
                             />
                         <Button
-                            android:layout_width="30sp"
-                            android:layout_height="30sp"
+                            android:layout_width="20sp"
+                            android:layout_height="20sp"
                             android:id="@+id/search_add_city"
                             android:text="+"
-                            android:textColor="#eee"
-                            android:textSize="20sp"
+                            android:textColor="#fff"
                             android:background="@layout/circular_button"/>
 
 
                     </LinearLayout>
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/text_view_search_city"
-                        android:textStyle="bold"
-                        android:paddingLeft="10dp"
-                        />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -622,29 +619,31 @@
                         android:textStyle="bold"
                         android:paddingLeft="10dp"
                         />
+
+                    <!--Marital Status-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Marital Status"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/search_Marital_status"
-                        android:textSize="16dp"
+                        android:textSize="12dp"
                         android:clickable="true"
                         android:hint="Select Marital Status"
                         android:background="#fff"
                         android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
                         android:focusableInTouchMode="false"
                         />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -652,28 +651,29 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Family Status-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Family Status"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/search_Family_status"
-                        android:textSize="16dp"
+                        android:textSize="12dp"
                         android:hint="Select Family Status"
                         android:clickable="true"
                         android:background="#fff"
                         android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
                         android:focusable="false"/>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -681,25 +681,26 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Manglik-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Manglik"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/search_manglik_status"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:entries="@array/manglik_search_array"
-                        android:layout_marginTop="10dp" />
-
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="2dp"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -707,26 +708,26 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Children-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Children"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/search_children"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:entries="@array/children_array"
-                        android:layout_marginTop="10dp"/>
-
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="2dp"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -734,23 +735,23 @@
                         android:background="#59fb6542">
                     </View>
 
-
+                    <!--Occupation-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Occupation"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:weightSum="2"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/check_profession"
@@ -767,14 +768,11 @@
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
-
-
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:weightSum="2"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/check_retired"
@@ -792,12 +790,11 @@
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:weightSum="2"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
                         <CheckBox
                             android:id="@+id/check_not_employed"
                             android:text="Not Employed"
@@ -810,13 +807,14 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:text="Studying-Not Employed"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:layout_gravity="fill"
+                            />
                     </LinearLayout>
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
                         <CheckBox
                             android:id="@+id/occupation_doesnt_matter"
                             android:text="Doesn't Matter"
@@ -826,9 +824,6 @@
                             android:checked="true"
                             />
                     </LinearLayout>
-
-
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -836,16 +831,17 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--AI-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Annual Income"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
                     <EditText
                         android:layout_width="match_parent"
@@ -853,11 +849,11 @@
                         android:id="@+id/search_Annual_income"
                         android:clickable="true"
                         android:hint="Select Annual Income"
-                        android:textSize="16dp"
+                        android:textSize="12dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
                         android:focusable="false"
                         android:background="#fff"/>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -865,23 +861,23 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Complexion-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Complexion"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
-                        />
-
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"/>
                     <LinearLayout
                         android:id="@+id/search_complexion"
                         android:layout_width="match_parent"
                         android:weightSum="2"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/search_check_very_fair"
@@ -897,13 +893,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-
-
                     <LinearLayout
                         android:id="@+id/search_complexion2"
                         android:layout_width="match_parent"
                         android:weightSum="2"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/search_check_wheatish"
@@ -917,16 +912,16 @@
                             android:text="Wheatish Brown"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill"/>
 
                     </LinearLayout>
-
-
                     <LinearLayout
                         android:id="@+id/search_complexion3"
                         android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/search_check_dark"
@@ -942,11 +937,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:checked="true"
+                            android:layout_gravity="fill"
                             />
 
                     </LinearLayout>
-
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -954,24 +948,24 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Body Type-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Body Type"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="14dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
-
-
                     <LinearLayout
                         android:id="@+id/search_body_type"
                         android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
 
                         <CheckBox
                             android:id="@+id/search_check_slim"
@@ -989,17 +983,18 @@
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:weightSum="2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
                         <CheckBox
                             android:id="@+id/search_check_average"
                             android:text="Average"
                             android:layout_weight="1"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            />
 
 
                         <CheckBox
@@ -1009,10 +1004,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
                         <CheckBox
                             android:id="@+id/bodytype_doesnt_matter"
                             android:text="Doesn't Matter"
@@ -1022,8 +1017,6 @@
                             android:checked="true"
                             />
                     </LinearLayout>
-
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -1031,29 +1024,30 @@
                         android:background="#59fb6542">
                     </View>
 
+                    <!--Physical Status-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textAlignment="textStart"
                         android:text="Physical Status"
-                        android:textSize="16dp"
-                        android:textStyle="italic"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="6dp"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        tools:ignore="MissingPrefix"
+                        android:textColor="#000"
                         />
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/search_physical_status"
-                        android:textSize="16dp"
+                        android:textSize="12dp"
                         android:clickable="true"
                         android:hint="Select Physical Status"
                         android:background="#fff"
                         android:layout_marginTop="10dp"
                         android:focusableInTouchMode="false"
                         android:layout_marginBottom="100dp"
-
+                        android:layout_marginLeft="10dp"
                         />
 
                 </LinearLayout>
