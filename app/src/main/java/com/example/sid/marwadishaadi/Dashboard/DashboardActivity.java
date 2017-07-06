@@ -147,6 +147,7 @@ public class DashboardActivity extends AppCompatActivity
         mSectionsPagerAdapter = new DashboardSectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.dash_container);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
 
