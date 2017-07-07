@@ -5,8 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,31 +37,34 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.picasso.Picasso;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
+import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
-public class  UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener{
+public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener {
 
-
+    private static final String TAG = "UserProfileActivity";
+    protected ImageView pref;
+    CollapsingToolbarLayout toolbarLayout;
     private ProfilePageAdapter profilePageAdapter;
     private ViewPager userinfo;
     private CarouselView carouselView;
-    protected ImageView pref;
     private FloatingActionButton fav;
     private FloatingActionButton sendmsg;
     private FloatingActionButton sendinterest;
@@ -72,68 +74,19 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
-    CollapsingToolbarLayout toolbarLayout;
+    private String clickedID  = customer_id;
 
- /*   AndroidNetworking.post(URL + "prepareUserProfile")
-            .addBodyParameter("customerNo", "O1057")
-.setPriority(Priority.HIGH)
-.build()
-.getAsJSONArray(new JSONArrayRequestListener() {
-        public void onResponse(JSONArray response) {
-// do anything with response
-            try {
-                FavouriteModel[] favouriteModel = new FavouriteModel[response.length()];
-                for (int i = 0; i < response.length(); i++) {
-
-                    JSONArray array = response.getJSONArray(i);
-                    String customerNo = array.getString(0);
-                    String name = array.getString(1);
-                    String dateOfBirth = array.getString(2);
-// Thu, 18 Jan 1990 00:00:00 GMT
-                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                    Date date = formatter.parse(dateOfBirth);
-                    System.out.println(date);
-
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date);
-                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                    String[] partsOfDate = formatedDate.split("-");
-                    int day = Integer.parseInt(partsOfDate[0]);
-                    int month = Integer.parseInt(partsOfDate[1]);
-                    int year = Integer.parseInt(partsOfDate[2]);
-                    int a = getAge(year, month, day);
-                    String age = Integer.toString(a);
-                    String education = array.getString(3);
-                    String occupationLocation = array.getString(4);
-                    String imageUrl = array.getString(5);
-
-
-                    favouriteModel[i] = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
-
-                    favouritesList.add(favouriteModel[i]);
-                    favouritesAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "onResponse: age of the user " + age);
-                    Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
-
-
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onError(ANError error) {
-            Log.d(TAG, "onResponse: json response array is " + error.toString());
-// handle error
-        }
-    });*/
 
     private String userid_from_deeplink;
+
+    public static void shareApp(Context context) {
+        final String appPackageName = context.getPackageName();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -156,8 +109,13 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
         Intent data = getIntent();
         String deeplink = data.getStringExtra("deeplink");
+        if (data.getStringExtra("customerNo") != null) {
+            clickedID = data.getStringExtra("customerNo");
+            new ProfilePicture().execute(clickedID);
+            Toast.makeText(UserProfileActivity.this,clickedID, Toast.LENGTH_SHORT).show();
+        }
 
-        if (deeplink!=null) {
+        if (deeplink != null) {
             userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
             Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
         }
@@ -236,7 +194,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                 String packageName = getPackageName();
                 String weblink = "http://www.marwadishaadi.com/" + caste + "/user/candidate/" + userid;
                 String domain = "https://bf5xe.app.goo.gl/";
-                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&afl="+weblink+"&dfl="+weblink;
+                String link = domain + "?link=" + weblink + "&apn=" + packageName + "&afl=" + weblink + "&dfl=" + weblink;
 
                 OnCompleteListener onCompleteListener = new OnCompleteListener<ShortDynamicLink>() {
                     @Override
@@ -249,7 +207,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                             Intent sendIntent = new Intent();
                             String msg = "Hey, Check this cool profile of " + username + ":" + shortLink.toString();
                             sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT,msg);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
                             sendIntent.setType("text/plain");
                             startActivity(sendIntent);
 
@@ -263,7 +221,8 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                 shortLinkTask.addOnCompleteListener(onCompleteListener);
 
 
-            }});
+            }
+        });
 
         sharesave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,21 +235,22 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                         .setContentTitle("Pdf Download")
                         .setSmallIcon(R.drawable.ic_action_drawer_notification)
                         .setAutoCancel(true)
-                        .setProgress(0,0,true)
+                        .setProgress(0, 0, true)
                         .setContentText("Download in progress");
 
 
                 final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(1,notification.build());
+                notificationManager.notify(1, notification.build());
 
                 AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                     @Override
-                    protected void initView(View view) {}
+                    protected void initView(View view) {
+                    }
                 };
                 page1.setReuseBitmap(true);
 
 
-                PdfDocument doc  = new PdfDocument(UserProfileActivity.this);
+                PdfDocument doc = new PdfDocument(UserProfileActivity.this);
                 doc.addPage(page1);
                 doc.setRenderWidth(1072);
                 doc.setRenderHeight(2000);
@@ -311,11 +271,11 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                         i.setDataAndType(targetUri, "application/pdf");
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,i,PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
                         notification.setContentText("Download complete");
                         notification.setContentIntent(pendingIntent);
-                        notification.setProgress(0,0,false);
-                        notificationManager.notify(1,notification.build());
+                        notification.setProgress(0, 0, false);
+                        notificationManager.notify(1, notification.build());
 
                     }
 
@@ -334,7 +294,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
         carouselView = (CarouselView) findViewById(R.id.carouselView);
 
-        new ProfilePicture().execute();
+        new ProfilePicture().execute(clickedID);
 
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
         userinfo = (ViewPager) findViewById(R.id.profile_container);
@@ -364,7 +324,6 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
     public void setImageForPosition(int position, ImageView imageView) {
 
     }
-
 
     public static class ProfilePageAdapter extends FragmentPagerAdapter {
 
@@ -414,28 +373,17 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
         }
     }
 
-
-    public static void shareApp(Context context)
-    {
-        final String appPackageName = context.getPackageName();
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
-        sendIntent.setType("text/plain");
-        context.startActivity(sendIntent);
-    }
-
-    class ProfilePicture extends AsyncTask<Void, Void, Void> {
-
+    public class ProfilePicture extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/fetchProfilePicture")
-                    .addBodyParameter("customerNo", "A1028")
+        protected Void doInBackground(String... params) {
+            String cus = params[0];
+            Log.d(TAG, "doInBackground:  ----------------------------------- " + cus);
+            AndroidNetworking.post(URL + "fetchProfilePicture")
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
-
 
 
                         @Override
@@ -443,18 +391,17 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
 
                             try {
                                 JSONArray array = response.getJSONArray(0);
-                                String name = array.getString(1)+ " "+array.getString(2);
+                                String name = array.getString(1) + " " + array.getString(2);
                                 final ArrayList<String> images = new ArrayList<>();
-                                for(int i =0;i<response.length();i++)
-                                {
-                                    images.add("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
-                                    Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/"+response.getJSONArray(i).getString(0));
+                                for (int i = 0; i < response.length(); i++) {
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
+                                    Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
 
                                 }
 
                                 toolbarLayout.setTitle(name);
 
-                                carouselView.setPageCount(images.size());
+
                                 carouselView.setImageListener(new ImageListener() {
                                     @Override
                                     public void setImageForPosition(int position, ImageView imageView) {
@@ -464,6 +411,7 @@ public class  UserProfileActivity extends AppCompatActivity implements ViewPager
                                                 .into(imageView);
                                     }
                                 });
+                                carouselView.setPageCount(images.size());
 
 
                             } catch (JSONException e) {

@@ -45,6 +45,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
     private FirebaseAnalytics mFirebaseAnalytics;
     private String favouriteState, interestState;
     private static final String TAG = "SuggestionAdapter";
+    View iView;
 
     public SuggestionAdapter(Context context, List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
@@ -57,10 +58,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
     @Override
     public SuggestionAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+         iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.suggestions_row, parent, false);
 
-        return new SuggestionAdapter.MyViewHolder(itemView);
+        return new SuggestionAdapter.MyViewHolder(iView);
     }
 
     @Override
@@ -93,7 +94,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.mariSta.setText(suggest.getMariSta());
         holder.company.setText(cd);
         holder.highDeg.setText(suggest.getHighDeg());
+        Log.d(TAG, "onBindViewHolder: $$$$$$$$$$$$$$$$$$$$$$$$$$ valus " + suggest.getFavouriteStatus());
         if (suggest.getFavouriteStatus().toCharArray()[0] == '1') {
+            Log.d(TAG, "onBindViewHolder: heart is faslse ****************************************** ");
             holder.sparkButtonFav.setChecked(false);
             holder.sparkButtonFav.setInactiveImage(R.mipmap.heart_disable);
         }
@@ -102,6 +105,73 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             holder.sparkButtonInterest.setInactiveImage(R.mipmap.heart_disable1);
         }
 
+        holder.sparkButtonFav.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+
+
+                // when its active
+                if (buttonState) {
+
+                    favouriteState = "added";
+                    new AddFavouriteFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), favouriteState);
+                    Snackbar snackbar = Snackbar.make(rv, "Added to Favourites", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                } else {
+
+                    favouriteState = "removed";
+                    new AddFavouriteFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), favouriteState);
+                    Snackbar snackbar = Snackbar.make(rv, "Removed from Favourites", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+
+                }
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+
+        holder.sparkButtonInterest.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+
+                if (buttonState) {
+                    Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    interestState = "added";
+                    new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
+                    Snackbar snackbar = Snackbar.make(rv, "Interest Sent", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                } else {
+                    Log.d(TAG, "onEvent: interest removed ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    interestState = "removed";
+                    new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
+                    Snackbar snackbar = Snackbar.make(rv, "Removed from interest", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                }
+
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+                // when its active
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
 
     }
 
@@ -140,7 +210,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
-                    i.putExtra("customerNo","A1028");
+                    i.putExtra("customerNo", cusId.getText());
+                    i.putExtra("from","suggestion");
+
                     context.startActivity(i);
                 }
             });
@@ -180,74 +252,6 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 }
             });
 
-            sparkButtonFav.setEventListener(new SparkEventListener() {
-                @Override
-                public void onEvent(ImageView button, boolean buttonState) {
-
-
-                    // when its active
-                    if (buttonState) {
-
-                        favouriteState = "added";
-                        new AddFavouriteFromSuggestion().execute(customer_id, cusId.getText().toString(), favouriteState);
-                        Snackbar snackbar = Snackbar.make(rv, "Added to Favourites", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-
-                    } else {
-
-                        favouriteState = "removed";
-                        new AddFavouriteFromSuggestion().execute(customer_id, cusId.getText().toString(), favouriteState);
-                        Snackbar snackbar = Snackbar.make(rv, "Removed from Favourites", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-
-                    }
-                }
-
-                @Override
-                public void onEventAnimationEnd(ImageView button, boolean buttonState) {
-
-                }
-
-                @Override
-                public void onEventAnimationStart(ImageView button, boolean buttonState) {
-
-                }
-            });
-
-
-            sparkButtonInterest.setEventListener(new SparkEventListener() {
-                @Override
-                public void onEvent(ImageView button, boolean buttonState) {
-
-                    if (buttonState) {
-                        Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
-                        interestState = "added";
-                        new AddInterestFromSuggestion().execute(customer_id, cusId.getText().toString(), interestState);
-                        Snackbar snackbar = Snackbar.make(rv, "Interest Sent", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-
-                    } else {
-                        Log.d(TAG, "onEvent: interest removed ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
-                        interestState = "removed";
-                        new AddInterestFromSuggestion().execute(customer_id, cusId.getText().toString(), interestState);
-                        Snackbar snackbar = Snackbar.make(rv, "Removed from interest", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
-
-                }
-
-                @Override
-                public void onEventAnimationEnd(ImageView button, boolean buttonState) {
-
-                    // when its active
-
-                }
-
-                @Override
-                public void onEventAnimationStart(ImageView button, boolean buttonState) {
-
-                }
-            });
         }
     }
 
