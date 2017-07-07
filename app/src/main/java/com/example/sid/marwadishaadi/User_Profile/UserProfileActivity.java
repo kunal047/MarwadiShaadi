@@ -377,7 +377,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         @Override
         protected Void doInBackground(String... params) {
-            String cus = params[0];
+            final String cus = params[0];
             Log.d(TAG, "doInBackground:  ----------------------------------- " + cus);
             AndroidNetworking.post(URL + "fetchProfilePicture")
                     .addBodyParameter("customerNo", cus)
@@ -394,7 +394,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 String name = array.getString(1) + " " + array.getString(2);
                                 final ArrayList<String> images = new ArrayList<>();
                                 for (int i = 0; i < response.length(); i++) {
-                                    images.add("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_"+cus+"/thumb/" + response.getJSONArray(i).getString(0));
                                     Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
 
                                 }

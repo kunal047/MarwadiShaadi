@@ -5,10 +5,11 @@ package com.example.sid.marwadishaadi.Dashboard_Interest_Sent;
  */
 
 public class InterestSentModel {
-    String name, city, degree, imgAdd, reqStatus, date;
+    String name, city, degree, imgAdd, reqStatus, date, customerId;
     int age;
 
-    public InterestSentModel(String name, String city, String degree, String imgAdd, String reqStatus, int age, String date) {
+    public InterestSentModel(String customerId, String name, String city, String degree, String imgAdd, String reqStatus, int age, String date) {
+        this.customerId = customerId;
         this.name = name;
         this.city = city;
         this.degree = degree;
@@ -17,6 +18,14 @@ public class InterestSentModel {
         this.age = age;
         this.date = date;
 
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getDate() {

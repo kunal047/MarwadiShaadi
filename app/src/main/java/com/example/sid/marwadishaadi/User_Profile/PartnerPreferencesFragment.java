@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
+import android.accessibilityservice.GestureDescription;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,12 +30,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class PartnerPreferencesFragment extends Fragment {
 
     private TextView edit_prefs;
     private Button similar;
+    private String clickedID = customer_id;
 
     private TextView age, height, build, complexion, physicalStatus, highestDegree, occup, maritalStatus, annualIncome, city;
 
@@ -62,7 +66,25 @@ public class PartnerPreferencesFragment extends Fragment {
         maritalStatus = (TextView) mview.findViewById(R.id.marital_status);
         annualIncome = (TextView) mview.findViewById(R.id.annual_income);
 
-        new PartnerPreference().execute();
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+
+        if (data.getStringExtra("customerNo") != null) {
+
+            clickedID = data.getStringExtra("customerNo");
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+            new PartnerPreference().execute(clickedID);
+
+        }
+
+
+        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
+
+            edit_prefs.setVisibility(View.GONE);
+
+        }
+
+        new PartnerPreference().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,12 +109,13 @@ public class PartnerPreferencesFragment extends Fragment {
     }
 
 
-    class PartnerPreference extends AsyncTask<Void, Void, Void> {
+    class PartnerPreference extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePartnerPreferences")
-                    .addBodyParameter("customerNo", "A1028")
+        protected Void doInBackground(String... strings) {
+            String cus = strings[0];
+            AndroidNetworking.post(URL +"profilePartnerPreferences")
+                    .addBodyParameter("customerNo", cus)
                     .setTag(this)
                     .setPriority(Priority.MEDIUM)
                     .build()

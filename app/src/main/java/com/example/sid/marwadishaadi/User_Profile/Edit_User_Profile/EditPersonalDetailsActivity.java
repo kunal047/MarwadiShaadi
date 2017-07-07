@@ -29,6 +29,7 @@ import java.util.Arrays;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 
 public class EditPersonalDetailsActivity extends AppCompatActivity {
@@ -104,7 +105,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo","A1028")
+                    .addBodyParameter("customerNo",customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -200,7 +201,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
 
                     AndroidNetworking.post("http://192.168.43.143:5050/editPersonalIndividualDetails")
-                            .addBodyParameter("customerNo", "A1028")
+                            .addBodyParameter("customerNo", customer_id)
                             .addBodyParameter("marrital_status",ms)
                             .addBodyParameter("height",h)
                             .addBodyParameter("mobile_phone",c)

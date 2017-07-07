@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 /**
@@ -82,6 +83,26 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 
             }
         });
+
+        holder.fav_name_age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","favourites");
+                i.putExtra("customerNo",favouriteModel.getCustomerId());
+                context.startActivity(i);
+            }
+        });
+
+        holder.fav_profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","favourites");
+                i.putExtra("customerNo",favouriteModel.getCustomerId());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -106,21 +127,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             remove = (Button) view.findViewById(R.id.remove);
             sendInterest = (Button) view.findViewById(R.id.send_interest);
 
-            fav_name_age.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
 
-            fav_profile_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
         }
     }
 

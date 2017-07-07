@@ -27,6 +27,8 @@ import java.util.Arrays;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
 public class EditFamilyDetailsActivity extends AppCompatActivity {
 
     EditText fatherName, mamaSurname, fatherOccupationDetails, grandfatherName, nativePlace, subcaste;
@@ -178,7 +180,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsFamily")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("fatherName", f)
                     .addBodyParameter("fatherOccupation", fo)
                     .addBodyParameter("fatherOccupationDetails", fod)

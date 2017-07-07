@@ -159,7 +159,7 @@ public class InterestSentFragment extends Fragment {
                                     date = formatter.parse(interestSentOn);
                                     interestSentOn = new SimpleDateFormat("E, dd MMM yyyy").format(date);
 
-                                    interestSentModels[i] = new InterestSentModel(name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
+                                    interestSentModels[i] = new InterestSentModel(customerNo,name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
                                     interestListSent.add(interestSentModels[i]);
                                     interestSentAdapter.notifyDataSetChanged();
