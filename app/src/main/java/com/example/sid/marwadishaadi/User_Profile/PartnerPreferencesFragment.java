@@ -42,6 +42,10 @@ public class PartnerPreferencesFragment extends Fragment {
 
     private TextView age, height, build, complexion, physicalStatus, highestDegree, occup, maritalStatus, annualIncome, city;
 
+
+    private TextView age,height,build,complexion,physicalStatus,highestDegree,occup,maritalStatus,annualIncome,city;
+
+    private String clickedID  = customer_id;
     public PartnerPreferencesFragment() {
         // Required empty public constructor
     }
@@ -79,9 +83,16 @@ public class PartnerPreferencesFragment extends Fragment {
 
 
         if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
+          
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+        if (data.getStringExtra("customerNo") != null) {
 
+            clickedID = data.getStringExtra("customerNo");
+            new PartnerPreference().execute(clickedID);
             edit_prefs.setVisibility(View.GONE);
-
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+            edit_prefs.setVisibility(View.GONE);
         }
 
         new PartnerPreference().execute(clickedID);
@@ -108,13 +119,13 @@ public class PartnerPreferencesFragment extends Fragment {
         return mview;
     }
 
-
     class PartnerPreference extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... strings) {
             String cus = strings[0];
             AndroidNetworking.post(URL +"profilePartnerPreferences")
+
                     .addBodyParameter("customerNo", cus)
                     .setTag(this)
                     .setPriority(Priority.MEDIUM)
