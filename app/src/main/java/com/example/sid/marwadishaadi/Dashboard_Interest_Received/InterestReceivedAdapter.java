@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
@@ -58,7 +60,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        InterestReceivedModel interestReceivedModel = mInterestReceivedModelList.get(position);
+        final InterestReceivedModel interestReceivedModel = mInterestReceivedModelList.get(position);
 
         String ag = interestReceivedModel.getName() + ", " + interestReceivedModel.getAge();
 
@@ -68,6 +70,17 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         holder.name.setText(ag);
         holder.highestDegree.setText(interestReceivedModel.getHighestDegree());
         holder.location.setText(interestReceivedModel.getLocation());
+
+        holder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context,UserProfileActivity.class);
+                i.putExtra("from","interestReceived");
+                i.putExtra("customerNo",interestReceivedModel.getCustomerId());
+                context.startActivity(i);
+
+            }
+        });
         if (interestReceivedModel.getStatus() == 0) {
             holder.status.setText("Accepted");
             holder.status.setBackgroundColor(Color.parseColor("#00c864"));
@@ -106,6 +119,8 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
             accept = (ImageView) itemView.findViewById(R.id.interest_accept);
             reject = (ImageView) itemView.findViewById(R.id.interest_reject);
             customerNo = (TextView) itemView.findViewById(R.id.textViewCustomerNo);
+
+
 
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -35,6 +35,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
     private FbGalleryAdapter fbGalleryAdapter;
     private String userid;
     private ArrayList<String> selected_photos_url = new ArrayList<>();
+    private static final String TAG = "FbGalleryActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +142,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                         JSONObject data = response.getJSONObject();
                                         try {
 
+                                            Log.d(TAG, "onCompleted: response from fb is " + response.toString());
                                             final JSONArray photos = data.getJSONArray("data");
 
                                             for (int i=0;i<photos.length();i++){

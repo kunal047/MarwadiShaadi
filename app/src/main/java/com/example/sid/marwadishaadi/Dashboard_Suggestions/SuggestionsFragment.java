@@ -143,6 +143,7 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             pd.setMessage("Please wait..");
+            pd.setCancelable(false);
             pd.show();
             super.onPreExecute();
 
@@ -158,9 +159,17 @@ public class SuggestionsFragment extends Fragment {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                             // do anything with response
                             try {
 
+                                suggestionModelList.clear();
                                 Log.d(TAG, "onResponse: response from ");
 
                                 for (int i = 0; i < response.length(); i++) {
@@ -245,6 +254,12 @@ public class SuggestionsFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                         }
                     });
             return null;
@@ -252,7 +267,6 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pd.dismiss();
             super.onPostExecute(aVoid);
             suggestionAdapter.notifyDataSetChanged();
         }

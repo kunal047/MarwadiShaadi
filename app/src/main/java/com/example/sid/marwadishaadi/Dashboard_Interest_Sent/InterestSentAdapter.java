@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Interest_Sent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 
@@ -21,7 +23,8 @@ import java.util.List;
  */
 
 
-public class InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolder> {
+public class
+InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolder> {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private Context context;
@@ -50,15 +53,25 @@ public class InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        InterestSentModel interestSentModel = interestSentModelList.get(position);
+        final InterestSentModel interestSentModel = interestSentModelList.get(position);
 
         String ag = interestSentModel.getName() + ", " + interestSentModel.getAge() + " years";
         Glide.with(context).load(interestSentModel.getImgAdd()).into(holder.profilepic);
         holder.name_age.setText(ag);
         holder.degree.setText(interestSentModel.getDegree());
         holder.location.setText(interestSentModel.getCity());
-        holder.req_status.setText((CharSequence) interestSentModel.getReqStatus());
+        holder.req_status.setText(interestSentModel.getReqStatus());
         holder.date.setText(interestSentModel.getDate());
+
+        holder.profilepic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","interestSent");
+                i.putExtra("customerNo",interestSentModel.getCustomerId());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -78,6 +91,8 @@ public class InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapte
             req_status = (TextView) view.findViewById(R.id.req_status);
             profilepic = (ImageView) view.findViewById(R.id.profilepic);
             date = (TextView) view.findViewById(R.id.date);
+
+
 
         }
     }

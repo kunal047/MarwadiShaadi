@@ -54,6 +54,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class DashboardActivity extends AppCompatActivity
@@ -147,6 +148,7 @@ public class DashboardActivity extends AppCompatActivity
         mSectionsPagerAdapter = new DashboardSectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.dash_container);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
 
@@ -316,8 +318,8 @@ public class DashboardActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/fetchProfilePictureDrawer")
-                    .addBodyParameter("customerNo", "A1028")
+            AndroidNetworking.post(URL +"fetchProfilePictureDrawer")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -330,7 +332,7 @@ public class DashboardActivity extends AppCompatActivity
                                 JSONArray array = response.getJSONArray(0);
                                 String name = array.getString(1) + " " + array.getString(2);
 
-                                Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + array.getString(0)).into(userdp);
+                                Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + array.getString(0)).into(userdp);
                                 nameDrawer.setText(name);
 
                             }catch (JSONException e) {
