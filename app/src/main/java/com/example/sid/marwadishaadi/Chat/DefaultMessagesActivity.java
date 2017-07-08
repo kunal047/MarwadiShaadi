@@ -185,6 +185,11 @@ private void onUnblockPressed(int id) {
         intent.putExtra("Name",toolbar.getTitle());
         menuItem.setTitle("Unblock");
     }
+      @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(getApplicationContext(),DefaultMessagesActivity.class);
+        startActivity(intent);
+    }
     @Override
     public boolean onSubmit(CharSequence input) {
 

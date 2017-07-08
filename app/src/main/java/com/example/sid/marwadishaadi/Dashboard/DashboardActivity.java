@@ -85,9 +85,7 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-        customer_id = sharedpref.getString("customer_no", customer_id);
-        customer_gender = sharedpref.getString("customer_gender", "Female");
+       
 
         Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
 
