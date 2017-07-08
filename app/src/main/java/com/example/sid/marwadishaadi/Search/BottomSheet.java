@@ -3,8 +3,10 @@ package com.example.sid.marwadishaadi.Search;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -37,9 +39,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 
 import static android.content.ContentValues.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.R.id.hometown;
+import static com.example.sid.marwadishaadi.R.id.mariSta;
 import static com.example.sid.marwadishaadi.Search.Search.AIList;
 import static com.example.sid.marwadishaadi.Search.Search.CastList;
 import static com.example.sid.marwadishaadi.Search.Search.annualincome;
@@ -60,9 +65,6 @@ import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fr
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
-/**
- * Created by vivonk on 01-06-2017.
- */
 
 
 public class BottomSheet extends BottomSheetDialogFragment {
@@ -74,13 +76,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private static EditText fname, lname, id;
     private static int count = 0, size = 0;
     public ProgressDialog dialog;
+
     //Edit Educational details
     Spinner editEducation;
     TextView eduDegree, eduInstituteLocation;
     Button updateEducation;
     String e, hd, in;
-    //-------------------------------------------
-//Edit Professional details of User Profile
+
+
+    //Edit Professional details of User Profile
     Spinner designation, annualIncome, occupation;
     TextView companyName, companyLocation;
     Button updateProfession;
@@ -88,24 +92,26 @@ public class BottomSheet extends BottomSheetDialogFragment {
     EditText aboutMe;
     Button aboutMe_update;
     String am;
+
     //Hobbies additional details
     EditText hobbies;
-
-    //-------------------------------------------
-
 
     //About Me additional details
     Button hobbies_update;
     String h;
+
     //LifeStyle additional details
     Spinner eatingHabit, smokingHabit, drinkingHabit;
     String eh, dh, sh;
     Button lifestyleUpdate;
+
     //Horoscope additional details
     Spinner manglik, matchHoroscope;
     EditText birthTime, birthPlace, gotra;
     String m, bt, bp, g, mh;
     Button horoscopeUpdate;
+
+
     //Relation Family Details
     Spinner relation;
     EditText relativeName, relativeOccupation, relativeLocation, relativeMobile;
@@ -133,6 +139,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
 
     }
+
+
     public BottomSheet(int i) {
         if (i == 0) {
             Search search = new Search();
@@ -475,51 +483,57 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         if (count == 1) {
 
+
             Button srch = (Button) contentView.findViewById(R.id.search_by_id_name_search_button);
             srch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     fname = (EditText) contentView.findViewById(R.id.search_by_first_name);
                     lname = (EditText) contentView.findViewById(R.id.search_by_last_name);
                     id = (EditText) contentView.findViewById(R.id.search_by_id);
+
                     String strfname, strlname, strid;
                     strfname = fname.getText().toString();
                     strlname = lname.getText().toString();
                     strid = id.getText().toString();
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String gender = sharedPreferences.getString("gender", null);
+                    if (gender.contains("Male")) {
+                        gender = "Female";
+                    } else {
+                        gender = "Male";
+                    }
                     if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+
                         Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
                         fname.setText("");
                         lname.setText("");
                         id.setText("");
-                    } else if (!strid.trim().isEmpty()) {
-                        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getContext());
-                    String gender =sharedPreferences.getString("gender",null);
-                    if(gender.contains("Male")){
-                        gender="Female";
-                    }else {
-                        gender="Male";
-                    }
-                    if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
-                        Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
 
                     } else if (!strid.trim().isEmpty()) {
-                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.customer_no=\"" + strid.trim() + "\"; ");
 
 
+                        if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+                            Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
 
-                    } else if ((!strlname.trim().isEmpty() & !strfname.trim().isEmpty())) {
-                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where (tbl_user.first_name=\" " + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
-                    } else if ((!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+                        } else if (!strid.trim().isEmpty()) {
+                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id  INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  tbl_user.customer_no=\"" + strid.trim() + "\"; ");
+                        } else if ((!strlname.trim().isEmpty() & !strfname.trim().isEmpty())) {
+                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  (tbl_user.first_name=\" " + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
+                        } else if ((!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
 
-                        if (!strlname.trim().isEmpty()) {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='"+ gender+"' order by created_on asc ;");
-
+                            if (!strlname.trim().isEmpty()) {
+                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  ( tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='" + gender + "') order by created_on asc ;");
+                            } else {
+                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
+                            }
                         } else {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
+                            Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
                     }
+                }
             });
         } else if (count == 2) {
             coun = 0;
@@ -590,19 +604,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     dialog.dismiss();
                 }
             });
-
-
         }
     }
 
     public String getS() {
         return s;
     }
-
     public void setS(String s) {
         BottomSheet.s = s;
     }
-
     private View viewGetter(int array) {
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
@@ -617,20 +627,19 @@ public class BottomSheet extends BottomSheetDialogFragment {
         listView.setAdapter(adapter);
         return view;
     }
-
     private View viewGetterEditPref(int array, String[] arr) {
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b = true;
         String[] str = getResources().getStringArray(array);
         for (int i = 0; i < str.length; i++) {
-           /* if(Arrays.asList(arr).indexOf(str[i]) == -1)
+            if(Arrays.asList(arr).indexOf(str[i]) == -1)
             {
                 b=false;
             }
-            else
-                b=true;*/
-
+            else {
+                b = true;
+            }
             User user = new User(str[i], "null", false);
             user.setBox(true);
             arrayOfUsers.add(user);
@@ -643,17 +652,19 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
+
     class BackNd extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(getContext());
+            dialog=new ProgressDialog(getContext());
             dialog.setMessage("Please Wait...");
+            dialog.show();
         }
 
         @Override
         protected String doInBackground(String... strings) {
-             Log.e(TAG, "response query is  ----------" + strings[0]);
+            Log.e(TAG, "response query is  ----------" + strings[0]);
             AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
@@ -727,35 +738,33 @@ public class BottomSheet extends BottomSheetDialogFragment {
             super.onPostExecute(s);
         }
     }
-
     class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editPersonalEducationDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .addBodyParameter("education", e)
-                    .addBodyParameter("edu_degree", hd)
-                    .addBodyParameter("college_name", in)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .addBodyParameter("education", e)
+                .addBodyParameter("edu_degree", hd)
+                .addBodyParameter("college_name", in)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
     class FetchPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -763,43 +772,41 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
-                                String[] education_array = getResources().getStringArray(R.array.education_array);
-                                for (String s : education_array) {
-                                    if (jsonArray.getString(13).equals(s)) {
-                                        editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
-                                    }
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
+                            String[] education_array = getResources().getStringArray(R.array.education_array);
+                            for (String s : education_array) {
+                                if (jsonArray.getString(13).equals(s)) {
+                                    editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
                                 }
-                                eduDegree.setText(jsonArray.getString(14));
-                                eduInstituteLocation.setText(jsonArray.getString(15));
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
+                            eduDegree.setText(jsonArray.getString(14));
+                            eduInstituteLocation.setText(jsonArray.getString(15));
 
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
-
     class FetchProfessionalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -807,110 +814,108 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
-                                String[] designationArray = getResources().getStringArray(R.array.designation_array);
-                                String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
-                                String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
-                                Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
+                            String[] designationArray = getResources().getStringArray(R.array.designation_array);
+                            String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
+                            String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
+                            Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
 
 
-                                for (String s : designationArray) {
-                                    if (jsonArray.getString(20).equals(s)) {
-                                        designation.setSelection(Arrays.asList(designationArray).indexOf(s));
-                                    }
+                            for (String s : designationArray) {
+                                if (jsonArray.getString(20).equals(s)) {
+                                    designation.setSelection(Arrays.asList(designationArray).indexOf(s));
                                 }
-
-                                for (String s : occupationArray) {
-                                    if (jsonArray.getString(17).equals(s)) {
-                                        occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
-                                    }
-                                }
-
-                                String annualI = jsonArray.getString(18);
-                                annualI = annualI.replaceAll("[^-?0-9]+", " ");
-                                List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                                Log.d(TAG, "onResponse: income array is " + incomeArray);
-                                if (jsonArray.getString(18).contains("Upto")) {
-                                    annualI = "Upto 3L";
-                                } else if (jsonArray.getString(18).contains("Above")) {
-                                    annualI = "Above 50L";
-
-                                } else if (incomeArray.size() == 3) {
-                                    Log.d(TAG, "onResponse: when three");
-                                    double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                    double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                    annualI = (int) first + "L - " + (int) second + "L";
-                                } else {
-                                    annualI = "No Income mentioned.";
-                                }
-
-
-                                for (String s : annualIncomeArray) {
-                                    if (annualI.equals(s)) {
-                                        annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
-                                    }
-                                }
-                                Log.d(TAG, "onResponse: AI is ------" + annualI);
-
-
-                                companyName.setText(jsonArray.getString(19));
-                                companyLocation.setText(jsonArray.getString(21));
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
 
+                            for (String s : occupationArray) {
+                                if (jsonArray.getString(17).equals(s)) {
+                                    occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
+                                }
+                            }
+
+                            String annualI = jsonArray.getString(18);
+                            annualI = annualI.replaceAll("[^-?0-9]+", " ");
+                            List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
+                            Log.d(TAG, "onResponse: income array is " + incomeArray);
+                            if (jsonArray.getString(18).contains("Upto")) {
+                                annualI = "Upto 3L";
+                            } else if (jsonArray.getString(18).contains("Above")) {
+                                annualI = "Above 50L";
+
+                            } else if (incomeArray.size() == 3) {
+                                Log.d(TAG, "onResponse: when three");
+                                double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                                double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                                annualI = (int) first + "L - " + (int) second + "L";
+                            } else {
+                                annualI = "No Income mentioned.";
+                            }
+
+
+                            for (String s : annualIncomeArray) {
+                                if (annualI.equals(s)) {
+                                    annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
+                                }
+                            }
+                            Log.d(TAG, "onResponse: AI is ------" + annualI);
+
+
+                            companyName.setText(jsonArray.getString(19));
+                            companyLocation.setText(jsonArray.getString(21));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditPersonalProfessionalDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editPersonalProfessionDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .addBodyParameter("occupation", o)
-                    .addBodyParameter("annualIncome", ai)
-                    .addBodyParameter("companyName", cn)
-                    .addBodyParameter("companyLocation", cl)
-                    .addBodyParameter("designation", d)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .addBodyParameter("occupation", o)
+                .addBodyParameter("annualIncome", ai)
+                .addBodyParameter("companyName", cn)
+                .addBodyParameter("companyLocation", cl)
+                .addBodyParameter("designation", d)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
     class FetchAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -918,58 +923,56 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
-                                aboutMe.setText(jsonArray.getString(0));
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
+                            aboutMe.setText(jsonArray.getString(0));
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsAboutMe")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
     class FetchAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -977,61 +980,58 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
-                                hobbies.setText(jsonArray.getString(1));
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
+                            hobbies.setText(jsonArray.getString(1));
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHobbies")
-                    .addBodyParameter("customerNo",customer_id)
-                    .addBodyParameter("hobbies", h)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo",customer_id)
+                .addBodyParameter("hobbies", h)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
-
     class FetchAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -1039,92 +1039,89 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
 
-                                String[] dietArray = getResources().getStringArray(R.array.diet_array);
+                            String[] dietArray = getResources().getStringArray(R.array.diet_array);
 
-                                for (String s : dietArray) {
-                                    if (jsonArray.getString(2).equals(s)) {
-                                        eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------eating----" + s);
-                                    }
+                            for (String s : dietArray) {
+                                if (jsonArray.getString(2).equals(s)) {
+                                    eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
+                                    Log.d(TAG, "onResponse: ---------eating----" + s);
                                 }
-
-                                String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
-
-                                for (String s : drinkingArray) {
-                                    if (jsonArray.getString(3).equals(s)) {
-                                        drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------drinking----" + s);
-
-                                    }
-                                }
-
-                                String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
-
-                                for (String s : smokingArray) {
-                                    if (jsonArray.getString(4).equals(s)) {
-                                        smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------smoking----" + s);
-
-                                    }
-                                }
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
 
+                            String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
+
+                            for (String s : drinkingArray) {
+                                if (jsonArray.getString(3).equals(s)) {
+                                    drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
+                                    Log.d(TAG, "onResponse: ---------drinking----" + s);
+
+                                }
+                            }
+
+                            String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
+
+                            for (String s : smokingArray) {
+                                if (jsonArray.getString(4).equals(s)) {
+                                    smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
+                                    Log.d(TAG, "onResponse: ---------smoking----" + s);
+
+                                }
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsLifestyle")
-                    .addBodyParameter("customerNo", customer_id)
-                    .addBodyParameter("smokingHabit", sh)
-                    .addBodyParameter("eatingHabit", eh)
-                    .addBodyParameter("drinkingHabit", dh)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .addBodyParameter("smokingHabit", sh)
+                .addBodyParameter("eatingHabit", eh)
+                .addBodyParameter("drinkingHabit", dh)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
-
     class FetchAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -1132,86 +1129,84 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
 
-                                birthTime.setText(jsonArray.getString(5));
-                                gotra.setText(jsonArray.getString(7));
-                                birthPlace.setText(jsonArray.getString(6));
+                            birthTime.setText(jsonArray.getString(5));
+                            gotra.setText(jsonArray.getString(7));
+                            birthPlace.setText(jsonArray.getString(6));
 
 
-                                String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
+                            String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
 
-                                for (String s : manglikArray) {
-                                    if (jsonArray.getString(8).equals(s)) {
-                                        manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
-                                    }
+                            for (String s : manglikArray) {
+                                if (jsonArray.getString(8).equals(s)) {
+                                    manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
                                 }
-
-                                String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
-
-                                for (String s : horoscopeArray) {
-                                    if (jsonArray.getString(9).equals(s)) {
-                                        matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
-
-                                    }
-                                }
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
 
+                            String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
+
+                            for (String s : horoscopeArray) {
+                                if (jsonArray.getString(9).equals(s)) {
+                                    matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
+
+                                }
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHoroscope")
-                    .addBodyParameter("customerNo", customer_id)
-                    .addBodyParameter("birthTime", bt)
-                    .addBodyParameter("birthPlace", bp)
-                    .addBodyParameter("gotra", g)
-                    .addBodyParameter("manglik", m)
-                    .addBodyParameter("matchHoroscope", mh)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .addBodyParameter("birthTime", bt)
+                .addBodyParameter("birthPlace", bp)
+                .addBodyParameter("gotra", g)
+                .addBodyParameter("manglik", m)
+                .addBodyParameter("matchHoroscope", mh)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-
     class FetchFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
 
 
@@ -1219,70 +1214,77 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray(0);
-                                String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray(0);
+                            String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
 
-                                for (String s : relationArray) {
-                                    if (jsonArray.getString(10).equals(s)) {
-                                        relation.setSelection(Arrays.asList(relationArray).indexOf(s));
-                                    }
+                            for (String s : relationArray) {
+                                if (jsonArray.getString(10).equals(s)) {
+                                    relation.setSelection(Arrays.asList(relationArray).indexOf(s));
                                 }
-                                relativeName.setText(jsonArray.getString(11));
-                                relativeOccupation.setText(jsonArray.getString(12));
-                                relativeLocation.setText(jsonArray.getString(13));
-                                relativeMobile.setText(jsonArray.getString(14));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-
+                            relativeName.setText(jsonArray.getString(11));
+                            relativeOccupation.setText(jsonArray.getString(12));
+                            relativeLocation.setText(jsonArray.getString(13));
+                            relativeMobile.setText(jsonArray.getString(14));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
 
 
             return null;
         }
     }
-
     class EditFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsRelation")
-                    .addBodyParameter("customerNo", customer_id)
-                    .addBodyParameter("relation", r)
-                    .addBodyParameter("relativeName", rn)
-                    .addBodyParameter("relativeOccupation", ro)
-                    .addBodyParameter("relativeLocation", rl)
-                    .addBodyParameter("relativeMobile", rm)
-                    .setTag(this)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
+                .addBodyParameter("customerNo", customer_id)
+                .addBodyParameter("relation", r)
+                .addBodyParameter("relativeName", rn)
+                .addBodyParameter("relativeOccupation", ro)
+                .addBodyParameter("relativeLocation", rl)
+                .addBodyParameter("relativeMobile", rm)
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-                        }
-                    });
+                    }
+                });
 
             return null;
         }
     }
-}
+};
+
+
+
+
+
+
+
+

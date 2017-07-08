@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,36 +27,27 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.model.Progress;
 import com.example.sid.marwadishaadi.About_Us.AboutUsActivity;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
 import com.example.sid.marwadishaadi.Contact_Us.ContactUsActivity;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Faq.FaqActivity;
 import com.example.sid.marwadishaadi.Login.LoginActivity;
 import com.example.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity;
 import com.example.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity;
 import com.example.sid.marwadishaadi.R;
-import com.example.sid.marwadishaadi.Search.Search;
-import com.example.sid.marwadishaadi.Search.SearchResultsActivity;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Calendar;
-import java.util.concurrent.RunnableFuture;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.HashConverter;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.str;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -78,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected LinearLayout morelinearlayout;
     protected TextView more;
     protected AlertDialog resetbox;
+    protected ProgressDialog dialog;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
 
     @Override
@@ -278,7 +268,7 @@ public class SettingsActivity extends AppCompatActivity {
                         final Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + call_us.getText().toString()));//change the number
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(getApplicationContext(),"Permission for Call Denied!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
                             return;
                         }else{
                             AlertDialog.Builder discarduser = new AlertDialog.Builder(SettingsActivity.this);
@@ -404,7 +394,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = new ProgressDialog(SettingsActivity.this);
+
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.setMessage("Please Wait...");

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -84,9 +85,7 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-        customer_id = sharedpref.getString("customer_no", "O1001");
-        customer_gender = sharedpref.getString("customer_gender", "Female");
+       
 
         Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
 
@@ -122,12 +121,28 @@ public class DashboardActivity extends AppCompatActivity
 
 
         inbox = (LinearLayout) mview.findViewById(R.id.nav_inbox);
-        inbox.setOnClickListener(new View.OnClickListener() {
+         inbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DashboardActivity.this, DefaultDialogsActivity.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                int counter=0;
+                String[] array=getResources().getStringArray(R.array.communities);
+                SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                for(int i=0;i<5;i++) {
+                    if (communityChecker.getString(array[i], null).contains("Yes")) {
+                        counter++;
+                    }
+                }
+                if(counter>0) {
+                    Intent i = new Intent(DashboardActivity.this, DefaultDialogsActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }
+                else{
+                    Toast.makeText(DashboardActivity.this, " This feature is only for premium members", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(getApplicationContext(),UpgradeMembershipActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
