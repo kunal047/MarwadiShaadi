@@ -275,7 +275,7 @@ public class SettingsActivity extends AppCompatActivity {
                         final Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + call_us.getText().toString()));//change the number
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(getApplicationContext(),"Permission for Call Denied!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
                             return;
                         }else{
                             AlertDialog.Builder discarduser = new AlertDialog.Builder(SettingsActivity.this);
