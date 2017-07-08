@@ -39,7 +39,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
 
     @Override
 
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         final ReverseModel rev = reverseModelList.get(position);
         Glide.with(context)
                 .load(rev.getImg_url())
