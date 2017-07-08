@@ -230,13 +230,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 public void onEvent(ImageView button, boolean buttonState) {
 
 
-                    Intent intent = new Intent(context, DefaultMessagesActivity.class);
-                    Bundle extras = new Bundle();
-                    extras.putString("customerName", name.getText().toString());
-                    extras.putString("customerId", cusId.getText().toString());
-
-                    intent.putExtras(extras);
-                    context.startActivity(intent);
+                    int counter=0;
+                    String[] array=context.getResources().getStringArray(R.array.communities);
+                    SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+                    for(int i=0;i<5;i++) {
+                        if (communityChecker.getString(array[i], null).contains("Yes")) {
+                            counter++;
+                        }
+                    }
+                    if(counter>0) {
+                        Intent intent = new Intent(context, DefaultMessagesActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString("customerName", name.getText().toString());
+                        extras.putString("customerId", cusId.getText().toString());
+                        intent.putExtras(extras);
+                        context.startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(getAppContext(), " This feature is only for premium members", Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(context,UpgradeMembershipActivity.class);
+                        context.startActivity(intent);
+                    }
                 }
 
 
