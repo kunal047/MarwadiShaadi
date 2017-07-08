@@ -87,7 +87,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 if(!feedback.trim().isEmpty())
                 {
 
-                    String TO = "techteam@marwadishaadi.com";
+                    String TO = "tech@marwadishaadi.com";
                     Intent send = new Intent(Intent.ACTION_SENDTO);
                     String uriText = "mailto:" + Uri.encode(TO) +
                             "?subject=" + Uri.encode(subject) +
