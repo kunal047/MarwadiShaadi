@@ -86,10 +86,17 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
+
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
             new PersonalDetails().execute(clickedID);
+
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
+
+
+        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
             edit_individual.setVisibility(View.GONE);
             edit_education.setVisibility(View.GONE);
             edit_profession.setVisibility(View.GONE);

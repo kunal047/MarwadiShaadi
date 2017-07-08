@@ -28,6 +28,8 @@ import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
+
 import static android.content.ContentValues.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
@@ -41,7 +43,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private TextView edit_horoscope;
     private static  int casebreak;
     private Button similar;
+
     private String clickedID  = customer_id;
+
 
     TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
 
@@ -128,8 +132,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         gotra = (TextView) mview.findViewById(R.id.gotra);
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
-
-
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
         if (data.getStringExtra("customerNo") != null) {
@@ -144,9 +146,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
         }
-
-
-
 
         new ProfileAdditionalDetails().execute(clickedID);
 
@@ -208,11 +207,11 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
     private class ProfileAdditionalDetails extends AsyncTask<String,Void,Void>{
         @Override
-        protected Void doInBackground(String... params){
 
-            String cus = params[0];
-            AndroidNetworking.post( URL + "profileAdditionalDetails")
-                    .addBodyParameter("customerNo", cus)
+        protected Void doInBackground(String... strings){
+            String cus=strings[0];
+            AndroidNetworking.post(URL +"profileAdditionalDetails")
+                    .addBodyParameter("customerNo",cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener(){

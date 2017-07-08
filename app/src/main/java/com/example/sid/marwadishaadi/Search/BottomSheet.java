@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.Search.Search.AIList;
 import static com.example.sid.marwadishaadi.Search.Search.CastList;
 import static com.example.sid.marwadishaadi.Search.Search.annualincome;
@@ -760,7 +761,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editPersonalEducationDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("education", e)
                     .addBodyParameter("edu_degree", hd)
                     .addBodyParameter("college_name", in)
@@ -790,7 +791,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -834,7 +835,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -913,7 +914,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editPersonalProfessionDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("occupation", o)
                     .addBodyParameter("annualIncome", ai)
                     .addBodyParameter("companyName", cn)
@@ -945,7 +946,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -978,9 +979,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsAboutMe")
-                    .addBodyParameter("customerNo", "A1028")
-                    .addBodyParameter("aboutMe", am)
-                    .setTag(this)
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1006,7 +1005,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1039,7 +1038,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHobbies")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo",customer_id)
                     .addBodyParameter("hobbies", h)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
@@ -1068,7 +1067,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1130,7 +1129,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsLifestyle")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("smokingHabit", sh)
                     .addBodyParameter("eatingHabit", eh)
                     .addBodyParameter("drinkingHabit", dh)
@@ -1161,7 +1160,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1216,7 +1215,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHoroscope")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("birthTime", bt)
                     .addBodyParameter("birthPlace", bp)
                     .addBodyParameter("gotra", g)
@@ -1248,7 +1247,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         protected Void doInBackground(Void... params) {
 
             AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1290,7 +1289,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsRelation")
-                    .addBodyParameter("customerNo", "A1028")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("relation", r)
                     .addBodyParameter("relativeName", rn)
                     .addBodyParameter("relativeOccupation", ro)

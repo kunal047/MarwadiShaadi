@@ -91,37 +91,30 @@ public class UploadPhotoActivity extends AppCompatActivity {
         fblogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null) {
+                loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this,Arrays.asList("email","user_photos"));
+                loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
 
-                    ArrayList<String> permissionsFB = new ArrayList<>();
-                    permissionsFB.add("email");
-                    permissionsFB.add("user_photos");
+                        // getting user profile
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        try {
 
-                    loginManager = LoginManager.getInstance();
-                    loginManager.logInWithPublishPermissions(UploadPhotoActivity.this, permissionsFB);
+                                            String userid = object.getString("id");
+                                            fblogin.setText("Or upload photos from Facebook");
+                                            Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                                            i.putExtra("userid",userid);
+                                            startActivity(i);
+                                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
-                    loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-
-                            // getting user profile
-                            GraphRequest request = GraphRequest.newMeRequest(
-                                    AccessToken.getCurrentAccessToken(),
-                                    new GraphRequest.GraphJSONObjectCallback() {
-                                        @Override
-                                        public void onCompleted(JSONObject object, GraphResponse response) {
-                                            try {
-
-                                                String userid = object.getString("id");
-                                                fblogin.setText("Or upload photos from Facebook");
-                                                Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                                                i.putExtra("userid", userid);
-                                                startActivity(i);
-                                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
                                     });
                             request.executeAsync();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+
 
 /**
  * Created by USER on 02-06-2017.
@@ -59,6 +61,31 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         RecentModel recentModel = recentModelList.get(position);
+        holder.recentUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","recent");
+                i.putExtra("customerNo",recentModelList.get(position).getRecentCustomerId());
+
+                context.startActivity(i);
+            }
+        });
+
+        holder.recentName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","recent");
+                i.putExtra("customerNo",recentModelList.get(position).getRecentCustomerId());
+                Log.d(TAG, "onClick: customer id is-------"+recentModelList.get(position).getRecentCustomerId());
+                context.startActivity(i);
+            }
+        });
+
+
         Glide.with(context).load(recentModel.getRecentUserImage()).into(holder.recentUserImage);
         holder.recentName.setText(recentModel.getRecentName());
         holder.recentAge.setText(recentModel.getRecentAge());
@@ -171,23 +198,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             sparkButtonInterest = (SparkButton) itemView.findViewById(R.id.recentInterest);
 
 
-            recentName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
 
-            recentUserImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
         }
     }
 

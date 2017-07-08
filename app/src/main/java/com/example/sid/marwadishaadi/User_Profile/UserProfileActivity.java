@@ -75,7 +75,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
     private String clickedID  = customer_id;
-    String cusBack;
 
 
     private String userid_from_deeplink;
@@ -376,10 +375,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         @Override
         protected Void doInBackground(String... params) {
-            cusBack = params[0];
-            Log.d(TAG, "doInBackground:  ----------------------------------- " + cusBack);
+
+            final String cus = params[0];
+            Log.d(TAG, "doInBackground:  ----------------------------------- " + cus);
+
             AndroidNetworking.post(URL + "fetchProfilePicture")
-                    .addBodyParameter("customerNo", cusBack)
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -393,7 +394,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 String name = array.getString(1) + " " + array.getString(2);
                                 final ArrayList<String> images = new ArrayList<>();
                                 for (int i = 0; i < response.length(); i++) {
-                                    images.add("http://www.marwadishaadi.com/uploads/cust_" + cusBack + "/thumb/" + response.getJSONArray(i).getString(0));
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_"+cus+"/thumb/" + response.getJSONArray(i).getString(0));
+                                    Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
+
                                 }
 
                                 toolbarLayout.setTitle(name);

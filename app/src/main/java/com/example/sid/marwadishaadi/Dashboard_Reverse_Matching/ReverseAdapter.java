@@ -38,8 +38,9 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        ReverseModel rev = reverseModelList.get(position);
+
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        final ReverseModel rev = reverseModelList.get(position);
         Glide.with(context)
                 .load(rev.getImg_url())
                 .into(holder.dp);
@@ -52,6 +53,19 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
                 i.putExtra("cust", reverseModelList.get(position).getCustomerNo());
+                i.putExtra("from","reverseMatching");
+                i.putExtra("customerNo",rev.getCustomerID());
+                context.startActivity(i);
+            }
+        });
+
+
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","reverseMatching");
+                i.putExtra("customerNo",rev.getCustomerID());
                 context.startActivity(i);
             }
         });
@@ -78,16 +92,6 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
             age = (TextView) itemView.findViewById(R.id.user_profile_age);
             city = (TextView) itemView.findViewById(R.id.user_profile_city);
             education = (TextView) itemView.findViewById(R.id.user_profile_education);
-
-
-
-            name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
 
         }
 
