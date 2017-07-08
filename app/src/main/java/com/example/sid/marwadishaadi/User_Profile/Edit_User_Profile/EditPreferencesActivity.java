@@ -49,8 +49,6 @@ import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetail
 public class EditPreferencesActivity extends AppCompatActivity {
 
     public static final String URL = "http://208.91.199.50:5000/";
-//    public static final String URL = "http://192.168.137.152:5050/";
-//    public static final String URL = "http://192.168.43.61:5050/";
     public static EditText prefannualincome;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
