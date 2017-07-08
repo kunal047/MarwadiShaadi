@@ -34,6 +34,8 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class ProfileFamilyDetailsFragment extends Fragment {
@@ -43,6 +45,9 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     private TextView edit_family;
     private TextView edit_relatives;
     private Button similar;
+
+    private String clickedID  = customer_id;
+
 
     TextView fatherName, grandpaName, mamaSurname, fatherOccupation, fatherOccupationDetails, nativePlace, subcaste, familyType, familyStatus, relation, relativeName, relativeOccupation, relativeLocation, relativeMobile;
 
@@ -118,7 +123,23 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         relativeLocation=(TextView) mview.findViewById(R.id.relative_location);
         relativeMobile=(TextView) mview.findViewById(R.id.relative_mobile);
 
-        new ProfileFamilyDetails().execute();
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+        if (data.getStringExtra("customerNo") != null) {
+
+            clickedID = data.getStringExtra("customerNo");
+            new ProfileFamilyDetails().execute(clickedID);
+          
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
+
+        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
+
+            edit_family.setVisibility(View.GONE);
+            edit_relatives.setVisibility(View.GONE);
+
+        }
+        new ProfileFamilyDetails().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,11 +171,13 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     }
 
 
-    private class ProfileFamilyDetails extends AsyncTask<Void, Void, Void>{
+    private class ProfileFamilyDetails extends AsyncTask<String, Void, Void>{
         @Override
-        protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
-                    .addBodyParameter("customerNo", "A1028")
+
+        protected Void doInBackground(String... strings) {
+            String cus = strings[0];
+            AndroidNetworking.post(URL+"profileFamilyDetails")
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .setTag(this)
                     .build()
@@ -190,13 +213,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                                 relativeLocation.setText(loc);
                                 String mob="Contact: "+result.getString(14);
                                 relativeMobile.setText(mob);
-
-
-
-
-
-
-
                             }
                             catch(JSONException e){
                                 e.printStackTrace();

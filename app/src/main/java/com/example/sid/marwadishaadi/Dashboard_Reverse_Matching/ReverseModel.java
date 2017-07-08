@@ -7,16 +7,26 @@ package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 public class ReverseModel {
 
     private String img_url;
-    private String name;
+    private String name,customerID;
     private int age;
-    private String educationDegree, location;
+    private String educationDegree, location, customerNo;
 
-    public ReverseModel(String img_url, String name, int age, String educationDegree, String location) {
+    public ReverseModel(String img_url, String name, int age, String educationDegree, String location, String customerNo) {
         this.img_url = img_url;
         this.name = name;
+        this.customerID = customerID;
         this.age = age;
         this.educationDegree = educationDegree;
         this.location = location;
+        this.customerNo = customerNo;
+    }
+
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
     }
 
     public String getEducationDegree() {
@@ -57,5 +67,13 @@ public class ReverseModel {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -109,8 +110,19 @@ public class RecentProfilesFragment extends Fragment {
 
     private class PrepareRecent extends AsyncTask<Void, Void, Void> {
 
+        ProgressDialog mProgressDialog = new ProgressDialog(getContext());
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.setTitle("Loading");
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+            super.onPreExecute();
+        }
+
         @Override
         protected Void doInBackground(Void... params) {
+
             AndroidNetworking.get(URL + "prepareRecent/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
@@ -120,8 +132,15 @@ public class RecentProfilesFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressDialog.dismiss();
+                                }
+                            });
                             try {
 
+                                recentList.clear();
                                 for (int i = 0; i < response.length(); i++) {
 
                                     JSONArray array = response.getJSONArray(i);
@@ -154,6 +173,8 @@ public class RecentProfilesFragment extends Fragment {
                                     String favouriteStatus = array.getString(7);
                                     String recentStatus = array.getString(8);
 
+
+                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** "  +favouriteStatus + " 000000000000 " + recentStatus);
                                     date = formatter.parse(createdOn);
                                     long diff = now.getTime() - date.getTime();
                                     long diffSeconds = diff / 1000 % 60;
@@ -195,6 +216,12 @@ public class RecentProfilesFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressDialog.dismiss();
+                                }
+                            });
                         }
                     });
 

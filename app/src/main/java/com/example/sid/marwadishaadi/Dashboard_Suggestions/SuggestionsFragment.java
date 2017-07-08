@@ -109,6 +109,8 @@ public class SuggestionsFragment extends Fragment {
     }
 
     private void refreshContent() {
+
+        suggestionModelList.clear();
         new PrepareSuggestions().execute();
         suggestionAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -141,6 +143,7 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             pd.setMessage("Please wait..");
+            pd.setCancelable(false);
             pd.show();
             super.onPreExecute();
 
@@ -156,9 +159,17 @@ public class SuggestionsFragment extends Fragment {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                             // do anything with response
                             try {
 
+                                suggestionModelList.clear();
                                 Log.d(TAG, "onResponse: response from ");
 
                                 for (int i = 0; i < response.length(); i++) {
@@ -213,12 +224,13 @@ public class SuggestionsFragment extends Fragment {
 
 
                                     String maritalStatus = array.getString(10);
-                                    String hometown = array.getString(11);
+                                    String homeName = array.getString(11);
+                                    String stateName = array.getString(12);
+                                    String hometown = homeName + ", " + stateName;
+                                    String favouriteStatus = array.getString(13);
+                                    String interestStatus = array.getString(14);
 
-                                    String favouriteStatus = array.getString(12);
-                                    String interestStatus = array.getString(13);
-
-
+                                    Log.d(TAG, "onResponse: fav status and int status are ################## " + favouriteStatus + " " + interestStatus);
                                     SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);
 
 
@@ -230,7 +242,6 @@ public class SuggestionsFragment extends Fragment {
 
                                 }
 
-                                Log.d(TAG, "onResponse: size of mpdel list ----------------------------- " + suggestionModelList.size());
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -243,6 +254,12 @@ public class SuggestionsFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                         }
                     });
             return null;
@@ -250,7 +267,6 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pd.dismiss();
             super.onPostExecute(aVoid);
             suggestionAdapter.notifyDataSetChanged();
         }

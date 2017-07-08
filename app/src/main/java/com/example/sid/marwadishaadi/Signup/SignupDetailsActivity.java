@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,9 +24,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Place;
 import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +44,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 
 public class SignupDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -133,7 +143,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         caste = (Spinner) findViewById(R.id.user_caste);
 
-        location = (AutoCompleteTextView) findViewById(R.id.location);
+        location = (AutoCompleteTextView) findViewById(R.id.signup_location);
         location.setThreshold(1);
         getData();
         placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, placeslist);
@@ -205,16 +215,44 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
     public void getData() {
 
-        Place place = new Place("Mumbai", "Maharashtra", "India");
-        placeslist.add(place);
-
-        Place place1 = new Place("Mumbra", "Maharashtra", "India");
-        placeslist.add(place1);
-
-        Place place2 = new Place("Kanpur", "UP", "India");
-        placeslist.add(place2);
+        new FetchLocation().execute();
 
     }
+
+    public class FetchLocation extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            AndroidNetworking.post("http://192.168.43.143:5050/fetchCityStateCountry")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Place place;
+                            try {
+                                for(int i = 0;i<response.length();i++) {
+                                    JSONArray array = response.getJSONArray(i);
+                                    place = new Place(array.getString(0), array.getString(2), array.getString(4));
+                                    placeslist.add(place);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+
+            return null;
+        }
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setDate(final Calendar calendar) {

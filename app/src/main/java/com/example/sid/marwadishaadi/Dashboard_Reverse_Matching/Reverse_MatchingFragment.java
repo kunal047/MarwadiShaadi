@@ -87,51 +87,44 @@ public class Reverse_MatchingFragment extends Fragment {
     private void refreshContent() {
 
         reverseModelList.clear();
+        reverseAdapter.notifyDataSetChanged();
         new PrepareReverse().execute();
-        reverseAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void getData() {
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
 
-        // make new network call here fetching data
+        int age;
 
-        reverseAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+
+        age = currentYear - DOByear;
+
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
+                --age;
+            }
+        }
+        return age;
     }
+
 
     private class PrepareReverse extends AsyncTask<Void, Void, Void> {
+
         ProgressDialog pd = new ProgressDialog(getContext());
 
         @Override
         protected void onPreExecute() {
-            pd.setMessage("Please wait..");
+            pd.setTitle("Please wait..");
             pd.show();
             super.onPreExecute();
 
         }
-
-        public int getAge(int DOByear, int DOBmonth, int DOBday) {
-
-            int age;
-
-            final Calendar calenderToday = Calendar.getInstance();
-            int currentYear = calenderToday.get(Calendar.YEAR);
-            int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
-            int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-
-            age = currentYear - DOByear;
-
-            if (DOBmonth > currentMonth) {
-                --age;
-            } else if (DOBmonth == currentMonth) {
-                if (DOBday > todayDay) {
-                    --age;
-                }
-            }
-            return age;
-        }
-
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -139,16 +132,26 @@ public class Reverse_MatchingFragment extends Fragment {
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)
-                    .getResponseOnlyIfCached()
-                    .setMaxAgeCacheControl(0, TimeUnit.SECONDS)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
+
                             try {
 
+                                reverseModelList.clear();
+                                reverseAdapter.notifyDataSetChanged();
+
                                 Log.d(TAG, "onResponse: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + response.toString());
+                                Log.d(TAG, "onResponse: before filling " + reverseModelList.toString());
 
                                 for (int i = 0; i < response.length(); i++) {
 
@@ -173,8 +176,7 @@ public class Reverse_MatchingFragment extends Fragment {
                                     String education = array.getString(3);
                                     String occupationLocation = array.getString(4);
                                     String imageUrl = array.getString(5);
-
-                                    ReverseModel reverseModel = new ReverseModel("http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation);
+                                    ReverseModel reverseModel = new ReverseModel( "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation, customerNo);
                                     reverseModelList.add(reverseModel);
                                     reverseAdapter.notifyDataSetChanged();
 
@@ -191,6 +193,13 @@ public class Reverse_MatchingFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
+
                         }
                     });
             return null;
@@ -198,7 +207,6 @@ public class Reverse_MatchingFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pd.dismiss();
             super.onPostExecute(aVoid);
         }
     }

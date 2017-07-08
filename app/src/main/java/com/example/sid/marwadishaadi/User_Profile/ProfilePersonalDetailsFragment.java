@@ -1,7 +1,6 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,10 +17,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
-import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPersonalDetailsActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
+import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
+import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPersonalDetailsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,18 +34,19 @@ import java.util.Date;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class ProfilePersonalDetailsFragment extends Fragment {
 
+    private static int casebreak;
+    TextView name_age, maritalStatus, birthdate, gender, address, mobileNo, caste, height, weight, complexion_build, physicalStatus, education, educationDegree, collegeName_collegeLocation, currentOccupation, designation_companyName, companyLocation, annualIncome;
     private TextView edit_individual;
     private TextView edit_education;
     private TextView edit_profession;
-    private static int casebreak;
     private Button similar;
-
-
-    TextView name_age, maritalStatus, birthdate, gender, address, mobileNo, caste, height, weight, complexion_build, physicalStatus, education, educationDegree, collegeName_collegeLocation, currentOccupation, designation_companyName, companyLocation, annualIncome;
+    private String clickedID = customer_id;
 
 
     public ProfilePersonalDetailsFragment() {
@@ -85,11 +84,28 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         companyLocation = (TextView) mview.findViewById(R.id.occup_location);
         annualIncome = (TextView) mview.findViewById(R.id.annual_income);
 
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+
+        if (data.getStringExtra("customerNo") != null) {
+
+            clickedID = data.getStringExtra("customerNo");
+            new PersonalDetails().execute(clickedID);
+
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
+
+
+        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
+            edit_individual.setVisibility(View.GONE);
+            edit_education.setVisibility(View.GONE);
+            edit_profession.setVisibility(View.GONE);
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
 
 
 
-
-        new PersonalDetails().execute();
+        new PersonalDetails().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +131,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                 casebreak = 12;
 
 
-
-
                 BottomSheetDialogFragment btm = new BottomSheet(1);
                 btm.show(getFragmentManager(), btm.getTag());
             }
@@ -135,12 +149,39 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         return mview;
     }
 
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
+
+        int age;
+
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+
+        age = currentYear - DOByear;
+
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
+                --age;
+            }
+        }
+        return age;
+    }
+
+    public int getCasebreak() {
+        return this.casebreak;
+    }
+
     class PersonalDetails extends AsyncTask<String, String, String> {
+
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                    .addBodyParameter("customerNo", "A1028")
+            String cus = strings[0];
+            AndroidNetworking.post(URL + "profilePersonalDetails")
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -249,7 +290,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 } else {
                                     annualI = "No Income mentioned.";
                                 }
-                                Log.d(TAG, "onResponse: Annual Income ----------- "+array.getString(18) );
+                                Log.d(TAG, "onResponse: Annual Income ----------- " + array.getString(18));
 
                                 annualIncome.setText(annualI);
 
@@ -268,32 +309,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             return null;
         }
-    }
-
-
-    public int getAge(int DOByear, int DOBmonth, int DOBday) {
-
-        int age;
-
-        final Calendar calenderToday = Calendar.getInstance();
-        int currentYear = calenderToday.get(Calendar.YEAR);
-        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
-        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-
-        age = currentYear - DOByear;
-
-        if (DOBmonth > currentMonth) {
-            --age;
-        } else if (DOBmonth == currentMonth) {
-            if (DOBday > todayDay) {
-                --age;
-            }
-        }
-        return age;
-    }
-
-    public int getCasebreak() {
-        return this.casebreak;
     }
 
     //Edit Educational details of User Personal Details
