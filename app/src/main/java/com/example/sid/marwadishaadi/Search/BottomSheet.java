@@ -498,7 +498,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     strfname = fname.getText().toString();
                     strlname = lname.getText().toString();
                     strid = id.getText().toString();
-
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String gender = sharedPreferences.getString("gender", null);
+                    if (gender.contains("Male")) {
+                        gender = "Female";
+                    } else {
+                        gender = "Male";
+                    }
                     if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
 
                         Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
@@ -508,13 +514,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                     } else if (!strid.trim().isEmpty()) {
 
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        String gender = sharedPreferences.getString("gender", null);
-                        if (gender.contains("Male")) {
-                            gender = "Female";
-                        } else {
-                            gender = "Male";
-                        }
+
                         if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
                             Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
 
