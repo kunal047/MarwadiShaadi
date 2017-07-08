@@ -2,8 +2,10 @@ package com.example.sid.marwadishaadi.Dashboard_Suggestions;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -19,6 +22,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -247,7 +251,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                         context.startActivity(intent);
                     }
                     else{
-                        Toast.makeText(getAppContext(), " This feature is only for premium members", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, " This feature is only for premium members", Toast.LENGTH_LONG).show();
                         Intent intent=new Intent(context,UpgradeMembershipActivity.class);
                         context.startActivity(intent);
                     }

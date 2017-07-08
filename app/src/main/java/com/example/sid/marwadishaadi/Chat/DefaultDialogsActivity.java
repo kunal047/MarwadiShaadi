@@ -4,23 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionsFragment;
-import com.example.sid.marwadishaadi.LoginHistory.InternetActivity;
-import com.example.sid.marwadishaadi.LoginHistory.OnClearFromRecentService;
 import com.example.sid.marwadishaadi.R;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
@@ -29,21 +21,15 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter.OnDialogClickListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
 //Inbox TODO top bar should work
 public class DefaultDialogsActivity extends DemoDialogsActivity  {
     String success="",query="";
