@@ -4,8 +4,10 @@ package com.example.sid.marwadishaadi.Search;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +39,8 @@ import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.R;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -44,11 +48,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Search extends AppCompatActivity {
-
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
@@ -136,6 +140,23 @@ public class Search extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        String[] community= getResources().getStringArray(R.array.communities);
+        SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        CastList.clear();
+        for(int i=0;i<5;i++){
+            if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
+            {
+                CastList.add(community[i]);
+                Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray()[0]);
+            }else if(communityPackage.getString(community[i],null).contains("Yes")){
+                Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray());
+                CastList.add(community[i]);
+            }
+            Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null));
+        }
+
+        spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
+        spinnerCastSearch.setText(CastList.toString());
         init();
         height_from = (Spinner) findViewById(R.id.height_from);
         height_to = (Spinner) findViewById(R.id.height_to);
@@ -219,7 +240,6 @@ public class Search extends AppCompatActivity {
         searchaddbutton = (Button) findViewById(R.id.search_add_city);
         statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
         citytextview = (TextView) findViewById(R.id.text_view_search_add_city);
-        spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
         autoCompleteState = (EditText) findViewById(R.id.search_state);
         autocompletecity = (EditText) findViewById(R.id.search_city);
 
@@ -683,9 +703,17 @@ public class Search extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(),"Occupation are :------" + occupation.toString(),Toast.LENGTH_LONG).show();
                 */
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String gender = sharedPreferences.getString("gender", null);
+                if(gender.contains("Male")){
 
+                    gender = "Female";
+                }else {
+
+                    gender = "Male";
+                }
                 String query = "";
-                query = "select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where tbl_user_files.file_type='profile_image'";
+                query = "select  YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where (tbl_user_files.file_type='profile_image') and ( tbl_user.gender='"+gender+"' ) ";
 //                ON tbl_user.customer_no=tbl_user_files.customer_no
                 int year = Calendar.getInstance().get(Calendar.YEAR);
                 query += "and ( YEAR(tbl_user.birthdate)>=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
@@ -707,11 +735,27 @@ public class Search extends AppCompatActivity {
                         query += "and ( tbl_user.height<=" + s2.substring(s2.length() - 5, s2.length() - 2) + " and tbl_user.height>=" + s1.substring(s1.length() - 5, s1.length() - 2) + ")";
                     }
                 }
-                String str = "";
-                str = spinnerCastSearch.getText().toString();
 
-                if (str.equals("[]") || str.equals("")) {
+
+
+                String str = "";
+                Log.e(TAG, "onClick: countSpinnerSearch is ++++++++++++++++++++++++" );
+                str = spinnerCastSearch.getText().toString();
+                if (str.contains("[]") || str.equals("")) {
                     //no code is here
+//                    String [] community =getResources.getStringArray
+                    /*String[] community= getResources().getStringArray(R.array.communities);
+                    SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    query+=" and (";
+                    for(int i=0;i<4;i++){
+                        if(communityPackage.getString(community[i],null).contains("Yes")){
+                            query+="tbl_user.customer_no like '"+communityPackage.getString(community[i],null).toCharArray()[0]+"%' or ";
+                        }
+                    }
+                    if(communityPackage.getString(community[4],null).contains("Yes")){
+                        query+="tbl_user.customer_no like '"+communityPackage.getString(community[4],null).toCharArray()[0]+"%' ) ";
+                    }*/
+
                 } else if (str.contains("Doesn't Matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.caste_array);
@@ -721,10 +765,10 @@ public class Search extends AppCompatActivity {
                     query += "tbl_user.customer_no like \"" + arrayString[arrayString.length - 1].toCharArray()[0] + "%\" )  ";
                 } else {
                     query += "and ( ";
-                    for (int i = 0; i < countspinnerCastSearch - 1; i++) {
+                    for (int i = 0; i < CastList.size() - 1; i++) {
                         query += "tbl_user.customer_no like \"" + CastList.get(i).toCharArray()[0] + "%\" or ";
                     }
-                    query += "tbl_user.customer_no like \"" + CastList.get(countspinnerCastSearch - 1).toCharArray()[0] + "%\" )  ";
+                    query += "tbl_user.customer_no like \"" + CastList.get(CastList.size() - 1).toCharArray()[0] + "%\" )  ";
                 }
 
                 str = maritalstatus.getText().toString();
@@ -735,7 +779,7 @@ public class Search extends AppCompatActivity {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.status_search_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
-                        query += "tbl_user.marrital_status = \"" + arrayString[i] + "\" or ";
+                        query += "tbl_user.marrital_status =\"" + arrayString[i] + "\" or ";
                     }
                     query += "tbl_user.marrital_status = \"" + arrayString[arrayString.length - 1] + "\")";
                 } else {
@@ -770,7 +814,7 @@ public class Search extends AppCompatActivity {
                     //no code is here
                 } else if (str.contains("Doesn't Matter")) {
                     query += " and (";
-                    String[] arrayString = getResources().getStringArray(R.array.fstatus_array);
+                    String[] arrayString = getResources().getStringArray(R.array.aincome_search_array);
                     for (int i = 0; i < arrayString.length; i++) {
                         String string = arrayString[i];
                         String s = string.replace("L", "00000");
@@ -779,7 +823,6 @@ public class Search extends AppCompatActivity {
                     }
                     for (int i = 1; i < arrayString.length - 1; i++) {
                         query += "tbl_user.anuual_income = \"" + arrayString[i] + "\" or ";
-
                     }
                     query += "tbl_user.anuual_income = \"" + arrayString[arrayString.length - 1] + "\") ";
                 } else {
@@ -824,7 +867,7 @@ public class Search extends AppCompatActivity {
                     query += (" and ( tbl_user.education=\"" + educationAll.get(0).toString() + "\"");
 
                     for (int i = 1; i < educationAll.size(); i++) {
-                        query += (" or tbl_user.education=\" " + educationAll.get(i).toString() + "\"");
+                        query += (" or tbl_user.education=\"" + educationAll.get(i).toString() + "\"");
                     }
 
                 }
@@ -834,7 +877,7 @@ public class Search extends AppCompatActivity {
                     query += (" and ( tbl_user.complexion=\"" + complexion.get(0).toString() + "\"");
 
                     for (int i = 1; i < complexion.size(); i++) {
-                        query += (" or tbl_user.complexion=\" " + complexion.get(i).toString() + "\"");
+                        query += (" or tbl_user.complexion=\"" + complexion.get(i).toString() + "\"");
                     }
 
                 } else {
@@ -851,7 +894,7 @@ public class Search extends AppCompatActivity {
                     query += (" and (  tbl_user.body_structure=\"" + complexion.get(0).toString() + "\"");
 
                     for (int i = 1; i < bodyType.size(); i++) {
-                        query += (" or tbl_user.body_structure=\" " + bodyType.get(i).toString() + "\"");
+                        query += (" or tbl_user.body_structure=\"" + bodyType.get(i).toString() + "\"");
                     }
 
                 } else {
@@ -905,13 +948,13 @@ public class Search extends AppCompatActivity {
                 if (mangli.equals("Doesn't matter")) {
                     //nothig is here for you
                 } else {
-                    query += " and tbl_user.manglik=\"" + mangli + "\"";
+                    query += " and ( tbl_user.manglik=\"" + mangli + "\" ) ";
                 }
                 String childs = children.getSelectedItem().toString();
                 if (childs.equals("Doesn't Matter")) {
                     //nthg is here for you
                 } else {
-                    query += " and tbl_user.children=\"" + childs + "\"";
+                    query += " and ( tbl_user.children=\"" + childs + "\")";
                 }
 
                 String itm = sort_by.getSelectedItem().toString();
@@ -921,7 +964,7 @@ public class Search extends AppCompatActivity {
                 } else if (itm.equals("Recent Profiles")) {
                     query += " order by tbl_user.created_on asc ";
                 } else {
-                    query += "order by tbl_login.last_activity_on asc ";
+                    query += " order by tbl_login.last_activity_on asc ";
                 }
 
                 new BackEnd().execute(query);
@@ -1027,7 +1070,23 @@ public class Search extends AppCompatActivity {
                 }
             }
         });
+        very_fair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if (int_very_fair) {
+                    int_very_fair = false;
+                    complexion.remove(very_fair.getText().toString());
+                    Toast.makeText(getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
+
+                } else if (!int_very_fair) {
+                    int_very_fair = true;
+                    complexion.add(very_fair.getText().toString());
+                    Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
         dark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1282,66 +1341,86 @@ public class Search extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(R.anim.exit,0);
         return true;
     }
 
-        private class BackEnd extends AsyncTask<String, String, String> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                dialog = new ProgressDialog(Search.this);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setCancelable(false);
-                dialog.setMessage("Please Wait...");
-                dialog.show();
-            }
+    private class BackEnd extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
 
-            @Override
-            protected String doInBackground(String... strings) {
-                AndroidNetworking.post("http://192.168.43.61:5050/searchById")
-                        .addBodyParameter("query", strings[0])
-                        .setPriority(Priority.HIGH)
-                        .build()
-                        .getAsJSONArray(new JSONArrayRequestListener() {
+            dialog = new ProgressDialog(Search.this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.setMessage("Please Wait...");
+            dialog.show();
+            super.onPreExecute();
+        }
 
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                Log.e(TAG, "onResponse: -------------- "+response.toString());
-                                for(int i=0;i<response.length();i++){
-                                    JSONArray user= null;
-                                    try {
-                                        user = response.getJSONArray(i);
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.e(TAG, "doInBackground: query is ------"+strings[0]);
+            AndroidNetworking.post("http://208.91.199.50:5000/searchById")
+                    .addBodyParameter("query", strings[0])
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.e(TAG, "onResponse: -------------- "+response.toString());
+                            Vector<String> customers=new Vector<String>();
+                            for(int i=0;i<response.length();i++){
+                                JSONArray user= null;
+                                try {
+                                    user = response.getJSONArray(i);
+                                    if((customers.indexOf(user.getString(3))==-1)){
+                                        customers.add(user.getString(3));
                                         Calendar calender = Calendar.getInstance();
                                         int year = calender.get(Calendar.YEAR);
-                                        SuggestionModel suggestionModel= new SuggestionModel(year-(int)user.get(0),"http://www.marwadishaadi.com/uploads/cust_"+user.get(3).toString()+"/thumb/"+user.get(1).toString(),user.get(2).toString(),user.get(3).toString(),user.get(4).toString(),user.get(5).toString(),user.get(6).toString(),user.get(7).toString(),user.get(8).toString(),user.get(9).toString(),user.get(10).toString(),user.get(11).toString(), user.get(12).toString(), user.get(13).toString());
-                                        suggestionModelList2.add(suggestionModel);
-
-                                    }
-                                    catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                        SuggestionModel suggestionModel;
+                                        if(user.get(8).equals("")){
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }else{
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }
+                                        suggestionModelList2.add(suggestionModel);}
+                                }
+                                catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
+                            Search.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
+                                    intent.putExtra("which","advSearch");
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void onError(ANError error) {
-                                Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG);
-                            }
-                        });
+                        @Override
+                        public void onError(ANError error) {
+                            Search.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                }
+                            });
+                            Log.e(TAG, "onError: error in search is "+error );
+                            Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG).show();
+                        }
+                    });
 
-                return null;
-            }
+            return null;
+        }
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                dialog.dismiss();
-                Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
-                intent.putExtra("which","advSearch");
-                startActivity(intent);
-                finish();
-            }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
         }
     }
+}
