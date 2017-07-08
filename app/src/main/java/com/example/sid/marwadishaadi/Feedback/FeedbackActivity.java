@@ -2,9 +2,11 @@ package com.example.sid.marwadishaadi.Feedback;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -39,9 +41,6 @@ public class FeedbackActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,11 +72,16 @@ public class FeedbackActivity extends AppCompatActivity {
                 if (email_response.isChecked()){
                     email_response_required = true;
                 }
-
+                
                 String phone_details = getPhoneDetails();
                 String bodyuser = "\n\n\n\n\nUser Device details\n-----------------------\n" + phone_details;
-                String username = "Siddhesh Rane";
+                String username = "Reply Not Required";
+                if(email_response_required){
+                    username="Reply Required";
+                }
+                SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String userid ="S123";
+                userid=sharedPreferences.getString("customer_id",null);
                 String subject = "Feedback from user " + username + " ( " + userid + " ) ";
                 String feedback=fftext.getText().toString() + bodyuser;
                 if(!feedback.trim().isEmpty())
@@ -131,7 +135,6 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
-        overridePendingTransition(R.anim.exit,0);
         return true;
     }
 }
