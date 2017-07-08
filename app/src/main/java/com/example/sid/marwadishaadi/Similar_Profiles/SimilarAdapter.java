@@ -19,7 +19,7 @@ import java.util.List;
 
 public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.MyViewHolder> {
 
-   List<SimilarModel> similarModelList;
+    List<SimilarModel> similarModelList;
     Context context;
 
     public SimilarAdapter(List<SimilarModel> similarModelList, Context context) {

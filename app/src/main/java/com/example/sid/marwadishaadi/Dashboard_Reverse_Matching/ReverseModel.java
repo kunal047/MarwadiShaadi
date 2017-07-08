@@ -9,14 +9,23 @@ public class ReverseModel {
     private String img_url;
     private String name;
     private int age;
-    private String educationDegree, location;
+    private String educationDegree, location, customerNo;
 
-    public ReverseModel(String img_url, String name, int age, String educationDegree, String location) {
+    public ReverseModel(String img_url, String name, int age, String educationDegree, String location, String customerNo) {
         this.img_url = img_url;
         this.name = name;
         this.age = age;
         this.educationDegree = educationDegree;
         this.location = location;
+        this.customerNo = customerNo;
+    }
+
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
     }
 
     public String getEducationDegree() {

@@ -177,7 +177,7 @@ public class Reverse_MatchingFragment extends Fragment {
                                     String occupationLocation = array.getString(4);
                                     String imageUrl = array.getString(5);
 
-                                    ReverseModel reverseModel = new ReverseModel("http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation);
+                                    ReverseModel reverseModel = new ReverseModel( "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation, customerNo);
                                     reverseModelList.add(reverseModel);
                                     reverseAdapter.notifyDataSetChanged();
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -28,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class ProfileAdditionalDetailsFragment extends Fragment {
 
@@ -38,6 +41,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private TextView edit_horoscope;
     private static  int casebreak;
     private Button similar;
+    private String clickedID  = customer_id;
 
     TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
 
@@ -125,7 +129,26 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
 
-        new ProfileAdditionalDetails().execute();
+
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+        if (data.getStringExtra("customerNo") != null) {
+
+            clickedID = data.getStringExtra("customerNo");
+            new ProfileAdditionalDetails().execute(clickedID);
+
+            edit_about.setVisibility(View.GONE);
+            edit_hobbies.setVisibility(View.GONE);
+            edit_horoscope.setVisibility(View.GONE);
+            edit_lifestyle.setVisibility(View.GONE);
+
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+        new ProfileAdditionalDetails().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,11 +206,13 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
 
 
-    private class ProfileAdditionalDetails extends AsyncTask<Void,Void,Void>{
+    private class ProfileAdditionalDetails extends AsyncTask<String,Void,Void>{
         @Override
-        protected Void doInBackground(Void... params){
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                    .addBodyParameter("customerNo","A1028")
+        protected Void doInBackground(String... params){
+
+            String cus = params[0];
+            AndroidNetworking.post( URL + "profileAdditionalDetails")
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener(){

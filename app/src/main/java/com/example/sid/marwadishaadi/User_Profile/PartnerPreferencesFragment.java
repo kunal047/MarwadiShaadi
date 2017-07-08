@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class PartnerPreferencesFragment extends Fragment {
@@ -37,6 +39,10 @@ public class PartnerPreferencesFragment extends Fragment {
     private Button similar;
 
     private TextView age,height,build,complexion,physicalStatus,highestDegree,occup,maritalStatus,annualIncome,city;
+
+    private String clickedID  = customer_id;
+
+
     public PartnerPreferencesFragment() {
         // Required empty public constructor
     }
@@ -61,7 +67,17 @@ public class PartnerPreferencesFragment extends Fragment {
         maritalStatus = (TextView)mview.findViewById(R.id.marital_status);
         annualIncome = (TextView)mview.findViewById(R.id.annual_income);
 
-        new PartnerPreference().execute();
+        Intent data = getActivity().getIntent();
+        String from = data.getStringExtra("from");
+        if (data.getStringExtra("customerNo") != null) {
+
+            clickedID = data.getStringExtra("customerNo");
+            new PartnerPreference().execute(clickedID);
+            edit_prefs.setVisibility(View.GONE);
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
+
+        new PartnerPreference().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +102,13 @@ public class PartnerPreferencesFragment extends Fragment {
     }
 
 
-    class PartnerPreference extends AsyncTask<Void,Void,Void>{
+    class PartnerPreference extends AsyncTask<String,Void,Void>{
 
         @Override
-        protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePartnerPreferences")
-                    .addBodyParameter("customerNo", "A1028")
+        protected Void doInBackground(String... params) {
+            String cus = params[0];
+            AndroidNetworking.post(URL + "profilePartnerPreferences")
+                    .addBodyParameter("customerNo", cus)
                     .setTag(this)
                     .setPriority(Priority.MEDIUM)
                     .build()

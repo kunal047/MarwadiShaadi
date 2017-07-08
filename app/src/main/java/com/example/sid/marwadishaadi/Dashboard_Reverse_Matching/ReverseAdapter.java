@@ -38,7 +38,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         ReverseModel rev = reverseModelList.get(position);
         Glide.with(context)
                 .load(rev.getImg_url())
@@ -47,6 +47,15 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
         holder.age.setText(String.valueOf(rev.getAge()) + " yrs");
         holder.education.setText(rev.getEducationDegree());
         holder.city.setText(rev.getLocation());
+        holder.dp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("cust", reverseModelList.get(position).getCustomerNo());
+                context.startActivity(i);
+            }
+        });
+
     }
 
 
@@ -70,13 +79,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
             city = (TextView) itemView.findViewById(R.id.user_profile_city);
             education = (TextView) itemView.findViewById(R.id.user_profile_education);
 
-            dp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(i);
-                }
-            });
+
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override

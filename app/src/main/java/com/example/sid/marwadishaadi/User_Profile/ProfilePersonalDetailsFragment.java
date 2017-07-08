@@ -90,16 +90,12 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             clickedID = data.getStringExtra("customerNo");
             new PersonalDetails().execute(clickedID);
-            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
-        }
-
-
-        if ("suggestion".equals(from)) {
-
             edit_individual.setVisibility(View.GONE);
             edit_education.setVisibility(View.GONE);
             edit_profession.setVisibility(View.GONE);
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
         }
+
 
 
         new PersonalDetails().execute(clickedID);
