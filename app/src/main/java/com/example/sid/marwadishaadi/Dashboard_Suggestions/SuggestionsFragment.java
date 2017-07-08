@@ -144,6 +144,7 @@ public class SuggestionsFragment extends Fragment {
         protected void onPreExecute() {
             pd.setMessage("Please wait..");
             pd.setCancelable(false);
+            pd.setCanceledOnTouchOutside(false);
             pd.show();
             super.onPreExecute();
 

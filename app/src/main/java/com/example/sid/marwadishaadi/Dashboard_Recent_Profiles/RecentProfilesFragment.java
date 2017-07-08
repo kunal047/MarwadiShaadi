@@ -116,6 +116,7 @@ public class RecentProfilesFragment extends Fragment {
         protected void onPreExecute() {
             mProgressDialog.setTitle("Loading");
             mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
             super.onPreExecute();
         }

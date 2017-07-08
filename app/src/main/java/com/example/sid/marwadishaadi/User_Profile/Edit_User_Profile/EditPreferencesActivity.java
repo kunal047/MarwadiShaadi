@@ -635,6 +635,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        onBackPressed();
         finish();
         return true;
     }

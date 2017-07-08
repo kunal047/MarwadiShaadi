@@ -121,6 +121,8 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             pd.setTitle("Please wait..");
+            pd.setCanceledOnTouchOutside(false);
+            pd.setCancelable(false);
             pd.show();
             super.onPreExecute();
 

@@ -237,6 +237,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
     @Override
     public boolean onSupportNavigateUp(){
+        onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit,0);
         return true;

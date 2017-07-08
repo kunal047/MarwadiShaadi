@@ -3,8 +3,10 @@ package com.example.sid.marwadishaadi.Membership;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -78,7 +80,9 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         name=(TextView)findViewById(R.id.membership_name);
         id=(TextView)findViewById(R.id.membership_id);
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        name.setText(sharedPreferences.getString("first_name",null)+" "+ sharedPreferences.getString("surname",null));
+        id.setText(sharedPreferences.getString("customer_id",null));
         agarwal_duration=(TextView)findViewById(R.id.duration_agarwal);
         agarwal_start=(TextView)findViewById(R.id.start_agarwal);
         agarwal_end=(TextView)findViewById(R.id.end_agarwal);
@@ -106,7 +110,6 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         others.setVisibility(View.GONE);
         no.setVisibility(View.GONE);
 
-        customer_id="A1001";
         String query = "SELECT community, duration, date(purchase_date), date(expiry_date), is_active FROM `tbl_user_community_package` WHERE customer_no=\""+customer_id+"\";";
         Log.d(TAG, "onCreate: ----- query is "+query);
         new BackEndMembership().execute(query);
@@ -216,6 +219,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     }
     @Override
     public boolean onSupportNavigateUp(){
+        onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit,0);
         return true;

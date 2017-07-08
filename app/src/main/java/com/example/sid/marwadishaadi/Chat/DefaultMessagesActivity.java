@@ -187,7 +187,7 @@ private void onUnblockPressed(int id) {
     }
       @Override
     public void onBackPressed() {
-        Intent intent=new Intent(getApplicationContext(),DefaultMessagesActivity.class);
+        Intent intent=new Intent(getApplicationContext(),DefaultDialogsActivity.class);
         startActivity(intent);
     }
     @Override

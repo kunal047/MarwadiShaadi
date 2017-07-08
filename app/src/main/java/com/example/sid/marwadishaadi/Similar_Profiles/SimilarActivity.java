@@ -84,12 +84,12 @@ public class SimilarActivity extends AppCompatActivity{
 
 
     private class PrepareSimilar extends AsyncTask<Void, Void, Void> {
-//        ProgressDialog pd = new ProgressDialog(getApplicationContext());
+        ProgressDialog pd = new ProgressDialog(SimilarActivity.this);
 
         @Override
         protected void onPreExecute() {
-//            pd.setMessage("Please wait..");
-//            pd.show();
+            pd.setMessage("Please wait..");
+            pd.show();
 //            super.onPreExecute();
 
         }
@@ -175,12 +175,24 @@ public class SimilarActivity extends AppCompatActivity{
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+                            SimilarActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                         }
 
                         @Override
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            SimilarActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
                         }
                     });
             return null;
@@ -195,6 +207,7 @@ public class SimilarActivity extends AppCompatActivity{
 
     @Override
     public boolean onSupportNavigateUp(){
+        onBackPressed();
         finish();
         return true;
     }

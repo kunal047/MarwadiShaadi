@@ -34,6 +34,7 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.example.sid.marwadishaadi.Chat.Dialog;
+import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.R;
@@ -1341,7 +1342,15 @@ public class Search extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent= new Intent(Search.this, DashboardActivity.class);
+        startActivity(intent);
+        super.onBackPressed();
     }
 
     private class BackEnd extends AsyncTask<String, String, String> {

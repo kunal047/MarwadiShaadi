@@ -3,8 +3,10 @@ package com.example.sid.marwadishaadi.Membership;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntegerRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.example.sid.marwadishaadi.Payment.activity.StatusActivity;
 import com.example.sid.marwadishaadi.Payment.activity.WebViewActivity;
 import com.example.sid.marwadishaadi.Payment.utility.AvenuesParams;
 import com.example.sid.marwadishaadi.Payment.utility.ServiceUtility;
@@ -44,11 +47,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+//import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
 
 
 public class MembershipActivity extends AppCompatActivity {
 
-public  AlertDialog.Builder reset;
+    public  AlertDialog.Builder reset;
     public static Integer calculate;
     public EditText accessCode, merchantId, currency, amount, orderId, rsaKeyUrl, redirectUrl, cancelUrl;
     RadioButton radio1, radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10, radio11, radio12, radio13, radio14, radio15, radio16, radio17, radio18;
@@ -60,7 +65,6 @@ public  AlertDialog.Builder reset;
     View mview;
     Button skip,coupon;
     String str;
-    ProgressDialog dialog;
 
     public static Integer getCalculate() {
         return calculate;
@@ -169,7 +173,7 @@ public  AlertDialog.Builder reset;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         PackageInfos=new ArrayList<>();
         Toolbar toolbar = (Toolbar) findViewById(R.id.membership_toolbar);
-        toolbar.setTitle("Membership Status");
+        toolbar.setTitle("MembershipActivity");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -221,49 +225,49 @@ public  AlertDialog.Builder reset;
 
                     Button redeem = (Button) reset_view.findViewById(R.id.redeem);
 
-                        Log.e(TAG, "onClick: ------------"+counts );
-                        redeem.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(counts==0) {
-                                    Analytics_Util.logAnalytic(mFirebaseAnalytics,"Coupon Code","button");
-                                    if (tvamount.getText().toString().trim().equals("0")) {
-                                        Toast.makeText(MembershipActivity.this, "Please select at least one package to redeem coupon" + getEmojiByUnicode(0x1F60E), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "onClick: ------------"+counts );
+                    redeem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(counts==0) {
+                                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Coupon Code","button");
+                                if (tvamount.getText().toString().trim().equals("0")) {
+                                    Toast.makeText(MembershipActivity.this, "Please select at least one package to redeem coupon" + getEmojiByUnicode(0x1F60E), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    String user_code = code.getText().toString().trim();
+                                    if (user_code.trim().equals("")) {
+                                        Toast.makeText(MembershipActivity.this, "Please Enter coupon code" + getEmojiByUnicode(0x1F611), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        String user_code = code.getText().toString().trim();
-                                        if (user_code.trim().equals("")) {
-                                            Toast.makeText(MembershipActivity.this, "Please Enter coupon code" + getEmojiByUnicode(0x1F611), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            new BCKND().execute(user_code);
-                                        }
+                                        new BCKND().execute(user_code);
                                     }
+                                }
 
-                                }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"Already Added one Coupon",Toast.LENGTH_SHORT).show();
-                                }
-//                        Toast.makeText(MembershipActivity.this, "yayay", Toast.LENGTH_SHORT).show();
                             }
-                        });
+                            else {
+                                Toast.makeText(getApplicationContext(),"Already Added one Coupon",Toast.LENGTH_SHORT).show();
+                            }
+//                        Toast.makeText(MembershipActivity.this, "yayay", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
-                        AlertDialog resetbox = reset.create();
-                        resetbox.show();
+                    AlertDialog resetbox = reset.create();
+                    resetbox.show();
 
                 }
                 else {
 //                    Toast.makeText(getApplicationContext(),"Already Added one coupon code"+getEmojiByUnicode(0x1F636),Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder ald = new AlertDialog.Builder(view.getRootView().getContext());
-                                                    ald.setTitle("Coupon Code details are");
-                                                    String ad = "";
-                                                    if (pair_c_discount_type.equals("Percent")) {
-                                                        ad = "%";
-                                                    }
-                                                    else {
-                                                        ad="Rs.";
-                                                    }
-    //                                            +"coupon type : "+pair_c_type+"\n"
-                                                    ald.setMessage("coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "Discount will added when go for payment");
+                    ald.setTitle("Coupon Code details are");
+                    String ad = "";
+                    if (pair_c_discount_type.equals("Percent")) {
+                        ad = "%";
+                    }
+                    else {
+                        ad="Rs.";
+                    }
+                    //                                            +"coupon type : "+pair_c_type+"\n"
+                    ald.setMessage("coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "Discount will added when go for payment");
                     AlertDialog resetbox = ald.create();
                     resetbox.show();
                 }
@@ -272,86 +276,86 @@ public  AlertDialog.Builder reset;
         });
 
 
-                clear1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        clear1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        gr1.clearCheck();
-                        c = c2 + c3 + c4 + c5;
-                        c1 = 0;
-                        tvamount.setText(String.valueOf(c));
+                gr1.clearCheck();
+                c = c2 + c3 + c4 + c5;
+                c1 = 0;
+                tvamount.setText(String.valueOf(c));
 
-                    }
-                });
+            }
+        });
 
-                clear2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr2.clearCheck();
-                        c = c1 + c3 + c4 + c5;
-                        c2 = 0;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        clear2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr2.clearCheck();
+                c = c1 + c3 + c4 + c5;
+                c2 = 0;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                clear3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr3.clearCheck();
-                        c = c2 + c1 + c4 + c5;
-                        c3 = 0;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        clear3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr3.clearCheck();
+                c = c2 + c1 + c4 + c5;
+                c3 = 0;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                clear4.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr4.clearCheck();
-                        c = c2 + c3 + c1 + c5;
-                        c4 = 0;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        clear4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr4.clearCheck();
+                c = c2 + c3 + c1 + c5;
+                c4 = 0;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                clear5.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr5.clearCheck();
-                        c = c2 + c3 + c4 + c1;
-                        c5 = 0;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        clear5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr5.clearCheck();
+                c = c2 + c3 + c4 + c1;
+                c5 = 0;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                clear6.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c = c6 = 0;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        clear6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c = c6 = 0;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio1 = (RadioButton) findViewById(R.id.radio1);
-                radio2 = (RadioButton) findViewById(R.id.radio2);
-                radio3 = (RadioButton) findViewById(R.id.radio3);
-                radio4 = (RadioButton) findViewById(R.id.radio4);
-                radio5 = (RadioButton) findViewById(R.id.radio5);
-                radio6 = (RadioButton) findViewById(R.id.radio6);
-                radio7 = (RadioButton) findViewById(R.id.radio7);
+        radio1 = (RadioButton) findViewById(R.id.radio1);
+        radio2 = (RadioButton) findViewById(R.id.radio2);
+        radio3 = (RadioButton) findViewById(R.id.radio3);
+        radio4 = (RadioButton) findViewById(R.id.radio4);
+        radio5 = (RadioButton) findViewById(R.id.radio5);
+        radio6 = (RadioButton) findViewById(R.id.radio6);
+        radio7 = (RadioButton) findViewById(R.id.radio7);
 
-                radio8 = (RadioButton) findViewById(R.id.radio8);
-                radio9 = (RadioButton) findViewById(R.id.radio9);
-                radio10 = (RadioButton) findViewById(R.id.radio10);
-                radio11 = (RadioButton) findViewById(R.id.radio11);
-                radio12 = (RadioButton) findViewById(R.id.radio12);
-                radio13 = (RadioButton) findViewById(R.id.radio13);
-                radio14 = (RadioButton) findViewById(R.id.radio14);
-                radio15 = (RadioButton) findViewById(R.id.radio15);
-                radio16 = (RadioButton) findViewById(R.id.radio16);
-                radio17 = (RadioButton) findViewById(R.id.radio17);
-                radio18 = (RadioButton) findViewById(R.id.radio18);
+        radio8 = (RadioButton) findViewById(R.id.radio8);
+        radio9 = (RadioButton) findViewById(R.id.radio9);
+        radio10 = (RadioButton) findViewById(R.id.radio10);
+        radio11 = (RadioButton) findViewById(R.id.radio11);
+        radio12 = (RadioButton) findViewById(R.id.radio12);
+        radio13 = (RadioButton) findViewById(R.id.radio13);
+        radio14 = (RadioButton) findViewById(R.id.radio14);
+        radio15 = (RadioButton) findViewById(R.id.radio15);
+        radio16 = (RadioButton) findViewById(R.id.radio16);
+        radio17 = (RadioButton) findViewById(R.id.radio17);
+        radio18 = (RadioButton) findViewById(R.id.radio18);
 
         dash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -362,6 +366,7 @@ public  AlertDialog.Builder reset;
                     if (counts==1) {
                         tvamount.setText(Integer.toString(calculate));
                     }
+                    checker();
                     Intent intent = new Intent(MembershipActivity.this, WebViewActivity.class);
                     intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull(accessCode.getText()).toString().trim());
                     intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(merchantId.getText()).toString().trim());
@@ -382,208 +387,208 @@ public  AlertDialog.Builder reset;
             }
         });
 
-                radio1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c1 = 1000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        radio1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c1 = 1000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c1 = 2000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        radio2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c1 = 2000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c1 = 2500;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        radio3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c1 = 2500;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio4.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
+        radio4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
 
-                        c2 = 1000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+                c2 = 1000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio5.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
+        radio5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
 
-                        c2 = 2000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+                c2 = 2000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                radio6.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c2 = 2500;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-
-
-                radio7.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-
-                        c3 = 1000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-
-                radio8.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-
-                        c3 = 2000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        radio6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c2 = 2500;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
 
-                radio9.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
+        radio7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c3 = 1000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+
+        radio8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c3 = 2000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
 
-                        c3 = 2500;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
+        radio9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
 
-                radio10.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
 
-                        c4 = 1000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-                radio11.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-                        c4 = 2000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
+                c3 = 2500;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
 
-                    }
-                });
-                radio12.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
+        radio10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
 
-                        c4 = 2500;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-
-                radio13.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-
-                        c5 = 1000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-                radio14.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-
-                        c5 = 2000;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-                radio15.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr6.clearCheck();
-
-                        c5 = 2500;
-                        c = c1 + c2 + c3 + c4 + c5;
-                        tvamount.setText(String.valueOf(c));
-                    }
-                });
-                radio16.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        gr1.clearCheck();
-                        gr2.clearCheck();
-                        gr3.clearCheck();
-                        gr4.clearCheck();
-                        gr5.clearCheck();
-                        c1 = c2 = c3 = c4 = c5 = 0;
-                        c6 = 5000;
-                        tvamount.setText(String.valueOf(c6));
-                    }
-                });
-                radio17.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gr1.clearCheck();
-                        gr2.clearCheck();
-                        gr3.clearCheck();
-                        gr4.clearCheck();
-                        gr5.clearCheck();
-                        c1 = c2 = c3 = c4 = c5 = 0;
-                        c6 = 10000;
-                        tvamount.setText(String.valueOf(c6));
-                    }
-                });
-                radio18.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        gr1.clearCheck();
-                        gr2.clearCheck();
-                        gr3.clearCheck();
-                        gr4.clearCheck();
-                        gr5.clearCheck();
-                        c1 = c2 = c3 = c4 = c5 = 0;
-                        c6 = 12500;
-                        tvamount.setText(String.valueOf(c6));
-                    }
-                });
+                c4 = 1000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+        radio11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+                c4 = 2000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
 
             }
+        });
+        radio12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c4 = 2500;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+
+        radio13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c5 = 1000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+        radio14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c5 = 2000;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+        radio15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr6.clearCheck();
+
+                c5 = 2500;
+                c = c1 + c2 + c3 + c4 + c5;
+                tvamount.setText(String.valueOf(c));
+            }
+        });
+        radio16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gr1.clearCheck();
+                gr2.clearCheck();
+                gr3.clearCheck();
+                gr4.clearCheck();
+                gr5.clearCheck();
+                c1 = c2 = c3 = c4 = c5 = 0;
+                c6 = 5000;
+                tvamount.setText(String.valueOf(c6));
+            }
+        });
+        radio17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gr1.clearCheck();
+                gr2.clearCheck();
+                gr3.clearCheck();
+                gr4.clearCheck();
+                gr5.clearCheck();
+                c1 = c2 = c3 = c4 = c5 = 0;
+                c6 = 10000;
+                tvamount.setText(String.valueOf(c6));
+            }
+        });
+        radio18.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gr1.clearCheck();
+                gr2.clearCheck();
+                gr3.clearCheck();
+                gr4.clearCheck();
+                gr5.clearCheck();
+                c1 = c2 = c3 = c4 = c5 = 0;
+                c6 = 12500;
+                tvamount.setText(String.valueOf(c6));
+            }
+        });
+
+    }
     private void init()
     {
         accessCode = (EditText) mview.findViewById(R.id.accessCode);
@@ -596,56 +601,61 @@ public  AlertDialog.Builder reset;
     }
 
 
-            @Override
-            public boolean onSupportNavigateUp() {
-                counts=0;
-                finish();
-                overridePendingTransition(R.anim.exit,0);
-                return true;
-            }
-            class BCKND extends AsyncTask<String,String,String>
-            {
-                ProgressDialog pd;
+    @Override
+    public boolean onSupportNavigateUp() {
+        counts=0;
+        finish();
+        return true;
+    }
+    class BCKND extends AsyncTask<String,String,String>
+    {
+        ProgressDialog pd;
 
-                @Override
-                protected void onPreExecute() {
-                    pd=new ProgressDialog(getApplicationContext());
-                    pd.setMessage("Checking coupon code");
-                    pd.setCanceledOnTouchOutside(false);
+        @Override
+        protected void onPreExecute() {
+            pd=new ProgressDialog(MembershipActivity.this);
+            pd.setMessage("Checking coupon code");
+            pd.setCanceledOnTouchOutside(false);
+            pd.show();
+            super.onPreExecute();
+        }
 
-                    super.onPreExecute();
-                }
-
-                @Override
-                protected String doInBackground(String... strings) {
-                    String query= "SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM tbl_coupans where c_code=\""+strings[0]+"\"";
-                    Log.e(TAG, "doInBackground: ------------------- query is "+query );
-                    AndroidNetworking.post("http://10.0.0.21:5050/checkCoupon")
-                            .addBodyParameter("query",query)
-                            .setPriority(Priority.HIGH)
-                            .build()
-                            .getAsJSONArray(new JSONArrayRequestListener() {
+        @Override
+        protected String doInBackground(String... strings) {
+            String query= "SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM tbl_coupans where c_code=\""+strings[0]+"\"";
+            Log.e(TAG, "doInBackground: ------------------- query is "+query );
+            AndroidNetworking.post("http://208.91.199.50:5000/checkCoupon")
+                    .addBodyParameter("query",query)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            //query is SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM `tbl_coupans` where c_code="coupon_code"
+                            Log.e(TAG, "onResponse: --------------- response is "+response.toString() );
+                            MembershipActivity.this.runOnUiThread(new Runnable() {
                                 @Override
-                                public void onResponse(JSONArray response) {
-                                    //query is SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM `tbl_coupans` where c_code="coupon_code"
-                                    Log.e(TAG, "onResponse: --------------- response is "+response.toString() );
+                                public void run() {
+                                    pd.dismiss();
+                                }
+                            });
+                            try {
+                                if(response.getString(0).equals("no"))
+                                {
+                                    Toast.makeText(MembershipActivity.this, "No coupon code found"+getEmojiByUnicode(0x1F60E), Toast.LENGTH_LONG).show();
+                                    goAway="NO";
+                                }
+                                else {
                                     try {
-                                        if(response.getString(0).equals("no"))
-                                        {
-                                            Toast.makeText(MembershipActivity.this, "No coupon code found"+getEmojiByUnicode(0x1F60E), Toast.LENGTH_LONG).show();
-                                            goAway="NO";
-                                        }
-                                        else {
-                                            try {
-                                                pair_c_code = response.get(0).toString();
-                                                pair_c_type = response.get(1).toString();
-                                                pair_c_discount_type = response.get(2).toString();
-                                                pair_c_discount = response.get(3).toString();
-                                                pair_c_used = response.get(4).toString();
-                                                pair_active = response.get(5).toString();
-                                                pair_c_allowed_number = response.get(6).toString();
-                                                Integer allow = Integer.parseInt(pair_c_allowed_number), used = Integer.parseInt(pair_c_used), amnt = Integer.parseInt(pair_c_discount);
-                                                if (pair_active.equals("Yes") & (allow > used | allow == 0)) {
+                                        pair_c_code = response.get(0).toString();
+                                        pair_c_type = response.get(1).toString();
+                                        pair_c_discount_type = response.get(2).toString();
+                                        pair_c_discount = response.get(3).toString();
+                                        pair_c_used = response.get(4).toString();
+                                        pair_active = response.get(5).toString();
+                                        pair_c_allowed_number = response.get(6).toString();
+                                        Integer allow = Integer.parseInt(pair_c_allowed_number), used = Integer.parseInt(pair_c_used), amnt = Integer.parseInt(pair_c_discount);
+                                        if (pair_active.equals("Yes") & (allow > used | allow == 0)) {
 
                                                     /*AlertDialog.Builder ald = new AlertDialog.Builder(getApplicationContext());
                                                     ald.setTitle("Coupon Code details are");
@@ -655,47 +665,64 @@ public  AlertDialog.Builder reset;
                                                     }
     //                                            +"coupon type : "+pair_c_type+"\n"
                                                     ald.setMessage("coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "");
-                                                    ald.show();*/
-                                                     calculate=Integer.parseInt(tvamount.getText().toString());
-                                                    if(pair_c_discount_type.equals("Amount"))  {
-                                                        calculate=calculate-Integer.parseInt(pair_c_discount);
-                                                    } else if (pair_c_discount_type.equals("Percent")){
-                                                        calculate=(calculate*(100-Integer.parseInt(pair_c_discount)))/100;
-                                                    }
-                                                    goAway="GO";
-                                                    //tvamount.setText(Integer.toString(calculate));
-                                                    counts=1;
-                                                    Log.e(TAG, "onResponse: ---"+counts );
-                                                    Toast.makeText(MembershipActivity.this,"Added coupon successfully Discount will added when go for payment "+getEmojiByUnicode(0x1F60A),Toast.LENGTH_LONG).show();
-                                                }
-                                                else {
-                                                    Toast.makeText(MembershipActivity.this, "This coupon code is no longer available"+getEmojiByUnicode(0x1F620), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }catch(JSONException e){
-                                                    e.printStackTrace();
-                                                }
 
+
+                                                    ald.show();*/
+                                            SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                            SharedPreferences.Editor edit=saved_values.edit();
+                                            if(allow!=0){
+                                                edit.putBoolean("Used",true);
+                                                edit.putBoolean("Increase",true);
+                                            }else if(allow==0){
+                                                edit.putBoolean("Used",true);
+                                                edit.putBoolean("Increase",false);
+                                            }
+                                            edit.apply();
+                                            calculate=Integer.parseInt(tvamount.getText().toString());
+                                            if(pair_c_discount_type.equals("Amount"))  {
+                                                calculate=calculate-Integer.parseInt(pair_c_discount);
+                                            } else if (pair_c_discount_type.equals("Percent")){
+                                                calculate=(calculate*(100-Integer.parseInt(pair_c_discount)))/100;
+                                            }
+                                            goAway="GO";
+                                            //tvamount.setText(Integer.toString(calculate));
+                                            counts=1;
+                                            Log.e(TAG, "onResponse: ---"+counts );
+                                            Toast.makeText(MembershipActivity.this,"Added coupon successfully Discount will added when go for payment "+getEmojiByUnicode(0x1F60A),Toast.LENGTH_LONG).show();
                                         }
-                                    } catch (JSONException e) {
+                                        else {
+                                            Toast.makeText(MembershipActivity.this, "This coupon code is no longer available"+getEmojiByUnicode(0x1F620), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }catch(JSONException e){
                                         e.printStackTrace();
                                     }
-                                }
 
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            MembershipActivity.this.runOnUiThread(new Runnable() {
                                 @Override
-                                public void onError(ANError anError) {
-                                    Toast.makeText(MembershipActivity.this, "Network Error "+getEmojiByUnicode(0x1F631), Toast.LENGTH_SHORT).show();
-                                    Log.e(TAG, "onError: --------------- error is "+anError );
+                                public void run() {
+                                    pd.dismiss();
                                 }
                             });
-                    return null;
-                }
+                            Toast.makeText(MembershipActivity.this, "Network Error "+getEmojiByUnicode(0x1F631), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "onError: --------------- error is "+anError );
+                        }
+                    });
+            return null;
+        }
 
-                @Override
-                protected void onPostExecute(String s) {
+        @Override
+        protected void onPostExecute(String s) {
 //                    pd.dismiss();
 
-                    super.onPostExecute(s);
-
+            super.onPostExecute(s);
                     /*Intent intent = new Intent(MembershipActivity.this, WebViewActivity.class);
                     intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull(accessCode.getText()).toString().trim());
                     intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(merchantId.getText()).toString().trim());
@@ -709,8 +736,8 @@ public  AlertDialog.Builder reset;
                     Log.e(TAG, "onClick: ------------- details are ----------" + tvamount.getText().toString());
                     startActivity(intent);
                     finish();*/
-                }
-            }
+        }
+    }
     public String getEmojiByUnicode(int unicode){
         return new String(Character.toChars(unicode));
     }
@@ -738,12 +765,12 @@ public  AlertDialog.Builder reset;
             PackageInfos.add("1000");
         }
         if(radio5.isChecked()){
-        PackageInfos.add("Agarwal");
+            PackageInfos.add("Agarwal");
             PackageInfos.add("6months");
             PackageInfos.add("2000");
         }
         if(radio6.isChecked()){
-        PackageInfos.add("Agarwal");
+            PackageInfos.add("Agarwal");
             PackageInfos.add("12months");
             PackageInfos.add("2500");        }
         if(radio7.isChecked()){

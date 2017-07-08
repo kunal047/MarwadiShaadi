@@ -2,8 +2,10 @@ package com.example.sid.marwadishaadi;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,11 +71,25 @@ public class SplashScreen extends AppCompatActivity {
                      i = new Intent(SplashScreen.this,UserProfileActivity.class);
                     if(deeplink!=null){
                         i.putExtra("deeplink",deeplink);
+                        startActivity(i);
                     }
                 }else{
-                     i = new Intent(SplashScreen.this,MainActivity.class);
+                    SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    boolean check = saved_values.getBoolean("isLoggedIn", false);
+//                Toast.makeText(getApplicationContext(),"Please check your Internet Connection",Toast.LENGTH_LONG);
+                    Log.d(":", "onDonePressed:--------------------------- bool is  " + check);
+                    if (check) {
+                        Intent intnt = new Intent(getApplicationContext(), DashboardActivity.class);
+                        intnt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intnt);
+                    }
+                    else {
+                        Intent intnt = new Intent(SplashScreen.this, MainActivity.class);
+                        startActivity(intnt);
+                        finish();
+                    }
                 }
-                startActivity(i);
+
                 finish();
             }
         },duration);
