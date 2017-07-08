@@ -40,6 +40,7 @@ import com.facebook.login.LoginResult;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -93,300 +95,301 @@ public class UploadPhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this,Arrays.asList("email","user_photos"));
-                loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
+                    loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("email","user_photos"));
+                    loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
 
-                        // getting user profile
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                AccessToken.getCurrentAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        try {
+                            // getting user profile
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    AccessToken.getCurrentAccessToken(),
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(JSONObject object, GraphResponse response) {
+                                            try {
 
-                                            String userid = object.getString("id");
-                                            fblogin.setText("Or upload photos from Facebook");
-                                            Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                                            i.putExtra("userid",userid);
-                                            startActivity(i);
-                                            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                String userid = object.getString("id");
+                                                fblogin.setText("Or upload photos from Facebook");
+                                                Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                                                i.putExtra("userid",userid);
+                                                startActivity(i);
+                                                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     });
                             request.executeAsync();
-                        }
+                                    }
 
-                        @Override
-                        public void onCancel() {
+                            @Override
+                            public void onCancel() {
 
-                        }
+                            }
 
-                        @Override
-                        public void onError(FacebookException error) {
+                            @Override
+                            public void onError(FacebookException error) {
 
-                        }
-                    });
-                } else {
+                            }
+                        });
+                    } else {
 
-                    Profile profile = Profile.getCurrentProfile();
-                    String userid = profile.getId();
-                    Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                    i.putExtra("userid", userid);
-                    startActivity(i);
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        Profile profile = Profile.getCurrentProfile();
+                        String userid = profile.getId();
+                        Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                        i.putExtra("userid", userid);
+                        startActivity(i);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    }
+
                 }
-
-            }
-        });
+            });
 
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        submit = (Button) findViewById(R.id.submit_photo);
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            submit = (Button) findViewById(R.id.submit_photo);
         submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
 //                if (photo1.getTag() == "changed") {
-                BitmapDrawable drawable = (BitmapDrawable) photo1.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                file_one = new File(getApplicationContext().getCacheDir(), "profile_photo.jpg");
-                try {
-                    file_one.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    BitmapDrawable drawable = (BitmapDrawable) photo1.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    file_one = new File(getApplicationContext().getCacheDir(), "profile_photo.jpg");
+                    try {
+                        file_one.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                byte[] bitmapdata = bos.toByteArray();
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
 
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file_one);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(file_one);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                drawable = (BitmapDrawable) photo2.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_two = new File(getApplicationContext().getCacheDir(), "two.jpg");
-                try {
-                    file_two.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    drawable = (BitmapDrawable) photo2.getDrawable();
+                    bitmap = drawable.getBitmap();
+                    file_two = new File(getApplicationContext().getCacheDir(), "two.jpg");
+                    try {
+                        file_two.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_two);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_two);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 //                }
 
 //                if (photo3.getTag() == "changed") {
-                drawable = (BitmapDrawable) photo3.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_three = new File(getApplicationContext().getCacheDir(), "three.jpg");
-                try {
-                    file_three.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    drawable = (BitmapDrawable) photo3.getDrawable();
+                    bitmap = drawable.getBitmap();
+                    file_three = new File(getApplicationContext().getCacheDir(), "three.jpg");
+                    try {
+                        file_three.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_three);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_three);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 //                }
 
 //                if (photo4.getTag() == "changed") {
-                drawable = (BitmapDrawable) photo4.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_four = new File(getApplicationContext().getCacheDir(), "four.jpg");
-                try {
-                    file_four.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    drawable = (BitmapDrawable) photo4.getDrawable();
+                    bitmap = drawable.getBitmap();
+                    file_four = new File(getApplicationContext().getCacheDir(), "four.jpg");
+                    try {
+                        file_four.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_four);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_four);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                drawable = (BitmapDrawable) photo5.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_five = new File(getApplicationContext().getCacheDir(), "five.jpg");
-                try {
-                    file_five.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    drawable = (BitmapDrawable) photo5.getDrawable();
+                    bitmap = drawable.getBitmap();
+                    file_five = new File(getApplicationContext().getCacheDir(), "five.jpg");
+                    try {
+                        file_five.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_five);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_five);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 //                }
 
-                new UploadPhoto().execute();
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
-                if (isSelected) {
-                    Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
+                    new UploadPhoto().execute();
+                    // analytics
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
+                    if (isSelected) {
+                        Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
 
 
-        photo1 = (CircleImageView) findViewById(R.id.photo1);
-        photo2 = (CircleImageView) findViewById(R.id.photo2);
-        photo3 = (CircleImageView) findViewById(R.id.photo3);
-        photo4 = (CircleImageView) findViewById(R.id.photo4);
-        photo5 = (CircleImageView) findViewById(R.id.photo5);
+            photo1 = (CircleImageView) findViewById(R.id.photo1);
+            photo2 = (CircleImageView) findViewById(R.id.photo2);
+            photo3 = (CircleImageView) findViewById(R.id.photo3);
+            photo4 = (CircleImageView) findViewById(R.id.photo4);
+            photo5 = (CircleImageView) findViewById(R.id.photo5);
 
         photo1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = 1;
-                selectImage();
+                @Override
+                public void onClick(View v) {
+                    number = 1;
+                    selectImage();
 
-            }
-        });
+                }
+            });
 
         photo2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = 2;
-                selectImage();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    number = 2;
+                    selectImage();
+                }
+            });
 
 
         photo3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = 3;
-                selectImage();
+                @Override
+                public void onClick(View v) {
+                    number = 3;
+                    selectImage();
 
-            }
-        });
+                }
+            });
 
 
         photo4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = 4;
-                selectImage();
+                @Override
+                public void onClick(View v) {
+                    number = 4;
+                    selectImage();
 
-            }
-        });
+                }
+            });
 
 
         photo5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = 5;
-                selectImage();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    number = 5;
+                    selectImage();
+                }
+            });
 
 
         if (this.getIntent().getExtras() != null) {
-            Bundle b = this.getIntent().getExtras();
-            ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
+                Bundle b = this.getIntent().getExtras();
+                ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
 
-            for (String url : urls) {
-                Log.d("urls from upload", "onCreate: " + url);
-            }
+                for (String url : urls) {
+                    Log.d("urls from upload", "onCreate: " + url);
+                }
 
-            for (int i = 0; i < urls.size(); i++) {
+                for (int i = 0; i < urls.size(); i++) {
 
-                Picasso.with(UploadPhotoActivity.this)
-                        .load(urls.get(i))
-                        .into(getImageviewInstance(i));
+                    Picasso.with(UploadPhotoActivity.this)
+                            .load(urls.get(i))
+                            .into(getImageviewInstance(i));
+
+                }
 
             }
 
         }
 
-    }
+        private CharSequence[] getItems() {
 
-    private CharSequence[] getItems() {
-
-        String tag = getImageview().getTag().toString();
-        if (tag.equals("default")) {
-            CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
-            return items;
-        } else if (getImageview() == photo1) {
-            if (!tag.equals("default")) {
-                CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
-                return items;
-            } else {
+            String tag = getImageview().getTag().toString();
+            if (tag.equals("default")) {
                 CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
                 return items;
+            } else if (getImageview() == photo1) {
+                if (!tag.equals("default")) {
+                    CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
+                    return items;
+                } else {
+                    CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+                    return items;
+                }
+            } else {
+                final CharSequence[] items = {"Take Photo", "Choose from Library", "Set as Profile picture", "Remove Photo",
+                        "Cancel"};
+                return items;
             }
-        } else {
-            final CharSequence[] items = {"Take Photo", "Choose from Library", "Set as Profile picture", "Remove Photo",
-                    "Cancel"};
-            return items;
         }
-    }
 
     private void selectImage() {
 
