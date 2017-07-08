@@ -492,91 +492,34 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         lname.setText("");
                         id.setText("");
                     } else if (!strid.trim().isEmpty()) {
-                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no and tbl_user.customer_no=\"" + strid + "\" ; ");
-                        if (success == "success") {
-                            if (size == 0) {
-                                Toast.makeText(getContext(), "No result found on these query", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Intent i = new Intent(getContext(), SearchResultsActivity.class);
-                                i.putExtra("COUNT", size);
-                                size = 0;
-                                fname.setText("");
-                                lname.setText("");
-                                id.setText("");
-                                startActivity(i);
+                        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String gender =sharedPreferences.getString("gender",null);
+                    if(gender.contains("Male")){
+                        gender="Female";
+                    }else {
+                        gender="Male";
+                    }
+                    if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+                        Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
 
-                            }
-                        } else {
-                            Toast.makeText(getContext(), err, Toast.LENGTH_SHORT).show();
-                        }
+                    } else if (!strid.trim().isEmpty()) {
+                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.customer_no=\"" + strid.trim() + "\"; ");
+
+
+
                     } else if ((!strlname.trim().isEmpty() & !strfname.trim().isEmpty())) {
-                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no and tbl_user.first_name=\" " + strfname + "\"and tbl_user.surname=\"" + strlname + "\" order by created_on asc ;");
-                        if (success == "success") {
-                            if (size == 0) {
-                                Toast.makeText(getContext(), "No result found on these query", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Intent i = new Intent(getContext(), SearchResultsActivity.class);
-                                i.putExtra("COUNT", size);
-                                size = 0;
-                                fname.setText("");
-                                lname.setText("");
-                                id.setText("");
-                                startActivity(i);
-
-                            }
-                        } else {
-                            Toast.makeText(getContext(), err, Toast.LENGTH_SHORT).show();
-                        }
+                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where (tbl_user.first_name=\" " + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
                     } else if ((!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
 
                         if (!strlname.trim().isEmpty()) {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no and tbl_user.surname=\"" + strlname + "\"   order by created_on asc ;");
-                            if (success == "success") {
-                                if (size == 0) {
+                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='"+ gender+"' order by created_on asc ;");
 
-                                    Toast.makeText(getContext(), "No result found on these query", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Intent i = new Intent(getContext(), SearchResultsActivity.class);
-                                    i.putExtra("COUNT", size);
-                                    Log.d(TAG, "onClick: sizzw is ************************************* " + Integer.toString(size));
-                                    fname.setText("");
-                                    lname.setText("");
-                                    id.setText("");
-                                    size = 0;
-                                    startActivity(i);
-                                }
-                            } else {
-                                Toast.makeText(getContext(), err, Toast.LENGTH_SHORT).show();
-                            }
                         } else {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_user.city,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no and tbl_user.first_name=\"" + strfname + "\"   order by created_on asc;");
-
-
-                            if (success == "success") {
-                                if (size == 0) {
-                                    Toast.makeText(getContext(), "No results found! ", Toast.LENGTH_SHORT).show();
-                                } else {
-
-                                    Intent i = new Intent(getContext(), SearchResultsActivity.class);
-                                    i.putExtra("COUNT", size);
-                                    fname.setText("");
-                                    lname.setText("");
-                                    id.setText("");
-                                    size = 0;
-                                    i.putExtra("which", "second");
-                                    startActivity(i);
-                                }
-                            } else {
-                                Toast.makeText(getContext(), err, Toast.LENGTH_SHORT).show();
-                            }
+                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
                         }
-
                     } else {
                         Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
                     }
-
-
-                }
             });
         } else if (count == 2) {
             coun = 0;
@@ -710,32 +653,55 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.d(TAG, "response query is  ----------" + strings[0]);
-            AndroidNetworking.post("http://192.168.43.61:5050/searchById")
+             Log.e(TAG, "response query is  ----------" + strings[0]);
+            AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
+                        Vector<String> customers=new Vector<String>();
                         @Override
                         public void onResponse(JSONArray response) {
                             String s = response.toString();
-                            Log.d(TAG, "onResponse:----------------" + s);
+                            Log.e(TAG, "onResponse:----------------" + s);
                             size = response.length();
+                            sm.clear();
                             for (int i = 0; i < response.length(); i++) {
+
                                 try {
                                                     /*SuggestionModel(int age, String imgAdd, String name, String cusId, String highDeg, String workLoc, String height, String comapany, String annInc, String mariSta, String hometown, String designation)
 */
 
                                     JSONArray user = response.getJSONArray(i);
-
-                                    Calendar calender = Calendar.getInstance();
-                                    int year = calender.get(Calendar.YEAR);
-                                    SuggestionModel suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), user.get(12).toString(), user.get(13).toString());
-                                    sm.add(suggestionModel);
+                                    if((customers.indexOf(user.getString(3))==-1)){
+                                        customers.add(user.getString(3));
+                                        Calendar calender = Calendar.getInstance();
+                                        int year = calender.get(Calendar.YEAR);
+                                    /*SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);*/
+                                        SuggestionModel suggestionModel;
+                                    if(user.get(8).equals("")){
+                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                    }else{
+                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                    }
+                                        sm.add(suggestionModel);
+//                                        Log.e(TAG, "onResponse: --- sm details are " + sm.get(i).getCusId());
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    Log.e(TAG, "run: sm size is *************"+sm.size());
+                                    Intent i = new Intent(getContext(), SearchResultsActivity.class);
+                                    i.putExtra("COUNT", size);
+                                    i.putExtra("which","second");
+                                    startActivity(i);
+                                }
+                            });
                             success = "success";
 
                         }
@@ -743,8 +709,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onError(ANError error) {
 //                        Toast.makeText(BottomSheet.this," ", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onError: --------------------- error is " + error);
+                            Log.e(TAG, "onError: --------------------- error is " + error);
                             err = "Network Error, Check Connection";
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                }
+                            });
                         }
                     });
             return null;
