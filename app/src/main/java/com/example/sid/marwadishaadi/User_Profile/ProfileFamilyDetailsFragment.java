@@ -45,7 +45,9 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     private TextView edit_family;
     private TextView edit_relatives;
     private Button similar;
-    private String clickedID = customer_id;
+
+    private String clickedID  = customer_id;
+
 
     TextView fatherName, grandpaName, mamaSurname, fatherOccupation, fatherOccupationDetails, nativePlace, subcaste, familyType, familyStatus, relation, relativeName, relativeOccupation, relativeLocation, relativeMobile;
 
@@ -121,16 +123,15 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         relativeLocation=(TextView) mview.findViewById(R.id.relative_location);
         relativeMobile=(TextView) mview.findViewById(R.id.relative_mobile);
 
-
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
             new ProfileFamilyDetails().execute(clickedID);
+          
             Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
         }
-
 
         if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
 
@@ -138,7 +139,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             edit_relatives.setVisibility(View.GONE);
 
         }
-
         new ProfileFamilyDetails().execute(clickedID);
 
         similar.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +173,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
     private class ProfileFamilyDetails extends AsyncTask<String, Void, Void>{
         @Override
+
         protected Void doInBackground(String... strings) {
             String cus = strings[0];
             AndroidNetworking.post(URL+"profileFamilyDetails")
@@ -212,13 +213,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                                 relativeLocation.setText(loc);
                                 String mob="Contact: "+result.getString(14);
                                 relativeMobile.setText(mob);
-
-
-
-
-
-
-
                             }
                             catch(JSONException e){
                                 e.printStackTrace();

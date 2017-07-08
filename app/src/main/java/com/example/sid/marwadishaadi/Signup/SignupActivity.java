@@ -30,7 +30,8 @@ import java.util.Arrays;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SignupActivity extends AppCompatActivity {
+public class
+SignupActivity extends AppCompatActivity {
 
     protected EditText email;
     protected EditText pass;

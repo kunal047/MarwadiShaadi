@@ -43,7 +43,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private TextView edit_horoscope;
     private static  int casebreak;
     private Button similar;
-    private String clickedID = customer_id;
+
+    private String clickedID  = customer_id;
+
 
     TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
 
@@ -130,25 +132,20 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         gotra = (TextView) mview.findViewById(R.id.gotra);
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
-
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
             new ProfileAdditionalDetails().execute(clickedID);
-            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
-        }
-
-
-        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
 
             edit_about.setVisibility(View.GONE);
             edit_hobbies.setVisibility(View.GONE);
-            edit_lifestyle.setVisibility(View.GONE);
             edit_horoscope.setVisibility(View.GONE);
-        }
+            edit_lifestyle.setVisibility(View.GONE);
 
+            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
+        }
 
         new ProfileAdditionalDetails().execute(clickedID);
 
@@ -210,6 +207,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
     private class ProfileAdditionalDetails extends AsyncTask<String,Void,Void>{
         @Override
+
         protected Void doInBackground(String... strings){
             String cus=strings[0];
             AndroidNetworking.post(URL +"profileAdditionalDetails")

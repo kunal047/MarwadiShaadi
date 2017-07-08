@@ -6,8 +6,7 @@ package com.example.sid.marwadishaadi.Similar_Profiles;
 
 public class SimilarModel {
 
-    String name, city,education,imgAdd;
-    int age;
+    String name, city,education,imgAdd, age;
 
     public String getImgAdd() {
         return imgAdd;
@@ -17,7 +16,7 @@ public class SimilarModel {
         this.imgAdd = imgAdd;
     }
 
-    public SimilarModel(String name, String city, String education, String imgAdd, int age) {
+    public SimilarModel(String name, String city, String education, String imgAdd, String age) {
 
         this.name = name;
         this.city = city;
@@ -50,11 +49,11 @@ public class SimilarModel {
         this.education = education;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 }

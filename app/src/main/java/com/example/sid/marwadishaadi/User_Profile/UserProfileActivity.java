@@ -104,8 +104,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         setSupportActionBar(toolbar);
 
 
-        toolbarLayout.setTitle("Pranay Parmar");
-
 
         Intent data = getIntent();
         String deeplink = data.getStringExtra("deeplink");
@@ -377,8 +375,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         @Override
         protected Void doInBackground(String... params) {
+
             final String cus = params[0];
             Log.d(TAG, "doInBackground:  ----------------------------------- " + cus);
+
             AndroidNetworking.post(URL + "fetchProfilePicture")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)

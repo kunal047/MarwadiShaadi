@@ -44,8 +44,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
 
 
 public class MembershipActivity extends AppCompatActivity {
@@ -62,6 +60,7 @@ public  AlertDialog.Builder reset;
     View mview;
     Button skip,coupon;
     String str;
+    ProgressDialog dialog;
 
     public static Integer getCalculate() {
         return calculate;

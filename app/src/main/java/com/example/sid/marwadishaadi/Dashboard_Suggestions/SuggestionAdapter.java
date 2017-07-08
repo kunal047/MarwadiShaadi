@@ -2,8 +2,10 @@ package com.example.sid.marwadishaadi.Dashboard_Suggestions;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -19,6 +22,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -230,13 +234,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 public void onEvent(ImageView button, boolean buttonState) {
 
 
-                    Intent intent = new Intent(context, DefaultMessagesActivity.class);
-                    Bundle extras = new Bundle();
-                    extras.putString("customerName", name.getText().toString());
-                    extras.putString("customerId", cusId.getText().toString());
-
-                    intent.putExtras(extras);
-                    context.startActivity(intent);
+                    int counter=0;
+                    String[] array=context.getResources().getStringArray(R.array.communities);
+                    SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+                    for(int i=0;i<5;i++) {
+                        if (communityChecker.getString(array[i], null).contains("Yes")) {
+                            counter++;
+                        }
+                    }
+                    if(counter>0) {
+                        Intent intent = new Intent(context, DefaultMessagesActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString("customerName", name.getText().toString());
+                        extras.putString("customerId", cusId.getText().toString());
+                        intent.putExtras(extras);
+                        context.startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(context, " This feature is only for premium members", Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(context,UpgradeMembershipActivity.class);
+                        context.startActivity(intent);
+                    }
                 }
 
 

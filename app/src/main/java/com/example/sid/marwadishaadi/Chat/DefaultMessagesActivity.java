@@ -1,12 +1,15 @@
 package com.example.sid.marwadishaadi.Chat;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -30,23 +33,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.R.attr.id;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.R.id.input;
+import static com.example.sid.marwadishaadi.R.id.pg;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
 
 public class DefaultMessagesActivity extends DemoMessagesActivity
         implements MessageInput.InputListener {
+    Toolbar toolbar;
     private static final String TAG = "DefaultMessagesActivity";
     public static MessagesListAdapter<Message> adapter;
+    private MessagesList messagesList;
+    private String customerId, customerName;
     public List<Message> ml;
-    Toolbar toolbar;
+    private Menu menu;
     RelativeLayout relative;
     ProgressDialog pgd;
     String url;
-    private MessagesList messagesList;
-    private String customerId, customerName;
-    private Menu menu;
    /* public static void open(Context context) {
         context.startActivity(new Intent(context, DefaultMessagesActivity.class));
     }*/
@@ -56,16 +62,15 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_messages);
-        String query = "";
+        String query="";
         Bundle extras = getIntent().getExtras();
         customerId = extras.getString("customerId");
         customerName = extras.getString("customerName");
-        url = extras.getString("url");
-        ml = new ArrayList<>();
+        ml=new ArrayList<>();
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        query+="update tbl_message set msg_read=1 where ( msg_from=\""+customer_id+"\" and msg_to =\""+customerId+ "\" ) or (msg_to=\""+customer_id+"\" and msg_from=\""+customerId+"\" ) ;";
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
        /* AndroidNetworking.post("http://192.168.43.15:8081/connect.php?query="+query)
@@ -73,35 +78,37 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 .build();*/
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
         query = "SELECT msg_on,msg_read,msg,msg_from,msg_to FROM `tbl_message`  where (msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\") or ( msg_from=\"" + customerId + "\" and msg_to =\"" + customer_id + "\") order by msg_on asc";
-        Log.e(TAG, "onCreate: ------------query is ----" + query);
-        pgd = new ProgressDialog(this);
+        Log.e(TAG, "onCreate: ------------query is ----"+query );
+        pgd=new ProgressDialog(this);
         pgd.setTitle("Wait a while");
         pgd.setMessage("Slow connection...");
         pgd.show();
-        AndroidNetworking.post("http://10.0.0.5:8081/connect.php?query=" + query)
+        AndroidNetworking.post("http://208.91.199.50:5000/getChat")
+                .addBodyParameter("query",query)
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
-                        for (int i = 0; i < response.length() - 1; i++) {
+                        Log.e(TAG, "onResponse: ----------response of creating list is \n"+response);
+                        for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONArray jsnrry = response.getJSONArray(i);
+                                JSONArray jsnrry= response.getJSONArray(i);
                                 String string = jsnrry.getString(0);
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                 Date date = format.parse(string);
-                                Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
+                                Log.e(TAG, "onResponse: date is "+ jsnrry.getString(0));
 
                                 Message message;
-                                if (jsnrry.getString(3).contains(customerId)) {
-                                    User user = new User("1", customerName, null, true);
-                                    message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                    // Log.e(TAG, "onResponse: Add it in left" );
-                                } else {
-                                    User user = new User("0", customerName, null, true);
-                                    message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                    // Log.e(TAG, "onResponse: Add it in Right" );
+                                if(jsnrry.getString(3).contains(customerId)){
+                                    User user = new User("1",customerName,null,true);
+                                message = new Message(jsnrry.getString(3), user, jsnrry.getString(2),date);
+                                   // Log.e(TAG, "onResponse: Add it in left" );
+                                }
+                                else{
+                                    User user = new User("0",customerName,null,true);
+                                    message = new Message(jsnrry.getString(3), user, jsnrry.getString(2),date);
+                                   // Log.e(TAG, "onResponse: Add it in Right" );
                                 }
 
                                 adapter.addToStart(message, true);
@@ -112,42 +119,39 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                             }
                         }
                     }
-
                     @Override
                     public void onError(ANError anError) {
                         Toast.makeText(DefaultMessagesActivity.this, "Network Error ", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "onError: ----------error of creating list is \n" + anError);
+                        Log.e(TAG, "onError: ----------error of creating list is \n"+anError);
                     }
                 });
 //        adapter.addToEnd(ml,true);
 
 
-        toolbar = (Toolbar) findViewById(R.id.chat_msg_toolbar);
+
+
+         toolbar = (Toolbar) findViewById(R.id.chat_msg_toolbar);
         toolbar.setTitle(customerName.split(",")[0]);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
-        if (pgd.isShowing())
-            pgd.dismiss();
+        if(pgd.isShowing())
+           pgd.dismiss();
     }
 
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
         super.onLoadMore(page, totalItemsCount);
-
     }
+ /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-    /*@Override
-       public boolean onCreateOptionsMenu(Menu menu) {
-
-           getMenuInflater().inflate(R.menu.chat_toolbar_block,menu);
-           this.menu =menu;
-           return super.onCreateOptionsMenu(menu);
-       }*/
+        getMenuInflater().inflate(R.menu.chat_toolbar_block,menu);
+        this.menu =menu;
+        return super.onCreateOptionsMenu(menu);
+    }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -166,21 +170,19 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 private void onUnblockPressed(int id) {
         MenuItem menuItem = menu.findItem(id);
         menuItem.setTitle("Block");
     }
-
     //TODO Unblock should be intended to block_list
     private void onBlockPressed(int id) {
         String customer_id="A1008";
         MenuItem menuItem = menu.findItem(id);
         Intent intent=new Intent(DefaultMessagesActivity.this,BlockedActivity.class);
-        intent.putExtra("ID", customerId);
-        intent.putExtra("Name", toolbar.getTitle());
+        intent.putExtra("ID",customerId);
+        intent.putExtra("Name",toolbar.getTitle());
         menuItem.setTitle("Unblock");
     }
     @Override
@@ -188,11 +190,10 @@ private void onUnblockPressed(int id) {
 
 
         Date date = new Date();
-        User user = new User("0", customerName, null, true);
+        User user = new User("0",customerName, null, true);
         Message message = new Message("0", user, input.toString(), date);
         adapter.addToStart(message, true);
         messagesList.setAdapter(adapter);
-
         Log.d(TAG, "onSubmit: is called !!");
 
         String messageFromId = customer_id;
@@ -201,7 +202,9 @@ private void onUnblockPressed(int id) {
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+//SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
         String messageTime = timeStamp;
+        Log.e(TAG, "onSubmit: time sent is ----- "+timeStamp);
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
@@ -224,13 +227,13 @@ private void onUnblockPressed(int id) {
                     @Override
                     public void onResponse(JSONArray response) {
                         // do anything with response TODO
-                        Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
+                        Log.e(TAG, "onResponse: ----------response of creating list is \n"+response);
                     }
-
                     @Override
                     public void onError(ANError error) {
                         // handle error TODO
                         Toast.makeText(DefaultMessagesActivity.this, "Network Error...", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "onError: error is "+ error );
                     }
                 });
         Log.d(TAG, "onSubmit: message from id is " + messageFromId);
