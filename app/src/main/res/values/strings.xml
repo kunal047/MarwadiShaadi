@@ -53,7 +53,15 @@
         <item>Agarwal</item>
         <item>Jain</item>
         <item>Khandelwal</item>
-        <item>Others</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="communities">
+        <item>Maheshwari</item>
+        <item>Agarwal</item>
+        <item>Jain</item>
+        <item>Khandelwal</item>
+        <item>Other</item>
     </string-array>
 
     <string name="q1">Can I change any or all of the profile information while modifying my profile?</string>

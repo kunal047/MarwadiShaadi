@@ -4,20 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
+    <!--<include layout="@layout/swipe_to_refresh">
+    </include>-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/chat_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        android:elevation="8dp">
-    </android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_below="@+id/chat_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chatRefresh">
+        <!--TODO-->
     <com.stfalcon.chatkit.dialogs.DialogsList
         android:id="@+id/dialogsList"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

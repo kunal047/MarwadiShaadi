@@ -64,7 +64,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
                 i.putExtra("from","reverseMatching");
-                i.putExtra("customerNo",rev.getCustomerID());
+                i.putExtra("customerNo",rev.getCustomerNo());
                 context.startActivity(i);
             }
         });

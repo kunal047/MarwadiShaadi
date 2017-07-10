@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             super(fm);
         }
 
+
         @Override
         public Fragment getItem(int position) {
             switch (position){

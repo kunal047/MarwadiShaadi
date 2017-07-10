@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,9 +24,17 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.App;
 import com.example.sid.marwadishaadi.Place;
 import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +45,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 
 public class SignupDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -48,7 +59,6 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     protected EditText mobile;
     protected ArrayAdapter<String> casteSpinnerAdapter;
     protected Button next;
-    protected List<Place> placeslist = new ArrayList<>();
     protected Spinner caste;
     protected AutoCompleteTextView location;
     protected PlacesAdapter placesAdapter;
@@ -133,15 +143,14 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         caste = (Spinner) findViewById(R.id.user_caste);
 
+
+        // autcomplete location
         location = (AutoCompleteTextView) findViewById(R.id.signup_location);
         location.setThreshold(1);
-        getData();
-        placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, placeslist);
+        placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, App.placeslist);
         location.setAdapter(placesAdapter);
 
         radioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-
-
         next = (Button) findViewById(R.id.advnext);
 
 
@@ -176,15 +185,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
                 sd.setMobile_number(mobile_number);
                 sd.setUser_location(user_location);
                 sd.setUser_caste(user_caste);
-
-//                Fragment fragment = new Signup_Basic_Info_Fragment();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.replace(R.id.fragmentBasicInfo, fragment);
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-
-                Intent i = new Intent(SignupDetailsActivity.this, AdvancedSignupDetailsActivity.class);
+           Intent i = new Intent(SignupDetailsActivity.this, AdvancedSignupDetailsActivity.class);
                 startActivity(i);
 
 //                }
@@ -203,18 +204,9 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
     }
 
-    public void getData() {
 
-        Place place = new Place("Mumbai", "Maharashtra", "India");
-        placeslist.add(place);
 
-        Place place1 = new Place("Mumbra", "Maharashtra", "India");
-        placeslist.add(place1);
 
-        Place place2 = new Place("Kanpur", "UP", "India");
-        placeslist.add(place2);
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setDate(final Calendar calendar) {

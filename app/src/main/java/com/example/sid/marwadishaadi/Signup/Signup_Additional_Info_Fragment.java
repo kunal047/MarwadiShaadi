@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.example.sid.marwadishaadi.App;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
@@ -30,6 +32,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
     private EditText editTextBirthTime;
     private int pHour;
     private int pMinute;
+    protected PlacesAdapter placesAdapter;
 
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
@@ -318,21 +321,39 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
         EditText editTextHobbies = (EditText) view.findViewById(R.id.editTextHobbies);
         EditText editTextGrandfatherName = (EditText) view.findViewById(R.id.editTextGrandfatherName);
         EditText editTextMamaSurname = (EditText) view.findViewById(R.id.editTextMamaSurname);
-        EditText editTextNativePlace = (EditText) view.findViewById(R.id.editTextNativePlace);
         EditText editTextSubcaste = (EditText) view.findViewById(R.id.editTextSubcaste);
         EditText editTextInstituteName = (EditText) view.findViewById(R.id.editTextInstituteName);
-        EditText editTextWorkLocation = (EditText) view.findViewById(R.id.editTextWorkLocation);
-//        EditText  = (EditText) view.findViewById(R.id.editTextBirthTime); already declared above
         EditText editTextGotra = (EditText) view.findViewById(R.id.editTextGotra);
         EditText editTextRelationFirstName = (EditText) view.findViewById(R.id.editTextRelationFirstName);
         EditText editTextRelationOccupation = (EditText) view.findViewById(R.id.editTextRelationOccupation);
         EditText editTextRelationMobile = (EditText) view.findViewById(R.id.editTextRelationMobile);
 
 
-        AutoCompleteTextView editTextRelationLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextRelationLocation);
-        AutoCompleteTextView editTextBirthPlace = (AutoCompleteTextView) view.findViewById(R.id.editTextBirthPlace);
+        AutoCompleteTextView WorkLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextWorkLocation);
+        AutoCompleteTextView NativePlace = (AutoCompleteTextView) view.findViewById(R.id.editTextNativePlace);
+        AutoCompleteTextView RelationLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextRelationLocation);
+        AutoCompleteTextView BirthPlace = (AutoCompleteTextView) view.findViewById(R.id.editTextBirthPlace);
 
-        editTextBirthPlace.addTextChangedListener(new TextWatcher() {
+
+        // autocomplete all location fields
+        WorkLocation.setThreshold(1);
+        placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextWorkLocation, App.placeslist);
+        WorkLocation.setAdapter(placesAdapter);
+
+        NativePlace.setThreshold(1);
+        placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextNativePlace, App.placeslist);
+        NativePlace.setAdapter(placesAdapter);
+
+        RelationLocation.setThreshold(1);
+        placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextRelationLocation, App.placeslist);
+        RelationLocation.setAdapter(placesAdapter);
+
+        BirthPlace.setThreshold(1);
+        placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextBirthPlace, App.placeslist);
+        BirthPlace.setAdapter(placesAdapter);
+
+
+        BirthPlace.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -350,7 +371,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        editTextRelationLocation.addTextChangedListener(new TextWatcher() {
+        RelationLocation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -367,6 +388,46 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
 
             }
         });
+
+        NativePlace.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nativePlace = s.toString();
+                ai.setNativePlace(nativePlace);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        WorkLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                workLocation = s.toString();
+                ai.setWorkLocation(workLocation);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
 
 
         editTextBirthTime.addTextChangedListener(new TextWatcher() {
@@ -463,24 +524,6 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        editTextNativePlace.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                nativePlace = s.toString();
-                ai.setNativePlace(nativePlace);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         editTextSubcaste.addTextChangedListener(new TextWatcher() {
             @Override
@@ -520,24 +563,6 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        editTextWorkLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                workLocation = s.toString();
-                ai.setWorkLocation(workLocation);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         editTextGotra.addTextChangedListener(new TextWatcher() {
             @Override

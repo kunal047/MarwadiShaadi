@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.Permission_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -98,13 +99,19 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(),"Please enter correct OTP",Toast.LENGTH_LONG).show();
                 }
+
                 // rest
             }
         });
 
+
         otp_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                Permission_Util permission_util = new Permission_Util(Otp_VerificationActivity.this,Manifest.permission.CALL_PHONE,"camera");
+                permission_util.checkPermission();
 
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"OTP_Call_US","button");
@@ -113,7 +120,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 callIntent.setData(Uri.parse("tel:" + otp_call.getText().toString()));//change the number
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(getApplicationContext(),"Permission for Call Denied!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
                     return;
                 }else{
                     AlertDialog.Builder discarduser = new AlertDialog.Builder(Otp_VerificationActivity.this);
@@ -140,6 +147,17 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Permission_Util.REQUEST_PERMISSION_SETTING) {
+            if (ActivityCompat.checkSelfPermission(Otp_VerificationActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                //Got Permission
+                Toast.makeText(Otp_VerificationActivity.this, "coollll", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

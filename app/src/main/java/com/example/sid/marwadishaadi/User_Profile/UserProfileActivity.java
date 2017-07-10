@@ -297,6 +297,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
         userinfo = (ViewPager) findViewById(R.id.profile_container);
         userinfo.setAdapter(profilePageAdapter);
+        userinfo.setOffscreenPageLimit(4);
         userinfo.setOnPageChangeListener(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
