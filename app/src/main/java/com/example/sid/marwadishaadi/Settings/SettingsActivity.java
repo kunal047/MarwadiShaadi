@@ -43,8 +43,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
@@ -68,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected TextView paymentpolicy;
     protected LinearLayout morelinearlayout;
     protected TextView more;
+    protected AlertDialog resetbox;
     protected ProgressDialog dialog;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
 
@@ -255,9 +254,10 @@ public class SettingsActivity extends AppCompatActivity {
                          user_old_pass = oldpass.getText().toString();
                          user_new_pass = newpass.getText().toString();
 
-                        customer_id="J1001";
+//                        customer_id="J1001";
                          query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
                         new BackEnd().execute(query);
+
 
                     }
                 });
@@ -294,7 +294,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
 
-                AlertDialog resetbox = reset.create();
+                 resetbox = reset.create();
                 resetbox.show();
             }
         });
@@ -428,35 +428,66 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                                 @Override
                                                 public void onResponse(JSONArray response) {
                                                     Log.d(TAG, "onResponse: ********** new passord ***      "+quer);
-                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG);
-
+                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG).show();
+                                                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if(dialog.isShowing()){
+                                                                dialog.dismiss();
+                                                            }
+                                                            if(resetbox.isShowing()){
+                                                                resetbox.dismiss();
+                                                            }
+                                                        }
+                                                    });
                                                 }
 
                                                 @Override
                                                 public void onError(ANError anError) {
-                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG);
+                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG).show();
                                                     Log.d(TAG, "onError: ----network error  88"+ anError);
-
+                                                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if(dialog.isShowing()){
+                                                                dialog.dismiss();
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             });
                                 }
 
                                 else
-                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG);
+                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG).show();
 
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-
+                        /*SettingsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(dialog.isShowing()){
+                                    dialog.dismiss();
+                                }
+                            }
+                        });*/
                     }
 
                     @Override
                     public void onError(ANError error) {
-                        Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG).show();
                         Log.d(TAG, "onError: ----network error  88  "+error);
-
+                        SettingsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(dialog.isShowing()){
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -466,8 +497,6 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        dialog.dismiss();
-
     }
 }
 }
