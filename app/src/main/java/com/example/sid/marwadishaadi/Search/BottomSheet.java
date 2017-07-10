@@ -11,6 +11,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,9 +23,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.App;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Filter;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment;
 import com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment;
@@ -76,22 +79,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private static EditText fname, lname, id;
     private static int count = 0, size = 0;
     public ProgressDialog dialog;
+    protected PlacesAdapter placesAdapter;
+
 
     //Edit Educational details
     Spinner editEducation;
-    TextView eduDegree, eduInstituteLocation;
+    TextView eduDegree;
     Button updateEducation;
     String e, hd, in;
-
+    EditText eduInstituteLocation;
 
     //Edit Professional details of User Profile
     Spinner designation, annualIncome, occupation;
-    TextView companyName, companyLocation;
+    TextView companyName;
     Button updateProfession;
     String d, cn, o, cl, ai;
     EditText aboutMe;
     Button aboutMe_update;
     String am;
+    AutoCompleteTextView companyLocation;
 
     //Hobbies additional details
     EditText hobbies;
@@ -107,17 +113,20 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     //Horoscope additional details
     Spinner manglik, matchHoroscope;
-    EditText birthTime, birthPlace, gotra;
+    EditText birthTime, gotra;
     String m, bt, bp, g, mh;
     Button horoscopeUpdate;
-
+    AutoCompleteTextView birthPlace;
 
     //Relation Family Details
     Spinner relation;
-    EditText relativeName, relativeOccupation, relativeLocation, relativeMobile;
+    EditText relativeName, relativeOccupation, relativeMobile;
     Button relationUpdate;
     String r, rn, ro, rl, rm;
     String[] array;
+    AutoCompleteTextView relativeLocation;
+
+
     Bundle bundle;
     private int content;
     private View contentView;
@@ -220,10 +229,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 12:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
+
                 editEducation = (Spinner) contentView.findViewById(R.id.edit_education);
                 eduDegree = (TextView) contentView.findViewById(R.id.edit_highest_degree);
-                eduInstituteLocation = (TextView) contentView.findViewById(R.id.edit_institute_name);
                 updateEducation = (Button) contentView.findViewById(R.id.education_update);
+                eduInstituteLocation = (EditText) contentView.findViewById(R.id.edit_institute_name);
 
 
 //                UPDATE tbl_user SET education="Engineer", edu_degree="B.E.", college_name="Dr. Babasaheb Ambedakar" WHERE customer_no="A1028"
@@ -260,9 +270,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 designation = (Spinner) contentView.findViewById(R.id.profession);
                 annualIncome = (Spinner) contentView.findViewById(R.id.edit_annual_income);
                 companyName = (TextView) contentView.findViewById(R.id.job_company);
-                companyLocation = (TextView) contentView.findViewById(R.id.job_location);
                 occupation = (Spinner) contentView.findViewById(R.id.occupation);
                 updateProfession = (Button) contentView.findViewById(R.id.professionUpdate);
+
+                companyLocation = (AutoCompleteTextView) contentView.findViewById(R.id.job_location);
+                companyLocation.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_profession, R.id.job_location, App.placeslist);
+                companyLocation.setAdapter(placesAdapter);
 
                 new FetchProfessionalEducationDetails().execute();
 
@@ -386,17 +400,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
 
                 birthTime = (EditText) contentView.findViewById(R.id.birthtime);
-                birthPlace = (EditText) contentView.findViewById(R.id.birth_location);
                 gotra = (EditText) contentView.findViewById(R.id.gotra);
                 manglik = (Spinner) contentView.findViewById(R.id.manglik);
                 matchHoroscope = (Spinner) contentView.findViewById(R.id.match_horoscope);
                 horoscopeUpdate = (Button) contentView.findViewById(R.id.horoscope_update);
+
+                // autcomplete location field
+                birthPlace = (AutoCompleteTextView) contentView.findViewById(R.id.birth_location);
+                birthPlace.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_horoscope, R.id.birth_location, App.placeslist);
+                birthPlace.setAdapter(placesAdapter);
 
                 new FetchAdditionalHoroscopeDetails().execute();
 
                 horoscopeUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         bt = birthTime.getText().toString();
                         bp = birthPlace.getText().toString();
                         g = gotra.getText().toString();
@@ -431,9 +451,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 relation = (Spinner) contentView.findViewById(R.id.relation);
                 relativeName = (EditText) contentView.findViewById(R.id.relative_name);
                 relativeOccupation = (EditText) contentView.findViewById(R.id.relative_occupation);
-                relativeLocation = (EditText) contentView.findViewById(R.id.relative_location);
                 relativeMobile = (EditText) contentView.findViewById(R.id.relative_mobile);
                 relationUpdate = (Button) contentView.findViewById(R.id.relation_update);
+
+
+                relativeLocation = (AutoCompleteTextView) contentView.findViewById(R.id.bottom_sheet_relative_location);
+                relativeLocation.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_relatives, R.id.bottom_sheet_relative_location, App.placeslist);
+                relativeLocation.setAdapter(placesAdapter);
+
 
                 new FetchFamilyRelationDetails().execute();
 

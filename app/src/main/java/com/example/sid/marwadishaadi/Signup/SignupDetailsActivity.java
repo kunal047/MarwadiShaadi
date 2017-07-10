@@ -28,6 +28,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.App;
 import com.example.sid.marwadishaadi.Place;
 import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
@@ -58,7 +59,6 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     protected EditText mobile;
     protected ArrayAdapter<String> casteSpinnerAdapter;
     protected Button next;
-    protected List<Place> placeslist = new ArrayList<>();
     protected Spinner caste;
     protected AutoCompleteTextView location;
     protected PlacesAdapter placesAdapter;
@@ -143,15 +143,14 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         caste = (Spinner) findViewById(R.id.user_caste);
 
+
+        // autcomplete location
         location = (AutoCompleteTextView) findViewById(R.id.signup_location);
         location.setThreshold(1);
-        getData();
-        placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, placeslist);
+        placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, App.placeslist);
         location.setAdapter(placesAdapter);
 
         radioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-
-
         next = (Button) findViewById(R.id.advnext);
 
 
@@ -186,15 +185,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
                 sd.setMobile_number(mobile_number);
                 sd.setUser_location(user_location);
                 sd.setUser_caste(user_caste);
-
-//                Fragment fragment = new Signup_Basic_Info_Fragment();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.replace(R.id.fragmentBasicInfo, fragment);
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-
-                Intent i = new Intent(SignupDetailsActivity.this, AdvancedSignupDetailsActivity.class);
+           Intent i = new Intent(SignupDetailsActivity.this, AdvancedSignupDetailsActivity.class);
                 startActivity(i);
 
 //                }
@@ -213,45 +204,8 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
     }
 
-    public void getData() {
 
-        new FetchLocation().execute();
 
-    }
-
-    public class FetchLocation extends AsyncTask<Void,Void,Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            AndroidNetworking.post("http://192.168.43.143:5050/fetchCityStateCountry")
-                    .addBodyParameter("customerNo", customer_id)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Place place;
-                            try {
-                                for(int i = 0;i<response.length();i++) {
-                                    JSONArray array = response.getJSONArray(i);
-                                    place = new Place(array.getString(0), array.getString(2), array.getString(4));
-                                    placeslist.add(place);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-
-                        }
-                    });
-
-            return null;
-        }
-    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
