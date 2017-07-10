@@ -49,12 +49,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
@@ -70,6 +67,7 @@ public class DashboardActivity extends AppCompatActivity
     private LinearLayout inbox;
     private LinearLayout search;
     private int click = 0;
+    private String customer_id, customer_gender;
     TextView nameDrawer;
 
     @Override
@@ -85,7 +83,10 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         setSupportActionBar(toolbar);
 
-       
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
 
         Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
 

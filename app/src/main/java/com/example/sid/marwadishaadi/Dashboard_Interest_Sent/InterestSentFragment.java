@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Interest_Sent;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,7 +34,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
@@ -44,15 +45,18 @@ public class InterestSentFragment extends Fragment {
     private RecyclerView recyclerView;
     private InterestSentAdapter interestSentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private String customer_id, customer_gender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
-
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
 
         swipeRefreshLayout = (SwipeRefreshLayout)mview.findViewById(R.id.swipe);
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);

@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,12 +31,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
@@ -48,14 +48,17 @@ public class Reverse_MatchingFragment extends Fragment {
     private ReverseAdapter reverseAdapter;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String customer_id, customer_gender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_reverse__matching, container, false);
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");

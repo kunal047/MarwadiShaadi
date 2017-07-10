@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Similar_Profiles;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -35,8 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 /**
@@ -50,6 +49,7 @@ public class SimilarActivity extends AppCompatActivity{
     private SimilarAdapter similarAdapter;
     private List<SimilarModel> similarModelList = new ArrayList<>();;
     private RecyclerView recyclerView;
+    private String customer_id, customer_gender;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -62,6 +62,9 @@ public class SimilarActivity extends AppCompatActivity{
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Similar Profiles","button");
 
