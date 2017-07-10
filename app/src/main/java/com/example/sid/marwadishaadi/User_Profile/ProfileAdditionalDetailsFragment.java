@@ -68,9 +68,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             String m=bundle.getString("manglik");
             String mh=bundle.getString("matchHoroscope");
 
+            if("".equals(hobby))
+                hobbies.setVisibility(View.GONE);
+
             if(hobby!=null)
                 hobbies.setText(hobby);
 
+            if("".equals(am))
+                aboutMe.setVisibility(View.GONE);
             if(am!=null)
                 aboutMe.setText(am);
 

@@ -2,7 +2,9 @@ package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,14 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.varunest.sparkbutton.SparkButton;
@@ -28,7 +28,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
@@ -42,6 +41,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     private Context context;
     private List<RecentModel> recentModelList;
     private String favouriteState, interestState;
+    private String customer_id, customer_gender;
     View iView;
 
 
@@ -55,6 +55,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
          iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_recent, parent, false);
 
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(context);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
         return new MyViewHolder(iView);
     }
 

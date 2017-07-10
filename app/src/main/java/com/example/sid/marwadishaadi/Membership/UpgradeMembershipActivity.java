@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Button;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,23 +20,16 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.R;
-import com.example.sid.marwadishaadi.Search.Search;
-import com.example.sid.marwadishaadi.Search.SearchResultsActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.meg7.widget.CircleImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Search.Search.suggestionModelList2;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
@@ -106,7 +99,6 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         others.setVisibility(View.GONE);
         no.setVisibility(View.GONE);
 
-        customer_id="A1001";
         String query = "SELECT community, duration, date(purchase_date), date(expiry_date), is_active FROM `tbl_user_community_package` WHERE customer_no=\""+customer_id+"\";";
         Log.d(TAG, "onCreate: ----- query is "+query);
         new BackEndMembership().execute(query);
