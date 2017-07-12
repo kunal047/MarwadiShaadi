@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Chat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,8 +31,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
 
@@ -45,11 +44,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     ProgressDialog pgd;
     String url;
     private MessagesList messagesList;
-    private String customerId, customerName;
+    private String customer_id, customerId, customerName;
     private Menu menu;
-   /* public static void open(Context context) {
-        context.startActivity(new Intent(context, DefaultMessagesActivity.class));
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +54,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         setContentView(R.layout.activity_default_messages);
         String query = "";
         Bundle extras = getIntent().getExtras();
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         customerId = extras.getString("customerId");
         customerName = extras.getString("customerName");
         url = extras.getString("url");
@@ -66,11 +65,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
         query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
-//        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
-       /* AndroidNetworking.post("http://192.168.43.15:8081/connect.php?query="+query)
-                .setPriority(Priority.HIGH)
-                .build();*/
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
         query = "SELECT msg_on,msg_read,msg,msg_from,msg_to FROM `tbl_message`  where (msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\") or ( msg_from=\"" + customerId + "\" and msg_to =\"" + customer_id + "\") order by msg_on asc";
         Log.e(TAG, "onCreate: ------------query is ----" + query);
@@ -151,17 +146,17 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-         /*case R.id.blocked:
-
-                 Snackbar snackbar = Snackbar.make(relative, "Added to Blocked List", Snackbar.LENGTH_LONG).setAction("UNBLOCK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            onUnblockPressed(id);
-                        }
-                    });
-                    snackbar.show();
-             onBlockPressed(id);
-                return true;*/
+//         case R.id.blocked:
+//
+//                 Snackbar snackbar = Snackbar.make(relative, "Added to Blocked List", Snackbar.LENGTH_LONG).setAction("UNBLOCK", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            onUnblockPressed(id);
+//                        }
+//                    });
+//                    snackbar.show();
+//             onBlockPressed(id);
+//                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -169,20 +164,22 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         return super.onOptionsItemSelected(item);
     }
-private void onUnblockPressed(int id) {
+
+    private void onUnblockPressed(int id) {
         MenuItem menuItem = menu.findItem(id);
         menuItem.setTitle("Block");
     }
 
     //TODO Unblock should be intended to block_list
     private void onBlockPressed(int id) {
-        String customer_id="A1008";
+        String customer_id = "A1008";
         MenuItem menuItem = menu.findItem(id);
-        Intent intent=new Intent(DefaultMessagesActivity.this,BlockedActivity.class);
+        Intent intent = new Intent(DefaultMessagesActivity.this, BlockedActivity.class);
         intent.putExtra("ID", customerId);
         intent.putExtra("Name", toolbar.getTitle());
         menuItem.setTitle("Unblock");
     }
+
     @Override
     public boolean onSubmit(CharSequence input) {
 
@@ -207,7 +204,7 @@ private void onUnblockPressed(int id) {
         String fromDelete = ""; // yes if deleted from sender
         String toDelete = ""; // use if deleted from receiver
 
-        AndroidNetworking.post(URL + "uploadChat")
+        AndroidNetworking.post("http://208.91.199.50:5000/uploadChat")
                 .addBodyParameter("messageFromId", messageFromId)
                 .addBodyParameter("messageToId", messageToId)
                 .addBodyParameter("replyTo", replyTo)

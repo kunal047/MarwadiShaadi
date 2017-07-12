@@ -2,8 +2,10 @@ package com.example.sid.marwadishaadi.Dashboard_Suggestions;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,8 +31,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
@@ -45,6 +45,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
     private FirebaseAnalytics mFirebaseAnalytics;
     private String favouriteState, interestState;
     private static final String TAG = "SuggestionAdapter";
+    private String customer_id;
     View iView;
 
     public SuggestionAdapter(Context context, List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
@@ -52,14 +53,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         this.suggestionModelList = suggestionModelList;
         this.context = context;
         this.mFirebaseAnalytics=FirebaseAnalytics.getInstance(context);
-
         this.rv = recyclerView;
+
     }
 
     @Override
     public SuggestionAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
          iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.suggestions_row, parent, false);
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this.context);
+        customer_id = sharedpref.getString("customer_id", null);
 
         return new SuggestionAdapter.MyViewHolder(iView);
     }
@@ -270,7 +274,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             String status = params[2];
             Log.d(TAG, "doInBackground: interest is ------------------ " + status);
 
-            AndroidNetworking.post(URL + "addInterestFromSuggestion")
+            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
                     .addBodyParameter("status", status)
@@ -300,7 +304,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             String customerId = params[0];
             String favId = params[1];
 
-            AndroidNetworking.post(URL + "addFavFromSuggestion")
+            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("favId", favId)
                     .addBodyParameter("status", favouriteState)

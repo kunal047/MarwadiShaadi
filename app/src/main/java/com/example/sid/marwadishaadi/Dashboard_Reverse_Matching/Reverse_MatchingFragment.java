@@ -36,7 +36,6 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class Reverse_MatchingFragment extends Fragment {
@@ -131,7 +130,7 @@ public class Reverse_MatchingFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get(URL + "prepareReverse/{customerNo}/{gender}")
+            AndroidNetworking.get("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)

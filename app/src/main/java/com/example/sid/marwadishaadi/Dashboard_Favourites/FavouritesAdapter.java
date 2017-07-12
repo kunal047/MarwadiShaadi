@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Dashboard_Favourites;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,9 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by pranay on 02-06-2017.
@@ -38,6 +38,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
     private static final String TAG = "FavouritesAdapter";
     Context context;
     private List<FavouriteModel> fav;
+    private String customer_id;
+
 
     public FavouritesAdapter(Context context, List<FavouriteModel> fav) {
         this.context = context;
@@ -48,6 +50,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fav_row, parent, false);
+
+
 
         return new MyViewHolder(itemView);
 
@@ -116,6 +120,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         ImageView fav_profile_image;
         Button remove, sendInterest;
 
+
+
         public MyViewHolder(View view) {
 
             super(view);
@@ -138,7 +144,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 
             String customerIdToRemove = params[0];
 
-            AndroidNetworking.post(URL + "removeFromFavourite")
+            AndroidNetworking.post("http://208.91.199.50:5000/removeFromFavourite")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("customerNoToRemove", customerIdToRemove)
                     .setPriority(Priority.HIGH)
@@ -173,7 +179,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String formatted = format.format(Calendar.getInstance().getTime());
 
-            AndroidNetworking.post(URL + "sendInterest")
+            AndroidNetworking.post("http://208.91.199.50:5000/sendInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("interestSentTo", customerIdToSendInterest)
                     .addBodyParameter("interestSentTime", formatted)

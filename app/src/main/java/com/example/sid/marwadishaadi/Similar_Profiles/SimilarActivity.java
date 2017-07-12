@@ -36,8 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
-
 /**
  * Created by Lawrence Dalmet on 13-06-2017.
  */
@@ -121,7 +119,7 @@ public class SimilarActivity extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get(URL + "prepareSimilar/{customerNo}/{gender}")
+            AndroidNetworking.get("http://208.91.199.50:5000/prepareSimilar/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)

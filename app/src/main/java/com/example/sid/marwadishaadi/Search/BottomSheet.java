@@ -3,8 +3,10 @@ package com.example.sid.marwadishaadi.Search;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -39,7 +41,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.Search.Search.AIList;
 import static com.example.sid.marwadishaadi.Search.Search.CastList;
 import static com.example.sid.marwadishaadi.Search.Search.annualincome;
@@ -58,6 +60,7 @@ import static com.example.sid.marwadishaadi.Search.Search.spinnerCastSearch;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceAnnualincome;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceMaritalstatus;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.prefannualincome;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 /**
@@ -97,26 +100,32 @@ public class BottomSheet extends BottomSheetDialogFragment {
     //About Me additional details
     Button hobbies_update;
     String h;
+
     //LifeStyle additional details
     Spinner eatingHabit, smokingHabit, drinkingHabit;
     String eh, dh, sh;
     Button lifestyleUpdate;
+
     //Horoscope additional details
     Spinner manglik, matchHoroscope;
     EditText birthTime, birthPlace, gotra;
     String m, bt, bp, g, mh;
     Button horoscopeUpdate;
+
     //Relation Family Details
     Spinner relation;
     EditText relativeName, relativeOccupation, relativeLocation, relativeMobile;
     Button relationUpdate;
     String r, rn, ro, rl, rm;
     String[] array;
+
     Bundle bundle;
     private int content;
     private View contentView;
     private UsersAdapter adapter;
     private int coun;
+    private String customer_id;
+
 
     public BottomSheet() {
 
@@ -133,6 +142,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
 
     }
+
     public BottomSheet(int i) {
         if (i == 0) {
             Search search = new Search();
@@ -166,7 +176,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             case 112:
                 contentView = viewGetterEditPref(R.array.aincome_array, array);
                 Toast.makeText(getContext(), "incase", Toast.LENGTH_LONG).show();
-
                 count = 2;
                 break;
 
@@ -212,6 +221,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 12:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
+                SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
+                Log.d(TAG, "setupDialog: case 12 ------------------------ " + customer_id);
                 editEducation = (Spinner) contentView.findViewById(R.id.edit_education);
                 eduDegree = (TextView) contentView.findViewById(R.id.edit_highest_degree);
                 eduInstituteLocation = (TextView) contentView.findViewById(R.id.edit_institute_name);
@@ -230,9 +242,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         e = editEducation.getSelectedItem().toString();
                         hd = eduDegree.getText().toString();
                         in = eduInstituteLocation.getText().toString();
-                        Log.d(TAG, "setupDialog: education is-----------" + e);
-                        Log.d(TAG, "setupDialog: degree is--------" + hd);
-                        Log.d(TAG, "setupDialog: institute is-------" + in);
                         new EditPersonalEducationDetails().execute();
                         Intent i = new Intent(getContext(), UserProfileActivity.class);
                         startActivity(i);
@@ -241,12 +250,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
 
                 });
-                count = 2;
 
                 break;
             case 13:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_profession, null);
-                count = 2;
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
+//                count = 2;
 
 
                 designation = (Spinner) contentView.findViewById(R.id.profession);
@@ -286,8 +296,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 21:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_about_me, null);
-                count = 2;
+//                count = 2;
 
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 aboutMe = (EditText) contentView.findViewById(R.id.about_me);
                 aboutMe_update = (Button) contentView.findViewById(R.id.aboutMe_update);
@@ -313,8 +325,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 22:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_hobbies, null);
-                count = 2;
-
+//                count = 2;
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
                 hobbies = (EditText) contentView.findViewById(R.id.hobbies);
                 hobbies_update = (Button) contentView.findViewById(R.id.hobbiesUpdate);
 
@@ -340,7 +353,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 23:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_lifestyle, null);
-                count = 2;
+//                count = 2;
+
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 eatingHabit = (Spinner) contentView.findViewById(R.id.eating_habits);
                 drinkingHabit = (Spinner) contentView.findViewById(R.id.drinking_habit);
@@ -374,9 +390,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 24:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_horoscope, null);
-                count = 2;
+//                count = 2;
 
-
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
                 birthTime = (EditText) contentView.findViewById(R.id.birthtime);
                 birthPlace = (EditText) contentView.findViewById(R.id.birth_location);
                 gotra = (EditText) contentView.findViewById(R.id.gotra);
@@ -417,8 +434,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 32:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_relatives, null);
-                count = 2;
 
+
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 relation = (Spinner) contentView.findViewById(R.id.relation);
                 relativeName = (EditText) contentView.findViewById(R.id.relative_name);
@@ -459,8 +478,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             default:
                 contentView = View.inflate(getContext(), R.layout.custom_list_view, null);
-                count = 2;
-
                 break;
 
         }
@@ -584,7 +601,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<String> result = new ArrayList<String>();
+                    List<String> result = new ArrayList<>();
                     for (User p : adapter.getBox()) {
                         if (p.box) {
                             coun++;
@@ -621,9 +638,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                                 preferenceAnnualincome.setText(result.toString());
 
-
                             } else {
-                                annualincome.setText(result.toString());
+                                prefannualincome.setText(result.toString().replace("[","").replace("]",""));
                                 AIList = result;
                                 countannualincome = coun;
 
@@ -672,10 +688,16 @@ public class BottomSheet extends BottomSheetDialogFragment {
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
         return view;
     }
 
     private View viewGetterEditPref(int array, String[] arr) {
+
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b = true;
@@ -711,7 +733,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected String doInBackground(String... strings) {
             Log.d(TAG, "response query is  ----------" + strings[0]);
-            AndroidNetworking.post("http://192.168.43.61:5050/searchById")
+            AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
@@ -758,9 +780,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
+
+
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editPersonalEducationDetails")
+            Log.d(TAG, "doInBackground: teeeeeeeeeeeeeeeeeeeeeest " + customer_id);
+            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalEducationDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("education", e)
                     .addBodyParameter("edu_degree", hd)
@@ -790,7 +815,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -834,7 +859,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -913,7 +938,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editPersonalProfessionDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalProfessionDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("occupation", o)
                     .addBodyParameter("annualIncome", ai)
@@ -945,7 +970,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -978,8 +1003,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsAboutMe")
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsAboutMe")
                     .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("aboutMe", am)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -1004,7 +1030,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1037,8 +1063,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHobbies")
-                    .addBodyParameter("customerNo",customer_id)
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHobbies")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("hobbies", h)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
@@ -1066,7 +1092,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1128,7 +1154,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsLifestyle")
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsLifestyle")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("smokingHabit", sh)
                     .addBodyParameter("eatingHabit", eh)
@@ -1159,7 +1185,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1214,7 +1240,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHoroscope")
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHoroscope")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("birthTime", bt)
                     .addBodyParameter("birthPlace", bp)
@@ -1246,7 +1272,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1288,7 +1314,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsRelation")
+            AndroidNetworking.post("http://208.91.199.50:5000/editFamilyDetailsRelation")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("relation", r)
                     .addBodyParameter("relativeName", rn)

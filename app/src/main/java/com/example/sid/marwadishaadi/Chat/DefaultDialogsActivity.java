@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Chat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,7 +32,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 //Inbox TODO top bar should work
 public class DefaultDialogsActivity extends DemoDialogsActivity {
@@ -45,11 +45,16 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DialogsList dialogsList;
     private DialogsListAdapter<Dialog> dla;
+    private String customer_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_dialogs);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         ListOfQueries = new ArrayList<>();
         ListOfMessage = new ArrayList<>();
         ListOfSender = new ArrayList<>();

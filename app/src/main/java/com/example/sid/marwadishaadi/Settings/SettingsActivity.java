@@ -54,11 +54,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.HashConverter;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.str;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -77,6 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected LinearLayout morelinearlayout;
     protected TextView more;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
+    private String customer_id, customer_gender;
+    private ProgressDialog dialog;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -89,6 +86,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         toolbar.setTitle("Settings");
@@ -262,7 +263,6 @@ public class SettingsActivity extends AppCompatActivity {
                          user_old_pass = oldpass.getText().toString();
                          user_new_pass = newpass.getText().toString();
 
-                        customer_id="J1001";
                          query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
                         new BackEnd().execute(query);
 
@@ -411,7 +411,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
         Log.d(TAG, "doInBackground: -----query s "+ query);
-        AndroidNetworking.post(URL + "ResetPassword")
+        AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                 .addBodyParameter("query", strings[0])
                 .setPriority(Priority.HIGH)
                 .build()
@@ -427,7 +427,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                 if(user.getString(0).contains(old_pass_encrypt)){
                                     Log.d(TAG, "onResponse2: ------ old password is --"+old_pass_encrypt);
                                     final String quer="update tbl_login set password = \""+HashConverter(user_new_pass)+"\" where customer_no=\""+customer_id+"\";";
-                                    AndroidNetworking.post(URL + "ResetPassword")
+                                    AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                                             .addBodyParameter("query", quer)
                                             .setPriority(Priority.HIGH)
                                             .build()

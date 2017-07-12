@@ -44,8 +44,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.dialog;
 
 
 public class MembershipActivity extends AppCompatActivity {
@@ -243,7 +241,6 @@ public  AlertDialog.Builder reset;
                                 else {
                                     Toast.makeText(getApplicationContext(),"Already Added one Coupon",Toast.LENGTH_SHORT).show();
                                 }
-//                        Toast.makeText(MembershipActivity.this, "yayay", Toast.LENGTH_SHORT).show();
                             }
                         });
 

@@ -127,7 +127,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Log.d(TAG, "doInBackground: called ----------------------------");
-            AndroidNetworking.post("http://192.168.43.143:5050/sendMail")
+            AndroidNetworking.post("http://208.91.199.50:5000/sendMail")
                     .addBodyParameter("forgotPassEmail", user_email)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
@@ -153,7 +153,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/forgotPassword")
+            AndroidNetworking.post("http://208.91.199.50:5000/forgotPassword")
                     .addBodyParameter("forgotPassEmail", user_email)
                     .setTag(this)
                     .setPriority(Priority.MEDIUM)

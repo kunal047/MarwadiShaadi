@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Favourites;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,18 +34,17 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
-
 
 public class FavouritesFragment extends Fragment {
 
     private static final String TAG = "FavouritesFragment";
+    private static final int MODE_PRIVATE = 0;
     private List<FavouriteModel> favouritesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FavouritesAdapter favouritesAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private String customer_id;
 //    private TextView favouriteZero;
 
     @Override
@@ -58,6 +58,8 @@ public class FavouritesFragment extends Fragment {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
@@ -121,7 +123,7 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected Void doInBackground(String... params) {
 
-            AndroidNetworking.post(URL + "prepareFavourites")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareFavourites")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
