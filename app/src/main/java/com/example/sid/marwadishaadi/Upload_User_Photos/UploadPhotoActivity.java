@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Upload_User_Photos;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -69,6 +70,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private CircleImageView img;
     private boolean isSelected = false;
     private CircleImageView photo1, photo2, photo3, photo4, photo5;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -82,6 +84,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_upload_photo);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         callbackManager = CallbackManager.Factory.create();
         fblogin = (Button) findViewById(R.id.fb_login_button);
@@ -552,7 +557,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     .addMultipartFile("image_three", file_three)
                     .addMultipartFile("image_four", file_four)
                     .addMultipartFile("image_five", file_five)
-                    .addMultipartParameter("customerNo", "O1001")
+                    .addMultipartParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .setUploadProgressListener(new UploadProgressListener() {

@@ -69,6 +69,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected AlertDialog resetbox;
     protected ProgressDialog dialog;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
+    private String customer_id, customer_gender;
+    private ProgressDialog dialog;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -81,6 +83,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         toolbar.setTitle("Settings");
@@ -404,7 +410,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
         Log.d(TAG, "doInBackground: -----query s "+ query);
-        AndroidNetworking.post(URL + "ResetPassword")
+        AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                 .addBodyParameter("query", strings[0])
                 .setPriority(Priority.HIGH)
                 .build()
@@ -420,7 +426,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                 if(user.getString(0).contains(old_pass_encrypt)){
                                     Log.d(TAG, "onResponse2: ------ old password is --"+old_pass_encrypt);
                                     final String quer="update tbl_login set password = \""+HashConverter(user_new_pass)+"\" where customer_no=\""+customer_id+"\";";
-                                    AndroidNetworking.post(URL + "ResetPassword")
+                                    AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                                             .addBodyParameter("query", quer)
                                             .setPriority(Priority.HIGH)
                                             .build()

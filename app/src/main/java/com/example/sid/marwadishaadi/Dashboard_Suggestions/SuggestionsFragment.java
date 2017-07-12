@@ -39,7 +39,6 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class SuggestionsFragment extends Fragment {
@@ -156,7 +155,7 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get(URL + "prepareSuggestions/{customerNo}/{gender}")
+            AndroidNetworking.get("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)

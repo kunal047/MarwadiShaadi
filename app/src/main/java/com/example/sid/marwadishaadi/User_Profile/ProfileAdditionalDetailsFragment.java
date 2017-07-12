@@ -4,11 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +35,7 @@ import org.json.JSONException;
 
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileAdditionalDetailsFragment extends Fragment {
 
@@ -43,8 +46,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private TextView edit_horoscope;
     private static  int casebreak;
     private Button similar;
+    private CardView mCardViewAboutMe, mCardViewHobbies;
 
-    private String clickedID  = customer_id;
+    private String clickedID, customer_id;
 
 
     TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
@@ -67,15 +71,11 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             String g=bundle.getString("gotra");
             String m=bundle.getString("manglik");
             String mh=bundle.getString("matchHoroscope");
-
-            if("".equals(hobby))
-                hobbies.setVisibility(View.GONE);
+            Log.e(TAG, "onReceive: empty *************************************** " + hobby);
 
             if(hobby!=null)
                 hobbies.setText(hobby);
 
-            if("".equals(am))
-                aboutMe.setVisibility(View.GONE);
             if(am!=null)
                 aboutMe.setText(am);
 
@@ -120,8 +120,17 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_profile__additional__details, container, false);
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        clickedID = customer_id;
+        mCardViewAboutMe = (CardView) mview.findViewById(R.id.cardViewAboutMe);
+        mCardViewHobbies = (CardView) mview.findViewById(R.id.cardViewHobbies);
+
         edit_about = (TextView) mview.findViewById(R.id.aboutme_clear);
         edit_hobbies=(TextView) mview.findViewById(R.id.hobbies_clear);
         edit_lifestyle=(TextView)mview.findViewById(R.id.lifestyle_clear);
@@ -139,6 +148,52 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
+
+        aboutMe.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, "beforeTextChanged: called ");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: called ");
+                if (s.length() == 0 && customer_id != clickedID) {
+                    mCardViewAboutMe.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    mCardViewAboutMe.setVisibility(View.GONE);
+                }
+                Log.d(TAG, "afterTextChanged: called ");
+
+            }
+        });
+
+        hobbies.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    mCardViewHobbies.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    mCardViewHobbies.setVisibility(View.GONE);
+                }
+            }
+        });
+
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
@@ -215,7 +270,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
         protected Void doInBackground(String... strings){
             String cus=strings[0];
-            AndroidNetworking.post(URL +"profileAdditionalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
                     .addBodyParameter("customerNo",cus)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -254,6 +309,11 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
     }
 
     public int getCasebreak()

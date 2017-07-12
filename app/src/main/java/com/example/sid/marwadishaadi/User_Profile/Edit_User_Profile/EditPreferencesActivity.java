@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetail
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
-    public static final String URL = "http://208.91.199.50:5000/";
+    final String URL = "http://208.91.199.50:5000/";
     public static EditText prefannualincome;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
@@ -74,6 +75,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
     private Spinner maritalstatus;
     private Spinner physicalstatus;
     private int casebreak;
+    private String customer_id;
+
     private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -109,6 +112,9 @@ public class EditPreferencesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_preferences);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_prefs_toolbar);
         toolbar.setTitle("Edit Partner Preferences");
@@ -643,8 +649,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePartnerPreferences")
-                    .addBodyParameter("customerNo", "A1002")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+                    .addBodyParameter("customerNo", customer_id)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -884,8 +890,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
             if (ai == null) {
                 annualincome = "";
             } else annualincome = ai;
-            AndroidNetworking.post("http://192.168.43.143:5050/editl")
-                    .addBodyParameter("customerNo", "A1002")
+            AndroidNetworking.post("http://208.91.199.50:5000/editl")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("minAge", mina)
                     .addBodyParameter("maxAge", maxa)
                     .addBodyParameter("heightFrom", hf)
