@@ -73,7 +73,7 @@
                     />
 
                 <AutoCompleteTextView
-                    android:id="@+id/relative_location"
+                    android:id="@+id/bottom_sheet_relative_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

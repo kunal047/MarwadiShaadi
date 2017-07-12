@@ -160,7 +160,7 @@
                     android:textSize="14dp"/>
 
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/editTextNativePlace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                     android:textSize="14dp"
                     />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/editTextWorkLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

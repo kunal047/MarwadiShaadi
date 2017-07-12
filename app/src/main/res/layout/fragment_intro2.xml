@@ -12,6 +12,25 @@
         android:src="@drawable/slider2min"
         android:scaleType="centerCrop"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="A unique portal that brings together all Marwadi's and offers exclusivity for Khandelwal, Agarwal, Maheshwari and Jain communities\n Talaash aapki zimmedari hamari! "
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        fontPath="fonts/OpenSans-Bold.ttf"
+        tools:ignore="MissingPrefix"/>
+    </LinearLayout>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/get_started"
         android:background="@layout/button_border_corner_circle_"

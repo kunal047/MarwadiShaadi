@@ -1,7 +1,6 @@
 package com.example.sid.marwadishaadi;
 
 import android.content.Context;
-import android.provider.Contacts;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -9,44 +8,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import android.widget.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sid on 01-Jul-17.
+ * Created by Sid on 08-Jul-17.
  */
 
-public class PlacesAdapter extends ArrayAdapter<Place> {
+public class CityAdapter extends ArrayAdapter<String> {
 
-    protected Context context;
-    protected List<Place> placeList;
-    protected List<Place> tempItems;
-    protected List<Place> suggestions;
+    Context context;
     protected int resource, textviewresourceid;
+    protected List<String> list;
+    protected List<String> tempItems;
+    protected List<String> suggestions;
 
-    public PlacesAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<Place> objects) {
+
+
+    public CityAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<String> objects) {
         super(context, resource, textViewResourceId, objects);
-
-        this.context = context;
-        this.placeList = objects;
-        this.resource = resource;
-        this.textviewresourceid = textViewResourceId;
-        this.tempItems = new ArrayList<Place>(placeList);
-        this.suggestions = new ArrayList<Place>();
+        this.context=context;
+        this.resource=resource;
+        this.textviewresourceid=textViewResourceId;
+        this.list=objects;
+        this.tempItems = new ArrayList<String>(list);
+        this.suggestions = new ArrayList<String>();
     }
 
 
-
     @Override
-    public Place getItem(int position) {
-        return placeList.get(position);
+    public String getItem(int position) {
+        return list.get(position);
     }
 
     @Override
     public int getCount() {
-        return placeList.size();
+        return list.size();
     }
 
     @Override
@@ -56,26 +54,26 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.places_row, parent, false);
         }
-        Place place = placeList.get(position);
-        if (place != null) {
+        String str = list.get(position);
+        if (str != null) {
             TextView textView = (TextView) convertView.findViewById(R.id.place_name);
             if (textView != null) {
-                textView.setText(place.getPlace());
+                textView.setText(str);
             }
         }
         return convertView;
     }
 
     @Override
-    public Filter getFilter() {
+    public android.widget.Filter getFilter() {
         return placeFilter;
     }
 
-    Filter placeFilter = new Filter() {
+    android.widget.Filter placeFilter = new android.widget.Filter() {
 
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            String res = ((Place) resultValue).getPlace();
+            String res = (String) resultValue;
             return res;
         }
 
@@ -83,12 +81,12 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         @Override
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
-            List<Place> filteredList = (List<Place>) results.values;
+            List<String> filteredList = (List<String>) results.values;
 
             if (results != null && results.count > 0) {
                 clear();
-                for (Place place : filteredList) {
-                    add(place);
+                for (String str : filteredList) {
+                    add(str);
                     notifyDataSetChanged();
                 }
             } else {
@@ -102,9 +100,9 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             FilterResults filterResults = new FilterResults();
             if (constraint != null) {
                 suggestions.clear();
-                for (Place place : tempItems) {
-                    if (place.getCity().toLowerCase().startsWith(constraint.toString())) {
-                        suggestions.add(place);
+                for (String str : tempItems) {
+                    if (str.toLowerCase().startsWith(constraint.toString())) {
+                        suggestions.add(str);
                     }
                 }
                 filterResults.values = suggestions;

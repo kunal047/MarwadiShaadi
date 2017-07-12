@@ -25,6 +25,8 @@ import android.widget.Toast;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.example.sid.marwadishaadi.App;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.stepstone.stepper.Step;
@@ -41,6 +43,7 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
     public static EditText preferenceMaritalstatus;
     public static EditText preferenceAnnualincome;
     public static EditText preferencePhysicalstatus;
+    protected PlacesAdapter placesAdapter;
 
     public static Signup_Partner_Preferences_Fragment pf = new Signup_Partner_Preferences_Fragment();
 
@@ -229,8 +232,13 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         CheckBox checkBoxNotEmployed = (CheckBox) view.findViewById(R.id.checkNotEmployedFP);
         CheckBox checkBoxStudying = (CheckBox) view.findViewById(R.id.checkStudyingNotEmployedFP);
 
+
+        // autocomplete location -> fetch
         AutoCompleteTextView workLocation = (AutoCompleteTextView) view.findViewById(R.id.prefWorkLocation);
 
+        workLocation.setThreshold(1);
+        placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_partner_preferences, R.id.prefWorkLocation, App.placeslist);
+        workLocation.setAdapter(placesAdapter);
 
         workLocation.addTextChangedListener(new TextWatcher() {
             @Override

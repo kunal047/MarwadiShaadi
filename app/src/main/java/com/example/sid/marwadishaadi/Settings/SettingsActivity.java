@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,31 +27,28 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.model.Progress;
 import com.example.sid.marwadishaadi.About_Us.AboutUsActivity;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
 import com.example.sid.marwadishaadi.Contact_Us.ContactUsActivity;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Faq.FaqActivity;
 import com.example.sid.marwadishaadi.Login.LoginActivity;
 import com.example.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity;
 import com.example.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity;
 import com.example.sid.marwadishaadi.R;
-import com.example.sid.marwadishaadi.Search.Search;
-import com.example.sid.marwadishaadi.Search.SearchResultsActivity;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Calendar;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.HashConverter;
+import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -71,6 +66,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected TextView paymentpolicy;
     protected LinearLayout morelinearlayout;
     protected TextView more;
+    protected AlertDialog resetbox;
+    protected ProgressDialog dialog;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
     private String customer_id, customer_gender;
     private ProgressDialog dialog;
@@ -263,8 +260,10 @@ public class SettingsActivity extends AppCompatActivity {
                          user_old_pass = oldpass.getText().toString();
                          user_new_pass = newpass.getText().toString();
 
+//                        customer_id="J1001";
                          query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
                         new BackEnd().execute(query);
+
 
                     }
                 });
@@ -275,7 +274,7 @@ public class SettingsActivity extends AppCompatActivity {
                         final Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + call_us.getText().toString()));//change the number
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(getApplicationContext(),"Permission for Call Denied!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
                             return;
                         }else{
                             AlertDialog.Builder discarduser = new AlertDialog.Builder(SettingsActivity.this);
@@ -301,7 +300,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
 
-                AlertDialog resetbox = reset.create();
+                 resetbox = reset.create();
                 resetbox.show();
             }
         });
@@ -401,7 +400,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = new ProgressDialog(SettingsActivity.this);
+
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.setMessage("Please Wait...");
@@ -435,35 +434,66 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                                 @Override
                                                 public void onResponse(JSONArray response) {
                                                     Log.d(TAG, "onResponse: ********** new passord ***      "+quer);
-                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG);
-
+                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG).show();
+                                                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if(dialog.isShowing()){
+                                                                dialog.dismiss();
+                                                            }
+                                                            if(resetbox.isShowing()){
+                                                                resetbox.dismiss();
+                                                            }
+                                                        }
+                                                    });
                                                 }
 
                                                 @Override
                                                 public void onError(ANError anError) {
-                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG);
+                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG).show();
                                                     Log.d(TAG, "onError: ----network error  88"+ anError);
-
+                                                    SettingsActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if(dialog.isShowing()){
+                                                                dialog.dismiss();
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             });
                                 }
 
                                 else
-                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG);
+                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG).show();
 
                             }
                             catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-
+                        /*SettingsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(dialog.isShowing()){
+                                    dialog.dismiss();
+                                }
+                            }
+                        });*/
                     }
 
                     @Override
                     public void onError(ANError error) {
-                        Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG).show();
                         Log.d(TAG, "onError: ----network error  88  "+error);
-
+                        SettingsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(dialog.isShowing()){
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -473,8 +503,6 @@ private class BackEnd extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        dialog.dismiss();
-
     }
 }
 }

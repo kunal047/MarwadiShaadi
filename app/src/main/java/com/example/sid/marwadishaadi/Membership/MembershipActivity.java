@@ -60,6 +60,7 @@ public  AlertDialog.Builder reset;
     View mview;
     Button skip,coupon;
     String str;
+    ProgressDialog dialog;
 
     public static Integer getCalculate() {
         return calculate;
