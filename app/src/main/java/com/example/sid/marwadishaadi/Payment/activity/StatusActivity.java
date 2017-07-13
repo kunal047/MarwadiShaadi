@@ -28,14 +28,11 @@ import com.facebook.login.LoginManager;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.Membership.MembershipActivity.PackageInfos;
 import static com.facebook.GraphRequest.TAG;
 
@@ -46,11 +43,16 @@ public class StatusActivity extends Activity {
 	private int i = 0;
 	int count=0;
 	private List<String> ListOfQueries;
+	private String customer_id;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_status);
+
+		SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+		customer_id = sharedpref.getString("customer_id", null);
+
 		Intent mainIntent = getIntent();
 		ListOfQueries=new ArrayList<String>();
 //		TextView tv4 = (TextView) findViewById(R.id.textView1);

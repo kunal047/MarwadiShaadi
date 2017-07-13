@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -43,13 +45,11 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
-    public static final String URL = "http://208.91.199.50:5000/";
-    public static EditText prefannualincome;
+    public static  EditText prefannualincome;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
@@ -74,14 +74,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
     private Spinner maritalstatus;
     private Spinner physicalstatus;
     private int casebreak;
-    private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+    private String customer_id;
 
-            Bundle bundle = intent.getExtras();
-            uai = bundle.getString("annualIncome");
-        }
-    };
 
     public EditPreferencesActivity() {
 
@@ -90,13 +84,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(someBroadcastReceiver,
-                new IntentFilter(SOME_INTENT_FILTER_NAME));
     }
 
     @Override
     public void onPause() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(someBroadcastReceiver);
         super.onPause();
     }
 
@@ -110,14 +101,15 @@ public class EditPreferencesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_preferences);
 
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_prefs_toolbar);
         toolbar.setTitle("Edit Partner Preferences");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(someBroadcastReceiver, new IntentFilter(SOME_INTENT_FILTER_NAME));
 
 
         age = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
@@ -279,8 +271,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 if (ms.equals("Select Marital Status"))
                     ms = "";
 
+                SharedPreferences sharedpref = getSharedPreferences("prefai", MODE_PRIVATE);
+                uai = sharedpref.getString("ai", null);
                 ai = uai;
-
+                Log.d(TAG, "onClick: value is " + ai);
 
                 new EditPartnerPreferences().execute();
 
@@ -326,11 +320,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         maritalstatus = (Spinner) findViewById(R.id.edit_marital_status);
 
-        prefannualincome = (EditText) findViewById(R.id.edit_annual_income);
+        prefannualincome = (EditText) findViewById(R.id.prefedit_annual_income);
         prefannualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "inOnclick", Toast.LENGTH_LONG).show();
 
                 BottomSheetDialogFragment btm = new BottomSheet(112, strArrayAnnual);
                 btm.show(getSupportFragmentManager(), btm.getTag());
@@ -644,8 +637,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePartnerPreferences")
-                    .addBodyParameter("customerNo", "A1002")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+                    .addBodyParameter("customerNo", customer_id)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -841,9 +834,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                strAnnual = response.getString(11).replace("[", "").replace("]", "");
-                                prefannualincome.setText(strAnnual);
-                                strArrayAnnual = strAnnual.split(",");
+                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", ""));
+
+
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -881,12 +875,14 @@ public class EditPreferencesActivity extends AppCompatActivity {
             String education = ep.toString();
             String occupation = op.toString();
             String bodytype = bt.toString();
-            String annualincome = null;
+            String annualincome;
             if (ai == null) {
                 annualincome = "";
-            } else annualincome = ai;
-            AndroidNetworking.post("http://192.168.43.143:5050/editl")
-                    .addBodyParameter("customerNo", "A1002")
+            } else {
+                annualincome = ai.replace("[", "").replace("]", "");
+            }
+            AndroidNetworking.post("http://208.91.199.50:5000/editPreferences")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("minAge", mina)
                     .addBodyParameter("maxAge", maxa)
                     .addBodyParameter("heightFrom", hf)

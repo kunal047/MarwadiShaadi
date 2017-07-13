@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Blocked_Members;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -31,13 +32,13 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 public class BlockedActivity extends AppCompatActivity {
     Bundle bundle;
     private List<BlockModel> blockModelList = new ArrayList<>();
     private RecyclerView recyclerView;
     private BlockAdapter blockAdapter;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -48,7 +49,11 @@ public class BlockedActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blocked);
-         bundle= getIntent().getExtras();
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
+        bundle= getIntent().getExtras();
         Toolbar toolbar = (Toolbar) findViewById(R.id.blocked_toolbar);
         toolbar.setTitle("Blocked Members");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

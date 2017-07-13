@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,9 +34,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class RecentProfilesFragment extends Fragment {
@@ -47,11 +46,17 @@ public class RecentProfilesFragment extends Fragment {
     private RecentAdapter recentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private String customer_id, customer_gender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mview = inflater.inflate(R.layout.fragment_recent__profiles, container, false);
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         // analytics
@@ -124,7 +129,7 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.get(URL + "prepareRecent/{customerNo}/{gender}")
+            AndroidNetworking.get("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)
@@ -133,12 +138,7 @@ public class RecentProfilesFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mProgressDialog.dismiss();
-                                }
-                            });
+
                             try {
 
                                 recentList.clear();
@@ -175,7 +175,7 @@ public class RecentProfilesFragment extends Fragment {
                                     String recentStatus = array.getString(8);
 
 
-                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** "  +favouriteStatus + " 000000000000 " + recentStatus);
+                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** " + favouriteStatus + " 000000000000 " + recentStatus);
                                     date = formatter.parse(createdOn);
                                     long diff = now.getTime() - date.getTime();
                                     long diffSeconds = diff / 1000 % 60;
@@ -197,7 +197,7 @@ public class RecentProfilesFragment extends Fragment {
                                         createdOn = diffSeconds + " seconds ago";
                                     }
 
-                                    Log.d(TAG, "onResponse: created on *************************** " +  createdOn);
+                                    Log.d(TAG, "onResponse: created on *************************** " + createdOn);
 
                                     RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
                                     recentList.add(recentModel);
@@ -227,6 +227,14 @@ public class RecentProfilesFragment extends Fragment {
                     });
 
             return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            recentAdapter.notifyDataSetChanged();
+            mProgressDialog.dismiss();
         }
     }
 }

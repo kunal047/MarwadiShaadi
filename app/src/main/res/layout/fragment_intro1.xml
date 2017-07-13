@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context="com.example.sid.marwadishaadi.Intro_Slides.Intro1Fragment">
 
@@ -15,10 +14,30 @@
         android:scaleType="centerCrop"/>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Marwadi Shaadi is the perfect place to find your perfect match. For every single marwadi looking for a soul mate."
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:layout_marginTop="300dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            fontPath="fonts/OpenSans-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+
+        <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
+            android:layout_marginTop="150dp"
         android:layout_gravity="bottom|center">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -36,5 +55,7 @@
             android:layout_margin="5dp"
             android:src="@color/white"/>
     </LinearLayout>
+    </LinearLayout>
+
 
 </FrameLayout>

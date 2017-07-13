@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,8 +35,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class InterestReceivedFragment extends Fragment {
@@ -47,6 +47,7 @@ public class InterestReceivedFragment extends Fragment {
     private CoordinatorLayout coordinatorLayout;
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String customer_id, customer_gender;
 
 
     public InterestReceivedFragment() {
@@ -59,6 +60,10 @@ public class InterestReceivedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
 
         swipeRefreshLayout = (SwipeRefreshLayout)mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -145,7 +150,7 @@ public class InterestReceivedFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
 
-            AndroidNetworking.post(URL + "prepareReceivedInterest")
+            AndroidNetworking.post( "http://208.91.199.50:5000/prepareReceivedInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()

@@ -284,10 +284,8 @@ public class LoginActivity extends AppCompatActivity {
                                         SharedPreferences.Editor editor=saved_values.edit();
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        editor.putString("first_name",response.getString(3));
-                                        editor.putString("surname",response.getString(4));
                                         editor.putBoolean("isLoggedIn",true);
-                                        JSONArray communityArray=response.getJSONArray(5);
+                                        JSONArray communityArray=response.getJSONArray(3);
                                         for(int i=0;i<5;i++){
                                             editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
                                         }
@@ -355,10 +353,8 @@ public class LoginActivity extends AppCompatActivity {
                                         SharedPreferences.Editor editor = saved_values.edit();
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        editor.putString("first_name",response.getString(3));
-                                        editor.putString("surname",response.getString(4));
                                         editor.putBoolean("isLoggedIn",true);
-                                        JSONArray communityArray=response.getJSONArray(5);
+                                        JSONArray communityArray=response.getJSONArray(3);
                                         for(int i=0;i<5;i++){
                                             editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
                                         }
@@ -408,10 +404,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
         super.onBackPressed();
     }
 }

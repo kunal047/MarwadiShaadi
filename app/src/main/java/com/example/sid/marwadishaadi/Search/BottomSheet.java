@@ -11,6 +11,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,9 +23,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.App;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.Filter;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment;
 import com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment;
@@ -42,9 +45,7 @@ import java.util.List;
 import java.util.Vector;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.R.id.hometown;
-import static com.example.sid.marwadishaadi.R.id.mariSta;
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.Search.Search.AIList;
 import static com.example.sid.marwadishaadi.Search.Search.CastList;
 import static com.example.sid.marwadishaadi.Search.Search.annualincome;
@@ -63,6 +64,7 @@ import static com.example.sid.marwadishaadi.Search.Search.spinnerCastSearch;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceAnnualincome;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceMaritalstatus;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.prefannualincome;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 
@@ -76,22 +78,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private static EditText fname, lname, id;
     private static int count = 0, size = 0;
     public ProgressDialog dialog;
+    protected PlacesAdapter placesAdapter;
+
 
     //Edit Educational details
     Spinner editEducation;
-    TextView eduDegree, eduInstituteLocation;
+    TextView eduDegree;
     Button updateEducation;
     String e, hd, in;
-
+    EditText eduInstituteLocation;
 
     //Edit Professional details of User Profile
     Spinner designation, annualIncome, occupation;
-    TextView companyName, companyLocation;
+    TextView companyName;
     Button updateProfession;
     String d, cn, o, cl, ai;
     EditText aboutMe;
     Button aboutMe_update;
     String am;
+    AutoCompleteTextView companyLocation;
 
     //Hobbies additional details
     EditText hobbies;
@@ -107,22 +112,27 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     //Horoscope additional details
     Spinner manglik, matchHoroscope;
-    EditText birthTime, birthPlace, gotra;
+    EditText birthTime, gotra;
     String m, bt, bp, g, mh;
     Button horoscopeUpdate;
-
+    AutoCompleteTextView birthPlace;
 
     //Relation Family Details
     Spinner relation;
-    EditText relativeName, relativeOccupation, relativeLocation, relativeMobile;
+    EditText relativeName, relativeOccupation, relativeMobile;
     Button relationUpdate;
     String r, rn, ro, rl, rm;
     String[] array;
+    AutoCompleteTextView relativeLocation;
+
+
     Bundle bundle;
     private int content;
     private View contentView;
     private UsersAdapter adapter;
     private int coun;
+    private String customer_id;
+
 
     public BottomSheet() {
 
@@ -172,9 +182,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
             case 112:
-                contentView = viewGetterEditPref(R.array.aincome_array, array);
-                Toast.makeText(getContext(), "incase", Toast.LENGTH_LONG).show();
-
+//                contentView = viewGetterEditPref(R.array.aincome_array, array);
+                Toast.makeText(getContext(), "incase why this is called ", Toast.LENGTH_LONG).show();
                 count = 2;
                 break;
 
@@ -220,10 +229,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 12:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
+                SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
+                Log.d(TAG, "setupDialog: case 12 ------------------------ " + customer_id);
                 editEducation = (Spinner) contentView.findViewById(R.id.edit_education);
                 eduDegree = (TextView) contentView.findViewById(R.id.edit_highest_degree);
-                eduInstituteLocation = (TextView) contentView.findViewById(R.id.edit_institute_name);
                 updateEducation = (Button) contentView.findViewById(R.id.education_update);
+                eduInstituteLocation = (EditText) contentView.findViewById(R.id.edit_institute_name);
 
 
 //                UPDATE tbl_user SET education="Engineer", edu_degree="B.E.", college_name="Dr. Babasaheb Ambedakar" WHERE customer_no="A1028"
@@ -238,9 +250,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         e = editEducation.getSelectedItem().toString();
                         hd = eduDegree.getText().toString();
                         in = eduInstituteLocation.getText().toString();
-                        Log.d(TAG, "setupDialog: education is-----------" + e);
-                        Log.d(TAG, "setupDialog: degree is--------" + hd);
-                        Log.d(TAG, "setupDialog: institute is-------" + in);
                         new EditPersonalEducationDetails().execute();
                         Intent i = new Intent(getContext(), UserProfileActivity.class);
                         startActivity(i);
@@ -249,20 +258,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
 
                 });
-                count = 2;
 
                 break;
             case 13:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_profession, null);
-                count = 2;
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
+//                count = 2;
 
 
                 designation = (Spinner) contentView.findViewById(R.id.profession);
                 annualIncome = (Spinner) contentView.findViewById(R.id.edit_annual_income);
                 companyName = (TextView) contentView.findViewById(R.id.job_company);
-                companyLocation = (TextView) contentView.findViewById(R.id.job_location);
                 occupation = (Spinner) contentView.findViewById(R.id.occupation);
                 updateProfession = (Button) contentView.findViewById(R.id.professionUpdate);
+
+                companyLocation = (AutoCompleteTextView) contentView.findViewById(R.id.job_location);
+                companyLocation.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_profession, R.id.job_location, App.placeslist);
+                companyLocation.setAdapter(placesAdapter);
 
                 new FetchProfessionalEducationDetails().execute();
 
@@ -294,8 +308,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 21:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_about_me, null);
-                count = 2;
+//                count = 2;
 
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 aboutMe = (EditText) contentView.findViewById(R.id.about_me);
                 aboutMe_update = (Button) contentView.findViewById(R.id.aboutMe_update);
@@ -321,8 +337,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 22:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_hobbies, null);
-                count = 2;
 
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
                 hobbies = (EditText) contentView.findViewById(R.id.hobbies);
                 hobbies_update = (Button) contentView.findViewById(R.id.hobbiesUpdate);
 
@@ -348,7 +365,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 23:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_lifestyle, null);
-                count = 2;
+
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 eatingHabit = (Spinner) contentView.findViewById(R.id.eating_habits);
                 drinkingHabit = (Spinner) contentView.findViewById(R.id.drinking_habit);
@@ -382,21 +401,28 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
             case 24:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_horoscope, null);
-                count = 2;
+//                count = 2;
 
-
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
                 birthTime = (EditText) contentView.findViewById(R.id.birthtime);
-                birthPlace = (EditText) contentView.findViewById(R.id.birth_location);
                 gotra = (EditText) contentView.findViewById(R.id.gotra);
                 manglik = (Spinner) contentView.findViewById(R.id.manglik);
                 matchHoroscope = (Spinner) contentView.findViewById(R.id.match_horoscope);
                 horoscopeUpdate = (Button) contentView.findViewById(R.id.horoscope_update);
+
+                // autcomplete location field
+                birthPlace = (AutoCompleteTextView) contentView.findViewById(R.id.birth_location);
+                birthPlace.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_horoscope, R.id.birth_location, App.placeslist);
+                birthPlace.setAdapter(placesAdapter);
 
                 new FetchAdditionalHoroscopeDetails().execute();
 
                 horoscopeUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         bt = birthTime.getText().toString();
                         bp = birthPlace.getText().toString();
                         g = gotra.getText().toString();
@@ -425,15 +451,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 32:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_relatives, null);
-                count = 2;
 
+
+                sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+                customer_id = sharedpref.getString("customer_id", null);
 
                 relation = (Spinner) contentView.findViewById(R.id.relation);
                 relativeName = (EditText) contentView.findViewById(R.id.relative_name);
                 relativeOccupation = (EditText) contentView.findViewById(R.id.relative_occupation);
-                relativeLocation = (EditText) contentView.findViewById(R.id.relative_location);
                 relativeMobile = (EditText) contentView.findViewById(R.id.relative_mobile);
                 relationUpdate = (Button) contentView.findViewById(R.id.relation_update);
+
+
+                relativeLocation = (AutoCompleteTextView) contentView.findViewById(R.id.bottom_sheet_relative_location);
+                relativeLocation.setThreshold(1);
+                placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_relatives, R.id.bottom_sheet_relative_location, App.placeslist);
+                relativeLocation.setAdapter(placesAdapter);
+
 
                 new FetchFamilyRelationDetails().execute();
 
@@ -467,8 +501,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             default:
                 contentView = View.inflate(getContext(), R.layout.custom_list_view, null);
-                count = 2;
-
                 break;
 
         }
@@ -498,7 +530,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     strfname = fname.getText().toString();
                     strlname = lname.getText().toString();
                     strid = id.getText().toString();
-
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String gender = sharedPreferences.getString("gender", null);
+                    if (gender.contains("Male")) {
+                        gender = "Female";
+                    } else {
+                        gender = "Male";
+                    }
                     if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
 
                         Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
@@ -508,13 +546,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                     } else if (!strid.trim().isEmpty()) {
 
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        String gender = sharedPreferences.getString("gender", null);
-                        if (gender.contains("Male")) {
-                            gender = "Female";
-                        } else {
-                            gender = "Male";
-                        }
+
                         if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
                             Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
 
@@ -541,7 +573,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<String> result = new ArrayList<String>();
+                    List<String> result = new ArrayList<>();
                     for (User p : adapter.getBox()) {
                         if (p.box) {
                             coun++;
@@ -574,16 +606,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             countfamilystatus = coun;
                             break;
                         case 5:
+                            Log.d(TAG, "onClick: context for ann is " + getContext().toString());
                             if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
 
                                 preferenceAnnualincome.setText(result.toString());
+                            } else if (getContext().toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity")) {
+
+                                prefannualincome.setText(result.toString().replace("[", "").replace("]", ""));
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("prefai", MODE_PRIVATE).edit();
+                                editor.putString("ai", result.toString());
+                                editor.apply();
 
 
                             } else {
-                                annualincome.setText(result.toString());
+
+                                annualincome.setText(result.toString().replace("[","").replace("]",""));
                                 AIList = result;
                                 countannualincome = coun;
-
                             }
                             break;
                         case 6:
@@ -625,9 +664,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
         return view;
     }
     private View viewGetterEditPref(int array, String[] arr) {
+
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b = true;
@@ -664,7 +709,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.e(TAG, "response query is  ----------" + strings[0]);
+            Log.d(TAG, "response query is  ----------" + strings[0]);
             AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
@@ -690,11 +735,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                         int year = calender.get(Calendar.YEAR);
                                     /*SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);*/
                                         SuggestionModel suggestionModel;
-                                    if(user.get(8).equals("")){
-                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                    }else{
-                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                    }
+                                        if(user.get(8).equals("")){
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }else{
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }
                                         sm.add(suggestionModel);
 //                                        Log.e(TAG, "onResponse: --- sm details are " + sm.get(i).getCusId());
                                     }
@@ -740,27 +785,30 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
     class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
+
+
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editPersonalEducationDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .addBodyParameter("education", e)
-                .addBodyParameter("edu_degree", hd)
-                .addBodyParameter("college_name", in)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            Log.d(TAG, "doInBackground: teeeeeeeeeeeeeeeeeeeeeest " + customer_id);
+            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalEducationDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("education", e)
+                    .addBodyParameter("edu_degree", hd)
+                    .addBodyParameter("college_name", in)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -771,37 +819,37 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] education_array = getResources().getStringArray(R.array.education_array);
-                            for (String s : education_array) {
-                                if (jsonArray.getString(13).equals(s)) {
-                                    editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] education_array = getResources().getStringArray(R.array.education_array);
+                                for (String s : education_array) {
+                                    if (jsonArray.getString(13).equals(s)) {
+                                        editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
+                                    }
                                 }
+                                eduDegree.setText(jsonArray.getString(14));
+                                eduInstituteLocation.setText(jsonArray.getString(15));
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            eduDegree.setText(jsonArray.getString(14));
-                            eduInstituteLocation.setText(jsonArray.getString(15));
 
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -813,75 +861,75 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] designationArray = getResources().getStringArray(R.array.designation_array);
-                            String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
-                            String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
-                            Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] designationArray = getResources().getStringArray(R.array.designation_array);
+                                String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
+                                String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
+                                Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
 
 
-                            for (String s : designationArray) {
-                                if (jsonArray.getString(20).equals(s)) {
-                                    designation.setSelection(Arrays.asList(designationArray).indexOf(s));
+                                for (String s : designationArray) {
+                                    if (jsonArray.getString(20).equals(s)) {
+                                        designation.setSelection(Arrays.asList(designationArray).indexOf(s));
+                                    }
                                 }
-                            }
 
-                            for (String s : occupationArray) {
-                                if (jsonArray.getString(17).equals(s)) {
-                                    occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
+                                for (String s : occupationArray) {
+                                    if (jsonArray.getString(17).equals(s)) {
+                                        occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
+                                    }
                                 }
-                            }
 
-                            String annualI = jsonArray.getString(18);
-                            annualI = annualI.replaceAll("[^-?0-9]+", " ");
-                            List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                            Log.d(TAG, "onResponse: income array is " + incomeArray);
-                            if (jsonArray.getString(18).contains("Upto")) {
-                                annualI = "Upto 3L";
-                            } else if (jsonArray.getString(18).contains("Above")) {
-                                annualI = "Above 50L";
+                                String annualI = jsonArray.getString(18);
+                                annualI = annualI.replaceAll("[^-?0-9]+", " ");
+                                List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
+                                Log.d(TAG, "onResponse: income array is " + incomeArray);
+                                if (jsonArray.getString(18).contains("Upto")) {
+                                    annualI = "Upto 3L";
+                                } else if (jsonArray.getString(18).contains("Above")) {
+                                    annualI = "Above 50L";
 
-                            } else if (incomeArray.size() == 3) {
-                                Log.d(TAG, "onResponse: when three");
-                                double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                annualI = (int) first + "L - " + (int) second + "L";
-                            } else {
-                                annualI = "No Income mentioned.";
-                            }
-
-
-                            for (String s : annualIncomeArray) {
-                                if (annualI.equals(s)) {
-                                    annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
+                                } else if (incomeArray.size() == 3) {
+                                    Log.d(TAG, "onResponse: when three");
+                                    double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                                    double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                                    annualI = (int) first + "L - " + (int) second + "L";
+                                } else {
+                                    annualI = "No Income mentioned.";
                                 }
+
+
+                                for (String s : annualIncomeArray) {
+                                    if (annualI.equals(s)) {
+                                        annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
+                                    }
+                                }
+                                Log.d(TAG, "onResponse: AI is ------" + annualI);
+
+
+                                companyName.setText(jsonArray.getString(19));
+                                companyLocation.setText(jsonArray.getString(21));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            Log.d(TAG, "onResponse: AI is ------" + annualI);
 
-
-                            companyName.setText(jsonArray.getString(19));
-                            companyLocation.setText(jsonArray.getString(21));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -891,27 +939,27 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editPersonalProfessionDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .addBodyParameter("occupation", o)
-                .addBodyParameter("annualIncome", ai)
-                .addBodyParameter("companyName", cn)
-                .addBodyParameter("companyLocation", cl)
-                .addBodyParameter("designation", d)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalProfessionDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("occupation", o)
+                    .addBodyParameter("annualIncome", ai)
+                    .addBodyParameter("companyName", cn)
+                    .addBodyParameter("companyLocation", cl)
+                    .addBodyParameter("designation", d)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -922,29 +970,29 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            aboutMe.setText(jsonArray.getString(0));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                aboutMe.setText(jsonArray.getString(0));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -954,21 +1002,22 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsAboutMe")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsAboutMe")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("aboutMe", am)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -979,29 +1028,29 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            hobbies.setText(jsonArray.getString(1));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                hobbies.setText(jsonArray.getString(1));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1011,23 +1060,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHobbies")
-                .addBodyParameter("customerNo",customer_id)
-                .addBodyParameter("hobbies", h)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHobbies")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("hobbies", h)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1038,58 +1087,58 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
 
-                            String[] dietArray = getResources().getStringArray(R.array.diet_array);
+                                String[] dietArray = getResources().getStringArray(R.array.diet_array);
 
-                            for (String s : dietArray) {
-                                if (jsonArray.getString(2).equals(s)) {
-                                    eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------eating----" + s);
+                                for (String s : dietArray) {
+                                    if (jsonArray.getString(2).equals(s)) {
+                                        eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------eating----" + s);
+                                    }
                                 }
+
+                                String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
+
+                                for (String s : drinkingArray) {
+                                    if (jsonArray.getString(3).equals(s)) {
+                                        drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------drinking----" + s);
+
+                                    }
+                                }
+
+                                String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
+
+                                for (String s : smokingArray) {
+                                    if (jsonArray.getString(4).equals(s)) {
+                                        smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------smoking----" + s);
+
+                                    }
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
-
-                            for (String s : drinkingArray) {
-                                if (jsonArray.getString(3).equals(s)) {
-                                    drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------drinking----" + s);
-
-                                }
-                            }
-
-                            String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
-
-                            for (String s : smokingArray) {
-                                if (jsonArray.getString(4).equals(s)) {
-                                    smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------smoking----" + s);
-
-                                }
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1099,25 +1148,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsLifestyle")
-                .addBodyParameter("customerNo", customer_id)
-                .addBodyParameter("smokingHabit", sh)
-                .addBodyParameter("eatingHabit", eh)
-                .addBodyParameter("drinkingHabit", dh)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsLifestyle")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("smokingHabit", sh)
+                    .addBodyParameter("eatingHabit", eh)
+                    .addBodyParameter("drinkingHabit", dh)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1128,51 +1177,51 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileAdditionalDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
 
-                            birthTime.setText(jsonArray.getString(5));
-                            gotra.setText(jsonArray.getString(7));
-                            birthPlace.setText(jsonArray.getString(6));
+                                birthTime.setText(jsonArray.getString(5));
+                                gotra.setText(jsonArray.getString(7));
+                                birthPlace.setText(jsonArray.getString(6));
 
 
-                            String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
+                                String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
 
-                            for (String s : manglikArray) {
-                                if (jsonArray.getString(8).equals(s)) {
-                                    manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
+                                for (String s : manglikArray) {
+                                    if (jsonArray.getString(8).equals(s)) {
+                                        manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
+                                    }
                                 }
+
+                                String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
+
+                                for (String s : horoscopeArray) {
+                                    if (jsonArray.getString(9).equals(s)) {
+                                        matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
+
+                                    }
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
-
-                            for (String s : horoscopeArray) {
-                                if (jsonArray.getString(9).equals(s)) {
-                                    matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
-
-                                }
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1182,27 +1231,27 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editAdditionalDetailsHoroscope")
-                .addBodyParameter("customerNo", customer_id)
-                .addBodyParameter("birthTime", bt)
-                .addBodyParameter("birthPlace", bp)
-                .addBodyParameter("gotra", g)
-                .addBodyParameter("manglik", m)
-                .addBodyParameter("matchHoroscope", mh)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHoroscope")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("birthTime", bt)
+                    .addBodyParameter("birthPlace", bp)
+                    .addBodyParameter("gotra", g)
+                    .addBodyParameter("manglik", m)
+                    .addBodyParameter("matchHoroscope", mh)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1213,38 +1262,38 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
 
-                            for (String s : relationArray) {
-                                if (jsonArray.getString(10).equals(s)) {
-                                    relation.setSelection(Arrays.asList(relationArray).indexOf(s));
+                                for (String s : relationArray) {
+                                    if (jsonArray.getString(10).equals(s)) {
+                                        relation.setSelection(Arrays.asList(relationArray).indexOf(s));
+                                    }
                                 }
+                                relativeName.setText(jsonArray.getString(11));
+                                relativeOccupation.setText(jsonArray.getString(12));
+                                relativeLocation.setText(jsonArray.getString(13));
+                                relativeMobile.setText(jsonArray.getString(14));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            relativeName.setText(jsonArray.getString(11));
-                            relativeOccupation.setText(jsonArray.getString(12));
-                            relativeLocation.setText(jsonArray.getString(13));
-                            relativeMobile.setText(jsonArray.getString(14));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1254,27 +1303,27 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsRelation")
-                .addBodyParameter("customerNo", customer_id)
-                .addBodyParameter("relation", r)
-                .addBodyParameter("relativeName", rn)
-                .addBodyParameter("relativeOccupation", ro)
-                .addBodyParameter("relativeLocation", rl)
-                .addBodyParameter("relativeMobile", rm)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            AndroidNetworking.post("http://208.91.199.50:5000/editFamilyDetailsRelation")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("relation", r)
+                    .addBodyParameter("relativeName", rn)
+                    .addBodyParameter("relativeOccupation", ro)
+                    .addBodyParameter("relativeLocation", rl)
+                    .addBodyParameter("relativeMobile", rm)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }

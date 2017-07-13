@@ -49,13 +49,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class DashboardActivity extends AppCompatActivity
@@ -70,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity
     private LinearLayout inbox;
     private LinearLayout search;
     private int click = 0;
+    private String customer_id, customer_gender;
     TextView nameDrawer;
 
     @Override
@@ -85,10 +82,13 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         setSupportActionBar(toolbar);
 
-       
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        customer_gender = sharedpref.getString("gender", null);
+
 
         Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -99,6 +99,8 @@ public class DashboardActivity extends AppCompatActivity
         View mview = navigationView.getHeaderView(0);
         nameDrawer = (TextView) mview.findViewById((R.id.name_drawer));
         userdp = (ImageView) mview.findViewById(R.id.user_dp);
+        //fetch dp and name
+        new FetchDrawer().execute();
         userdp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,8 +109,7 @@ public class DashboardActivity extends AppCompatActivity
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
-    //fetch dp and name
-        new FetchDrawer().execute();
+
         interest = (LinearLayout) mview.findViewById(R.id.nav_interest);
         interest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,7 +334,8 @@ public class DashboardActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post(URL +"fetchProfilePictureDrawer")
+            Log.d(TAG, "doInBackground: customer id is +++++++++++++++++++++++++ " + customer_id);
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchProfilePictureDrawer")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -344,11 +346,19 @@ public class DashboardActivity extends AppCompatActivity
                         public void onResponse(JSONArray response) {
 
                             try {
-                                JSONArray array = response.getJSONArray(0);
-                                String name = array.getString(1) + " " + array.getString(2);
+                                Log.d(TAG, "onResponse: resposne is " + response.toString());
+                                Log.d(TAG, "onResponse: length of response is " + response.length());
 
-                                Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + array.getString(0)).into(userdp);
+                                String name = response.getString(0) + " " + response.getString(1);
+                                if (response.length() == 3) {
+                                    Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + response.getString(2)).into(userdp);
+                                }
                                 nameDrawer.setText(name);
+
+                                SharedPreferences sharedpref = getSharedPreferences("customername", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedpref.edit();
+                                editor.putString("name", nameDrawer.getText().toString());
+                                editor.apply();
 
                             }catch (JSONException e) {
                                 e.printStackTrace();

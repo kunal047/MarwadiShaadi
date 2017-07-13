@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,14 +34,16 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.example.sid.marwadishaadi.App;
 import com.example.sid.marwadishaadi.Chat.Dialog;
-import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.example.sid.marwadishaadi.CityAdapter;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
 import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
+import com.example.sid.marwadishaadi.Place;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +69,7 @@ public class Search extends AppCompatActivity {
     public ProgressDialog dialog;
     TextView tvMin, tvMax;
     Button addButton, searchaddbutton;
-    EditText autoCompleteState, autocompletecity;
+    AutoCompleteTextView autoCompleteState, autocompletecity;
     static String addTextState, addPrevious = "";
     static String addTextcity, addPreviousc = "";
     public static EditText maritalstatus;
@@ -98,9 +101,11 @@ public class Search extends AppCompatActivity {
     public static List<String> maritalstatusList = new ArrayList<>();
     public static List<String> AIList = new ArrayList<>();
     public static List<String> physicalstatusList = new ArrayList<>();
-
-
+    List<String> cityAutoCompleteList = new ArrayList<>();
+    List<String> stateAutoCompleteList = new ArrayList<>();
+    CityAdapter cityAdapter;
     Spinner height_from, height_to, sort_by, manglik, children;
+    private String customer_id;
 
     public Search() {
 
@@ -144,6 +149,10 @@ public class Search extends AppCompatActivity {
         String[] community= getResources().getStringArray(R.array.communities);
         SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         CastList.clear();
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         for(int i=0;i<5;i++){
             if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
             {
@@ -241,19 +250,29 @@ public class Search extends AppCompatActivity {
         searchaddbutton = (Button) findViewById(R.id.search_add_city);
         statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
         citytextview = (TextView) findViewById(R.id.text_view_search_add_city);
-        autoCompleteState = (EditText) findViewById(R.id.search_state);
-        autocompletecity = (EditText) findViewById(R.id.search_city);
+        autoCompleteState = (AutoCompleteTextView) findViewById(R.id.search_state);
+        autocompletecity = (AutoCompleteTextView) findViewById(R.id.search_city);
+        new FetchLocationSearch().execute();
+        //autocomplete city and state
+        autocompletecity.setThreshold(1);
+        cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_city, cityAutoCompleteList);
+        autocompletecity.setAdapter(cityAdapter);
+
+        autoCompleteState.setThreshold(1);
+        cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_state,stateAutoCompleteList);
+        autoCompleteState.setAdapter(cityAdapter);
+
 
         advCV = (CardView) findViewById(R.id.advanced_search);
         final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
-// get min and max text view
+        // get min and max text view
         tvMin = (TextView) findViewById(R.id.textMin);
         tvMax = (TextView) findViewById(R.id.textMax);
         rangeSeekbar.setMinValue(18);
         rangeSeekbar.setMaxValue(71);
 
 
-// set listener
+        // set listener
 
 
         rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
@@ -1342,15 +1361,7 @@ public class Search extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        onBackPressed();
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent= new Intent(Search.this, DashboardActivity.class);
-        startActivity(intent);
-        super.onBackPressed();
     }
 
     private class BackEnd extends AsyncTask<String, String, String> {
@@ -1432,4 +1443,42 @@ public class Search extends AppCompatActivity {
 
         }
     }
+
+    public class FetchLocationSearch extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            AndroidNetworking.post("http://192.168.43.143:5050/fetchCityStateCountry")
+                .addBodyParameter("customerNo", customer_id)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        String city,state;
+                        try {
+                            for(int i = 0;i<response.length();i++) {
+                                JSONArray array = response.getJSONArray(i);
+                                city = array.getString(0);
+                                cityAutoCompleteList.add(city);
+
+                                state = array.getString(2);
+                                stateAutoCompleteList.add(state);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+            return null;
+        }
+    }
+
 }

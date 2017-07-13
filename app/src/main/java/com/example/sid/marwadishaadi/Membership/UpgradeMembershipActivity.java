@@ -12,8 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Button;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,24 +22,15 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.example.sid.marwadishaadi.R;
-import com.example.sid.marwadishaadi.Search.Search;
-import com.example.sid.marwadishaadi.Search.SearchResultsActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.meg7.widget.CircleImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.Calendar;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.Search.Search.suggestionModelList2;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class UpgradeMembershipActivity extends AppCompatActivity {
@@ -52,6 +43,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     TextView agarwal_end, jain_end, khandelwal_end, maheshwari_end, others_end;
     TextView name,id;
     public ProgressDialog dialog;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -63,6 +55,9 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upgrade_membership);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.upgrademembership_toolbar);
         toolbar.setTitle("Membership Status");
@@ -80,9 +75,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         name=(TextView)findViewById(R.id.membership_name);
         id=(TextView)findViewById(R.id.membership_id);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        name.setText(sharedPreferences.getString("first_name",null)+" "+ sharedPreferences.getString("surname",null));
-        id.setText(sharedPreferences.getString("customer_id",null));
+
         agarwal_duration=(TextView)findViewById(R.id.duration_agarwal);
         agarwal_start=(TextView)findViewById(R.id.start_agarwal);
         agarwal_end=(TextView)findViewById(R.id.end_agarwal);
@@ -110,8 +103,9 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         others.setVisibility(View.GONE);
         no.setVisibility(View.GONE);
 
+
+
         String query = "SELECT community, duration, date(purchase_date), date(expiry_date), is_active FROM `tbl_user_community_package` WHERE customer_no=\""+customer_id+"\";";
-        Log.d(TAG, "onCreate: ----- query is "+query);
         new BackEndMembership().execute(query);
 
         upgrade.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +135,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post(URL + "MembershipStatus")
+            AndroidNetworking.post("http://208.91.199.50:5000/MembershipStatus")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
@@ -193,11 +187,21 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                                         }
 
 
+
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
 
                                 }
+
+                                SharedPreferences prefs = getSharedPreferences("customername", MODE_PRIVATE);
+                                String nameOfUser = prefs.getString("name", null);
+
+                                Log.d(TAG, "onResponse: name of user is " + nameOfUser);
+
+                                name.setText("Hello, " + nameOfUser);
+                                id.setText("Member ID : " + customer_id);
                             }
                         }
 
@@ -219,7 +223,6 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     }
     @Override
     public boolean onSupportNavigateUp(){
-        onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit,0);
         return true;

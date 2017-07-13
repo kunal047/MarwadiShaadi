@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Dashboard_Favourites;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -118,16 +117,6 @@ public class FavouritesFragment extends Fragment {
     }
 
     private class PrepareFavourites extends AsyncTask<String, Void, Void> {
-        ProgressDialog pd = new ProgressDialog(getContext());
-
-        @Override
-        protected void onPreExecute() {
-            pd.setTitle("Please wait..");
-            pd.setCanceledOnTouchOutside(false);
-            pd.setCancelable(false);
-            pd.show();
-            super.onPreExecute();
-        }
 
         @Override
         protected Void doInBackground(String... params) {
@@ -139,13 +128,6 @@ public class FavouritesFragment extends Fragment {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         public void onResponse(JSONArray response) {
                             // do anything with response
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
-
                             try {
                                 FavouriteModel[] favouriteModel = new FavouriteModel[response.length()];
                                 for (int i = 0; i < response.length(); i++) {
@@ -196,13 +178,6 @@ public class FavouritesFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
-
                         }
                     });
             return null;
