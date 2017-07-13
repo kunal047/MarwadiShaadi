@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -34,8 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class ProfilePersonalDetailsFragment extends Fragment {
@@ -46,7 +46,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
     private TextView edit_education;
     private TextView edit_profession;
     private Button similar;
-    private String clickedID = customer_id;
+    private String clickedID, customer_id;
 
 
     public ProfilePersonalDetailsFragment() {
@@ -59,6 +59,10 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View mview = inflater.inflate(R.layout.fragment_profile__personal__details, container, false);
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        clickedID = customer_id;
 
         edit_individual = (TextView) mview.findViewById(R.id.individual_clear);
         edit_education = (TextView) mview.findViewById(R.id.edu_clear);
@@ -180,7 +184,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             String cus = strings[0];
-            AndroidNetworking.post(URL + "profilePersonalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()

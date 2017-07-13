@@ -28,7 +28,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 /**
@@ -220,7 +219,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             String status = params[2];
             Log.d(TAG, "doInBackground: interest is ------------------ " + status);
 
-            AndroidNetworking.post(URL + "addInterestFromSuggestion")
+            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
                     .addBodyParameter("status", status)
@@ -250,7 +249,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             String customerId = params[0];
             String favId = params[1];
 
-            AndroidNetworking.post(URL + "addFavFromSuggestion")
+            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("favId", favId)
                     .addBodyParameter("status", favouriteState)

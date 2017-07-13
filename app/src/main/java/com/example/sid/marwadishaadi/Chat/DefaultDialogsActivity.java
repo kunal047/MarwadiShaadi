@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Chat;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
@@ -26,24 +27,44 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 //Inbox TODO top bar should work
-public class DefaultDialogsActivity extends DemoDialogsActivity  {
-    String success="",query="";
-    String name,url;
+public class DefaultDialogsActivity extends DemoDialogsActivity {
+    static boolean fire = false, fire2 = false, MainFire = false, CalledOnce = false;
+    String success = "", query = "";
+    String name, url;
+    ProgressDialog pgd;
+    ScheduledExecutorService scheduleTaskExecutor1, scheduleTaskExecutor;
+    int count = 0, count2 = 0, time = 0;
+    ArrayList<String> ListOfQueries, ListOfMessage, ListOfSender, ListOfGetter, ListOfName, ListOfUrl, ListOFMessageOn;
     private SwipeRefreshLayout swipeRefreshLayout;
     ProgressDialog pgd;
     private DialogsList dialogsList;
     private DialogsListAdapter<Dialog> dla;
+    private String customer_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_dialogs);
-        dla=new DialogsListAdapter<Dialog>( super.imageLoader);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
+        ListOfQueries = new ArrayList<>();
+        ListOfMessage = new ArrayList<>();
+        ListOfSender = new ArrayList<>();
+        ListOfGetter = new ArrayList<>();
+        ListOfName = new ArrayList<>();
+        ListOfUrl = new ArrayList<>();
+        ListOFMessageOn = new ArrayList<>();
+        dla = new DialogsListAdapter<Dialog>(super.imageLoader);
+
         dialogsList = (DialogsList) findViewById(R.id.dialogsList);
         dialogsList.setAdapter(dla);
         Toolbar toolbar = (Toolbar) findViewById(R.id.chat_toolbar);
@@ -76,7 +97,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
             }
         });
 
-        new ListCreater().execute();
+        new ListCreator().execute()
     }
 
 //TODO Noob CTF

@@ -1,384 +1,413 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/upgrademembership_toolbar"
-            android:layout_width="match_parent"
-            android:theme="@style/MyToolbartheme"
-            android:titleTextColor="@android:color/white"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="8dp"
-            >
-        </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/upgrademembership_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="8dp"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
+        >
+    </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:layout_height="match_parent">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:layout_width="144dp"
-        android:layout_height="144dp"
-        android:src="@drawable/profile"
-        android:id="@+id/membership_photo"/>
 
-        <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:text="Hello, Mervin Dalmet"
-            android:textAlignment="center"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-             android:layout_marginTop="20dp"
-            fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"
-            android:id="@+id/membership_name"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:paddingLeft="10dp"
+                      android:paddingRight="10dp">
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:text="Member ID : M123"
-            android:textSize="14dp"
-            android:id="@+id/membership_id"
-            />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/membership_photo"
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/default_drawer"/>
 
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/maheshwari"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:padding="16dp"
-                android:background="@color/maheshwari"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="MAHESHWARI "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/duration_maheshwari"/> 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Started On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/start_maheshwari"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/end_maheshwari"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/agarwal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@color/agarwal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="AGARWAL "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/duration_agarwal"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Started On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/start_agarwal"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/end_agarwal"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/jain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@color/jain"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="JAIN "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/duration_jain"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Started On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/start_jain"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/end_jain"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/khandelwal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@color/khandelwal"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="KHANDELWAL "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/duration_khandelwal"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Started On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/start_khandelwal"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/end_khandelwal"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/others"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:background="@color/others"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="OTHER "
-                    android:textColor="@color/black"
-                    android:padding="2dp"
-                    android:textSize="14dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/duration_others"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Started On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/start_others"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ends On : "
-                    android:padding="2dp"
-                    android:textSize="14dp"
-                    android:id="@+id/end_others"/>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/no_membership"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardUseCompatPadding="true"
-
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical">
             <TextView
+                android:id="@+id/membership_name"
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="You have not taken any membership yet\nHere are some perks of premium membership:"
-                android:textColor="@color/colorPrimary"
-                android:padding="2dp"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
+                android:layout_marginTop="20dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                tools:ignore="MissingPrefix"/>
+
+
+            <TextView
+                android:id="@+id/membership_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="14dp"
                 />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="Access verified contact numbers"
-                    android:drawableLeft="@drawable/tick"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="10dp"
-                    />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="View photo album of profiles"
-                    android:drawableLeft="@drawable/tick"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="10dp"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/maheshwari"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="Send direct messages"
-                    android:drawableLeft="@drawable/tick"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="10dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="Initiate Chat"
-                    android:drawableLeft="@drawable/tick"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="10dp"/>
+                    android:background="@color/maheshwari"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </LinearLayout>
-</android.support.v7.widget.CardView>
-        <Button
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:id="@+id/upgrade"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Upgrade Membership"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:background="@layout/button_border_corner_circle_"
-            />
-    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="MAHESHWARI "
+                        android:textColor="@color/black"
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/duration_maheshwari"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Duration : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/start_maheshwari"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Started On : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/end_maheshwari"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Ends On : "
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/agarwal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/agarwal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="AGARWAL "
+                        android:textColor="@color/black"
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/duration_agarwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Duration : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/start_agarwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Started On : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/end_agarwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Ends On : "
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/jain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/jain"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="JAIN "
+                        android:textColor="@color/black"
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/duration_jain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Duration : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/start_jain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Started On : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/end_jain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Ends On : "
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/khandelwal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/khandelwal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="KHANDELWAL "
+                        android:textColor="@color/black"
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/duration_khandelwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Duration : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/start_khandelwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Started On : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/end_khandelwal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Ends On : "
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/others"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="OTHER "
+                        android:textColor="@color/black"
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/duration_others"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Duration : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/start_others"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Started On : "
+                        android:textSize="14dp"/>
+
+                    <TextView
+                        android:id="@+id/end_others"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Ends On : "
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/no_membership"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        fontPath="fonts/OpenSans-Bold.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="You have not taken any membership yet\nHere are some perks of premium membership:"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="MissingPrefix"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/tick"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="Access verified contact numbers"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/tick"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="View photo album of profiles"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/tick"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="Send direct messages"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/tick"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
+                        android:text="Initiate Chat"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/upgrade"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@layout/button_border_corner_circle_"
+                android:text="Upgrade Membership"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                />
+        </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>

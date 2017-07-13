@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -61,8 +62,6 @@ import java.util.Locale;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener {
@@ -82,6 +81,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
+    private String clickedID;
+    private String customer_id;
     private String clickedID = customer_id;
     private ImageView pdfImage;
     private TextView pdfImageName, pdfImageId, pdfName, pdfAge, pdfMaritalStatus, pdfDob, pdfGender, pdfLocation, pdfContact, pdfCommunity, pdfSubcaste, pdfHeight, pdfWeight, pdfComplexion, pdfBodyType, pdfPhysicalStatus, pdfEduLevel, pdfHighestDegree, pdfInstituteName, pdfOccupation, pdfDesignation, pdfCompany, pdfIncome, pdfAbout, pdfHobby, pdfDiet, pdfDrink, pdfSmoke, pdfBirthTime, pdfBirthPlace, pdfGotra, pdfManglik, pdfMatchHoroscope, pdfFatherName, pdfFatherOccupation, pdfFatherOccupationDetail, pdfFamilyStatus, pdfFamilyType, pdfFamilyValues, pdfNativePlaces, pdfGrandfatherName, pdfMama;
@@ -108,6 +109,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean called = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -117,9 +119,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         setSupportActionBar(toolbar);
 
 
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        clickedID = customer_id;
+
         Intent data = getIntent();
         String deeplink = data.getStringExtra("deeplink");
         if (data.getStringExtra("customerNo") != null) {
+            called = false;
             clickedID = data.getStringExtra("customerNo");
             new ProfilePicture().execute(clickedID);
             Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
@@ -273,7 +280,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         carouselView = (CarouselView) findViewById(R.id.carouselView);
 
-        new ProfilePicture().execute(clickedID);
+        if (called) {
+            new ProfilePicture().execute(clickedID);
+        }
 
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
         userinfo = (ViewPager) findViewById(R.id.profile_container);
@@ -364,27 +373,29 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             final String cus = params[0];
             Log.d(TAG, "doInBackground:  ----------------------------------- " + cus);
 
-            AndroidNetworking.post(URL + "fetchProfilePicture")
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchProfilePicture")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
-
-
                         @Override
                         public void onResponse(JSONArray response) {
 
                             try {
-                                JSONArray array = response.getJSONArray(0);
-                                String name = array.getString(1) + " " + array.getString(2);
+                                Log.d(TAG, "onResponse: user profile " + response.toString());
+                                String name = response.getString(0) + " " + response.getString(1);
                                 final ArrayList<String> images = new ArrayList<>();
                                 for (int i = 0; i < response.length(); i++) {
                                     images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getJSONArray(i).getString(0));
                                     Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
+                                if (response.length() == 3) {
+                                    String[] image_urls = response.getString(2).replace("[", "").replace("]", "").replace("\"", "").trim().split(",");
 
-                                }
+                                    for (int i = 0; i < image_urls.length; i++) {
+                                        images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + image_urls[i]);
 
                                 toolbarLayout.setTitle(name);
+                                Log.d(TAG, "onResponse: toolbar val " + toolbarLayout.getTitle());
 
 
                                 carouselView.setImageListener(new ImageListener() {

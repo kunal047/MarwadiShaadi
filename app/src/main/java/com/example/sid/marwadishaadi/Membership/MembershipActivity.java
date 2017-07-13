@@ -242,7 +242,6 @@ public  AlertDialog.Builder reset;
                                 else {
                                     Toast.makeText(getApplicationContext(),"Already Added one Coupon",Toast.LENGTH_SHORT).show();
                                 }
-//                        Toast.makeText(MembershipActivity.this, "yayay", Toast.LENGTH_SHORT).show();
                             }
                         });
 

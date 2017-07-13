@@ -3,8 +3,10 @@ package com.example.sid.marwadishaadi.Membership;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -29,8 +31,6 @@ import org.json.JSONException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class UpgradeMembershipActivity extends AppCompatActivity {
@@ -43,6 +43,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     TextView agarwal_end, jain_end, khandelwal_end, maheshwari_end, others_end;
     TextView name,id;
     public ProgressDialog dialog;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -54,6 +55,9 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upgrade_membership);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.upgrademembership_toolbar);
         toolbar.setTitle("Membership Status");
@@ -99,8 +103,9 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         others.setVisibility(View.GONE);
         no.setVisibility(View.GONE);
 
+
+
         String query = "SELECT community, duration, date(purchase_date), date(expiry_date), is_active FROM `tbl_user_community_package` WHERE customer_no=\""+customer_id+"\";";
-        Log.d(TAG, "onCreate: ----- query is "+query);
         new BackEndMembership().execute(query);
 
         upgrade.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +135,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post(URL + "MembershipStatus")
+            AndroidNetworking.post("http://208.91.199.50:5000/MembershipStatus")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
@@ -182,11 +187,21 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                                         }
 
 
+
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
 
                                 }
+
+                                SharedPreferences prefs = getSharedPreferences("customername", MODE_PRIVATE);
+                                String nameOfUser = prefs.getString("name", null);
+
+                                Log.d(TAG, "onResponse: name of user is " + nameOfUser);
+
+                                name.setText("Hello, " + nameOfUser);
+                                id.setText("Member ID : " + customer_id);
                             }
                         }
 
