@@ -44,7 +44,6 @@ import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,6 +105,7 @@ public class Search extends AppCompatActivity {
     List<String> stateAutoCompleteList = new ArrayList<>();
     CityAdapter cityAdapter;
     Spinner height_from, height_to, sort_by, manglik, children;
+    private String customer_id;
 
     public Search() {
 
@@ -149,6 +149,10 @@ public class Search extends AppCompatActivity {
         String[] community= getResources().getStringArray(R.array.communities);
         SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         CastList.clear();
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         for(int i=0;i<5;i++){
             if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
             {

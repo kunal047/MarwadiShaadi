@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -342,6 +343,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
 
         NativePlace.setThreshold(1);
         placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextNativePlace, App.placeslist);
+        Log.d("sahjk", "onCreateView: placelist native-----------"+App.placeslist.size());
         NativePlace.setAdapter(placesAdapter);
 
         RelationLocation.setThreshold(1);

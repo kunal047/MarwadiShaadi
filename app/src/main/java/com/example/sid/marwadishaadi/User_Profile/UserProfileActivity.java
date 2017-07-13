@@ -213,9 +213,26 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Share Profile", "button");
 
-                String caste = "Maheshwari";
-                String userid = "M13725";
-                final String username = "Siddhesh";
+                String caste = "";
+
+                if (clickedID.charAt(0) == 'M') {
+                    caste = "Maheswari";
+                } else if (clickedID.charAt(0) == 'K') {
+                    caste= "Khandelwal";
+                } else if (clickedID.charAt(0) == 'A') {
+                    caste = "Agarwal";
+                } else if (clickedID.charAt(0) == 'J') {
+                    caste = "Jain";
+                } else if (clickedID.charAt(0) == 'O') {
+                    caste = "Other";
+                }
+
+
+                String userid = clickedID;
+
+                SharedPreferences sharedpref = getSharedPreferences("customername", MODE_PRIVATE);
+                final String username = sharedpref.getString("name", null);
+
                 String packageName = getPackageName();
                 String weblink = "http://www.marwadishaadi.com/" + caste + "/user/candidate/" + userid;
                 String domain = "https://bf5xe.app.goo.gl/";

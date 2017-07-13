@@ -30,8 +30,7 @@
             android:layout_height="250dp"
             android:background="#1afb6542"
             android:clickable="true"
-            android:src="@drawable/profile"/>
-
+        />
         <TextView
             android:id="@+id/recentTextViewName"
             android:layout_width="wrap_content"
@@ -40,7 +39,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:clickable="true"
-            android:text="Siddhesh Khandelwal,"
             android:textColor="#2d2d2d"
             android:textSize="16dp"
             android:textStyle="bold"/>
@@ -53,7 +51,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/recentTextViewName"
-            android:text="20 yrs"
             android:textColor="#2d2d2d"
             android:textSize="16dp"
             android:textStyle="bold"/>
@@ -65,7 +62,6 @@
             android:layout_below="@id/recentTextViewName"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:text="B.Tech"
             android:textColor="#2d2d2d"
             android:textSize="12dp"/>
 
@@ -75,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/recentTextViewEducation"
             android:layout_marginLeft="5dp"
-            android:text="Mumbai"
             android:textColor="#2d2d2d"
             android:textSize="12dp"/>
 
@@ -87,7 +82,6 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary"
             android:padding="5dp"
-            android:text="20 hrs ago"
             android:textColor="@android:color/white"
             android:textSize="13dp"
             android:textStyle="bold"/>

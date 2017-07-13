@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/profile"/>
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:clickable="true"
-            android:text="Siddhesh Rane, "
             android:textColor="#fff"
             android:textSize="14dp"
             android:textStyle="bold"
@@ -42,7 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
-            android:text="20 yrs"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="#fff"
             android:textSize="12dp"
@@ -54,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="B.Tech"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="#fff"
             android:textSize="12dp"
@@ -66,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="Mumbai"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="#fff"
             android:textSize="12dp"
