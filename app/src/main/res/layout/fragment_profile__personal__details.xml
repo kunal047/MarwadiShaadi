@@ -1,9 +1,9 @@
 <android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,33 +26,33 @@
                 android:orientation="vertical">
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Individual"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/individual_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Individual"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/individual_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/name_age"
@@ -62,9 +62,9 @@
                     android:drawableLeft="@drawable/profile_name"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Siddhesh Rane , 20 yrs"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/marital_status"
@@ -74,9 +74,9 @@
                     android:drawableLeft="@drawable/profile_marital"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Never Married"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/birthdate"
@@ -86,9 +86,9 @@
                     android:drawableLeft="@drawable/profile_dob"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="24th May 1997"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
 
@@ -99,9 +99,9 @@
                     android:drawableLeft="@drawable/profile_gender"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Male"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/address"
@@ -111,9 +111,9 @@
                     android:drawableLeft="@drawable/profile_home"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Lives in Mumbai,Maharashtra,India"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/contact_mob"
@@ -123,9 +123,9 @@
                     android:drawableLeft="@drawable/profile_contact"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Contact him at 9004918906"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/caste"
@@ -135,9 +135,9 @@
                     android:drawableLeft="@drawable/profile_caste"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Maratha"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/height"
@@ -147,9 +147,9 @@
                     android:drawableLeft="@drawable/profile_height"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Stands tall at 5'11"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/weight"
@@ -159,9 +159,9 @@
                     android:drawableLeft="@drawable/profile_wt"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="50 kgs"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/complexion_build"
@@ -171,9 +171,9 @@
                     android:drawableLeft="@drawable/profile_body"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Fair skinned , Athletic Build"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/physical_status"
@@ -183,21 +183,21 @@
                     android:drawableLeft="@drawable/profile_built"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Perfectly Normal"
+                    android:text=""
                     android:textColor="#2d2d2d"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,32 +206,32 @@
                 android:orientation="vertical">
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Education &amp; Career"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Education &amp; Career"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/edu_clear"/>
+                    <TextView
+
+                        android:id="@+id/edu_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
 
@@ -240,49 +240,50 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Engineer"
-                    android:textColor="#2d2d2d"
                     android:drawableLeft="@drawable/profile_edu"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/edu_degree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="B.Tech in Computer Engineering"
-                    android:textColor="#2d2d2d"
                     android:drawableLeft="@drawable/profile_degree"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
+
                 <TextView
                     android:id="@+id/collegeName_collegeLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="VJTI , Mumbai"
-                    android:textColor="#2d2d2d"
                     android:drawableLeft="@drawable/profile_institute"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -290,80 +291,81 @@
                 android:layout_margin="12dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Profession"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textStyle="italic"
-                    android:layout_marginBottom="10dp"
-                    />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/profession_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Profession"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"
+                        />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/profession_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/current_occup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee at Shaadi.com"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_designation"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/occupDesignation_occupCompany"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Working as Software Engineer"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_occupation"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/occup_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Located in Thane"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_location"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/annual_income"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Earns INR 15 Lakh to 20 lakh annually"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_income"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="#2d2d2d"
                     android:textSize="16dp"
                     />
 
@@ -374,14 +376,14 @@
             android:id="@+id/similar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@layout/button_border_corner_circle_"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="View Similar Profiles"
             android:textAllCaps="false"
-            android:layout_gravity="center"
-            android:background="@layout/button_border_corner_circle_"
-            android:textColor="@color/white"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

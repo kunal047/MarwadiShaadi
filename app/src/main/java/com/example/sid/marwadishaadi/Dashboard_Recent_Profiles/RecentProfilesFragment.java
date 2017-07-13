@@ -137,12 +137,7 @@ public class RecentProfilesFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mProgressDialog.dismiss();
-                                }
-                            });
+
                             try {
 
                                 recentList.clear();
@@ -179,7 +174,7 @@ public class RecentProfilesFragment extends Fragment {
                                     String recentStatus = array.getString(8);
 
 
-                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** "  +favouriteStatus + " 000000000000 " + recentStatus);
+                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** " + favouriteStatus + " 000000000000 " + recentStatus);
                                     date = formatter.parse(createdOn);
                                     long diff = now.getTime() - date.getTime();
                                     long diffSeconds = diff / 1000 % 60;
@@ -201,7 +196,7 @@ public class RecentProfilesFragment extends Fragment {
                                         createdOn = diffSeconds + " seconds ago";
                                     }
 
-                                    Log.d(TAG, "onResponse: created on *************************** " +  createdOn);
+                                    Log.d(TAG, "onResponse: created on *************************** " + createdOn);
 
                                     RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
                                     recentList.add(recentModel);
@@ -231,6 +226,14 @@ public class RecentProfilesFragment extends Fragment {
                     });
 
             return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            recentAdapter.notifyDataSetChanged();
+            mProgressDialog.dismiss();
         }
     }
 }

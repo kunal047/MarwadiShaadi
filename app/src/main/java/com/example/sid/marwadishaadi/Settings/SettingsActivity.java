@@ -47,8 +47,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.HashConverter;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -67,7 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected LinearLayout morelinearlayout;
     protected TextView more;
     protected AlertDialog resetbox;
-    protected ProgressDialog dialog;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
     private String customer_id, customer_gender;
     private ProgressDialog dialog;

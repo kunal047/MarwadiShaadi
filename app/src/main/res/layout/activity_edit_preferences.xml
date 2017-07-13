@@ -726,7 +726,7 @@
 
 
                             <EditText
-                                android:id="@+id/edit_annual_income"
+                                android:id="@+id/prefedit_annual_income"
                                 android:layout_marginLeft="10dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -737,6 +737,21 @@
                                 android:layout_marginBottom="10dp"
                                 android:focusableInTouchMode="false"
                                 />
+
+
+
+                            <!--<EditText-->
+                                <!--android:id="@+id/edit_annual_income"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--android:textSize="14dp"-->
+                                <!--android:clickable="true"-->
+                                <!--android:hint="Select Annual Income"-->
+                                <!--android:background="#fff"-->
+                                <!--android:layout_marginBottom="10dp"-->
+                                <!--android:focusableInTouchMode="false"-->
+                                <!--/>-->
 
                         </LinearLayout>
                     </LinearLayout>

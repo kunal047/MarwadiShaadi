@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,20 +37,22 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.Membership.MembershipActivity.PackageInfos;
-import static com.example.sid.marwadishaadi.R.string.view;
 
 public class WebViewActivity extends Activity {
 	private ProgressDialog dialog;
 	Intent mainIntent;
 	static  String html, encVal="";
 	protected ServiceHandler sh;
+	private String customer_id;
+
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_webview);
+		SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+		customer_id = sharedpref.getString("customer_id", null);
 		mainIntent = getIntent();
 
 		// Calling async task to get display content

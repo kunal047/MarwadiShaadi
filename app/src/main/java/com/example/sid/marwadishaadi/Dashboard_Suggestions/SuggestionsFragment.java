@@ -146,6 +146,7 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            pd.setIndeterminate(true);
             pd.setMessage("Please wait..");
             pd.setCancelable(false);
             pd.show();
@@ -164,12 +165,7 @@ public class SuggestionsFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
+
                             // do anything with response
                             try {
 
@@ -242,7 +238,12 @@ public class SuggestionsFragment extends Fragment {
                                     suggestionModelList.add(suggestionModel);
                                     suggestionAdapter.notifyDataSetChanged();
 
-
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            pd.dismiss();
+                                        }
+                                    });
 
                                 }
 
@@ -269,11 +270,7 @@ public class SuggestionsFragment extends Fragment {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            suggestionAdapter.notifyDataSetChanged();
-        }
+
     }
 
 }

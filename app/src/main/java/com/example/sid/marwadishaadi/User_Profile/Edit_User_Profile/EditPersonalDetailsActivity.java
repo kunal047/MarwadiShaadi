@@ -42,7 +42,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
     Spinner maritalStatus,height,physcialStatus,complexion,built;
     EditText contactNumber, weight;
     AutoCompleteTextView location;
-    String  ms,h,c,l,w,ps,co,b, customer_id;
+    String customer_id;
 
     String  ms,h,c,l,w,ps,co,b;
     private PlacesAdapter placesAdapter;

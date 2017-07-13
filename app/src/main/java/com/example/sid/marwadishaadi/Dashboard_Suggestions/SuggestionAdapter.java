@@ -41,7 +41,7 @@ import java.util.List;
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
 
-    private final Context context;
+    private Context context;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -64,15 +64,19 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
          iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.suggestions_row, parent, false);
 
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this.context);
-        customer_id = sharedpref.getString("customer_id", null);
 
+        SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        Log.d(TAG, "onCreateViewHolder: customer id in suggestion is " + customer_id);
         return new SuggestionAdapter.MyViewHolder(iView);
     }
 
     @Override
     public void onBindViewHolder(SuggestionAdapter.MyViewHolder holder, final int position) {
         SuggestionModel suggest = suggestionModelList.get(position);
+
+
+
         String ag = suggest.getName() + ", " + suggest.getAge();
         String cd = "None";
         if (suggest.getDesignation().length() > 0 && suggest.getComapany().length() == 0) {

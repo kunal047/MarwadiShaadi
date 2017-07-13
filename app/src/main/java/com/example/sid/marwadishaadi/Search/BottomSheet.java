@@ -46,9 +46,6 @@ import java.util.Vector;
 
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.R.id.hometown;
-import static com.example.sid.marwadishaadi.R.id.mariSta;
 import static com.example.sid.marwadishaadi.Search.Search.AIList;
 import static com.example.sid.marwadishaadi.Search.Search.CastList;
 import static com.example.sid.marwadishaadi.Search.Search.annualincome;
@@ -67,6 +64,7 @@ import static com.example.sid.marwadishaadi.Search.Search.spinnerCastSearch;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceAnnualincome;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferenceMaritalstatus;
 import static com.example.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
+import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.prefannualincome;
 import static com.example.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
 
 
@@ -184,8 +182,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
             case 112:
-                contentView = viewGetterEditPref(R.array.aincome_array, array);
-                Toast.makeText(getContext(), "incase", Toast.LENGTH_LONG).show();
+//                contentView = viewGetterEditPref(R.array.aincome_array, array);
+                Toast.makeText(getContext(), "incase why this is called ", Toast.LENGTH_LONG).show();
                 count = 2;
                 break;
 
@@ -608,15 +606,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             countfamilystatus = coun;
                             break;
                         case 5:
+                            Log.d(TAG, "onClick: context for ann is " + getContext().toString());
                             if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
 
                                 preferenceAnnualincome.setText(result.toString());
+                            } else if (getContext().toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity")) {
+
+                                prefannualincome.setText(result.toString().replace("[", "").replace("]", ""));
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("prefai", MODE_PRIVATE).edit();
+                                editor.putString("ai", result.toString());
+                                editor.apply();
+
 
                             } else {
-                                prefannualincome.setText(result.toString().replace("[","").replace("]",""));
+
+                                annualincome.setText(result.toString().replace("[","").replace("]",""));
                                 AIList = result;
                                 countannualincome = coun;
-
                             }
                             break;
                         case 6:
@@ -729,11 +735,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                         int year = calender.get(Calendar.YEAR);
                                     /*SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);*/
                                         SuggestionModel suggestionModel;
-                                    if(user.get(8).equals("")){
-                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                    }else{
-                                         suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                    }
+                                        if(user.get(8).equals("")){
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }else{
+                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        }
                                         sm.add(suggestionModel);
 //                                        Log.e(TAG, "onResponse: --- sm details are " + sm.get(i).getCusId());
                                     }
@@ -796,13 +802,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -819,31 +825,31 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] education_array = getResources().getStringArray(R.array.education_array);
-                            for (String s : education_array) {
-                                if (jsonArray.getString(13).equals(s)) {
-                                    editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] education_array = getResources().getStringArray(R.array.education_array);
+                                for (String s : education_array) {
+                                    if (jsonArray.getString(13).equals(s)) {
+                                        editEducation.setSelection(Arrays.asList(education_array).indexOf(s));
+                                    }
                                 }
+                                eduDegree.setText(jsonArray.getString(14));
+                                eduInstituteLocation.setText(jsonArray.getString(15));
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            eduDegree.setText(jsonArray.getString(14));
-                            eduInstituteLocation.setText(jsonArray.getString(15));
 
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -861,69 +867,69 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] designationArray = getResources().getStringArray(R.array.designation_array);
-                            String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
-                            String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
-                            Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] designationArray = getResources().getStringArray(R.array.designation_array);
+                                String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
+                                String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
+                                Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
 
 
-                            for (String s : designationArray) {
-                                if (jsonArray.getString(20).equals(s)) {
-                                    designation.setSelection(Arrays.asList(designationArray).indexOf(s));
+                                for (String s : designationArray) {
+                                    if (jsonArray.getString(20).equals(s)) {
+                                        designation.setSelection(Arrays.asList(designationArray).indexOf(s));
+                                    }
                                 }
-                            }
 
-                            for (String s : occupationArray) {
-                                if (jsonArray.getString(17).equals(s)) {
-                                    occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
+                                for (String s : occupationArray) {
+                                    if (jsonArray.getString(17).equals(s)) {
+                                        occupation.setSelection(Arrays.asList(occupationArray).indexOf(s));
+                                    }
                                 }
-                            }
 
-                            String annualI = jsonArray.getString(18);
-                            annualI = annualI.replaceAll("[^-?0-9]+", " ");
-                            List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                            Log.d(TAG, "onResponse: income array is " + incomeArray);
-                            if (jsonArray.getString(18).contains("Upto")) {
-                                annualI = "Upto 3L";
-                            } else if (jsonArray.getString(18).contains("Above")) {
-                                annualI = "Above 50L";
+                                String annualI = jsonArray.getString(18);
+                                annualI = annualI.replaceAll("[^-?0-9]+", " ");
+                                List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
+                                Log.d(TAG, "onResponse: income array is " + incomeArray);
+                                if (jsonArray.getString(18).contains("Upto")) {
+                                    annualI = "Upto 3L";
+                                } else if (jsonArray.getString(18).contains("Above")) {
+                                    annualI = "Above 50L";
 
-                            } else if (incomeArray.size() == 3) {
-                                Log.d(TAG, "onResponse: when three");
-                                double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                annualI = (int) first + "L - " + (int) second + "L";
-                            } else {
-                                annualI = "No Income mentioned.";
-                            }
-
-
-                            for (String s : annualIncomeArray) {
-                                if (annualI.equals(s)) {
-                                    annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
+                                } else if (incomeArray.size() == 3) {
+                                    Log.d(TAG, "onResponse: when three");
+                                    double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                                    double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                                    annualI = (int) first + "L - " + (int) second + "L";
+                                } else {
+                                    annualI = "No Income mentioned.";
                                 }
+
+
+                                for (String s : annualIncomeArray) {
+                                    if (annualI.equals(s)) {
+                                        annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
+                                    }
+                                }
+                                Log.d(TAG, "onResponse: AI is ------" + annualI);
+
+
+                                companyName.setText(jsonArray.getString(19));
+                                companyLocation.setText(jsonArray.getString(21));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            Log.d(TAG, "onResponse: AI is ------" + annualI);
 
-
-                            companyName.setText(jsonArray.getString(19));
-                            companyLocation.setText(jsonArray.getString(21));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -947,13 +953,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -970,23 +976,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            aboutMe.setText(jsonArray.getString(0));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                aboutMe.setText(jsonArray.getString(0));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1005,13 +1011,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1028,23 +1034,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            hobbies.setText(jsonArray.getString(1));
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                hobbies.setText(jsonArray.getString(1));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1064,13 +1070,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1087,52 +1093,52 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
 
-                            String[] dietArray = getResources().getStringArray(R.array.diet_array);
+                                String[] dietArray = getResources().getStringArray(R.array.diet_array);
 
-                            for (String s : dietArray) {
-                                if (jsonArray.getString(2).equals(s)) {
-                                    eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------eating----" + s);
+                                for (String s : dietArray) {
+                                    if (jsonArray.getString(2).equals(s)) {
+                                        eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------eating----" + s);
+                                    }
                                 }
+
+                                String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
+
+                                for (String s : drinkingArray) {
+                                    if (jsonArray.getString(3).equals(s)) {
+                                        drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------drinking----" + s);
+
+                                    }
+                                }
+
+                                String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
+
+                                for (String s : smokingArray) {
+                                    if (jsonArray.getString(4).equals(s)) {
+                                        smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
+                                        Log.d(TAG, "onResponse: ---------smoking----" + s);
+
+                                    }
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            String[] drinkingArray = getResources().getStringArray(R.array.drinking_array);
-
-                            for (String s : drinkingArray) {
-                                if (jsonArray.getString(3).equals(s)) {
-                                    drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------drinking----" + s);
-
-                                }
-                            }
-
-                            String[] smokingArray = getResources().getStringArray(R.array.smoking_array);
-
-                            for (String s : smokingArray) {
-                                if (jsonArray.getString(4).equals(s)) {
-                                    smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
-                                    Log.d(TAG, "onResponse: ---------smoking----" + s);
-
-                                }
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1154,13 +1160,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1177,45 +1183,45 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
 
-                            birthTime.setText(jsonArray.getString(5));
-                            gotra.setText(jsonArray.getString(7));
-                            birthPlace.setText(jsonArray.getString(6));
+                                birthTime.setText(jsonArray.getString(5));
+                                gotra.setText(jsonArray.getString(7));
+                                birthPlace.setText(jsonArray.getString(6));
 
 
-                            String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
+                                String[] manglikArray = getResources().getStringArray(R.array.manglik_array);
 
-                            for (String s : manglikArray) {
-                                if (jsonArray.getString(8).equals(s)) {
-                                    manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
+                                for (String s : manglikArray) {
+                                    if (jsonArray.getString(8).equals(s)) {
+                                        manglik.setSelection(Arrays.asList(manglikArray).indexOf(s));
+                                    }
                                 }
+
+                                String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
+
+                                for (String s : horoscopeArray) {
+                                    if (jsonArray.getString(9).equals(s)) {
+                                        matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
+
+                                    }
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            String[] horoscopeArray = getResources().getStringArray(R.array.horoscope_array);
-
-                            for (String s : horoscopeArray) {
-                                if (jsonArray.getString(9).equals(s)) {
-                                    matchHoroscope.setSelection(Arrays.asList(horoscopeArray).indexOf(s));
-
-                                }
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1239,13 +1245,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }
@@ -1262,32 +1268,32 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray(0);
-                            String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray(0);
+                                String[] relationArray = getResources().getStringArray(R.array.relation_name_array);
 
-                            for (String s : relationArray) {
-                                if (jsonArray.getString(10).equals(s)) {
-                                    relation.setSelection(Arrays.asList(relationArray).indexOf(s));
+                                for (String s : relationArray) {
+                                    if (jsonArray.getString(10).equals(s)) {
+                                        relation.setSelection(Arrays.asList(relationArray).indexOf(s));
+                                    }
                                 }
+                                relativeName.setText(jsonArray.getString(11));
+                                relativeOccupation.setText(jsonArray.getString(12));
+                                relativeLocation.setText(jsonArray.getString(13));
+                                relativeMobile.setText(jsonArray.getString(14));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            relativeName.setText(jsonArray.getString(11));
-                            relativeOccupation.setText(jsonArray.getString(12));
-                            relativeLocation.setText(jsonArray.getString(13));
-                            relativeMobile.setText(jsonArray.getString(14));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
 
             return null;
@@ -1311,13 +1317,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(ANError anError) {
+                        @Override
+                        public void onError(ANError anError) {
 
-                    }
-                });
+                        }
+                    });
 
             return null;
         }

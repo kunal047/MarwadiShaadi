@@ -42,10 +42,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     Toolbar toolbar;
     private static final String TAG = "DefaultMessagesActivity";
     public static MessagesListAdapter<Message> adapter;
-    private MessagesList messagesList;
-    private String customerId, customerName;
     public List<Message> ml;
-    private Menu menu;
+
     RelativeLayout relative;
     ProgressDialog pgd;
     String url;

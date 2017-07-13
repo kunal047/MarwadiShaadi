@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
+import com.pdfjet.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +43,8 @@ public class PartnerPreferencesFragment extends Fragment {
     private TextView age,height,build,complexion,physicalStatus,highestDegree,occup,maritalStatus,annualIncome,city;
 
     private String clickedID, customer_id;
+    private LinearLayout complexionLayout;
+
     public PartnerPreferencesFragment() {
         // Required empty public constructor
     }
@@ -64,7 +68,7 @@ public class PartnerPreferencesFragment extends Fragment {
         age = (TextView) mview.findViewById(R.id.age);
         height = (TextView) mview.findViewById(R.id.height);
 
-
+        complexionLayout = (LinearLayout) mview.findViewById(R.id.complexionLayout);
         complexion = (TextView) mview.findViewById(R.id.complexion);
         build = (TextView) mview.findViewById(R.id.build);
         physicalStatus = (TextView) mview.findViewById(R.id.physical_status);
@@ -154,56 +158,73 @@ public class PartnerPreferencesFragment extends Fragment {
 
                                     str = response.getString(4).replace("[", "").replace("]", "").replace("\"", "");
                                     String c = str;
-                                    for (int i = 1; i < str.length(); i++) {
+                                    Log.d(TAG, "onResponse: complexion is" + c + "---");
+                                    if (c != null && c.trim().length() == 0) {
+                                        Log.d(TAG, "onResponse: in here");
+                                        complexionLayout.setVisibility(View.GONE);
+                                    } else {
+                                        Log.d(TAG, "onResponse: here ***** ");
+                                        complexion.setText(c);
                                     }
-                                    complexion.setText(c);
 
 
                                     str = response.getString(5).replace("[", "").replace("]", "").replace("\"","");
                                     String b = str;
-                                    for (int i = 1; i < str.length(); i++) {
-                                    }
-                                    build.setText(b);
 
-                                    physicalStatus.setText(response.getString(6));
-                                    city.setText(response.getString(7));
+                                    if (b != null && b.trim().length() == 0) {
+                                        build.setVisibility(View.GONE);
+                                    } else {
+                                        build.setText(b);
+                                    }
+
+                                    if (response.getString(6) != null && response.getString(6).trim().length() == 0) {
+                                        physicalStatus.setVisibility(View.GONE);
+                                    } else {
+                                        physicalStatus.setText(response.getString(6));
+                                    }
+
+                                    if (response.getString(7) != null && response.getString(7).trim().length() == 0) {
+                                        city.setVisibility(View.GONE);
+                                    } else {
+                                        city.setText(response.getString(7));
+                                    }
 
                                     str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
 
                                     String hd = str;
-                                    for (int i = 1; i < str.length(); i++) {
+
+                                    if (response.getString(8) != null && response.getString(8).trim().length() == 0) {
+                                        highestDegree.setVisibility(View.GONE);
+                                    } else {
+                                        highestDegree.setText(hd);
                                     }
-                                    highestDegree.setText(hd);
 
 
                                     str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
                                     String o = str;
-                                    for (int i = 1; i < str.length(); i++) {
-
-                                    }
-                                    occup.setText(o);
-
-
-                                    maritalStatus.setText(response.getString(10));
-
-                                    String annualIn = response.getString(11);
-                                    annualIn = annualIn.replaceAll("[^-?0-9]+", " ");
-                                    List<String> incomeArray = Arrays.asList(annualIn.trim().split(" "));
-                                    Log.d(TAG, "onResponse: income array is " + incomeArray);
-                                    if (annualIn.contains("Upto")) {
-                                        annualIn = "Upto 3L";
-                                    } else if (annualIn.contains("Above")) {
-                                        annualIn = "Above 50L";
-
-                                    } else if (incomeArray.size() == 3) {
-                                        Log.d(TAG, "onResponse: when three");
-                                        double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                        double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                        annualIn = (int) first + "L - " + (int) second + "L";
+                                    if (response.getString(9) != null && response.getString(9).trim().length() == 0) {
+                                        occup.setVisibility(View.GONE);
                                     } else {
-                                        annualIn = "No Income mentioned.";
+                                        occup.setText(o);
                                     }
-                                    annualIncome.setText(annualIn);
+
+
+
+
+                                    if (response.getString(10) != null && response.getString(10).trim().length() == 0) {
+                                        maritalStatus.setVisibility(View.GONE);
+
+                                    } else {
+                                        maritalStatus.setText(response.getString(10));
+                                    }
+
+                                    if (response.getString(11) != null && response.getString(11).trim().length() == 0) {
+                                        annualIncome.setText("No Income mentioned.");
+
+                                    } else {
+                                        String annualIn = response.getString(11).replace("[", "").replace("]", "").replace("\"", "");
+                                        annualIncome.setText(annualIn);
+                                    }
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
