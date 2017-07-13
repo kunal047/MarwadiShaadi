@@ -12,6 +12,7 @@
             android:weightSum="2"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -30,12 +31,14 @@
         </LinearLayout>
         
     <ImageView
+            android:id="@+id/pdfImage"
             android:layout_width="200dp"
             android:layout_height="250dp"
             android:src="@drawable/profile"
             android:layout_gravity="center_horizontal"
             />
     <TextView
+        android:id="@+id/pdfImageName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Siddhesh Rane"
@@ -49,6 +52,7 @@
             android:gravity="center_horizontal"
         android:layout_marginTop="4dp">
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Profile ID: "
@@ -56,6 +60,7 @@
             tools:ignore="MissingPrefix"/>
 
             <TextView
+                android:id="@+id/pdfImageId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="M1234"
@@ -105,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Siddhesh Rane"
-                android:id="@+id/pdf_name"
+                android:id="@+id/pdfName"
                 />
         </LinearLayout>
         <LinearLayout
@@ -124,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20 years"
-                android:id="@+id/pdf_age"
+                android:id="@+id/pdfAge"
                 />
         </LinearLayout>
         <LinearLayout
@@ -143,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Never Married"
-                android:id="@+id/pdf_marital_status"
+                android:id="@+id/pdfMaritalStatus"
 
                 />
         </LinearLayout>
@@ -163,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="24 May 1997"
-                android:id="@+id/pdf_dob"
+                android:id="@+id/pdfDob"
                 />
         </LinearLayout>
         <LinearLayout
@@ -182,7 +187,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Male"
-                android:id="@+id/pdf_gender"
+                android:id="@+id/pdfGender"
                 />
         </LinearLayout>
         <LinearLayout
@@ -201,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mumbai, Maharashtra"
-                android:id="@+id/pdf_location"
+                android:id="@+id/pdfLocation"
                 />
         </LinearLayout>
         <LinearLayout
@@ -220,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+91-9004918906"
-                android:id="@+id/pdf_contact"
+                android:id="@+id/pdfContact"
                 />
         </LinearLayout>
         <LinearLayout
@@ -239,7 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Maheshwari"
-                android:id="@+id/pdf_community"
+                android:id="@+id/pdfCommunity"
                 />
         </LinearLayout>
         <LinearLayout
@@ -258,7 +263,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Shwetambar"
-                android:id="@+id/pdf_subcaste"
+                android:id="@+id/pdfSubcaste"
                 />
         </LinearLayout>
         <LinearLayout
@@ -277,7 +282,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5ft 8 inch"
-                android:id="@+id/pdf_height"
+                android:id="@+id/pdfHeight"
                 />
         </LinearLayout>
         <LinearLayout
@@ -296,7 +301,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="50 kg"
-                android:id="@+id/pdf_weight"
+                android:id="@+id/pdfWeight"
                 />
         </LinearLayout>
         <LinearLayout
@@ -315,7 +320,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fair"
-                android:id="@+id/pdf_complexion"
+                android:id="@+id/pdfComplexion"
                 />
         </LinearLayout>
         <LinearLayout
@@ -334,7 +339,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Slim"
-                android:id="@+id/pdf_body_type"
+                android:id="@+id/pdfBodyType"
                 />
         </LinearLayout>
         <LinearLayout
@@ -353,7 +358,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Perfectly Normal"
-                android:id="@+id/pdf_physical_status"
+                android:id="@+id/pdfPhysicalStatus"
                 />
         </LinearLayout>
         <TextView
@@ -376,10 +381,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Educational Level: "
-                android:id="@+id/pdf_edu_level"
+
                 />
 
             <TextView
+                android:id="@+id/pdfEduLevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Graduate"
@@ -401,7 +407,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="B. Tech"
-                android:id="@+id/pdf_highest_degree"
+                android:id="@+id/pdfHighestDegree"
                 />
         </LinearLayout>
         <LinearLayout
@@ -420,7 +426,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VJTI"
-                android:id="@+id/pdf_institute_name"
+                android:id="@+id/pdfInstituteName"
                 />
         </LinearLayout>
         <TextView
@@ -448,7 +454,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Job"
-                android:id="@+id/pdf_occupation"
+                android:id="@+id/pdfOccupation"
                 />
         </LinearLayout>
         <LinearLayout
@@ -467,7 +473,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Employee"
-                android:id="@+id/pdf_designation"
+                android:id="@+id/pdfDesignation"
                 />
         </LinearLayout>
         <LinearLayout
@@ -486,7 +492,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MarwadiShaadi"
-                android:id="@+id/pdf_company"
+                android:id="@+id/pdfCompany"
                 />
         </LinearLayout>
         <LinearLayout
@@ -505,7 +511,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INR 15L to 20L"
-                android:id="@+id/pdf_income"
+                android:id="@+id/pdfIncome"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -534,7 +540,7 @@
             android:text="I love coding"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:id="@+id/pdf_about"
+            android:id="@+id/pdfAbout"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -552,7 +558,7 @@
             android:text="Reading"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:id="@+id/pdf_hobby"
+            android:id="@+id/pdfHobby"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -579,7 +585,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Non Vegetarian"
-                android:id="@+id/pdf_diet"
+                android:id="@+id/pdfDiet"
                 />
         </LinearLayout>
         <LinearLayout
@@ -598,7 +604,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No"
-                android:id="@+id/pdf_drink"
+                android:id="@+id/pdfDrink"
                 />
         </LinearLayout>
         <LinearLayout
@@ -617,7 +623,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No"
-                android:id="@+id/pdf_smoke"
+                android:id="@+id/pdfSmoke"
                 />
         </LinearLayout>
         <LinearLayout
@@ -650,7 +656,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="9:36 PM"
-                    android:id="@+id/pdf_birth_time"
+                    android:id="@+id/pdfBirthTime"
                     />
             </LinearLayout>
             <LinearLayout
@@ -669,7 +675,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mumbai"
-                    android:id="@+id/pdf_birth_place"
+                    android:id="@+id/pdfBirthplace"
                     />
             </LinearLayout>
             <LinearLayout
@@ -688,7 +694,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="96 kuli"
-                    android:id="@+id/pdf_gotra"
+                    android:id="@+id/pdfGotra"
                     />
             </LinearLayout>
 
@@ -705,7 +711,7 @@
                     android:text="Manglik: " />
 
                 <TextView
-                    android:id="@+id/pdf_manglik"
+                    android:id="@+id/pdfManglik"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No" />
@@ -727,7 +733,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yes"
-                    android:id="@+id/pdf_match_horoscope"
+                    android:id="@+id/pdfMatchHoroscope"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -756,7 +762,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Santosh Rane"
-                android:id="@+id/pdf_father_name"
+                android:id="@+id/pdfFatherName"
                 />
         </LinearLayout>
         <LinearLayout
@@ -775,7 +781,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Business"
-                android:id="@+id/pdf_father_occupation"
+                android:id="@+id/pdfFatherOccupation"
                 />
         </LinearLayout>
         <LinearLayout
@@ -794,7 +800,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Oil Merchant"
-                android:id="@+id/pdf_father_occupation_detail"
+                android:id="@+id/pdfFatherOccupationDetail"
                 />
         </LinearLayout>
         <LinearLayout
@@ -813,7 +819,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Upper Middle Class"
-                android:id="@+id/pdf_family_status"
+                android:id="@+id/pdfFamilyStatus"
                 />
         </LinearLayout>
         <LinearLayout
@@ -832,7 +838,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nuclear"
-                android:id="@+id/pdf_family_type"
+                android:id="@+id/pdfFamilyType"
                 />
         </LinearLayout>
         <LinearLayout
@@ -851,7 +857,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Modern"
-                android:id="@+id/pdf_family_values"
+                android:id="@+id/pdfFamilyValues"
                 />
         </LinearLayout>
         <LinearLayout
@@ -870,7 +876,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Goa"
-                android:id="@+id/pdf_native_place"
+                android:id="@+id/pdfNativePlace"
                 />
         </LinearLayout>
 
@@ -890,7 +896,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yashwant Rane"
-                android:id="@+id/pdf_grandfather_name"
+                android:id="@+id/pdfGrandfatherName"
                 />
         </LinearLayout>
         <LinearLayout
@@ -909,7 +915,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Almeida"
-                android:id="@+id/pdf_mama"
+                android:id="@+id/pdfMama"
                 />
         </LinearLayout>
 

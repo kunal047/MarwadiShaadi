@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,12 +24,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
@@ -49,7 +53,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -74,10 +82,15 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private FloatingActionMenu fab;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CoordinatorLayout coordinatorLayout;
-    private String clickedID  = customer_id;
-
+    private String clickedID = customer_id;
+    private ImageView pdfImage;
+    private TextView pdfImageName, pdfImageId, pdfName, pdfAge, pdfMaritalStatus, pdfDob, pdfGender, pdfLocation, pdfContact, pdfCommunity, pdfSubcaste, pdfHeight, pdfWeight, pdfComplexion, pdfBodyType, pdfPhysicalStatus, pdfEduLevel, pdfHighestDegree, pdfInstituteName, pdfOccupation, pdfDesignation, pdfCompany, pdfIncome, pdfAbout, pdfHobby, pdfDiet, pdfDrink, pdfSmoke, pdfBirthTime, pdfBirthPlace, pdfGotra, pdfManglik, pdfMatchHoroscope, pdfFatherName, pdfFatherOccupation, pdfFatherOccupationDetail, pdfFamilyStatus, pdfFamilyType, pdfFamilyValues, pdfNativePlaces, pdfGrandfatherName, pdfMama;
+    private TextView pdfDate;
 
     private String userid_from_deeplink;
+    NotificationCompat.Builder notification;
+    NotificationManager notificationManager;
+
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -104,13 +117,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         setSupportActionBar(toolbar);
 
 
-
         Intent data = getIntent();
         String deeplink = data.getStringExtra("deeplink");
         if (data.getStringExtra("customerNo") != null) {
             clickedID = data.getStringExtra("customerNo");
             new ProfilePicture().execute(clickedID);
-            Toast.makeText(UserProfileActivity.this,clickedID, Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
         }
 
         if (deeplink != null) {
@@ -130,6 +142,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         editphotos = (FloatingActionButton) findViewById(R.id.fab_edit_photos);
 
+
+        String from = data.getStringExtra("from");
+
+
+        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from)) {
+            editphotos.setVisibility(View.GONE);
+        }
+
         editphotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +159,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+
             }
         });
 
@@ -222,14 +244,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             }
         });
 
+
         sharesave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
+
+
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
 
 
-                final NotificationCompat.Builder notification = new NotificationCompat.Builder(UserProfileActivity.this)
+                notification = new NotificationCompat.Builder(UserProfileActivity.this)
                         .setContentTitle("Pdf Download")
                         .setSmallIcon(R.drawable.ic_action_drawer_notification)
                         .setAutoCancel(true)
@@ -237,54 +262,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         .setContentText("Download in progress");
 
 
-                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(1, notification.build());
 
-                AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
-                    @Override
-                    protected void initView(View view) {
-                    }
-                };
-                page1.setReuseBitmap(true);
-
-
-                PdfDocument doc = new PdfDocument(UserProfileActivity.this);
-                doc.addPage(page1);
-                doc.setRenderWidth(1072);
-                doc.setRenderHeight(2000);
-                doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
-                doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
-                doc.setFileName("Siddhesh-Rane-Profile");
-                doc.setInflateOnMainThread(false);
-                doc.setListener(new PdfDocument.Callback() {
-                    @Override
-                    public void onComplete(File file) {
-                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
-
-                        Toast.makeText(UserProfileActivity.this, "SiddheshRaneProfile.pdf saved in Downloads Folder", Toast.LENGTH_SHORT).show();
-
-                        Uri targetUri = Uri.fromFile(file);
-
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setDataAndType(targetUri, "application/pdf");
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-                        notification.setContentText("Download complete");
-                        notification.setContentIntent(pendingIntent);
-                        notification.setProgress(0, 0, false);
-                        notificationManager.notify(1, notification.build());
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
-                    }
-                });
-
-                Toast.makeText(UserProfileActivity.this, "Download Started", Toast.LENGTH_SHORT).show();
-                doc.createPdf(UserProfileActivity.this);
+                new FetchPdfDetails().execute();
 
             }
         });
@@ -302,7 +283,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
         tabLayout.setupWithViewPager(userinfo);
+
+
     }
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -395,7 +379,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 String name = array.getString(1) + " " + array.getString(2);
                                 final ArrayList<String> images = new ArrayList<>();
                                 for (int i = 0; i < response.length(); i++) {
-                                    images.add("http://www.marwadishaadi.com/uploads/cust_"+cus+"/thumb/" + response.getJSONArray(i).getString(0));
+                                    images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getJSONArray(i).getString(0));
                                     Log.d("blah", "onResponse: Image is************http://www.marwadishaadi.com/uploads/cust_A1028/thumb/" + response.getJSONArray(i).getString(0));
 
                                 }
@@ -428,5 +412,218 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     });
             return null;
         }
+    }
+
+    class FetchPdfDetails extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            Log.d(TAG, "doInBackground: clicked is " + clickedID);
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchPDFDetails")
+                    .addBodyParameter("customerNo", clickedID)
+                    .setPriority(Priority.HIGH)
+                    .setTag(TAG)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(final JSONArray response) {
+
+
+                            AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
+                                @Override
+                                protected void initView(View view) {
+
+                                    pdfImage = (ImageView) view.findViewById(R.id.pdfImage);
+                                    pdfImageName = (TextView) view.findViewById(R.id.pdfImageName);
+                                    pdfImageId = (TextView) view.findViewById(R.id.pdfImageId);
+                                    pdfName = (TextView) view.findViewById(R.id.pdfName);
+                                    pdfAge = (TextView) view.findViewById(R.id.pdfAge);
+                                    pdfMaritalStatus = (TextView) view.findViewById(R.id.pdfMaritalStatus);
+                                    pdfDob = (TextView) view.findViewById(R.id.pdfDob);
+                                    pdfGender = (TextView) view.findViewById(R.id.pdfGender);
+                                    pdfLocation = (TextView) view.findViewById(R.id.pdfLocation);
+                                    pdfContact = (TextView) view.findViewById(R.id.pdfContact);
+                                    pdfCommunity = (TextView) view.findViewById(R.id.pdfCommunity);
+                                    pdfSubcaste = (TextView) view.findViewById(R.id.pdfSubcaste);
+                                    pdfHeight = (TextView) view.findViewById(R.id.pdfHeight);
+                                    pdfWeight = (TextView) view.findViewById(R.id.pdfWeight);
+                                    pdfComplexion = (TextView) view.findViewById(R.id.pdfComplexion);
+                                    pdfBodyType = (TextView) view.findViewById(R.id.pdfBodyType);
+                                    pdfPhysicalStatus = (TextView) view.findViewById(R.id.pdfPhysicalStatus);
+                                    pdfEduLevel = (TextView) view.findViewById(R.id.pdfEduLevel);
+                                    pdfHighestDegree = (TextView) view.findViewById(R.id.pdfHighestDegree);
+                                    pdfInstituteName = (TextView) view.findViewById(R.id.pdfInstituteName);
+                                    pdfOccupation = (TextView) view.findViewById(R.id.pdfOccupation);
+                                    pdfDesignation = (TextView) view.findViewById(R.id.pdfDesignation);
+                                    pdfCompany = (TextView) view.findViewById(R.id.pdfCompany);
+                                    pdfIncome = (TextView) view.findViewById(R.id.pdfIncome);
+                                    pdfAbout = (TextView) view.findViewById(R.id.pdfAbout);
+                                    pdfHobby = (TextView) view.findViewById(R.id.pdfHobby);
+                                    pdfDiet = (TextView) view.findViewById(R.id.pdfDiet);
+                                    pdfDrink = (TextView) view.findViewById(R.id.pdfDrink);
+                                    pdfSmoke = (TextView) view.findViewById(R.id.pdfSmoke);
+                                    pdfBirthTime = (TextView) view.findViewById(R.id.pdfBirthTime);
+                                    pdfBirthPlace = (TextView) view.findViewById(R.id.pdfBirthplace);
+                                    pdfGotra = (TextView) view.findViewById(R.id.pdfGotra);
+                                    pdfManglik = (TextView) view.findViewById(R.id.pdfManglik);
+                                    pdfMatchHoroscope = (TextView) view.findViewById(R.id.pdfMatchHoroscope);
+                                    pdfFatherName = (TextView) view.findViewById(R.id.pdfFatherName);
+                                    pdfFatherOccupation = (TextView) view.findViewById(R.id.pdfFatherOccupation);
+                                    pdfFatherOccupationDetail = (TextView) view.findViewById(R.id.pdfFatherOccupationDetail);
+                                    pdfFamilyStatus = (TextView) view.findViewById(R.id.pdfFamilyStatus);
+                                    pdfFamilyType = (TextView) view.findViewById(R.id.pdfFamilyType);
+                                    pdfFamilyValues = (TextView) view.findViewById(R.id.pdfFamilyValues);
+                                    pdfNativePlaces = (TextView) view.findViewById(R.id.pdfNativePlace);
+                                    pdfGrandfatherName = (TextView) view.findViewById(R.id.pdfGrandfatherName);
+                                    pdfMama = (TextView) view.findViewById(R.id.pdfMama);
+                                    pdfDate = (TextView) view.findViewById(R.id.date);
+
+
+                                    try {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Glide.with(UserProfileActivity.this)
+                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(0))
+                                                            .into(pdfImage);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                        String pdfname = response.getString(1) + " " + response.getString(2);
+                                        pdfImageName.setText(pdfname);
+                                        pdfImageId.setText(response.getString(3));
+                                        pdfName.setText(pdfname);
+                                        int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(response.getString(4));
+                                        pdfAge.setText(String.valueOf(age));
+                                        pdfMaritalStatus.setText(response.getString(5));
+                                        pdfDob.setText(response.getString(4));
+                                        pdfGender.setText(response.getString(6));
+                                        pdfLocation.setText(response.getString(7));
+                                        pdfContact.setText(response.getString(8));
+
+
+                                        String[] c = response.getString(3).split("");
+                                        String cast = "";
+                                        if (c[1].equals("A")) {
+                                            cast = "Agarwal";
+                                        } else if (c[1].equals("K")) {
+                                            cast = "Khandelwal";
+                                        } else if (c[1].equals("J")) {
+                                            cast = "Jain";
+                                        } else if (c[1].equals("M")) {
+                                            cast = "Maheshwari";
+                                        } else if (c[1].equals("O")) {
+                                            cast = "Other";
+                                        }
+
+                                        pdfCommunity.setText(cast);
+                                        pdfSubcaste.setText(response.getString(9));
+                                        pdfHeight.setText(response.getString(10));
+                                        pdfWeight.setText(response.getString(11));
+                                        pdfComplexion.setText(response.getString(12));
+                                        pdfBodyType.setText(response.getString(13));
+                                        pdfPhysicalStatus.setText(response.getString(14));
+                                        pdfEduLevel.setText(response.getString(15));
+                                        pdfHighestDegree.setText(response.getString(16));
+                                        if(response.getString(18)!=null && !response.getString(18).isEmpty()){
+                                        String inl = response.getString(17) + ", " + response.getString(18);
+                                        pdfInstituteName.setText(inl);}
+                                        else{pdfInstituteName.setText(response.getString(17));}
+                                        pdfOccupation.setText(response.getString(19));
+                                        pdfDesignation.setText(response.getString(20));
+                                        pdfCompany.setText(response.getString(21));
+                                        pdfIncome.setText(response.getString(22));
+                                        pdfAbout.setText(response.getString(23));
+                                        pdfHobby.setText(response.getString(24));
+                                        pdfDiet.setText(response.getString(25));
+                                        pdfDrink.setText(response.getString(41));
+                                        pdfSmoke.setText(response.getString(26));
+                                        pdfBirthTime.setText(response.getString(27));
+                                        pdfBirthPlace.setText(response.getString(28));
+                                        pdfGotra.setText(response.getString(29));
+                                        pdfManglik.setText(response.getString(30));
+                                        pdfMatchHoroscope.setText(response.getString(31));
+                                        pdfFatherName.setText(response.getString(32));
+                                        pdfFatherOccupation.setText(response.getString(33));
+                                        pdfFatherOccupationDetail.setText(response.getString(34));
+                                        pdfFamilyStatus.setText(response.getString(35));
+                                        pdfFamilyType.setText(response.getString(36));
+                                        pdfFamilyValues.setText(response.getString(37));
+                                        pdfNativePlaces.setText(response.getString(38));
+                                        pdfGrandfatherName.setText(response.getString(39));
+                                        pdfMama.setText(response.getString(40));
+                                        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                                        pdfDate.setText(currentDate);
+
+                                    } catch (JSONException E) {
+                                        Log.d(TAG, "initView: " + E.getMessage());
+                                    }
+
+                                }
+                            };
+                            page1.setReuseBitmap(true);
+
+
+                            PdfDocument doc = new PdfDocument(UserProfileActivity.this);
+                            doc.addPage(page1);
+                            doc.setRenderWidth(1072);
+                            doc.setRenderHeight(2000);
+                            doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
+                            doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                            try {
+                                doc.setFileName(response.getString(1) + " " + response.getString(2));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            doc.setInflateOnMainThread(false);
+                            doc.setListener(new PdfDocument.Callback() {
+                                @Override
+                                public void onComplete(File file) {
+                                    Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
+
+                                    Toast.makeText(UserProfileActivity.this, "Profile saved in Downloads Folder", Toast.LENGTH_SHORT).show();
+
+                                    Uri targetUri = Uri.fromFile(file);
+
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setDataAndType(targetUri, "application/pdf");
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    notification.setContentText("File saved");
+                                    notification.setContentIntent(pendingIntent);
+                                    notification.setProgress(0, 0, false);
+                                    notificationManager.notify(1, notification.build());
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
+                                }
+                            });
+
+                            Toast.makeText(UserProfileActivity.this, "Saving profile", Toast.LENGTH_SHORT).show();
+                            doc.createPdf(UserProfileActivity.this);
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Log.d(TAG, "onError: error is ********************" + anError.toString());
+
+                        }
+                    });
+
+            return null;
+        }
+
+
     }
 }
