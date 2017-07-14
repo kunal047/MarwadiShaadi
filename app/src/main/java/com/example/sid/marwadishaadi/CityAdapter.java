@@ -101,7 +101,7 @@ public class CityAdapter extends ArrayAdapter<String> {
             if (constraint != null) {
                 suggestions.clear();
                 for (String str : tempItems) {
-                    if (str.toLowerCase().startsWith(constraint.toString())) {
+                    if (str.toLowerCase().startsWith(constraint.toString().toLowerCase())) {
                         suggestions.add(str);
                     }
                 }

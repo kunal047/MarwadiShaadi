@@ -99,7 +99,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.height.setText(suggest.getHeight());
         holder.workLoc.setText(suggest.getWorkLoc());
 
-        holder.annInc.setText(suggest.getAnnInc());
+        holder.annInc.setText(suggest.getAnnInc().replace("000000","0L").replace("00000","L"));
+
         holder.hometown.setText(suggest.getHometown());
         holder.mariSta.setText(suggest.getMariSta());
         holder.company.setText(cd);

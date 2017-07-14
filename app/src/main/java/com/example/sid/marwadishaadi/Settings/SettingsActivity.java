@@ -318,13 +318,11 @@ public class SettingsActivity extends AppCompatActivity {
                                     // analytics
                                     Analytics_Util.logAnalytic(mFirebaseAnalytics,"Deactivate Acc","textview");
 
-                                    Toast.makeText(SettingsActivity.this, "cool!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(SettingsActivity.this, "ohh whyyy", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -349,7 +347,6 @@ public class SettingsActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(SettingsActivity.this, "cool!", Toast.LENGTH_SHORT).show();
                                 // analytics
                                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Delete acc","textview");
 
@@ -358,7 +355,6 @@ public class SettingsActivity extends AppCompatActivity {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(SettingsActivity.this, "ohh whyyy", Toast.LENGTH_SHORT).show();
                             }
                         });
 

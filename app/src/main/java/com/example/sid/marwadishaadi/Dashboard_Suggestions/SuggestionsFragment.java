@@ -270,7 +270,11 @@ public class SuggestionsFragment extends Fragment {
             return null;
         }
 
-
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pd.dismiss();
+        }
     }
 
 }
