@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Search;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -400,12 +403,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 break;
             case 24:
+
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_horoscope, null);
 //                count = 2;
 
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
                 birthTime = (EditText) contentView.findViewById(R.id.birthtime);
+                birthTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar c = Calendar.getInstance();
+                        int hour = c.get(Calendar.HOUR_OF_DAY);
+                        int min = c.get(Calendar.MINUTE);
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), mTimeSetListener, hour, min, DateFormat.is24HourFormat(getActivity()));
+                        timePickerDialog.setTitle("Select Time");
+                        timePickerDialog.show();
+                    }
+                });
+
                 gotra = (EditText) contentView.findViewById(R.id.gotra);
                 manglik = (Spinner) contentView.findViewById(R.id.manglik);
                 matchHoroscope = (Spinner) contentView.findViewById(R.id.match_horoscope);
@@ -526,6 +542,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     lname = (EditText) contentView.findViewById(R.id.search_by_last_name);
                     id = (EditText) contentView.findViewById(R.id.search_by_id);
 
+
                     String strfname, strlname, strid;
                     strfname = fname.getText().toString();
                     strlname = lname.getText().toString();
@@ -537,34 +554,33 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     } else {
                         gender = "Male";
                     }
-                    if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+                    if (strid.trim().isEmpty() && strlname.trim().isEmpty() && strfname.trim().isEmpty()) {
 
                         Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
                         fname.setText("");
                         lname.setText("");
                         id.setText("");
 
-                    } else if (!strid.trim().isEmpty()) {
+                    }
+                      else if (!strid.trim().isEmpty()) {
+//and tbl_login.user_deleted='0' removed from below queries
 
+                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id  INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes'  ) and  tbl_user.customer_no=\"" + strid.trim() + "\"; ");
+                        } else if ((!strlname.trim().isEmpty() && !strfname.trim().isEmpty())) {
+                        Log.d(TAG, "onClick: -hhhh-----------inhere"+strfname+"-----"+strlname+"------"+strid);
 
-                        if (!strid.trim().isEmpty() & (!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
-                            Toast.makeText(getContext(), " Please use either ID or Name ", Toast.LENGTH_SHORT).show();
-
-                        } else if (!strid.trim().isEmpty()) {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id  INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  tbl_user.customer_no=\"" + strid.trim() + "\"; ");
-                        } else if ((!strlname.trim().isEmpty() & !strfname.trim().isEmpty())) {
-                            new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  (tbl_user.first_name=\" " + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
-                        } else if ((!strlname.trim().isEmpty() | !strfname.trim().isEmpty())) {
+                        new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and  (tbl_user.first_name=\"" + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
+                        } else if ((!strlname.trim().isEmpty() || !strfname.trim().isEmpty())) {
 
                             if (!strlname.trim().isEmpty()) {
-                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  ( tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='" + gender + "') order by created_on asc ;");
+                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and  ( tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='" + gender + "') order by created_on asc ;");
                             } else {
-                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
+                                new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and  tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
                             }
                         } else {
                             Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
                         }
-                    }
+
                 }
             });
         } else if (count == 2) {
@@ -585,7 +601,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     }
                     switch (content) {
                         case 1:
-                            spinnerCastSearch.setText(result.toString());
+                            String community_text= result.toString().replace("[", "").replace("]", "");
+                            spinnerCastSearch.setText(community_text);
                             CastList = result;
                             countspinnerCastSearch = coun;
                             break;
@@ -595,20 +612,21 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 preferenceMaritalstatus.setText(result.toString());
                                 break;
                             } else {
-                                maritalstatus.setText(result.toString());
+                                String marital_text= result.toString().replace("[", "").replace("]", "");
+                                maritalstatus.setText(marital_text);
                                 maritalstatusList = result;
                                 countmaritalstatus = coun;
                                 break;
                             }
                         case 4:
-                            familystatus.setText(result.toString());
+                            String family_text= result.toString().replace("[", "").replace("]", "");
+                            familystatus.setText(family_text);
                             familystatusList = result;
                             countfamilystatus = coun;
                             break;
                         case 5:
                             Log.d(TAG, "onClick: context for ann is " + getContext().toString());
                             if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
-
                                 preferenceAnnualincome.setText(result.toString());
                             } else if (getContext().toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity")) {
 
@@ -627,12 +645,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             break;
                         case 6:
                             if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
-
                                 preferencePhysicalstatus.setText(result.toString());
                                 break;
 
                             } else {
-                                physicalstatus.setText(result.toString());
+                                String physical_text= result.toString().replace("[", "").replace("]", "");
+                                physicalstatus.setText(physical_text);
                                 physicalstatusList = (result);
                                 countphysicalstatus = coun;
                                 break;
@@ -1328,6 +1346,30 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
+
+    private void updateDisplay(EditText birthtime,int hour,int minute) {
+        birthtime.setText(
+                new StringBuilder()
+                        .append(pad(hour)).append(":")
+                        .append(pad(minute)));
+    }
+
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
+
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    int pHour = hourOfDay;
+                    int pMinute = minute;
+                    updateDisplay(birthTime,pHour,pMinute);
+                }
+            };
+
 };
 
 

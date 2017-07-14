@@ -405,6 +405,8 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
+                                    Log.d(TAG, "onResponse: response is **********"+response.toString());
+
                                     str = response.getString(0);
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
@@ -414,7 +416,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putBoolean("isLoggedIn",true);
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        JSONArray communityArray=response.getJSONArray(3);
+                                        JSONArray communityArray=response.getJSONArray(5);
                                         for(int i=0;i<5;i++){
                                             editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
                                         }
@@ -499,7 +501,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putBoolean("isLoggedIn", true);
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        JSONArray communityArray = response.getJSONArray(3);
+                                        JSONArray communityArray = response.getJSONArray(5);
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }

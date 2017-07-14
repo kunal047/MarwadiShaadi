@@ -127,12 +127,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             called = false;
             clickedID = data.getStringExtra("customerNo");
             new ProfilePicture().execute(clickedID);
-            Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
         }
 
         if (deeplink != null) {
             userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
-            Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
         }
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
