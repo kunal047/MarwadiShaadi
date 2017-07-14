@@ -44,7 +44,6 @@ import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,6 +105,7 @@ public class Search extends AppCompatActivity {
     List<String> stateAutoCompleteList = new ArrayList<>();
     CityAdapter cityAdapter;
     Spinner height_from, height_to, sort_by, manglik, children;
+    private String customer_id;
 
     public Search() {
 
@@ -136,6 +136,8 @@ public class Search extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,20 +151,25 @@ public class Search extends AppCompatActivity {
         String[] community= getResources().getStringArray(R.array.communities);
         SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         CastList.clear();
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
         for(int i=0;i<5;i++){
             if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
             {
                 CastList.add(community[i]);
-                Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray()[0]);
+       //         Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray()[0]);
             }else if(communityPackage.getString(community[i],null).contains("Yes")){
-                Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray());
+         //       Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray());
                 CastList.add(community[i]);
             }
             Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null));
         }
 
         spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
-        spinnerCastSearch.setText(CastList.toString());
+        String community_text= CastList.toString().replace("[", "").replace("]", "");
+        spinnerCastSearch.setText(community_text);
         init();
         height_from = (Spinner) findViewById(R.id.height_from);
         height_to = (Spinner) findViewById(R.id.height_to);
@@ -248,7 +255,18 @@ public class Search extends AppCompatActivity {
         citytextview = (TextView) findViewById(R.id.text_view_search_add_city);
         autoCompleteState = (AutoCompleteTextView) findViewById(R.id.search_state);
         autocompletecity = (AutoCompleteTextView) findViewById(R.id.search_city);
-        new FetchLocationSearch().execute();
+
+        for (Place place : App.placeslist) {
+            if(!stateAutoCompleteList.contains(place.getState())){
+                stateAutoCompleteList.add(place.getState());
+            }
+            cityAutoCompleteList.add(place.getCity());
+        }
+
+        Log.d(TAG, "onCreate: stste========"+stateAutoCompleteList.toString());
+        Log.d(TAG, "onCreate: city========"+cityAutoCompleteList.toString());
+
+
         //autocomplete city and state
         autocompletecity.setThreshold(1);
         cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_city, cityAutoCompleteList);
@@ -257,7 +275,6 @@ public class Search extends AppCompatActivity {
         autoCompleteState.setThreshold(1);
         cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_state,stateAutoCompleteList);
         autoCompleteState.setAdapter(cityAdapter);
-
 
         advCV = (CardView) findViewById(R.id.advanced_search);
         final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
@@ -295,12 +312,16 @@ public class Search extends AppCompatActivity {
                     autoCompleteState.setText("");
                     Toast.makeText(getApplicationContext(), "Please click + button after state selection ", Toast.LENGTH_SHORT).show();
                 } else {
-                    statesList.add(addTextState);
-                    statetextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    statetextView.setText((addPrevious + "\n" + addTextState));
-                    addPrevious = statetextView.getText().toString();
+                    if(!statesList.contains(addTextState)){
+                        statesList.add(addTextState);
+                        statetextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        statetextView.setText((addPrevious + "\n" + addTextState));
+                        addPrevious = statetextView.getText().toString();
+                    }else {
+                        Toast.makeText(Search.this, "Already added", Toast.LENGTH_SHORT).show();
+                    }
+
                     autoCompleteState.setText("");
-                    Toast.makeText(getApplicationContext(), "Added successfully ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -313,12 +334,15 @@ public class Search extends AppCompatActivity {
                     autocompletecity.setText("");
                     Toast.makeText(getApplicationContext(), "Please click + button after city selection ", Toast.LENGTH_SHORT).show();
                 } else {
-                    cityList.add(addTextcity);
-                    citytextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    citytextview.setText(addPreviousc + "\n" + addTextcity);
-                    addPreviousc = citytextview.getText().toString();
+                    if(!cityList.contains(addTextcity)){
+                        cityList.add(addTextcity);
+                        citytextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        citytextview.setText(addPreviousc + "\n" + addTextcity);
+                        addPreviousc = citytextview.getText().toString();
+                    }else {
+                        Toast.makeText(Search.this, "Already added", Toast.LENGTH_SHORT).show();
+                    }
                     autocompletecity.setText("");
-                    Toast.makeText(getApplicationContext(), "Added successfully ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -993,6 +1017,7 @@ public class Search extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Education are :------" + education.toString(),Toast.LENGTH_SHORT).show();
 */
 
+
             }
         });
 
@@ -1409,7 +1434,11 @@ public class Search extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
+                                    cityList.clear();
+                                    statesList.clear();
+                                    addPrevious = addPreviousc = "";
                                     Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     intent.putExtra("which","advSearch");
                                     startActivity(intent);
                                     finish();
@@ -1440,41 +1469,5 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    public class FetchLocationSearch extends AsyncTask<Void,Void,Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            AndroidNetworking.post("http://192.168.43.143:5050/fetchCityStateCountry")
-                .addBodyParameter("customerNo", customer_id)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        String city,state;
-                        try {
-                            for(int i = 0;i<response.length();i++) {
-                                JSONArray array = response.getJSONArray(i);
-                                city = array.getString(0);
-                                cityAutoCompleteList.add(city);
-
-                                state = array.getString(2);
-                                stateAutoCompleteList.add(state);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
-
-            return null;
-        }
-    }
 
 }

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -59,7 +60,6 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static String customer_id;
     public static String customer_gender;
     public ProgressDialog dialog;
     public String str = "";
@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean checker = false;
     private String email, pass;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private String customer_id;
 
     //    anita.k@makindia.com
     public static String HashConverter(String pswrd) {
@@ -219,12 +220,22 @@ public class LoginActivity extends AppCompatActivity {
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
+
+                                             char charEmail= email.charAt(0);
+                                             char character=email.charAt(0);
+                                             if((int)charEmail<123 & (int)charEmail>96){
+                                                 charEmail=(char)((int)charEmail-32);
+                                                 email=email.replace(character,charEmail);
+
+                                             }
+
                                              new BackGround().execute("email", email, pass);
                                              final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
                                              scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                                                  @Override
                                                  public void run() {
                                                      try {
+                                                         checker = true;
                                                          Log.e(TAG, "run: checker is " + checker);
                                                          if (!checker) {
                                                              Log.e(TAG, "run: --I am running after 3 second");
@@ -361,7 +372,7 @@ public class LoginActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    class BackGround extends AsyncTask<String, String, String> {
+    private class BackGround extends AsyncTask<String, String, String> {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onPreExecute() {
@@ -384,7 +395,8 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONArray response) {
                                 try {
-                                    Log.e(TAG, "onResponse: response is ------------- " + response.toString());
+
+
                                     LoginActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -394,11 +406,39 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
+                                    Log.d(TAG, "onResponse: response is **********"+response.toString());
+
                                     str = response.getString(0);
-                                    checker = true;
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
+                                        SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                        SharedPreferences.Editor editor=saved_values.edit();
+                                        editor.putBoolean("isLoggedIn",true);
+                                        editor.putString("customer_id", customer_id);
+                                        editor.putString("gender", customer_gender);
+                                        JSONArray communityArray=response.getJSONArray(5);
+                                        for(int i=0;i<5;i++){
+                                            editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
+                                        }
+                                        editor.apply();
+                                        Log.e(TAG, "onResponse: --community and response is "+saved_values.getString("Agarwal",null));
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                             @Override
+                                            public void run() {
+                                                if(dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Intent intent=new Intent(getApplicationContext(),DashboardActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+                                /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);		 +                                    else
+ -                                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {		 +                                    {Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();}
+
+
+
                                         Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
                                     }
                                    /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
@@ -457,7 +497,29 @@ public class LoginActivity extends AppCompatActivity {
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
-                                        Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+                                        SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                        SharedPreferences.Editor editor = saved_values.edit();
+                                        editor.putBoolean("isLoggedIn", true);
+                                        editor.putString("customer_id", customer_id);
+                                        editor.putString("gender", customer_gender);
+                                        JSONArray communityArray = response.getJSONArray(5);
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                        }
+                                        editor.apply();
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (dialog.isShowing()) {
+                                                    dialog.dismiss();
+                                                }
+                                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();
                                     }
                                    /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
                                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -486,6 +548,8 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
 
+                                Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+
                                 // handle error
                                 Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
                             }
@@ -500,6 +564,11 @@ public class LoginActivity extends AppCompatActivity {
 
             super.onPostExecute(s);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
 

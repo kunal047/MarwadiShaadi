@@ -2,8 +2,10 @@ package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,7 +28,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 /**
  * Created by USER on 01-06-2017.
@@ -40,6 +41,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<InterestReceivedModel> interestReceivedModelList;
     private List<InterestReceivedModel> mInterestReceivedModelList;
+    private String customer_id;
 
     public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
         this.context = context;
@@ -53,6 +55,10 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_interest, parent, false);
+
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this.context);
+        customer_id = sharedpref.getString("customer_id", null);
 
         return new MyViewHolder(itemView);
     }
@@ -191,8 +197,8 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
             String clickedId = params[0];
             String status = params[1];
-            AndroidNetworking.post(URL + "prepareInterest")
-                    .addBodyParameter("customerNo", "O1057")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareInterest")
+                    .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("clickedId", clickedId)
                     .addBodyParameter("status", status)
                     .setPriority(Priority.HIGH)

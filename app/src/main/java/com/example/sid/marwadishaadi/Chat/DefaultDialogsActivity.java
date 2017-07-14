@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Chat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,24 +27,41 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 //Inbox TODO top bar should work
-public class DefaultDialogsActivity extends DemoDialogsActivity  {
-    String success="",query="";
-    String name,url;
-    private SwipeRefreshLayout swipeRefreshLayout;
+public class DefaultDialogsActivity extends DemoDialogsActivity {
+    static boolean fire = false, fire2 = false, MainFire = false, CalledOnce = false;
+    String success = "", query = "";
+    String name, url;
+    ScheduledExecutorService scheduleTaskExecutor1, scheduleTaskExecutor;
+    int count = 0, count2 = 0, time = 0;
+    ArrayList<String> ListOfQueries, ListOfMessage, ListOfSender, ListOfGetter, ListOfName, ListOfUrl, ListOFMessageOn;
     ProgressDialog pgd;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private DialogsList dialogsList;
     private DialogsListAdapter<Dialog> dla;
+    private String customer_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_dialogs);
-        dla=new DialogsListAdapter<Dialog>( super.imageLoader);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+
+        ListOfQueries = new ArrayList<>();
+        ListOfMessage = new ArrayList<>();
+        ListOfSender = new ArrayList<>();
+        ListOfGetter = new ArrayList<>();
+        ListOfName = new ArrayList<>();
+        ListOfUrl = new ArrayList<>();
+        ListOFMessageOn = new ArrayList<>();
+        dla = new DialogsListAdapter<Dialog>(super.imageLoader);
+
         dialogsList = (DialogsList) findViewById(R.id.dialogsList);
         dialogsList.setAdapter(dla);
         Toolbar toolbar = (Toolbar) findViewById(R.id.chat_toolbar);
@@ -55,7 +73,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
         pgd.setMessage("Slow Network...");
         pgd.setCancelable(false);
         pgd.show();
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.chatRefresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chatRefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -67,7 +85,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
             @Override
 
             public void onDialogClick(Dialog dialog) {
-                Log.e("TAG", "onDialogClick: " + dialog.getId() + "------" + dialog.getDialogName()+" item photo is "+ dialog.getDialogPhoto());
+                Log.e("TAG", "onDialogClick: " + dialog.getId() + "------" + dialog.getDialogName() + " item photo is " + dialog.getDialogPhoto());
                 Intent intnt = new Intent(getApplicationContext(), DefaultMessagesActivity.class);
                 intnt.putExtra("customerId", dialog.getUsers().get(0).getId());
                 intnt.putExtra("customerName", dialog.getUsers().get(0).getName());
@@ -89,7 +107,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
     }
 
 
-    private class ListCreater extends AsyncTask<String,String,String>{
+    private class ListCreater extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -97,10 +115,9 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
 
         @Override
         protected String doInBackground(String... strings) {
-            if(pgd.isShowing()){
+            if (pgd.isShowing()) {
                 //dummy
-            }
-            else {
+            } else {
                 DefaultDialogsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -113,17 +130,17 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
                 });
             }
 
-            query="select tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on (tbl_user.customer_no!='"+customer_id+"') and (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no!='"+customer_id+"') and (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\""+customer_id+"\" or tbl_message.msg_to =\""+customer_id+"\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
+            query = "select tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on (tbl_user.customer_no!='" + customer_id + "') and (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no!='" + customer_id + "') and (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
             //inner join tbl_user on tbl_message.msg_from!="+
-            Log.e("G", "initAdapter: ---query of response list is ---"+query);
+            Log.e("G", "initAdapter: ---query of response list is ---" + query);
 //        http://10.0.0.3:8081/connect.php
 //        "http://10.0.0.7:5050/GetChat"
             //TODO Changed here
             AndroidNetworking.post("http://208.91.199.50:5000/getChat")
-                    .addBodyParameter("query",query)
+                    .addBodyParameter("query", query)
                     .setPriority(Priority.HIGH)
                     .build()
-                    .getAsJSONArray(new JSONArrayRequestListener(){
+                    .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             DefaultDialogsActivity.this.runOnUiThread(new Runnable() {
@@ -132,73 +149,72 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
                                     pgd.dismiss();
                                 }
                             });
-                            Vector<String> str=new Vector<String>();
-                            success="success";
-                            Log.e("Chat over list", "onResponse: of *********** getting all chat "+response );
+                            Vector<String> str = new Vector<String>();
+                            success = "success";
+                            Log.e("Chat over list", "onResponse: of *********** getting all chat " + response);
 //                        TODO id,name,photo,UserArrayList,LastMessage,UnreadCount;
                             //TODO Later change it with response.length-1 to repsonse.length
 
-                                try {
-                                    dla.clear();
-                                    for(int i=0;i<response.length();i++){
-                                    final JSONArray jsnrry= response.getJSONArray(i);
-                                    if(jsnrry.getString(0).contains(customer_id)){
+                            try {
+                                dla.clear();
+                                for (int i = 0; i < response.length(); i++) {
+                                    final JSONArray jsnrry = response.getJSONArray(i);
+                                    if (jsnrry.getString(0).contains(customer_id)) {
                                         Log.e(TAG, "onResponse: ************************************** item is at 0");
-                                        if(!str.contains(jsnrry.getString(1).trim())){
+                                        if (!str.contains(jsnrry.getString(1).trim())) {
                                             //Blank code TODO nthng
                                             str.add(jsnrry.getString(1));
 //                                        new Asynctask().execute(query,jsnrry.getString(1),jsnrry.getString(0),jsnrry.getString(2));
                                             //string[1]=listofgetter, string[2]=ListOfSender,string[3]=ListOfmessage
-                                            url="http://www.marwadishaadi.com/uploads/cust_"+jsnrry.getString(1)+"/thumb/"+jsnrry.getString(7);
-                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL "+url );
+                                            url = "http://www.marwadishaadi.com/uploads/cust_" + jsnrry.getString(1) + "/thumb/" + jsnrry.getString(7);
+                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL " + url);
                                             ArrayList<User> me = new ArrayList<User>();
                                             User usrme = new User(jsnrry.getString(1), jsnrry.getString(5), url, false);
                                             me.add(usrme);
                                             String string = jsnrry.getString(3);
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
-                                            Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2),date);
+                                            Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
-                                            Log.e(TAG, "PrepareList: id is "+dlg.getId()+" dialog message id "+dlg.getLastMessage().getId()+"dialog user is "+dlg.getUsers().get(0).getId()+" user avatar and name are "+dlg.getUsers().get(0).getAvatar()+"&&"+dlg.getUsers().get(0).getName());
-                                            Log.e(TAG, "PrepareList: ---item added is "+i);
+                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "&&" + dlg.getUsers().get(0).getName());
+                                            Log.e(TAG, "PrepareList: ---item added is " + i);
                                             dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
                                         }
-                                    }
-                                    else {
-                                        if(!str.contains(jsnrry.getString(0).trim())){
+                                    } else {
+                                        if (!str.contains(jsnrry.getString(0).trim())) {
                                             //code will not do some
                                             str.add(jsnrry.getString(0));
-                                            url="http://www.marwadishaadi.com/uploads/cust_"+jsnrry.getString(0)+"/thumb/"+jsnrry.getString(7);
-                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL "+url );
+                                            url = "http://www.marwadishaadi.com/uploads/cust_" + jsnrry.getString(0) + "/thumb/" + jsnrry.getString(7);
+                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL " + url);
                                             ArrayList<User> me = new ArrayList<User>();
                                             User usrme = new User(jsnrry.getString(0), jsnrry.getString(5), url, false);
                                             me.add(usrme);
                                             String string = jsnrry.getString(3);
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
-                                            Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2),date);
+                                            Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
-                                            Log.e(TAG, "PrepareList: id is "+dlg.getId()+" dialog message id "+dlg.getLastMessage().getId()+"dialog user is "+dlg.getUsers().get(0).getId()+" user avatar and name are "+dlg.getUsers().get(0).getAvatar()+"  && "+dlg.getUsers().get(0).getName());
-                                            Log.e(TAG, "PrepareList: ---item added is "+i);
+                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "  && " + dlg.getUsers().get(0).getName());
+                                            Log.e(TAG, "PrepareList: ---item added is " + i);
                                             dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
                                         }
                                     }
 
-                                }} catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                        /*Dialog dlg=new Dialog()
                         dla.addItem(dlg);*/
-                            }
-
+                        }
 
 
                         @Override
@@ -210,7 +226,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity  {
                                 }
                             });
                             Toast.makeText(DefaultDialogsActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
-                            Log.e("Chat over list", "onResponse: of *********** getting all chat "+anError );
+                            Log.e("Chat over list", "onResponse: of *********** getting all chat " + anError);
                         }
                     });
             return null;

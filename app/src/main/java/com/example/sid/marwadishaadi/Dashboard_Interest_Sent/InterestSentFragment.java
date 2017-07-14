@@ -35,7 +35,6 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
 
 public class InterestSentFragment extends Fragment {
@@ -117,7 +116,7 @@ public class InterestSentFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
 
-            AndroidNetworking.post(URL + "prepareSentInterest")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareSentInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()

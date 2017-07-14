@@ -2,10 +2,10 @@ package com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +17,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.R;
-import com.example.sid.marwadishaadi.User_Profile.ProfileFamilyDetailsFragment;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import org.json.JSONArray;
@@ -27,7 +26,6 @@ import java.util.Arrays;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 public class EditFamilyDetailsActivity extends AppCompatActivity {
 
@@ -35,6 +33,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
     Spinner fatherOccupation, familyStatus, familyType, familyValues;
     Button updateFamily;
     String f, fo, fod, fs, ft, fv, gn, ms, n, sc;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -47,6 +46,9 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_family_details);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         fatherName = (EditText) findViewById(R.id.edit_father_name);
         mamaSurname = (EditText) findViewById(R.id.edit_mama_surname);
@@ -86,7 +88,6 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
                 startActivity(i);
 
 
-
             }
         });
 
@@ -97,6 +98,11 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
     class FetchFamilyDetailsFamily extends AsyncTask<Void, Void, Void> {
 
@@ -104,8 +110,8 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://192.168.43.143:5050/profileFamilyDetails")
-                    .addBodyParameter("customerNo", "A1028")
+            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -179,7 +185,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://192.168.43.143:5050/editFamilyDetailsFamily")
+            AndroidNetworking.post("http://208.91.199.50:5000/editFamilyDetailsFamily")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("fatherName", f)
                     .addBodyParameter("fatherOccupation", fo)
@@ -208,11 +214,5 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
 
             return null;
         }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
     }
 }

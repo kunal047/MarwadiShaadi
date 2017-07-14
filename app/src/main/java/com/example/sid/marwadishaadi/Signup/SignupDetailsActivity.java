@@ -47,8 +47,6 @@ import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-
 
 public class SignupDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 

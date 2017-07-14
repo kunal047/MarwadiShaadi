@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -16,14 +17,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.LoginHistory.OnClearFromRecentService;
-import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.appinvite.AppInviteInvitationResult;
-import com.google.android.gms.appinvite.AppInviteReferral;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.firebase.iid.FirebaseInstanceId;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,19 +30,24 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 /**
  * Created by Sid on 14-Jun-17.
  */
 
+
 public class App extends Application{
 
     public static List<Place> placeslist = new ArrayList<>();
 
+    private String customer_id;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate() {
+
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        customer_id = sharedpref.getString("customer_id", null);
 
         new FetchLocation().execute();
 
@@ -66,7 +65,6 @@ public class App extends Application{
                 .build()
         );
         OnClearFromRecentService onClearFromRecentService=new OnClearFromRecentService();
-            SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
             boolean check = sharedpref.getBoolean("isLoggedIn", false);
             Toast.makeText(getApplicationContext(),"Please check your Internet Connection",Toast.LENGTH_LONG);
             Log.d(":", "onDonePressed:--------------------------- bool is  " + check);
@@ -81,7 +79,7 @@ public class App extends Application{
     }
 
 
-    public static class FetchLocation extends AsyncTask<Void,Void,Void> {
+    private class FetchLocation extends AsyncTask<Void,Void,Void> {
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -90,7 +88,8 @@ public class App extends Application{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            AndroidNetworking.get("http://208.91.199.50:5000/fetchCityStateCountry")
+
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchCityStateCountry")
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
@@ -106,6 +105,7 @@ public class App extends Application{
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
 
                     }
 

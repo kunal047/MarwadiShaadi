@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,13 +36,14 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.content.ContentValues.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 
 
 public class EditPersonalDetailsActivity extends AppCompatActivity {
     Spinner maritalStatus,height,physcialStatus,complexion,built;
     EditText contactNumber, weight;
     AutoCompleteTextView location;
+    String customer_id;
+
     String  ms,h,c,l,w,ps,co,b;
     private PlacesAdapter placesAdapter;
 
@@ -53,6 +55,9 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_personal_details);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_pdetails_toolbar);
         toolbar.setTitle("Edit Personal Details");
@@ -118,7 +123,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post("http://192.168.43.143:5050/profilePersonalDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
                     .addBodyParameter("customerNo",customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -214,7 +219,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
 
 
-                    AndroidNetworking.post("http://192.168.43.143:5050/editPersonalIndividualDetails")
+                    AndroidNetworking.post("http://208.91.199.50:5000/editPersonalIndividualDetails")
                             .addBodyParameter("customerNo", customer_id)
                             .addBodyParameter("marrital_status",ms)
                             .addBodyParameter("height",h)

@@ -1,9 +1,9 @@
 <android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,14 +12,15 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardViewAboutMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,31 +28,31 @@
                 android:layout_margin="12dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="About Me"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/aboutme_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="About Me"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/aboutme_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
 
@@ -60,26 +61,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Siddhesh Rane , 20 yrs"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardViewHobbies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,31 +89,31 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Hobbies/Interests"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/hobbies_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Hobbies/Interests"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/hobbies_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
 
@@ -120,25 +122,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Siddhesh Rane , 20 yrs"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_hobby"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -146,80 +148,78 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="LifeStyle"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/lifestyle_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="LifeStyle"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/lifestyle_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/eating_habits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Non-Vegetarian"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_diet"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/drinking_habit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Doesn't Drink"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_drink"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/smoking_habits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Doesn't Smoke"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_smoke"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -228,31 +228,31 @@
                 android:orientation="vertical">
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Horoscope"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/horoscope_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Match Horoscope"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/horoscope_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
 
@@ -261,62 +261,59 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Born on 9.36 PM at Mumbai"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_dob"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/gotra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Rane - 96 kuli"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_gotra"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/manglik"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Not a Manglik"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_manglik"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/match_horoscope"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Match Horoscope"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_horoscope"
                     android:drawablePadding="10dp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <Button
             android:id="@+id/similar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@layout/button_border_corner_circle_"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="View Similar Profiles"
             android:textAllCaps="false"
-            android:layout_gravity="center"
-            android:background="@layout/button_border_corner_circle_"
-            android:textColor="@color/white"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:textColor="@color/white"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
