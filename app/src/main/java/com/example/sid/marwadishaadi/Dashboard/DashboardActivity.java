@@ -67,7 +67,7 @@ public class DashboardActivity extends AppCompatActivity
     private LinearLayout inbox;
     private LinearLayout search;
     private int click = 0;
-    private String customer_id, customer_gender;
+    private String customer_id, customer_gender,customer_name;
     TextView nameDrawer;
 
     @Override
@@ -346,10 +346,14 @@ public class DashboardActivity extends AppCompatActivity
 
                             try {
                                 JSONArray array = response.getJSONArray(0);
-                                String name = array.getString(1) + " " + array.getString(2);
-
+                                customer_name = array.getString(1) + " " + array.getString(2);
+                                SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedpref.edit();
+                                editor.putString("customer_name", customer_name);
+                                editor.apply();
+                                editor.commit();
                                 Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + array.getString(0)).into(userdp);
-                                nameDrawer.setText(name);
+                                nameDrawer.setText(customer_name);
 
                             }catch (JSONException e) {
                                 e.printStackTrace();

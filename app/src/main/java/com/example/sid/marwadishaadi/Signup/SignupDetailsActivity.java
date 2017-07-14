@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -56,6 +57,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     protected EditText name;
     protected EditText surname;
     protected EditText dob;
+    public static List<Place> placeslist = new ArrayList<>();
     protected EditText mobile;
     protected ArrayAdapter<String> casteSpinnerAdapter;
     protected Button next;
@@ -136,12 +138,17 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
         setContentView(R.layout.activity_signup_details);
 
 
+
+
         name = (EditText) findViewById(R.id.first_name);
         surname = (EditText) findViewById(R.id.last_name);
         dob = (EditText) findViewById(R.id.dob);
         mobile = (EditText) findViewById(R.id.mobile);
 
         caste = (Spinner) findViewById(R.id.user_caste);
+
+
+
 
 
         // autcomplete location
@@ -231,6 +238,44 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
             int month1 = calendar.get(Calendar.MONTH);
             int day1 = calendar.get(Calendar.DAY_OF_MONTH);
             return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year1, month1, day1);
+        }
+    }
+
+    public static class FetchLocation extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d("location wala", "onPostExecute: " + placeslist.toString());
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            AndroidNetworking.get("http://208.91.199.50:5000/fetchCityStateCountry")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Place place;
+                        try {
+                            for(int i = 0;i<response.length();i++) {
+                                JSONArray array = response.getJSONArray(i);
+                                place = new Place(array.getString(0), array.getString(2), array.getString(4));
+                                placeslist.add(place);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+            return null;
         }
     }
 }

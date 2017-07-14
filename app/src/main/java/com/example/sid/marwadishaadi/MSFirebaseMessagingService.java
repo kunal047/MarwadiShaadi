@@ -10,6 +10,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
@@ -33,7 +35,9 @@ public class MSFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
 
-        //// TODO: 01-Jul-17 #KUNAL below is the sample notification..u can get the title and body from remoteMessage object
+        Log.d("notification",remoteMessage.getNotification().getTitle());
+
+        Notifications_Util.createNotification(remoteMessage.getData().get("Type"),remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody(),this,1);
 
        /* Notif_Message message = new Notif_Message("Mervin","first");
         Notif_Message message1 = new Notif_Message("Maitree","second");

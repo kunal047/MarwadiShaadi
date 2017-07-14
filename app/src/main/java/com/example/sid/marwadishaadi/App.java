@@ -23,6 +23,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,11 +71,12 @@ public class App extends Application{
             Toast.makeText(getApplicationContext(),"Please check your Internet Connection",Toast.LENGTH_LONG);
             Log.d(":", "onDonePressed:--------------------------- bool is  " + check);
             if (check) {
-                Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
+                Intent i = new Intent(getApplicationContext(),DashboardActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
                 startActivity(i);
             }
+
 
     }
 
@@ -82,9 +84,13 @@ public class App extends Application{
     public static class FetchLocation extends AsyncTask<Void,Void,Void> {
 
         @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d("location wala", "onPostExecute: " + placeslist.toString());
+        }
+
+        @Override
         protected Void doInBackground(Void... voids) {
-            AndroidNetworking.post("http://192.168.43.143:5050/fetchCityStateCountry")
-                .addBodyParameter("customerNo", customer_id)
+            AndroidNetworking.get("http://208.91.199.50:5000/fetchCityStateCountry")
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
@@ -95,7 +101,7 @@ public class App extends Application{
                             for(int i = 0;i<response.length();i++) {
                                 JSONArray array = response.getJSONArray(i);
                                 place = new Place(array.getString(0), array.getString(2), array.getString(4));
-                                placeslist.add(place);
+                                App.placeslist.add(place);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

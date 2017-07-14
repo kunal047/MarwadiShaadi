@@ -22,10 +22,17 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
@@ -33,6 +40,7 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
 import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
 
@@ -43,6 +51,7 @@ import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditP
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
 
+    private DatabaseReference mDatabase;
     private final Context context;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;
@@ -148,6 +157,29 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             public void onEvent(ImageView button, boolean buttonState) {
 
                 if (buttonState) {
+
+                    mDatabase = FirebaseDatabase.getInstance().getReference("users");
+
+                    mDatabase.child(suggestionModelList.get(position).getCusId()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+                            String registration_id = device.getDevice_id();
+                            SharedPreferences sharedpref = context.getSharedPreferences("userinfo", MODE_PRIVATE);
+                            String customer_name = sharedpref.getString("customer_name", null);
+                            String body = customer_name + " has sent you an Interest";
+                            // sending notification
+                            Notifications_Util.SendNotification(registration_id,body,"New Interest","Interest Request");
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
                     interestState = "added";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
@@ -276,6 +308,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
 
     class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
+
+
 
 
         @Override

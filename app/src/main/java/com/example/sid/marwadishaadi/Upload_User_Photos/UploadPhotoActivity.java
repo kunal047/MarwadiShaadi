@@ -95,10 +95,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                    loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("email","user_photos"));
-                    loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    LoginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("user_photos", "email", "public_profile"));
+                    LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
+
 
                             // getting user profile
                             GraphRequest request = GraphRequest.newMeRequest(
@@ -121,7 +122,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                         }
                                     });
                             request.executeAsync();
-                                    }
+                        }
 
                             @Override
                             public void onCancel() {
