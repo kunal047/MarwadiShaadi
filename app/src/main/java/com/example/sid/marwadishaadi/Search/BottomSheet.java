@@ -13,6 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -369,6 +370,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             case 23:
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_lifestyle, null);
 
+
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
 
@@ -383,9 +385,22 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     @Override
 
                     public void onClick(View v) {
-                        eh = eatingHabit.getSelectedItem().toString();
-                        dh = drinkingHabit.getSelectedItem().toString();
-                        sh = smokingHabit.getSelectedItem().toString();
+                        if (eatingHabit.getSelectedItem().toString().contains("Select")) {
+                            eh = "";
+                        } else {
+                            eh = eatingHabit.getSelectedItem().toString();
+                        }
+                        if (drinkingHabit.getSelectedItem().toString().contains("Do")) {
+                            dh = "";
+                        } else {
+                            dh = drinkingHabit.getSelectedItem().toString();
+                        }
+
+                        if (smokingHabit.getSelectedItem().toString().contains("Do")) {
+                            sh = "";
+                        } else {
+                            sh = smokingHabit.getSelectedItem().toString();
+                        }
 
                         new EditAdditionalLifeStyleDetails().execute();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);

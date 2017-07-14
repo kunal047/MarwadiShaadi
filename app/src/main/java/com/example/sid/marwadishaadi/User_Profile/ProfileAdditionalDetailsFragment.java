@@ -89,11 +89,15 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             if(sh!=null)
                 smokingHabits.setText(sh);
 
+
             if(bt!=null || bp!=null)
                 birthtime.setText(bt+" at "+bp);
 
             if(g!=null)
                 gotra.setText(g);
+            else{
+                gotra.setVisibility(View.GONE);
+            }
 
             if(m!=null)
                 manglik.setText(m);
@@ -289,8 +293,13 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                                 String bl= result.getString(5) + " at " + result.getString(6);
 
                                 birthtime.setText(bl);
+
                                 gotra.setText(result.getString(7));
+
                                 manglik.setText(result.getString(8));
+                                if(result.getString(9).isEmpty()){
+                                    matchHoroscope.setVisibility(View.GONE);
+                                }
                                 matchHoroscope.setText(result.getString(9));
 
 

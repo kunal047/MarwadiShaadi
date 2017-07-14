@@ -223,7 +223,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                     Intent i = new Intent(context, UserProfileActivity.class);
                     i.putExtra("customerNo", cusId.getText());
                     i.putExtra("from","suggestion");
-
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
             });
@@ -232,6 +232,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
+                    i.putExtra("customerNo", cusId.getText());
+                    i.putExtra("from","suggestion");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
             });

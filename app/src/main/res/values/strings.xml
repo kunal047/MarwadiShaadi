@@ -127,6 +127,7 @@
     <string name="refund7">2. If members are not contacted by other members.</string>
     <string name="refund8">3. If members do not view or take any verified contact numbers.</string>
     <string name="refund9">4. If others do not view or take your contact number.</string>
+    <string name="drinking_habit">Do you drink ?</string>
 
     <string-array name="fstatus_array">
         <item>Select Family Status</item>
