@@ -15,12 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.R;
+import com.pdfjet.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +51,9 @@ public class InterestReceivedFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
-
+    private LinearLayout empty_view;
+    private LinearLayout empty_view_sent;
+    private ProgressBar mProgressBar;
 
     public InterestReceivedFragment() {
         // Required empty public constructor
@@ -61,19 +66,27 @@ public class InterestReceivedFragment extends Fragment {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
 
+        empty_view = (LinearLayout) mview.findViewById(R.id.empty_view);
+        empty_view_sent = (LinearLayout) mview.findViewById(R.id.empty_view_sent);
+
+        empty_view.setVisibility(View.GONE);
+        empty_view_sent.setVisibility(View.GONE);
+
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
+
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout)mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                interestReceivedModelList.clear();
                 new PrepareReceivedInterest().execute();
-                interestReceivedAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -145,6 +158,12 @@ public class InterestReceivedFragment extends Fragment {
     }
 
     private class PrepareReceivedInterest extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setIndeterminate(true);
+        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -160,60 +179,76 @@ public class InterestReceivedFragment extends Fragment {
                             // do anything with response
 
                             try {
+                                mProgressBar.setVisibility(View.GONE);
 
                                 Log.d(TAG, "onResponse: response from received interest ----------------------- " + response.toString());
-
-                                InterestReceivedModel[] interestReceivedModels = new InterestReceivedModel[response.length()];
                                 interestReceivedModelList.clear();
+                                interestReceivedAdapter.notifyDataSetChanged();
 
-                                for (int i = 0; i < response.length(); i++) {
+                                if(response.length() == 0){
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            empty_view.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                }else{
+                                    empty_view.setVisibility(View.GONE);
 
-                                    JSONArray array = response.getJSONArray(i);
-                                    String customerNo = array.getString(0);
-                                    String name = array.getString(1);
-                                    String dateOfBirth = array.getString(2);
-                                    Log.d(TAG, "onResponse: dob is " + dateOfBirth);
+
+                                    for (int i = 0; i < response.length(); i++) {
+
+                                        JSONArray array = response.getJSONArray(i);
+                                        String customerNo = array.getString(0);
+                                        String name = array.getString(1);
+                                        String dateOfBirth = array.getString(2);
+                                        Log.d(TAG, "onResponse: dob is " + dateOfBirth);
 //                                Thu, 18 Jan 1990 00:00:00 GMT
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date date = formatter.parse(dateOfBirth);
+                                        System.out.println(date);
 
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
 
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int a = getAge(year, month, day);
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int a = getAge(year, month, day);
 
-                                    String age = Integer.toString(a);
-                                    String cityName = array.getString(3);
-                                    String education = array.getString(4);
-                                    String imageUrl = array.getString(5);
-                                    String replyAction = array.getString(6);
-                                    int resultReplyAction;
-                                    if (replyAction.contains("Yes")) {
-                                        resultReplyAction = 0;
-                                    } else if (replyAction.contains("No")) {
-                                        resultReplyAction = 1;
-                                    } else {
-                                        resultReplyAction = 2;
+                                        String age = Integer.toString(a);
+                                        String cityName = array.getString(3);
+                                        String education = array.getString(4);
+                                        String imageUrl = array.getString(5);
+                                        String replyAction = array.getString(6);
+                                        int resultReplyAction;
+                                        if (replyAction.contains("Yes")) {
+                                            resultReplyAction = 0;
+                                        } else if (replyAction.contains("No")) {
+                                            resultReplyAction = 1;
+                                        } else {
+                                            resultReplyAction = 2;
+                                        }
+                                        String interestSentOn = array.getString(7);
+                                        date = formatter.parse(interestSentOn);
+
+                                        InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
+
+                                        if (!interestReceivedModelList.contains(interestReceivedModels)){
+                                            interestReceivedModelList.add(interestReceivedModels);
+                                            interestReceivedAdapter.notifyDataSetChanged();
+
+                                            Log.d(TAG, "onResponse: age of the user " + age);
+                                            Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+                                        }
+
+
+
                                     }
-                                    String interestSentOn = array.getString(7);
-                                    date = formatter.parse(interestSentOn);
-
-                                    interestReceivedModels[i] = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
-
-                                    interestReceivedModelList.add(interestReceivedModels[i]);
-                                    interestReceivedAdapter.notifyDataSetChanged();
-
-                                    Log.d(TAG, "onResponse: age of the user " + age);
-                                    Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
-
-
                                 }
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -225,10 +260,18 @@ public class InterestReceivedFragment extends Fragment {
                         @Override
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
-                            // handle error
+                            mProgressBar.setVisibility(View.GONE);
+
                         }
                     });
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

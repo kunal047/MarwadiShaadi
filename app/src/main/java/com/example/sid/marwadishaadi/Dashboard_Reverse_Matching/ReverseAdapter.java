@@ -95,4 +95,8 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
         }
 
     }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

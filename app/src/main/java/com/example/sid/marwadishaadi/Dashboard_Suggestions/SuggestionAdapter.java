@@ -346,5 +346,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,10 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -48,19 +48,31 @@ public class Reverse_MatchingFragment extends Fragment {
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
+    private LinearLayout empty_view_reverse;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_reverse__matching, container, false);
+        empty_view_reverse = (LinearLayout) mview.findViewById(R.id.empty_view_reverse);
+        empty_view_reverse.setVisibility(View.GONE);
+
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");
+
+
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setVisibility(View.GONE);
 
         reverseRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -87,11 +99,7 @@ public class Reverse_MatchingFragment extends Fragment {
     }
 
     private void refreshContent() {
-
-        reverseModelList.clear();
-        reverseAdapter.notifyDataSetChanged();
         new PrepareReverse().execute();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -118,14 +126,12 @@ public class Reverse_MatchingFragment extends Fragment {
 
     private class PrepareReverse extends AsyncTask<Void, Void, Void> {
 
-        ProgressDialog pd = new ProgressDialog(getContext());
 
         @Override
         protected void onPreExecute() {
-            pd.setTitle("Please wait..");
-            pd.show();
             super.onPreExecute();
-
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setIndeterminate(true);
         }
 
         @Override
@@ -140,49 +146,59 @@ public class Reverse_MatchingFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
 
                             try {
+                                mProgressBar.setVisibility(View.GONE);
 
                                 reverseModelList.clear();
                                 reverseAdapter.notifyDataSetChanged();
 
-                                Log.d(TAG, "onResponse: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + response.toString());
-                                Log.d(TAG, "onResponse: before filling " + reverseModelList.toString());
 
-                                for (int i = 0; i < response.length(); i++) {
 
-                                    JSONArray array = response.getJSONArray(i);
-                                    String customerNo = array.getString(0);
-                                    String name = array.getString(1);
-                                    String dateOfBirth = array.getString(2);
+                                if(response.toString().contains("zero")){
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            empty_view_reverse.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                }else {
+                                    empty_view_reverse.setVisibility(View.GONE);
+
+
+                                    for (int i = 0; i < response.length(); i++) {
+
+                                        JSONArray array = response.getJSONArray(i);
+                                        String customerNo = array.getString(0);
+                                        String name = array.getString(1);
+                                        String dateOfBirth = array.getString(2);
 //                                Thu, 18 Jan 1990 00:00:00 GMT
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date date = formatter.parse(dateOfBirth);
+                                        System.out.println(date);
 
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
 
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int age = getAge(year, month, day);
-                                    String education = array.getString(3);
-                                    String occupationLocation = array.getString(4);
-                                    String imageUrl = array.getString(5);
-                                    ReverseModel reverseModel = new ReverseModel( "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation, customerNo);
-                                    reverseModelList.add(reverseModel);
-                                    reverseAdapter.notifyDataSetChanged();
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int age = getAge(year, month, day);
+                                        String education = array.getString(3);
+                                        String occupationLocation = array.getString(4);
+                                        String imageUrl = array.getString(5);
+                                        ReverseModel reverseModel = new ReverseModel( "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation, customerNo);
+                                        if (!reverseModelList.contains(reverseModel)){
+                                            reverseModelList.add(reverseModel);
+                                            reverseAdapter.notifyDataSetChanged();
 
+                                        }
+
+                                    }
                                 }
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -193,12 +209,12 @@ public class Reverse_MatchingFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    pd.dismiss();
+                                    mProgressBar.setVisibility(View.GONE);
+
                                 }
                             });
 
@@ -210,6 +226,9 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

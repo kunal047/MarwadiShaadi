@@ -397,15 +397,15 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         public void onResponse(JSONArray response) {
 
                             try {
-                                Log.d(TAG, "onResponse: user profile " + response.toString());
+                                Log.d(TAG, "onResponse: user profile " + response.toString() + " and ;len " + response.length());
                                 String name = response.getString(0) + " " + response.getString(1);
                                 final ArrayList<String> images = new ArrayList<>();
 
-                                if (response.length() == 3) {
-                                    String[] image_urls = response.getString(2).replace("[", "").replace("]", "").replace("\"", "").trim().split(",");
+                                if (response.length() > 2) {
 
-                                    for (int i = 0; i < image_urls.length; i++) {
-                                        images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + image_urls[i]);
+                                    for (int i = 2; i < response.length(); i++) {
+                                       
+                                        images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getString(i).replace("[ ","").replace("]", "").replace("\"", ""));
                                     }
                                 }
 
@@ -415,10 +415,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
 
                                 carouselView.setImageListener(new ImageListener() {
+                                    
+                                    
                                     @Override
                                     public void setImageForPosition(int position, ImageView imageView) {
+                                        Log.d(TAG, "setImageForPosition: hittin on images.get(position) " + images.get(position));
                                         Picasso.with(UserProfileActivity.this)
-                                                .load(images.get(position))
+                                                .load(images.get(position).replace("[", ""))
                                                 .fit()
                                                 .into(imageView);
                                     }

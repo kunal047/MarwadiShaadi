@@ -24,8 +24,11 @@ public class UsersAdapter extends ArrayAdapter<User> {
     private int selectedPosition = -1;
     private static final String TAG = "UsersAdapter";
     private  CheckBox checkbox;
+    private Context mContext;
     public UsersAdapter(Context context, ArrayList<User> users) {
+
         super(context, R.layout.spinner_multiple_select, users);
+        this.mContext = context;
         arraylist=users;
     }
 
@@ -62,7 +65,7 @@ public class UsersAdapter extends ArrayAdapter<User> {
         checkbox.setOnCheckedChangeListener(myCheckChangList);
         checkbox.setTag(position);
         checkbox.setChecked(user.box);
-        if (position == 0)
+        if (position == 0 && !mContext.toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity"))
         {
             checkbox.setChecked(true);
         }

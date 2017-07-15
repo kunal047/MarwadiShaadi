@@ -54,7 +54,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
          iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_recent, parent, false);
 
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
         return new MyViewHolder(iView);
@@ -94,7 +94,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         holder.recentOnline.setText(recentModel.getRecentOnline());
         holder.recentHighestDegree.setText(recentModel.getRecentHighestDegree());
         holder.recentLocation.setText(recentModel.getRecentLocation());
-        Log.d(TAG, "onBindViewHolder: recentModel.getRecentFavouriteStatus().toCharArray()[0]" + recentModel.getRecentFavouriteStatus().toCharArray()[0]);
+        Log.d(TAG, "onBindViewHolder: recentModel.getRecentFavouriteStatus().toCharArray()[0]" + recentModel.getRecentInterestStatus().toCharArray()[0]);
         if (recentModel.getRecentFavouriteStatus().contains("contain")) {
             holder.sparkButtonFavourite.setChecked(false);
             holder.sparkButtonFavourite.setInactiveImage(R.mipmap.heart_disable);
@@ -103,6 +103,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             holder.sparkButtonInterest.setChecked(false);
             holder.sparkButtonInterest.setInactiveImage(R.mipmap.heart_disable1);
         }
+
         holder.sparkButtonFavourite.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
@@ -270,4 +271,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

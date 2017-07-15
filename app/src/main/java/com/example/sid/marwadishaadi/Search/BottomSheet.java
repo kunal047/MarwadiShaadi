@@ -125,7 +125,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     EditText relativeName, relativeOccupation, relativeMobile;
     Button relationUpdate;
     String r, rn, ro, rl, rm;
-    String[] array;
+    String[] array={};
     AutoCompleteTextView relativeLocation;
 
 
@@ -146,7 +146,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         if (i == 111) {
             content = 111;
         } else if (i == 112) {
-            content = 5;
+            content = 112;
         } else if (i == 113) {
             content = 113;
         }
@@ -185,9 +185,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
             case 112:
-//                contentView = viewGetterEditPref(R.array.aincome_array, array);
+                contentView = viewGetterEditPref(R.array.aincome_array, array);
                 Toast.makeText(getContext(), "incase why this is called ", Toast.LENGTH_LONG).show();
                 count = 2;
+                content = 5;
                 break;
 
             case 0:
@@ -692,10 +693,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
+        Log.d(TAG, "viewGetterEditPref: arrays of income is "  + arr);
+
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b = true;
         String[] str = getResources().getStringArray(array);
-        for (int i = 0; i < str.length; i++) {
+        for (int i = 1; i < str.length; i++) {
             if(Arrays.asList(arr).indexOf(str[i]) == -1)
             {
                 b=false;
@@ -704,7 +707,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 b = true;
             }
             User user = new User(str[i], "null", false);
-            user.setBox(true);
+            user.setBox(b);
             arrayOfUsers.add(user);
         }
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
