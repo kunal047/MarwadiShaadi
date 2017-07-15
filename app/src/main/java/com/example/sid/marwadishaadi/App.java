@@ -49,8 +49,7 @@ public class App extends Application{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d("location wala", "onPostExecute: " + placeslist.toString());
-        }
+                    }
 
         @Override
         protected Void doInBackground(Void... voids) {

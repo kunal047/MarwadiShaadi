@@ -665,7 +665,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 break;
 
                             } else {
-                                String physical_text= result.toString().replace("[", "").replace("]", "");
+                                String physical_text = result.toString().replace("[", "").replace("]", "");
                                 physicalstatus.setText(physical_text);
                                 physicalstatusList = (result);
                                 countphysicalstatus = coun;
@@ -702,16 +702,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
         customer_id = sharedpref.getString("customer_id", null);
         return view;
     }
+
     private View viewGetterEditPref(int array, String[] arr) {
 
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        Log.d(TAG, "viewGetterEditPref: arrays of income is "  + arr);
-
         ArrayList<User> arrayOfUsers = new ArrayList<>();
-        boolean b = true;
+        boolean b;
         String[] str = getResources().getStringArray(array);
         for (int i = 1; i < str.length; i++) {
             if(Arrays.asList(arr).indexOf(str[i]) == -1)
@@ -734,11 +733,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
 
-    class BackNd extends AsyncTask<String, String, String> {
+    private class BackNd extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog=new ProgressDialog(getContext());
+            dialog = new ProgressDialog(getContext());
             dialog.setMessage("Please Wait...");
             dialog.show();
         }
@@ -751,7 +750,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
-                        Vector<String> customers=new Vector<String>();
+                        Vector<String> customers = new Vector<>();
+
                         @Override
                         public void onResponse(JSONArray response) {
                             String s = response.toString();
@@ -765,15 +765,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
 */
 
                                     JSONArray user = response.getJSONArray(i);
-                                    if((customers.indexOf(user.getString(3))==-1)){
+                                    if ((customers.indexOf(user.getString(3)) == -1)) {
                                         customers.add(user.getString(3));
                                         Calendar calender = Calendar.getInstance();
                                         int year = calender.get(Calendar.YEAR);
                                     /*SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);*/
                                         SuggestionModel suggestionModel;
-                                        if(user.get(8).equals("")){
+                                        if (user.get(8).equals("")) {
                                             suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                        }else{
+                                        } else {
                                             suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }
                                         sm.add(suggestionModel);
@@ -787,10 +787,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                    Log.e(TAG, "run: sm size is *************"+sm.size());
+                                    Log.e(TAG, "run: sm size is *************" + sm.size());
                                     Intent i = new Intent(getContext(), SearchResultsActivity.class);
                                     i.putExtra("COUNT", size);
-                                    i.putExtra("which","second");
+                                    i.putExtra("which", "second");
                                     startActivity(i);
                                 }
                             });
@@ -819,7 +819,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             super.onPostExecute(s);
         }
     }
-    class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
+
+    private class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
 
@@ -849,7 +850,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -891,7 +893,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchProfessionalEducationDetails extends AsyncTask<Void, Void, Void> {
+    private class FetchProfessionalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -971,7 +973,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditPersonalProfessionalDetails extends AsyncTask<Void, Void, Void> {
+    private class EditPersonalProfessionalDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1000,7 +1002,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -1034,7 +1037,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
+
+    private class EditAdditionalAboutMeDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1058,7 +1062,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -1092,7 +1097,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
+
+     private class EditAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1117,7 +1123,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -1180,7 +1187,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
+
+    private class EditAdditionalLifeStyleDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1207,7 +1215,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -1263,7 +1272,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
+
+    private class EditAdditionalHoroscopeDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1292,7 +1302,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class FetchFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
+
+    private class FetchFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -1335,7 +1346,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
-    class EditFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
+
+    private class EditFamilyRelationDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -1365,7 +1377,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
     }
 
-    private void updateDisplay(EditText birthtime,int hour,int minute) {
+    private void updateDisplay(EditText birthtime, int hour, int minute) {
         birthtime.setText(
                 new StringBuilder()
                         .append(pad(hour)).append(":")
@@ -1382,13 +1394,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    int pHour = hourOfDay;
-                    int pMinute = minute;
-                    updateDisplay(birthTime,pHour,pMinute);
+
+                    updateDisplay(birthTime, hourOfDay, minute);
                 }
             };
 
-};
+}
 
 
 

@@ -31,6 +31,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+
+import com.example.sid.marwadishaadi.Login.LoginActivity;
+
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
@@ -77,8 +80,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"forgot");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,"button");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "button");
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -88,7 +91,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         submit = (Button) findViewById(R.id.Submit_forgot);
         call_us_number = (TextView) findViewById((R.id.call_us_number));
 
-        call_us.setOnClickListener(new View.OnClickListener() {
+        call_us_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -121,14 +124,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     Call();
                 }
 
+
             }
         });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked --------------------------------------------- ");
-                System.out.println("adfsjlkadsjklfj klasjfk as as ");
+
                 user_email = email.getText().toString();
                 new ForgotPassword().execute();
 
@@ -146,17 +149,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         } else {
             AlertDialog.Builder discarduser = new AlertDialog.Builder(ForgotPasswordActivity.this);
             discarduser.setMessage("Do you want to call " + call_us_number.getText().toString() + " ? ")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(callIntent);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(callIntent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
             // setting up dialog box
             AlertDialog alertbox = discarduser.create();
@@ -166,6 +169,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         }
     }
+
     private class SendMail extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -206,18 +210,23 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
+                                Log.d(TAG, "onResponse: ------------------------ " + response.toString());
                                 JSONArray result = response.getJSONArray(0);
                                 int res = Integer.parseInt(result.get(0).toString());
-                                Log.d(TAG, "onResponse: ------------------------ " + res);
+
 
                                 if (res == 1) {
                                     sentmail = true;
                                     Log.d(TAG, "onResponse: in response ^^^^^^^^^^^^^^^^ ");
                                     new SendMail().execute();
+                                    Toast.makeText(ForgotPasswordActivity.this, "Please check your e-mail for temporary password", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivity(i);
                                     Log.d(TAG, "onResponse: end of response ");
 
                                 } else {
-                                     sentmail = false;
+                                    sentmail = false;
+                                    Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -234,19 +243,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     });
 
 
-
-
-
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (!sentmail) {
-                Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
-            }
-        }
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            if (!sentmail) {
+//                Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
+//            }
+//        }
     }
 
     @Override

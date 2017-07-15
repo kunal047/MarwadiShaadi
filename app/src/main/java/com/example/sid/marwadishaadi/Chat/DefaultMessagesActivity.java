@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
@@ -73,7 +74,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
         query = "SELECT msg_on,msg_read,msg,msg_from,msg_to FROM `tbl_message`  where (msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\") or ( msg_from=\"" + customerId + "\" and msg_to =\"" + customer_id + "\") order by msg_on asc";
-        Log.e(TAG, "onCreate: ------------query is ----" + query);
+        Log.e(TAG, "f" + query);
         pgd = new ProgressDialog(this);
         pgd.setTitle("Wait a while");
         pgd.setMessage("Slow connection...");
@@ -90,7 +91,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                             try {
                                 JSONArray jsnrry = response.getJSONArray(i);
                                 String string = jsnrry.getString(0);
-                                SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
+                                SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                 Date date = format.parse(string);
                                 Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
 
@@ -106,9 +107,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                 }
 
                                 adapter.addToStart(message, true);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
+                            } catch (JSONException | ParseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -205,9 +204,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         String replyTo = "0"; // default is 0
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance().getTime());
 //SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
-        String messageTime = timeStamp;
+
         Log.e(TAG, "onSubmit: time sent is ----- " + timeStamp);
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
@@ -220,7 +219,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 .addBodyParameter("replyTo", replyTo)
                 .addBodyParameter("subject", subject)
                 .addBodyParameter("message", messageString)
-                .addBodyParameter("messageOn", messageTime)
+                .addBodyParameter("messageOn", timeStamp)
                 .addBodyParameter("replyOn", replyOn)
                 .addBodyParameter("messageRead", messageRead)
                 .addBodyParameter("fromDelete", fromDelete)
