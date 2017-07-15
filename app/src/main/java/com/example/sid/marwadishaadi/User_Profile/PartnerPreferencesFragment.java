@@ -84,7 +84,7 @@ public class PartnerPreferencesFragment extends Fragment {
         }
 
 
-        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from)) {
+        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from) | "similar".equals(from)) {
 
             edit_prefs.setVisibility(View.GONE);
             edit_prefs.setVisibility(View.GONE);

@@ -150,6 +150,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         gotra = (TextView) mview.findViewById(R.id.gotra);
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
+
+
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
 

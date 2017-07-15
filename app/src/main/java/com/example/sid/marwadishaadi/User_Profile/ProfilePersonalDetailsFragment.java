@@ -436,7 +436,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
 
 
-        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from)) {
+        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from) | "similar".equals(from)) {
             edit_individual.setVisibility(View.GONE);
             edit_education.setVisibility(View.GONE);
             edit_profession.setVisibility(View.GONE);
