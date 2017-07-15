@@ -12,6 +12,8 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -281,6 +283,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 uai = sharedpref.getString("ai", null);
                 ai = uai;
                 Log.d(TAG, "onClick: value is " + ai);
+                strArrayAnnual = prefannualincome.getText().toString().split(",");
 
                 new EditPartnerPreferences().execute();
 
@@ -333,8 +336,24 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
                 BottomSheetDialogFragment btm = new BottomSheet(112, strArrayAnnual);
                 btm.show(getSupportFragmentManager(), btm.getTag());
-                Log.d(TAG, "onClick: context for application " + getApplicationContext().toString());
 
+            }
+        });
+        prefannualincome.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: value is " + s.toString());
+//                strArrayAnnual = s.toString().split(",");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                strArrayAnnual = s.toString().replace(", ", ",").split(",");
             }
         });
         physicalstatus = (Spinner) findViewById(R.id.edit_physical_status);
@@ -839,8 +858,12 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", ""));
 
+
+                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", "").replace("\"", "").replace("000000","0L").replace("00000", "L"));
+
+
+                                strArrayAnnual = prefannualincome.getText().toString().split(",");
 
 
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -39,11 +40,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
     Context context;
     private List<FavouriteModel> fav;
     private String customer_id;
+    private LinearLayout empty_view_favourites;
 
-
-    public FavouritesAdapter(Context context, List<FavouriteModel> fav) {
+    public FavouritesAdapter(Context context, List<FavouriteModel> fav,LinearLayout empty_view_favourites) {
         this.context = context;
         this.fav = fav;
+        this.empty_view_favourites = empty_view_favourites;
     }
 
     @Override
@@ -52,6 +54,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                 .inflate(R.layout.fav_row, parent, false);
 
 
+        SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         return new MyViewHolder(itemView);
 
@@ -74,6 +78,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             public void onClick(View view) {
                 fav.remove(position);
                 notifyDataSetChanged();
+                if (fav.size() == 0){
+                    if (empty_view_favourites.getVisibility() != View.VISIBLE) {
+                        empty_view_favourites.setVisibility(View.VISIBLE);
+                    }
+                }
                 new RemoveFromFavourite().execute(favouriteModel.getCustomerId());
             }
         });
@@ -152,6 +161,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         public void onResponse(JSONArray response) {
                             Log.d(TAG, "onResponse: json response array is " + response.toString());
+
                         }
 
                         @Override
@@ -198,5 +208,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                     });
             return null;
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 }

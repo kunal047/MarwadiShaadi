@@ -26,6 +26,7 @@
 
         <ImageView
             android:id="@+id/recentUserImage"
+            android:src="@drawable/default_drawer"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="#1afb6542"

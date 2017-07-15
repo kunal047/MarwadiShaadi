@@ -29,6 +29,7 @@
             <ImageView
                 android:clickable="true"
                 android:id="@+id/imgAdd"
+                android:src="@drawable/default_drawer"
                 android:layout_width="wrap_content"
                 android:layout_height="290dp"
                 android:layout_marginLeft="8dp"

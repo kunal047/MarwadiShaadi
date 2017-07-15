@@ -30,6 +30,7 @@ import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.SignupActivity;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -131,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                        Log.d("object", object.toString());
+                         
 
                         try {
                             String first_name = object.getString("first_name");
@@ -246,6 +247,12 @@ public class LoginActivity extends AppCompatActivity {
                                                              Log.e(TAG, "run: -- pro t next step");
 
                                                              if (str.equals("success")) {
+
+                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                 SharedPreferences.Editor editors = userinfo.edit();
+                                                                 editors.putBoolean("isLoggedIn",true);
+                                                                 editors.apply();
+
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
                                                                  SharedPreferences.Editor editor = sharedpref.edit();
                                                                  editor.putBoolean("isLoggedIn", true);
@@ -255,9 +262,21 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.putString("gender", customer_gender);
                                                                  editor.apply();
                                                                  dialog.dismiss();
-                                                                 Notifications_Util.RegisterDevice(customer_id);
+
+
+                                                                 Intent deeplink_data = getIntent();
+                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                 if (deeplink !=null){
+                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                     i.putExtra("deeplink",deeplink);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                 }                                                                 Notifications_Util.RegisterDevice(customer_id);
+
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
                                                              } else if (str.equals("failure")) {
                                                                  Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
                                                                  dialog.dismiss();
@@ -313,6 +332,11 @@ public class LoginActivity extends AppCompatActivity {
                                                              Log.e(TAG, "run: -- pro t next step");
 
                                                              if (str.equals("success")) {
+                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                 SharedPreferences.Editor editors = userinfo.edit();
+                                                                 editors.putBoolean("isLoggedIn",true);
+                                                                 editors.apply();
+
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
                                                                  SharedPreferences.Editor editor = sharedpref.edit();
                                                                  editor.putBoolean("isLoggedIn", true);
@@ -322,9 +346,24 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.putString("gender", customer_gender);
                                                                  editor.apply();
                                                                  dialog.dismiss();
+
+
+                                                                 Intent deeplink_data = getIntent();
+                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                 if (deeplink !=null){
+                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                     i.putExtra("deeplink",deeplink);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                 }
+
+
                                                                  Notifications_Util.RegisterDevice(customer_id);
+
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
                                                              } else if (str.equals("failure")) {
                                                                  Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
                                                                  dialog.dismiss();
@@ -382,7 +421,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.d(TAG, "doInBackground:---------------------- email--" + strings[1] + "---pass is ---" + strings[2]);
+             
             if (strings[0].contains("email")) {
                 AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
                         .addPathParameter("check", "email")
@@ -406,7 +445,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                    Log.d(TAG, "onResponse: response is **********"+response.toString());
+                                     
 
                                     str = response.getString(0);
                                     if (str.contains("success")) {
@@ -453,7 +492,7 @@ public class LoginActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 
-                                //                        Log.d(TAG, "onResponse: -------------"+response.toString());
+                                //                         
                             }
 
                             @Override
@@ -467,7 +506,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                Log.d(TAG, "onResponse: ----Network Error in Email Login" + error.toString());
+                                 
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -533,7 +572,7 @@ public class LoginActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 
-                                //                        Log.d(TAG, "onResponse: -------------"+response.toString());
+                                //                         
                             }
 
                             @Override
@@ -551,7 +590,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
 
                                 // handle error
-                                Log.d(TAG, "onResponse: ----Ye kya Qutiyapa hai" + error.toString());
+                                 
                             }
                         });
             }

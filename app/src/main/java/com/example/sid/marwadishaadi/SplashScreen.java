@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.example.sid.marwadishaadi.Login.LoginActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,18 +86,45 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 Intent i;
+
+                // from deeplink -> go to profile
                 if (activitycode == 0) {
-                     i = new Intent(SplashScreen.this,UserProfileActivity.class);
-                    if(deeplink!=null){
+                    if (isUserLoggedIn()){
+                        i = new Intent(SplashScreen.this,UserProfileActivity.class);
+                        if(deeplink!=null){
+                            i.putExtra("deeplink",deeplink);
+                        }
+                    }else{
+                        i = new Intent(SplashScreen.this,LoginActivity.class);
                         i.putExtra("deeplink",deeplink);
                     }
+
                 }else{
-                     i = new Intent(SplashScreen.this,MainActivity.class);
+                    if (isUserLoggedIn()){
+                        i = new Intent(SplashScreen.this, DashboardActivity.class);
+                    }else{
+                        if (isFirstLaunch()){
+                            i = new Intent(SplashScreen.this,MainActivity.class);
+                        }else{
+                            i = new Intent(SplashScreen.this,LoginActivity.class);
+
+                        }
+                    }
                 }
                 startActivity(i);
                 finish();
             }
         },duration);
+    }
+
+    private boolean isUserLoggedIn(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isLoggedIn", false);
+    }
+
+    private boolean isFirstLaunch(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isFirstTime",false);
     }
 }
 
