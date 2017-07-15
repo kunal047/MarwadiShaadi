@@ -192,8 +192,7 @@ public class FavouritesFragment extends Fragment {
 
                                         if (!favouritesList.contains(favouriteModel)){
 
-                                            favouritesList.add(favouriteModel);
-                                            favouritesAdapter.notifyDataSetChanged();
+                                            favouritesList.add(0, favouriteModel);
 
                                             Log.d(TAG, "onResponse: age of the user " + age);
                                             Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));

@@ -202,7 +202,6 @@ public class PartnerPreferencesFragment extends Fragment {
                                         }
 
                                         if (o != null && o.trim().length() == 0) {
-
                                             occup.setVisibility(View.GONE);
                                         } else {
                                             occup.setText(o);
@@ -221,7 +220,7 @@ public class PartnerPreferencesFragment extends Fragment {
                                             highestDegree.setText(hd);
                                         }
 
-                                        if ( ai != null && ai.trim().length() == 0) {
+                                        if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
                                             annualIncome.setText("No Income mentioned.");
 
                                         } else {

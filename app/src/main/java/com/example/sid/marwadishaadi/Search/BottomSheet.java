@@ -446,7 +446,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         m = manglik.getSelectedItem().toString();
                         mh = matchHoroscope.getSelectedItem().toString();
 
-                        new EditAdditionalHoroscopeDetails();
+                        new EditAdditionalHoroscopeDetails().execute();
                         Intent someIntent = new Intent(SOME_INTENT_FILTER_NAME);
                         someIntent.putExtra("birthTime", bt);
                         someIntent.putExtra("birthPlace", bp);

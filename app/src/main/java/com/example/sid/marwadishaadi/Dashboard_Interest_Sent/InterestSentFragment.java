@@ -83,6 +83,7 @@ public class InterestSentFragment extends Fragment {
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(interestSentAdapter);
@@ -201,7 +202,7 @@ public class InterestSentFragment extends Fragment {
 
                                         if (!interestListSent.contains(interestSentModels)) {
 
-                                            interestListSent.add(interestSentModels);
+                                            interestListSent.add(0, interestSentModels);
                                             interestSentAdapter.notifyDataSetChanged();
 
                                             Log.d(TAG, "onResponse: age of the user " + age);

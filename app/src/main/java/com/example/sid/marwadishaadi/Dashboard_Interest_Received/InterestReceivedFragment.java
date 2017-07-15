@@ -135,17 +135,6 @@ public class InterestReceivedFragment extends Fragment {
         }
     }
 
-    /* @Override
-     public void onAttach(Context context) {
-         super.onAttach(context);
-         if (context instanceof OnFragmentInteractionListener) {
-             mListener = (OnFragmentInteractionListener) context;
-         } else {
-             throw new RuntimeException(context.toString()
-                     + " must implement OnFragmentInteractionListener");
-         }
-     }
- */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -237,7 +226,7 @@ public class InterestReceivedFragment extends Fragment {
                                         InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
 
                                         if (!interestReceivedModelList.contains(interestReceivedModels)){
-                                            interestReceivedModelList.add(interestReceivedModels);
+                                            interestReceivedModelList.add(0, interestReceivedModels);
                                             interestReceivedAdapter.notifyDataSetChanged();
 
                                             Log.d(TAG, "onResponse: age of the user " + age);
