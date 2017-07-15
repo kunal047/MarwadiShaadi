@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login);
 
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
-        fblogin.setReadPermissions(Arrays.asList("email","user_photos"));
+        fblogin.setReadPermissions(Arrays.asList("email", "user_photos"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -132,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                         
 
                         try {
                             String first_name = object.getString("first_name");
@@ -222,11 +221,11 @@ public class LoginActivity extends AppCompatActivity {
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
 
-                                             char charEmail= email.charAt(0);
-                                             char character=email.charAt(0);
-                                             if((int)charEmail<123 & (int)charEmail>96){
-                                                 charEmail=(char)((int)charEmail-32);
-                                                 email=email.replace(character,charEmail);
+                                             char charEmail = email.charAt(0);
+                                             char character = email.charAt(0);
+                                             if ((int) charEmail < 123 & (int) charEmail > 96) {
+                                                 charEmail = (char) ((int) charEmail - 32);
+                                                 email = email.replace(character, charEmail);
 
                                              }
 
@@ -250,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
-                                                                 editors.putBoolean("isLoggedIn",true);
+                                                                 editors.putBoolean("isLoggedIn", true);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -266,19 +265,18 @@ public class LoginActivity extends AppCompatActivity {
                                                                  //Notifications_Util.RegisterDevice(customer_id);
 
 
-
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
-                                                                 if (deeplink !=null){
+                                                                 if (deeplink != null) {
                                                                      Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
-                                                                     i.putExtra("deeplink",deeplink);
+                                                                     i.putExtra("deeplink", deeplink);
                                                                      startActivity(i);
-                                                                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                                                                  }
 
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
-                                                                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
                                                              } else if (str.equals("failure")) {
                                                                  Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
@@ -337,7 +335,7 @@ public class LoginActivity extends AppCompatActivity {
                                                              if (str.equals("success")) {
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
-                                                                 editors.putBoolean("isLoggedIn",true);
+                                                                 editors.putBoolean("isLoggedIn", true);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -354,18 +352,17 @@ public class LoginActivity extends AppCompatActivity {
 
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
-                                                                 if (deeplink !=null){
+                                                                 if (deeplink != null) {
                                                                      Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
-                                                                     i.putExtra("deeplink",deeplink);
+                                                                     i.putExtra("deeplink", deeplink);
                                                                      startActivity(i);
-                                                                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                                                                  }
-
 
 
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
-                                                                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
                                                              } else if (str.equals("failure")) {
                                                                  Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
@@ -424,7 +421,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-             
+
             if (strings[0].contains("email")) {
                 AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
                         .addPathParameter("check", "email")
@@ -448,30 +445,29 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                     
 
                                     str = response.getString(0);
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
                                         SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                        SharedPreferences.Editor editor=saved_values.edit();
-                                        editor.putBoolean("isLoggedIn",true);
+                                        SharedPreferences.Editor editor = saved_values.edit();
+                                        editor.putBoolean("isLoggedIn", true);
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        JSONArray communityArray=response.getJSONArray(5);
-                                        for(int i=0;i<5;i++){
-                                            editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
+                                        JSONArray communityArray = response.getJSONArray(5);
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
-                                        Log.e(TAG, "onResponse: --community and response is "+saved_values.getString("Agarwal",null));
+                                        Log.e(TAG, "onResponse: --community and response is " + saved_values.getString("Agarwal", null));
                                         LoginActivity.this.runOnUiThread(new Runnable() {
-                                             @Override
+                                            @Override
                                             public void run() {
-                                                if(dialog.isShowing()) {
+                                                if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Intent intent=new Intent(getApplicationContext(),DashboardActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                                                 startActivity(intent);
                                             }
                                         });
@@ -509,7 +505,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                 
+
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -593,7 +589,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
 
                                 // handle error
-                                 
+
                             }
                         });
             }
