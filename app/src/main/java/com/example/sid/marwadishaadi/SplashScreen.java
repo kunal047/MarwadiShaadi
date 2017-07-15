@@ -19,8 +19,17 @@ import com.example.sid.marwadishaadi.Login.LoginActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -33,6 +42,15 @@ public class SplashScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
+
+   /*     // registering device
+        String registration_id = FirebaseInstanceId.getInstance().getToken();
+
+
+        // sending notification
+        Notifications_Util.SendNotification(registration_id,"Mervin sent you an Interest","New Interest","Interest Request");
+
+*/
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {

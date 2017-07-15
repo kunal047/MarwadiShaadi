@@ -66,7 +66,7 @@ public class DashboardActivity extends AppCompatActivity
     private LinearLayout inbox;
     private LinearLayout search;
     private int click = 0;
-    private String customer_id, customer_gender;
+    private String customer_id, customer_gender,customer_name;
     TextView nameDrawer;
 
     @Override
@@ -346,6 +346,7 @@ public class DashboardActivity extends AppCompatActivity
                         public void onResponse(JSONArray response) {
 
                             try {
+
                                 Log.d(TAG, "onResponse: resposne is " + response.toString());
                                 Log.d(TAG, "onResponse: length of response is " + response.length());
 

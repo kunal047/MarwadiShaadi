@@ -27,6 +27,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.SignupActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -84,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
             String hashtext = number.toString(16);
             // Now we need to zero pad it if you actually want the full 32 chars.
             while (hashtext.length(
-
-
             ) < 32) {
                 hashtext = "0" + hashtext;
             }
@@ -124,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login);
 
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
-        fblogin.setReadPermissions(Arrays.asList("email"));
+        fblogin.setReadPermissions(Arrays.asList("email","user_photos"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -264,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.apply();
                                                                  dialog.dismiss();
 
+
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
                                                                  if (deeplink !=null){
@@ -271,7 +271,8 @@ public class LoginActivity extends AppCompatActivity {
                                                                      i.putExtra("deeplink",deeplink);
                                                                      startActivity(i);
                                                                      overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                                                                 }
+                                                                 }                                                                 Notifications_Util.RegisterDevice(customer_id);
+
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
                                                                  overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
@@ -346,6 +347,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.apply();
                                                                  dialog.dismiss();
 
+
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
                                                                  if (deeplink !=null){
@@ -354,6 +356,9 @@ public class LoginActivity extends AppCompatActivity {
                                                                      startActivity(i);
                                                                      overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                                                                  }
+
+
+                                                                 Notifications_Util.RegisterDevice(customer_id);
 
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);

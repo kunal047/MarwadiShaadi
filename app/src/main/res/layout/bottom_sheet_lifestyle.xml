@@ -44,6 +44,7 @@
                     android:textSize="20dp"
                     android:entries="@array/drinking_array"
                     android:layout_marginTop="20dp"
+                    android:prompt="@string/drinking_habit"
                     android:layout_weight="1" />
 
                 <Spinner

@@ -10,6 +10,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -40,14 +41,19 @@ public class App extends Application{
                 .build()
         );
 
-
     }
 
 
     private class FetchLocation extends AsyncTask<Void,Void,Void> {
 
         @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d("location wala", "onPostExecute: " + placeslist.toString());
+        }
+
+        @Override
         protected Void doInBackground(Void... voids) {
+
             AndroidNetworking.post("http://208.91.199.50:5000/fetchCityStateCountry")
                 .setPriority(Priority.HIGH)
                 .build()
@@ -59,7 +65,7 @@ public class App extends Application{
                             for(int i = 0;i<response.length();i++) {
                                 JSONArray array = response.getJSONArray(i);
                                 place = new Place(array.getString(0), array.getString(2), array.getString(4));
-                                placeslist.add(place);
+                                App.placeslist.add(place);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
