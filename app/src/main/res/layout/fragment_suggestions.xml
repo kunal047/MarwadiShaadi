@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/swipe_to_refresh">
-    </include>
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/empty_view_suggestions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="125dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="40dp"
+            android:src="@drawable/no_int"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Oops! No new suggestions found !"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/suggestion_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true"
+            />
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/swipe_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <FrameLayout
 
         android:layout_width="match_parent"
@@ -16,39 +69,41 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
+
             <TextView
-                android:clickable="true"
                 android:id="@+id/preference"
-                android:padding="5dp"
-                android:textSize="15dp"
-                android:layout_weight="1"
-                android:textColor="#000"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Preference"
-                android:textAlignment="center"
+                android:layout_weight="1"
+                android:background="#b9b9b9"
+                android:clickable="true"
                 android:drawableLeft="@drawable/ic_user_edit"
                 android:gravity="center_vertical"
-                android:background="#b9b9b9"
-                />
-            
-            <TextView
-                android:clickable="true"
-                android:id="@+id/filter"
                 android:padding="5dp"
-                android:textSize="15dp"
+                android:text="Preference"
                 android:textAlignment="center"
-                android:layout_weight="1"
+                android:textColor="#000"
+                android:textSize="15dp"
+                />
+
+            <TextView
+                android:id="@+id/filter"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="#b9b9b9"
-                android:text="Filter"
-                android:textColor="#000"
+                android:clickable="true"
                 android:drawableLeft="@drawable/ic_action_filter"
                 android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="Filter"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="15dp"
                 />
 
         </LinearLayout>
 
     </FrameLayout>
+
 </FrameLayout>

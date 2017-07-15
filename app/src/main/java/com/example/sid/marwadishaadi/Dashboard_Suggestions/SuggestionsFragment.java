@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Dashboard_Suggestions;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,10 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -37,7 +37,6 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -51,6 +50,8 @@ public class SuggestionsFragment extends Fragment {
     private TextView filters;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
+    private LinearLayout empty_view_suggestions;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +60,11 @@ public class SuggestionsFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_suggestions, container, false);
+        empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
+        empty_view_suggestions.setVisibility(View.GONE);
+
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -113,11 +119,7 @@ public class SuggestionsFragment extends Fragment {
     }
 
     private void refreshContent() {
-
-        suggestionModelList.clear();
         new PrepareSuggestions().execute();
-        suggestionAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -142,16 +144,12 @@ public class SuggestionsFragment extends Fragment {
     }
 
     private class PrepareSuggestions extends AsyncTask<Void, Void, Void> {
-        ProgressDialog pd=new ProgressDialog(getContext());
 
         @Override
         protected void onPreExecute() {
-            pd.setIndeterminate(true);
-            pd.setMessage("Please wait..");
-            pd.setCancelable(false);
-            pd.show();
             super.onPreExecute();
-
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.showContextMenu();
         }
 
         @Override
@@ -169,84 +167,91 @@ public class SuggestionsFragment extends Fragment {
                             // do anything with response
                             try {
 
+
                                 suggestionModelList.clear();
-                                Log.d(TAG, "onResponse: response from ");
+                                suggestionAdapter.notifyDataSetChanged();
 
-                                for (int i = 0; i < response.length(); i++) {
-
-                                    JSONArray array = response.getJSONArray(i);
-                                    String customerNo = array.getString(0);
-                                    String name = array.getString(1);
-                                    String dateOfBirth = array.getString(2);
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
-
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int a = getAge(year, month, day);
-                                    String age = Integer.toString(a);
-                                    String education = array.getString(3);
-                                    String occupationLocation = array.getString(4);
-                                    String imageUrl = array.getString(5);
-
-                                    String height = array.getString(6);
-                                    double feet = Double.parseDouble(height) / 30.48;
-                                    double inches = (Double.parseDouble(height) / 2.54) - ((int) feet * 12);
-                                    height = (int) feet + "'" + (int) inches;
-
-                                    String occupationCompany = array.getString(7);
-                                    String occupationDesignation = array.getString(8);
-                                    String annualIncome = array.getString(9);
-                                    annualIncome = annualIncome.replaceAll("[^-?0-9]+", " ");
-                                    List<String> incomeArray = Arrays.asList(annualIncome.trim().split(" "));
-                                    Log.d(TAG, "onResponse: income array is " + incomeArray);
-                                    if (annualIncome.contains("Upto")) {
-                                        annualIncome = "Upto 3L";
-                                    } else if (annualIncome.contains("Above")) {
-                                        annualIncome = "Above 50L";
-
-                                    } else if (incomeArray.size() == 3) {
-                                        Log.d(TAG, "onResponse: when three");
-                                        double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                        double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                        annualIncome = (int) first + "L - " + (int) second + "L";
-                                    } else {
-                                        annualIncome = "No Income mentioned.";
-                                    }
-
-
-                                    String maritalStatus = array.getString(10);
-                                    String homeName = array.getString(11);
-                                    String stateName = array.getString(12);
-                                    String hometown = homeName + ", " + stateName;
-                                    String favouriteStatus = array.getString(13);
-                                    String interestStatus = array.getString(14);
-
-                                    Log.d(TAG, "onResponse: fav status and int status are ################## " + favouriteStatus + " " + interestStatus);
-                                    SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);
-
-
-
-                                    suggestionModelList.add(suggestionModel);
-                                    suggestionAdapter.notifyDataSetChanged();
-
+                                if (response.length() == 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            pd.dismiss();
+                                            empty_view_suggestions.setVisibility(View.VISIBLE);
                                         }
                                     });
+                                } else {
 
+                                    empty_view_suggestions.setVisibility(View.GONE);
+
+
+                                    for (int i = 0; i < response.length(); i++) {
+
+                                        JSONArray array = response.getJSONArray(i);
+                                        String customerNo = array.getString(0);
+                                        String name = array.getString(1);
+                                        String dateOfBirth = array.getString(2);
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date date = formatter.parse(dateOfBirth);
+                                        System.out.println(date);
+
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int a = getAge(year, month, day);
+                                        String age = Integer.toString(a);
+                                        String education = array.getString(3);
+                                        String occupationLocation = array.getString(4);
+                                        String imageUrl = array.getString(5);
+
+                                        String height = array.getString(6);
+                                        double feet = Double.parseDouble(height) / 30.48;
+                                        double inches = (Double.parseDouble(height) / 2.54) - ((int) feet * 12);
+                                        height = (int) feet + "'" + (int) inches;
+
+                                        String occupationCompany = array.getString(7);
+                                        String occupationDesignation = array.getString(8);
+                                        String annualIncome = array.getString(9);
+                                        annualIncome = annualIncome.replaceAll("[^-?0-9]+", " ");
+                                        List<String> incomeArray = Arrays.asList(annualIncome.trim().split(" "));
+
+                                        if (annualIncome.contains("Upto")) {
+                                            annualIncome = "Upto 3L";
+                                        } else if (annualIncome.contains("Above")) {
+                                            annualIncome = "Above 50L";
+
+                                        } else if (incomeArray.size() == 3) {
+
+                                            double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                                            double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                                            annualIncome = (int) first + "L - " + (int) second + "L";
+                                        } else {
+                                            annualIncome = "No Income mentioned.";
+                                        }
+
+
+                                        String maritalStatus = array.getString(10);
+                                        String homeName = array.getString(11);
+                                        String stateName = array.getString(12);
+                                        String hometown = homeName + ", " + stateName;
+                                        String favouriteStatus = array.getString(13);
+                                        String interestStatus = array.getString(14);
+
+
+                                        SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);
+
+                                        if (!suggestionModelList.contains(suggestionModel)) {
+                                            suggestionModelList.add(suggestionModel);
+                                            suggestionAdapter.notifyDataSetChanged();
+                                        }
+
+
+                                    }
                                 }
-
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -257,12 +262,12 @@ public class SuggestionsFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+
                             // handle error
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    pd.dismiss();
+                                    mProgressBar.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -273,8 +278,11 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            pd.dismiss();
+            mProgressBar.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
         }
+
+
     }
 
 }

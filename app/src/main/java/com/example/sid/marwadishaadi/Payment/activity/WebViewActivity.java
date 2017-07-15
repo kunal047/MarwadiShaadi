@@ -69,9 +69,9 @@ public class WebViewActivity extends Activity {
 			super.onPreExecute();
 			// Showing progress dialog
 			dialog = new ProgressDialog(WebViewActivity.this);
-			dialog.setMessage("Please wait...");
-			dialog.setCancelable(false);
-			dialog.show();
+//			dialog.setMessage("Please wait...");
+//			dialog.setCancelable(false);
+//			dialog.show();
 			String query="";
 			int size=PackageInfos.size();
 			Calendar c= Calendar.getInstance();

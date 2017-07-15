@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="textStart"
-            android:id="@+id/switchNot"
+            android:id="@+id/switchNotifications"
             app:switchPadding="100dp"
             android:text="Notifications"
             android:drawableLeft="@drawable/setting_notif"
