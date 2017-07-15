@@ -17,11 +17,16 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.sid.marwadishaadi.Notifications.NotificationsActivity;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -40,46 +45,45 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
-
-   /*     // registering device
-        String registration_id = FirebaseInstanceId.getInstance().getToken();
-
-
-        // sending notification
-        Notifications_Util.SendNotification(registration_id,"Mervin sent you an Interest","New Interest","Interest Request");
-
+      /* final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("A1001").child("Notifications");
+        final NotificationsModel notification= new NotificationsModel("Mervin","12-9-17",3,true,false,false,false,false,false,false,false,false);
+        String hash = String.valueOf(notification.hashCode());
+        mDatabase.child(hash).setValue(notification);
 */
+        // sending notification
+       // Notifications_Util.SendNotification(registration_id, "Mervin sent you an Interest", "New Interest", "Interest Request");
+
         FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
-                        if (deepLink != null) {
-
-                            // sending deeplink
-                            setUpIntent(0,deepLink.toString());
-                            
-                        } else {
-                            
-                            setUpIntent(1,null);
-                        }
+            .getDynamicLink(getIntent())
+            .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                @Override
+                public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                    Uri deepLink = null;
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.getLink();
                     }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Error", "getDynamicLink:onFailure", e);
-                    }
-                });
+                    if (deepLink != null) {
 
-      
+                        // sending deeplink
+                        setUpIntent(0, deepLink.toString());
+
+                    } else {
+
+                        setUpIntent(1, null);
+                    }
+                }
+            })
+            .addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("Error", "getDynamicLink:onFailure", e);
+                }
+            });
+
+
     }
     
     public void setUpIntent(final int activitycode, final String deeplink){
@@ -93,7 +97,7 @@ public class SplashScreen extends AppCompatActivity {
                         i.putExtra("deeplink",deeplink);
                     }
                 }else{
-                     i = new Intent(SplashScreen.this,MainActivity.class);
+                     i = new Intent(SplashScreen.this,NotificationsActivity.class);
                 }
                 startActivity(i);
                 finish();

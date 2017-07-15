@@ -42,7 +42,7 @@ public class Notifications_Util {
     static final Uri notifsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     static final Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
     static String api_key = "key=AAAAUe8pB3Q:APA91bGbd9V8mrZ8dtvzXqjgcbtdqlRHXVzBcZpX1mM_f2jPe1EcH6p0Ksl4MjmORMRUGM7tCQUUhH9dAxHdvGEkQpwn11D5YQ9ag5ZGRRDI1UWX_G19UirKcSSbi9eAHf8nexG5jPd9";
-    static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+    static DatabaseReference mDatabase;
 
     public static Notification.Builder createNotification(String type, String title, String message, Context context, int notifyid){
 
@@ -62,12 +62,10 @@ public class Notifications_Util {
 
     }
 
-    public static void RegisterDevice(String customer_id){
+    public static void RegisterDevice(String customer_id,String registration_id){
 
-        String registration_id = FirebaseInstanceId.getInstance().getToken();
-        DeviceRegistration deviceRegistration = new DeviceRegistration(registration_id,customer_id);
-        mDatabase.child(customer_id).setValue(deviceRegistration);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("devices");
+        mDatabase.child(registration_id).setValue(registration_id);
     }
 
     public static void SendNotification(String registration_id,String bodymsg,String titlemsg,String type){

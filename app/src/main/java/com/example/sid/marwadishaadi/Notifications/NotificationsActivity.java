@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Notifications;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +32,11 @@ import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +51,8 @@ public class NotificationsActivity extends AppCompatActivity {
     private NotificationsAdapter notificationsAdapter;
     private View ChildView ;
     private FirebaseAnalytics mFirebaseAnalytics;
-
-    Paint p = new Paint();
+    private DatabaseReference mDatabase;
+    private String customer_id;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -56,9 +63,19 @@ public class NotificationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+/*
 
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+*/
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+/*
+        if (customer_id !=null){
+*/
+            mDatabase = FirebaseDatabase.getInstance().getReference("A1001").child("Notifications");
+        //}
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Notifications","view");
@@ -178,8 +195,10 @@ public class NotificationsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Clear Notifications","button");
+
                 notificationsModelList.clear();
                 notificationsAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -210,9 +229,44 @@ public class NotificationsActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    public void setData(DataSnapshot dataSnapshot){
+        Log.d("data", "setData: " + dataSnapshot.toString());
+            NotificationsModel notificationsModel = dataSnapshot.getValue(NotificationsModel.class);
+            notificationsModelList.add(notificationsModel);
+            notificationsAdapter.notifyDataSetChanged();
+
+    }
     public void prepareBlockData()
     {
-        NotificationsModel ne;
+
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    setData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    setData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    /*    NotificationsModel ne;
 
         ne= new NotificationsModel("Mervin","12-9-17",3,true,false,false,false,false,false,false,false,false);
         notificationsModelList.add(ne);
@@ -233,7 +287,7 @@ public class NotificationsActivity extends AppCompatActivity {
         ne= new NotificationsModel("Mervin","12-9-17",3,false,false,false,false,false,false,false,false,true);
         notificationsModelList.add(ne);
 
-        notificationsAdapter.notifyDataSetChanged();
+        notificationsAdapter.notifyDataSetChanged();*/
     }
     @Override
     public boolean onSupportNavigateUp(){

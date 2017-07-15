@@ -255,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.putString("gender", customer_gender);
                                                                  editor.apply();
                                                                  dialog.dismiss();
-                                                                 Notifications_Util.RegisterDevice(customer_id);
+                                                                 //Notifications_Util.RegisterDevice(customer_id);
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
                                                              } else if (str.equals("failure")) {
@@ -322,7 +322,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.putString("gender", customer_gender);
                                                                  editor.apply();
                                                                  dialog.dismiss();
-                                                                 Notifications_Util.RegisterDevice(customer_id);
+                                                                 //Notifications_Util.RegisterDevice(customer_id);
                                                                  Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                                                  startActivity(i);
                                                              } else if (str.equals("failure")) {
