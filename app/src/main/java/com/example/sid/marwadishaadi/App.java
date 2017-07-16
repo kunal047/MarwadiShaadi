@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -48,8 +49,7 @@ public class App extends Application{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d("location wala", "onPostExecute: " + placeslist.toString());
-        }
+                    }
 
         @Override
         protected Void doInBackground(Void... voids) {

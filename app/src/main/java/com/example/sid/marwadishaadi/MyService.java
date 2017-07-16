@@ -12,23 +12,19 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyService extends FirebaseInstanceIdService {
 
-    @Override
-    public void onStart(Intent intent, int startId) {
-        String registration_id = FirebaseInstanceId.getInstance().getToken();
-        Log.d("registration-device -> ", registration_id);
-    }
 
     @Override
     public void onTokenRefresh() {
 
         String registration_id = FirebaseInstanceId.getInstance().getToken();
         Log.d("registration-device -> ", registration_id);
-        
-        sendDeviceRegistrationToServer(registration_id);
+
+        // algo
+        // if user logged in -> get userid and store device id
+        // if not -> store it in prefs
+        // after successfull -> login/signup -> then update in firebase
+        Notifications_Util.RegisterDevice("A1001", registration_id);
+
     }
 
-    public void sendDeviceRegistrationToServer(String device_id){
-        
-        // // TODO: 10-Jul-17  network call 
-    }
 }

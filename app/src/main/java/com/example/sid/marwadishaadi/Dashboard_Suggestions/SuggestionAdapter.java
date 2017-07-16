@@ -171,13 +171,13 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+                     /*       DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
                             String registration_id = device.getDevice_id();
                             SharedPreferences sharedpref = context.getSharedPreferences("userinfo", MODE_PRIVATE);
                             String customer_name = sharedpref.getString("customer_name", null);
                             String body = customer_name + " has sent you an Interest";
                             // sending notification
-                            Notifications_Util.SendNotification(registration_id,body,"New Interest","Interest Request");
+                            Notifications_Util.SendNotification(registration_id,body,"New Interest","Interest Request");*/
 
                         }
 
@@ -317,9 +317,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
 
 
-    class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
-
-
+    public class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
 
 
         @Override
@@ -354,7 +352,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         }
     }
 
-    class AddFavouriteFromSuggestion extends AsyncTask<String, Void, Void> {
+    public class AddFavouriteFromSuggestion extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {

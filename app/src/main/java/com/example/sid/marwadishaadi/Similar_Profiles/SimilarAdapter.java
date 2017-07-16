@@ -1,6 +1,7 @@
 package com.example.sid.marwadishaadi.Similar_Profiles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import java.util.List;
 
@@ -67,6 +69,22 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.MyViewHo
             name_age = (TextView) itemView.findViewById(R.id.name_age);
             city = (TextView) itemView.findViewById(R.id.city);
             education = (TextView) itemView.findViewById(R.id.education);
+
+            imgAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = getAdapterPosition();
+                    Intent i = new Intent(context, UserProfileActivity.class);
+                    i.putExtra("customerNo", similarModelList.get(position).getCustomer_id());
+                    i.putExtra("from","similar");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+
+                }
+            });
         }
+
+
     }
 }

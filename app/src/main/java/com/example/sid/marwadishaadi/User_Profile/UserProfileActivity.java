@@ -11,9 +11,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +37,10 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.Chat.User;
+import com.example.sid.marwadishaadi.Dashboard_Suggestions.SuggestionAdapter;
+import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
@@ -82,9 +88,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private CoordinatorLayout coordinatorLayout;
     private String customer_id;
     private String clickedID = customer_id;
+    private String customer_name;
     private ImageView pdfImage;
     private TextView pdfImageName, pdfImageId, pdfName, pdfAge, pdfMaritalStatus, pdfDob, pdfGender, pdfLocation, pdfContact, pdfCommunity, pdfSubcaste, pdfHeight, pdfWeight, pdfComplexion, pdfBodyType, pdfPhysicalStatus, pdfEduLevel, pdfHighestDegree, pdfInstituteName, pdfOccupation, pdfDesignation, pdfCompany, pdfIncome, pdfAbout, pdfHobby, pdfDiet, pdfDrink, pdfSmoke, pdfBirthTime, pdfBirthPlace, pdfGotra, pdfManglik, pdfMatchHoroscope, pdfFatherName, pdfFatherOccupation, pdfFatherOccupationDetail, pdfFamilyStatus, pdfFamilyType, pdfFamilyValues, pdfNativePlaces, pdfGrandfatherName, pdfMama;
     private TextView pdfDate;
+    private Boolean isSelf = true;
+    private Boolean isFavAdded;
+    private Boolean isInterestSent;
+    private Boolean isMsgSent;
+    private View view;
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+
 
     private String userid_from_deeplink;
     NotificationCompat.Builder notification;
@@ -116,6 +130,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        view = getWindow().getDecorView().getRootView();
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -150,9 +165,16 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         String from = data.getStringExtra("from");
 
-
         if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from)) {
             editphotos.setVisibility(View.GONE);
+            isSelf = false;
+            new CheckStatus().execute();
+        }
+
+        if (isSelf){
+            fav.setVisibility(View.GONE);
+            sendmsg.setVisibility(View.GONE);
+            sendinterest.setVisibility(View.GONE);
         }
 
         editphotos.setOnClickListener(new View.OnClickListener() {
@@ -182,29 +204,72 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         });
 
 
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "button");
-            }
-        });
+        if (fav.getVisibility() != View.GONE){
 
-        sendmsg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Message", "button");
-            }
-        });
+            fav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // analytics
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "button");
+                    new AddFavouriteFromSuggestion().execute(customer_id,clickedID,"added");
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Added to Favourites", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    fav.setVisibility(View.GONE);
+                }
+            });
+        }
 
-        sendinterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest", "button");
-            }
-        });
+
+        if(sendmsg.getVisibility() != View.GONE){
+
+            sendmsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // analytics
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Message", "button");
+                    int counter=0;
+                    String[] array=getApplicationContext().getResources().getStringArray(R.array.communities);
+                    SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    for(int i=0;i<5;i++) {
+                        if (communityChecker.getString(array[i], null).contains("Yes")) {
+                            counter++;
+                        }
+                    }
+                    if(counter>0) {
+                        Intent intent = new Intent(UserProfileActivity.this, DefaultMessagesActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString("customerName", customer_name);
+                        extras.putString("customerId",clickedID);
+                        intent.putExtras(extras);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(UserProfileActivity.this, " This feature is only for premium members", Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(UserProfileActivity.this,UpgradeMembershipActivity.class);
+                        startActivity(intent);
+                    }
+
+                }
+            });
+        }
+
+
+        if(sendinterest.getVisibility() != View.GONE){
+
+            sendinterest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // analytics
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest", "button");
+                    new AddInterestFromSuggestion().execute(customer_id,clickedID,"added");
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Interest Sent", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                }
+            });
+
+        }
+
 
         shareprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -658,7 +723,130 @@ class FetchPdfDetails extends AsyncTask<String, Void, Void> {
 
         return null;
     }
+}
+
+    public class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
 
 
-}}
+        @Override
+        protected Void doInBackground(String... params) {
+
+            Log.d(TAG, "doInBackground: in here ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+
+            String customerId = params[0];
+            String interestId = params[1];
+            String status = params[2];
+            Log.d(TAG, "doInBackground: interest is ------------------ " + status);
+
+            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
+                .addBodyParameter("customerNo", customerId)
+                .addBodyParameter("interestId", interestId)
+                .addBodyParameter("status", status)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+            return null;
+        }
+    }
+
+    public class AddFavouriteFromSuggestion extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            String customerId = params[0];
+            String favId = params[1];
+            String favouriteState = params[2];
+
+            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
+                .addBodyParameter("customerNo", customerId)
+                .addBodyParameter("favId", favId)
+                .addBodyParameter("status", favouriteState)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+            return null;
+        }
+    }
+
+
+    public class CheckStatus extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+
+            AndroidNetworking.post("http://208.91.199.50:5000/getStatus")
+                .addBodyParameter("customerNo",customer_id)
+                .addBodyParameter("clickedId",clickedID)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("status->", "onResponse: " + response.toString());
+
+                        JSONArray data = null;
+                        try {
+
+                            data = response.getJSONArray(0);
+
+                            customer_name = data.getString(0);
+                            isFavAdded = data.getString(1).equals("1")?true:false;
+                            isInterestSent = data.getString(2).equals("1")?true:false;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(isFavAdded){
+                            if (fav.getVisibility() != View.GONE) {
+                                fav.setVisibility(View.GONE);
+                            }
+                        }
+
+                        if(isInterestSent){
+                            if(sendinterest.getVisibility() != View.GONE){
+                                sendinterest.setVisibility(View.GONE);
+                            }
+                        }
+
+                        if(isMsgSent){
+                            if (sendmsg.getVisibility() != View.GONE){
+                                sendmsg.setVisibility(View.GONE);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+            return null;
+        }
+    }
+}
 
