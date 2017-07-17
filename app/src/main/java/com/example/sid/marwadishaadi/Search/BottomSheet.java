@@ -187,7 +187,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             //--------------------- EDIT PROFILE PREFERENCES ------------------------------------
             case 112:
                 contentView = viewGetterEditPref(R.array.aincome_array, array);
-                Toast.makeText(getContext(), "incase why this is called ", Toast.LENGTH_LONG).show();
                 count = 2;
                 content = 5;
                 break;
@@ -236,7 +235,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
                 SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
-                Log.d(TAG, "setupDialog: case 12 ------------------------ " + customer_id);
                 editEducation = (Spinner) contentView.findViewById(R.id.edit_education);
                 eduDegree = (TextView) contentView.findViewById(R.id.edit_highest_degree);
                 updateEducation = (Button) contentView.findViewById(R.id.education_update);
@@ -583,7 +581,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                         new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation  from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id  INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes'  ) and  tbl_user.customer_no=\"" + strid.trim() + "\"; ");
                         } else if ((!strlname.trim().isEmpty() && !strfname.trim().isEmpty())) {
-                        Log.d(TAG, "onClick: -hhhh-----------inhere"+strfname+"-----"+strlname+"------"+strid);
 
                         new BackNd().execute("select YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation  from tbl_user  INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and  (tbl_user.first_name=\"" + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
                         } else if ((!strlname.trim().isEmpty() || !strfname.trim().isEmpty())) {
@@ -610,9 +607,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         if (p.box) {
                             coun++;
                             result.add(p.name);
-
-                            Log.d(TAG, "onClick: result is " + result.toString());
-
                         }
                     }
                     switch (content) {
@@ -641,7 +635,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             countfamilystatus = coun;
                             break;
                         case 5:
-                            Log.d(TAG, "onClick: context for ann is " + getContext().toString());
                             if (getContext().toString().contains("Signup.AdvancedSignupDetailsActivity")) {
                                 preferenceAnnualincome.setText(result.toString());
                             } else if (getContext().toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity")) {
@@ -744,7 +737,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.d(TAG, "response query is  ----------" + strings[0]);
             AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
@@ -826,7 +818,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d(TAG, "doInBackground: teeeeeeeeeeeeeeeeeeeeeest " + customer_id);
             AndroidNetworking.post("http://208.91.199.50:5000/editPersonalEducationDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("education", e)
@@ -912,7 +903,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 String[] designationArray = getResources().getStringArray(R.array.designation_array);
                                 String[] occupationArray = getResources().getStringArray(R.array.occupation_array);
                                 String[] annualIncomeArray = getResources().getStringArray(R.array.aincome_array);
-                                Log.d(TAG, "onResponse: profession is " + jsonArray.getString(17));
 
 
                                 for (String s : designationArray) {
@@ -930,14 +920,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 String annualI = jsonArray.getString(18);
                                 annualI = annualI.replaceAll("[^-?0-9]+", " ");
                                 List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                                Log.d(TAG, "onResponse: income array is " + incomeArray);
                                 if (jsonArray.getString(18).contains("Upto")) {
                                     annualI = "Upto 3L";
                                 } else if (jsonArray.getString(18).contains("Above")) {
                                     annualI = "Above 50L";
 
                                 } else if (incomeArray.size() == 3) {
-                                    Log.d(TAG, "onResponse: when three");
                                     double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
                                     double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                                     annualI = (int) first + "L - " + (int) second + "L";
@@ -951,9 +939,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                         annualIncome.setSelection(Arrays.asList(annualIncomeArray).indexOf(s));
                                     }
                                 }
-                                Log.d(TAG, "onResponse: AI is ------" + annualI);
-
-
                                 companyName.setText(jsonArray.getString(19));
                                 companyLocation.setText(jsonArray.getString(21));
 
@@ -1146,7 +1131,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : dietArray) {
                                     if (jsonArray.getString(2).equals(s)) {
                                         eatingHabit.setSelection(Arrays.asList(dietArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------eating----" + s);
                                     }
                                 }
 
@@ -1155,8 +1139,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : drinkingArray) {
                                     if (jsonArray.getString(3).equals(s)) {
                                         drinkingHabit.setSelection(Arrays.asList(drinkingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------drinking----" + s);
-
                                     }
                                 }
 
@@ -1165,8 +1147,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 for (String s : smokingArray) {
                                     if (jsonArray.getString(4).equals(s)) {
                                         smokingHabit.setSelection(Arrays.asList(smokingArray).indexOf(s));
-                                        Log.d(TAG, "onResponse: ---------smoking----" + s);
-
                                     }
                                 }
 

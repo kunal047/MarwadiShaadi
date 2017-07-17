@@ -19,6 +19,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
@@ -72,7 +73,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         holder.fav_name_age.setText(name_age);
         holder.fav_education.setText(favouriteModel.getHighest_degree());
         holder.fav_city.setText(favouriteModel.getLocation());
-        Glide.with(context).load(favouriteModel.getImageurl()).into(holder.fav_profile_image);
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
+        Glide.with(context).load(favouriteModel.getImageurl()).apply(options).into(holder.fav_profile_image);
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,13 +165,13 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         public void onResponse(JSONArray response) {
-                            Log.d(TAG, "onResponse: json response array is " + response.toString());
+                            
 
                         }
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+                            
                             // handle error
                         }
                     });

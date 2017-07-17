@@ -3,7 +3,9 @@ package com.example.sid.marwadishaadi.Chat;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -47,6 +49,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     private MessagesList messagesList;
     private String customer_id, customerId, customerName;
     private Menu menu;
+    private Handler handler = new Handler();
+    private String query;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,57 +74,19 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+//        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
+
+
+//        Log.e(TAG, "onCreate: ------------query is ----" + query);
         query = "SELECT msg_on,msg_read,msg,msg_from,msg_to FROM `tbl_message`  where (msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\") or ( msg_from=\"" + customerId + "\" and msg_to =\"" + customer_id + "\") order by msg_on asc";
-        Log.e(TAG, "f" + query);
+        Log.e(TAG, "f " + query);
         pgd = new ProgressDialog(this);
         pgd.setTitle("Wait a while");
-        pgd.setMessage("Slow connection...");
+        pgd.setMessage("Waiting for connection...");
         pgd.show();
-        AndroidNetworking.post("http://208.91.199.50:5000/getChat")
-                .addBodyParameter("query", query)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONArray jsnrry = response.getJSONArray(i);
-                                String string = jsnrry.getString(0);
-                                SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
-                                Date date = format.parse(string);
-                                Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
-
-                                Message message;
-                                if (jsnrry.getString(3).contains(customerId)) {
-                                    User user = new User("1", customerName, null, true);
-                                    message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                    // Log.e(TAG, "onResponse: Add it in left" );
-                                } else {
-                                    User user = new User("0", customerName, null, true);
-                                    message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                    // Log.e(TAG, "onResponse: Add it in Right" );
-                                }
-
-                                adapter.addToStart(message, true);
-                            } catch (JSONException | ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Toast.makeText(DefaultMessagesActivity.this, "Network Error ", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "onError: ----------error of creating list is \n" + anError);
-                    }
-                });
-//        adapter.addToEnd(ml,true);
 
 
         toolbar = (Toolbar) findViewById(R.id.chat_msg_toolbar);
@@ -131,7 +98,65 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         input.setInputListener(this);
         if (pgd.isShowing())
             pgd.dismiss();
+
+        new FetchingMessages().execute(query);
+//        adapter.addToEnd(ml,true);
+
+
     }
+
+    private class FetchingMessages extends AsyncTask<String, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            query = params[0];
+            AndroidNetworking.post("http://208.91.199.50:5000/getChat")
+                    .addBodyParameter("query", query)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    JSONArray jsnrry = response.getJSONArray(i);
+                                    String string = jsnrry.getString(0);
+                                    SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
+                                    Date date = format.parse(string);
+                                    Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
+
+                                    Message message;
+                                    if (jsnrry.getString(3).contains(customerId)) {
+                                        User user = new User("1", customerName, null, true);
+                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
+                                        // Log.e(TAG, "onResponse: Add it in left" );
+                                    } else {
+                                        User user = new User("0", customerName, null, true);
+                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
+                                        // Log.e(TAG, "onResponse: Add it in Right" );
+                                    }
+
+                                    adapter.addToStart(message, true);
+                                } catch (JSONException | ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(DefaultMessagesActivity.this, "Network Error ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+            return null;
+        }
+    }
+
+
 
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
@@ -197,7 +222,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         Message message = new Message("0", user, input.toString(), date);
         adapter.addToStart(message, true);
         messagesList.setAdapter(adapter);
-        Log.d(TAG, "onSubmit: is called !!");
+
 
         String messageFromId = customer_id;
         String messageToId = customerId;
@@ -240,7 +265,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         Log.e(TAG, "onError: error is " + error);
                     }
                 });
-        Log.d(TAG, "onSubmit: message from id is " + messageFromId);
+
         return true;
     }
 }

@@ -387,7 +387,7 @@ public class Signup_Basic_Info_Fragment extends Fragment implements Step{
             }
         });
 
-        Log.d(TAG, "onCreateView: jsdfaadf height is  ----------- " + height);
+
 
         return view;
     }

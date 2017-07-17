@@ -427,7 +427,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        Log.d(TAG, "doInBackground: -----query s "+ query);
+
         AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                 .addBodyParameter("query", strings[0])
                 .setPriority(Priority.HIGH)
@@ -436,13 +436,13 @@ private class BackEnd extends AsyncTask<String, String, String> {
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, "onResponse1: --------- "+response);
+
                             JSONArray user= null;
                             try {
                                 user = response.getJSONArray(0);
                                 old_pass_encrypt=HashConverter(user_old_pass);
                                 if (user.getString(0).equals(old_pass_encrypt)) {
-                                    Log.d(TAG, "onResponse2: ------ old password is --" + user.getString(0));
+
                                     final String quer = "update tbl_login set password = \"" + HashConverter(user_new_pass) + "\" where customer_no=\"" + customer_id + "\";";
                                     AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                                             .addBodyParameter("query", quer)
@@ -451,7 +451,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                             .getAsJSONArray(new JSONArrayRequestListener() {
                                                 @Override
                                                 public void onResponse(JSONArray response) {
-                                                    Log.d(TAG, "onResponse: ********** new passord ***      " + quer);
+
                                                     Toast.makeText(getApplicationContext(), "Password has been changed successfully", Toast.LENGTH_LONG).show();
                                                     SettingsActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
@@ -469,7 +469,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                                 @Override
                                                 public void onError(ANError anError) {
                                                     Toast.makeText(getApplicationContext(), "Network Error. Please try again.", Toast.LENGTH_LONG).show();
-                                                    Log.d(TAG, "onError: ----network error  88" + anError);
+
                                                     SettingsActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
@@ -502,7 +502,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                     @Override
                     public void onError(ANError error) {
                         Toast.makeText(getApplicationContext(),"Network Error Occurred. Please check Internet",Toast.LENGTH_LONG).show();
-                        Log.d(TAG, "onError: ----network error  88  "+error);
+
                         SettingsActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

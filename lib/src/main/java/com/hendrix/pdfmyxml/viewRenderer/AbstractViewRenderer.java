@@ -109,8 +109,7 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
         int specWidth   = View.MeasureSpec.makeMeasureSpec(width  == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : width,  width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
         int specHeight  = View.MeasureSpec.makeMeasureSpec(height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : height, height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
         int a = ViewGroup.LayoutParams.MATCH_PARENT;
-        System.out.println("a");
-
+        System.out.println(a);
         try {
             view.measure(specWidth, specHeight);
         }

@@ -168,7 +168,7 @@ public class PartnerPreferencesFragment extends Fragment {
                                 str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
 
                                 final String hd = str;
-                                Log.d(TAG, "onResponse: highest  for user is --" + str + " and length is " + str.length());
+
 
 
                                 str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
@@ -221,7 +221,7 @@ public class PartnerPreferencesFragment extends Fragment {
                                         }
 
                                         if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
-                                            annualIncome.setText("No Income mentioned.");
+                                           annualIncome.setVisibility(View.GONE);
 
                                         } else {
                                             String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
@@ -238,7 +238,7 @@ public class PartnerPreferencesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onError: errr ------------- " + error.toString());
+
                             // handle error
                         }
                     });
@@ -253,14 +253,14 @@ public class PartnerPreferencesFragment extends Fragment {
             String annualI = aincome;
             annualI = annualI.replaceAll("[^-?0-9]+", " ");
             List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-            Log.d(TAG, "onResponse: income str is " + incomeArray);
+
             if (annualI.contains("Upto")) {
                 annualI = "Upto 3L";
             } else if (annualI.contains("Above")) {
                 annualI = "Above 50L";
 
             } else if (incomeArray.size() == 3) {
-                Log.d(TAG, "onResponse: when three");
+
                 double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
                 double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                 annualI = (int) first + "L - " + (int) second + "L";

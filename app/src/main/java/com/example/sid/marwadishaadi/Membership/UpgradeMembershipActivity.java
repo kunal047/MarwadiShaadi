@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Membership;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -141,6 +142,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
 
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.e(TAG, "onResponse: -------------- "+response.toString());
@@ -157,33 +159,33 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                                         } else if (membership.getString(0).contains("Agarwal")) {
                                             agarwal.setVisibility(View.VISIBLE);
 
-                                            agarwal_duration.setText("Duration: " + membership.getString(1));
-                                            agarwal_start.setText("Started On: " + membership.getString(2));
-                                            agarwal_end.setText("Ends On: " + membership.getString(3));
+                                            agarwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                                            agarwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                                            agarwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
                                         } else if (membership.getString(0).contains("Jain")) {
                                             jain.setVisibility(View.VISIBLE);
 
-                                            jain_duration.setText("Duration: " + membership.getString(1));
-                                            jain_start.setText("Started On: " + membership.getString(2));
-                                            jain_end.setText("Ends On: " + membership.getString(3));
+                                            jain_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                                            jain_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                                            jain_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
                                         } else if (membership.getString(0).contains("Khandelwal")) {
                                             khandelwal.setVisibility(View.VISIBLE);
 
-                                            khandelwal_duration.setText("Duration: " + membership.getString(1));
-                                            khandelwal_start.setText("Started On: " + membership.getString(2));
-                                            khandelwal_end.setText("Ends On: " + membership.getString(3));
+                                            khandelwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                                            khandelwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                                            khandelwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
                                         } else if (membership.getString(0).contains("Maheshwari")) {
                                             maheshwari.setVisibility(View.VISIBLE);
 
-                                            maheshwari_duration.setText("Duration: " + membership.getString(1));
-                                            maheshwari_start.setText("Started On: " + membership.getString(2));
-                                            maheshwari_end.setText("Ends On: " + membership.getString(3));
+                                            maheshwari_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                                            maheshwari_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                                            maheshwari_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
                                         } else if (membership.getString(0).contains("Other")) {
                                             others.setVisibility(View.VISIBLE);
 
-                                            others_duration.setText("Duration: " + membership.getString(1));
-                                            others_start.setText("Started On: " + membership.getString(2));
-                                            others_end.setText("Ends On: " + membership.getString(3));
+                                            others_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                                            others_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                                            others_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
                                         }
 
 
@@ -195,10 +197,11 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
                                 }
 
-                                SharedPreferences prefs = getSharedPreferences("customername", MODE_PRIVATE);
-                                String nameOfUser = prefs.getString("name", null);
 
-                                Log.d(TAG, "onResponse: name of user is " + nameOfUser);
+                                SharedPreferences prefs = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                String nameOfUser = prefs.getString("firstname", null);
+
+
 
                                 name.setText("Hello, " + nameOfUser);
                                 id.setText("Member ID : " + customer_id);

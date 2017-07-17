@@ -60,7 +60,7 @@ public class InitialScreenActivity extends Activity {
 			intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(redirectUrl.getText()).toString().trim());
 			intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(cancelUrl.getText()).toString().trim());
 			intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl.getText()).toString().trim());
-			Log.d(TAG, "onClick:--------------------------------- "+ServiceUtility.chkNull(rsaKeyUrl.getText()).toString().trim());
+
 			startActivity(intent);
 		}
 		else{
