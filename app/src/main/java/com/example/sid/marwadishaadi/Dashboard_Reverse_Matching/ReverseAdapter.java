@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
@@ -41,8 +42,13 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
 
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final ReverseModel rev = reverseModelList.get(position);
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
         Glide.with(context)
                 .load(rev.getImg_url())
+                .apply(options)
                 .into(holder.dp);
         holder.name.setText(rev.getName());
         holder.age.setText(String.valueOf(rev.getAge()) + " yrs");

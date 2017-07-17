@@ -2,9 +2,13 @@ package com.example.sid.marwadishaadi.User_Profile;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,11 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
@@ -48,6 +54,8 @@ public class ProfilePersonalDetailsFragment extends Fragment {
     private TextView edit_profession;
     private Button similar;
     private String clickedID, customer_id;
+    private String res = "";
+    private boolean isPaidMember;
 
 
     public ProfilePersonalDetailsFragment() {
@@ -88,6 +96,17 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         designation_companyName = (TextView) mview.findViewById(R.id.occupDesignation_occupCompany);
         companyLocation = (TextView) mview.findViewById(R.id.occup_location);
         annualIncome = (TextView) mview.findViewById(R.id.annual_income);
+
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        for (int i = 0; i < 5; i++) {
+
+            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                isPaidMember = true;
+            }
+        }
 
         name_age.addTextChangedListener(new TextWatcher() {
             @Override
@@ -192,7 +211,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.length() < 9 && customer_id != clickedID) {
                     mobileNo.setVisibility(View.GONE);
                 }
             }
@@ -262,7 +281,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace(",", "").trim().length() == 0 && customer_id != clickedID) {
                     complexion_build.setVisibility(View.GONE);
                 }
             }
@@ -425,6 +444,26 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             }
         });
 
+        if (!isPaidMember) {
+            mobileNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar snackbar = Snackbar
+                            .make(mview, "Become a paid member.", Snackbar.LENGTH_LONG)
+                            .setAction("GO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                                    getContext().startActivity(intent);
+                                }
+                            });
+
+// Changing message text color
+                    snackbar.setActionTextColor(Color.RED);
+                }
+            });
+        }
+
 
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
@@ -527,7 +566,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.d(TAG, "onResponse: ******************in personal details");
+                            
                             try {
                                 JSONArray array = response.getJSONArray(0);
 
@@ -540,7 +579,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                System.out.println(date);
                                 String[] str = {"January",
                                         "February",
                                         "March",
@@ -570,7 +608,23 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 birthdate.setText(strDate);
                                 gender.setText(array.getString(4));
                                 address.setText(array.getString(5));
-                                mobileNo.setText(array.getString(6));
+
+                                if (isPaidMember) {
+                                    mobileNo.setText(array.getString(6));
+                                } else {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (Build.VERSION.SDK_INT >= 11) {
+                                                mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                                            }
+                                            float radius = mobileNo.getTextSize() / 3;
+                                            BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                                            mobileNo.getPaint().setMaskFilter(filter);
+                                        }
+                                    });
+                                }
+
 
                                 String[] c = array.getString(7).split("");
                                 String cast = "";
@@ -620,31 +674,28 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
                                 designation_companyName.setText(dc);
 
-                                String cl = "Located in " + array.getString(21);
+                                String cl = array.getString(21);
                                 companyLocation.setText(cl);
 
 
                                 String annualI = array.getString(18);
                                 annualI = annualI.replaceAll("[^-?0-9]+", " ");
                                 List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                                Log.d(TAG, "onResponse: income array is " + incomeArray);
+                                
                                 if (array.getString(18).contains("Upto")) {
                                     annualI = "Upto 3L";
                                 } else if (array.getString(18).contains("Above")) {
                                     annualI = "Above 50L";
 
                                 } else if (incomeArray.size() == 3) {
-                                    Log.d(TAG, "onResponse: when three");
+                                    
                                     double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
                                     double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                                     annualI = (int) first + "L - " + (int) second + "L";
                                 } else {
                                     annualI = "No Income mentioned.";
                                 }
-                                Log.d(TAG, "onResponse: Annual Income ----------- " + array.getString(18));
-
                                 annualIncome.setText(annualI);
-
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

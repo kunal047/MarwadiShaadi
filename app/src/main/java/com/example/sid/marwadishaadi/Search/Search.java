@@ -263,8 +263,8 @@ public class Search extends AppCompatActivity {
             cityAutoCompleteList.add(place.getCity());
         }
 
-        Log.d(TAG, "onCreate: stste========"+stateAutoCompleteList.toString());
-        Log.d(TAG, "onCreate: city========"+cityAutoCompleteList.toString());
+
+
 
 
         //autocomplete city and state
@@ -301,7 +301,7 @@ public class Search extends AppCompatActivity {
         rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
-                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+
             }
         });
         addButton.setOnClickListener(new View.OnClickListener() {

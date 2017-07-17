@@ -171,7 +171,6 @@ public class FavouritesFragment extends Fragment {
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -194,8 +193,8 @@ public class FavouritesFragment extends Fragment {
 
                                             favouritesList.add(0, favouriteModel);
 
-                                            Log.d(TAG, "onResponse: age of the user " + age);
-                                            Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+
+
 
 
                                         }
@@ -215,7 +214,7 @@ public class FavouritesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+
                             // handle error
                             mProgressBar.setVisibility(View.GONE);
                         }

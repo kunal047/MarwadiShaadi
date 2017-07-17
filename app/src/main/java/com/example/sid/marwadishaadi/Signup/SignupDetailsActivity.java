@@ -176,7 +176,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 //               find the radio button by returned id
                 RadioButton radioButton = (RadioButton) findViewById(radioGroupGender.getCheckedRadioButtonId());
 
-                Log.d(TAG, "onClick: valuese are --------------------- " + radioGroupGender.getCheckedRadioButtonId());
+
 //                if (radioButton != null && radioButton.getText() == null || first_name.isEmpty() || last_name.isEmpty() || date_of_birth.isEmpty() || mobile_number.isEmpty() || user_caste.isEmpty() || user_location.isEmpty()) {
 //                    Toast.makeText(SignupDetailsActivity.this, "All Fields are compulsory", Toast.LENGTH_SHORT).show();
 //                } else {
@@ -243,7 +243,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d("location wala", "onPostExecute: " + placeslist.toString());
+
         }
 
         @Override

@@ -1,12 +1,14 @@
 package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,7 @@ public class Reverse_MatchingFragment extends Fragment {
     private String customer_id, customer_gender;
     private LinearLayout empty_view_reverse;
     private ProgressBar mProgressBar;
+    private String res = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +66,16 @@ public class Reverse_MatchingFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        for (int i = 0; i < 5; i++) {
+            
+            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            }
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
@@ -92,6 +105,8 @@ public class Reverse_MatchingFragment extends Fragment {
                 refreshContent();
             }
         });
+
+
 
         new PrepareReverse().execute();
 
@@ -136,9 +151,10 @@ public class Reverse_MatchingFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
+                    .addBodyParameter("membership", res)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -175,7 +191,6 @@ public class Reverse_MatchingFragment extends Fragment {
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -188,12 +203,16 @@ public class Reverse_MatchingFragment extends Fragment {
                                         int age = getAge(year, month, day);
                                         String education = array.getString(3);
                                         String occupationLocation = array.getString(4);
-                                        String imageUrl = array.getString(5);
-                                        ReverseModel reverseModel = new ReverseModel( "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, age , education, occupationLocation, customerNo);
-                                        if (!reverseModelList.contains(reverseModel)){
+                                        String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(5);
+
+                                        ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
+
+                                        if (!reverseModelList.contains(reverseModel) && imageUrl.contains("null")){
                                             reverseModelList.add(reverseModel);
                                             reverseAdapter.notifyDataSetChanged();
-
+                                        } else if (!reverseModelList.contains(reverseModel)) {
+                                            reverseModelList.add(0, reverseModel);
+                                            reverseAdapter.notifyDataSetChanged();
                                         }
 
                                     }
@@ -227,9 +246,9 @@ public class Reverse_MatchingFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             mProgressBar.setVisibility(View.GONE);
-
             swipeRefreshLayout.setRefreshing(false);
         }
+
     }
 
 }

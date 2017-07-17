@@ -282,7 +282,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 SharedPreferences sharedpref = getSharedPreferences("prefai", MODE_PRIVATE);
                 uai = sharedpref.getString("ai", null);
                 ai = uai;
-                Log.d(TAG, "onClick: value is " + ai);
+                
                 strArrayAnnual = prefannualincome.getText().toString().split(",");
 
                 new EditPartnerPreferences().execute();
@@ -311,7 +311,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         age.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
-                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+                
             }
         });
 
@@ -347,7 +347,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: value is " + s.toString());
+                
 //                strArrayAnnual = s.toString().split(",");
             }
 
@@ -810,7 +810,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
                                 str = response.getString(9).replace("[", "").replace("]", "");
                                 strArray = str.split(",");
-                                Log.d(TAG, "occupation is***************" + professional.getText().toString());
+                                
                                 if (strArray == null) {
 
                                     occupationDontMatter.setChecked(true);
@@ -910,6 +910,8 @@ public class EditPreferencesActivity extends AppCompatActivity {
             } else {
                 annualincome = ai.replace("[", "").replace("]", "");
             }
+            
+
             AndroidNetworking.post("http://208.91.199.50:5000/editPreferences")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("minAge", mina)
@@ -936,7 +938,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
 
-                            Log.d(TAG, "onError: -----" + anError.getErrorBody());
+                            
                         }
                     });
             return null;

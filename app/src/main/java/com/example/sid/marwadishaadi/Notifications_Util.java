@@ -94,7 +94,7 @@ public class Notifications_Util {
             e.printStackTrace();
         }
 
-        Log.d("Test--------------->", "SendNotification: ");
+
         AndroidNetworking.post("https://fcm.googleapis.com/fcm/send")
             .addHeaders("Content-Type","application/json")
             .addHeaders("Authorization",api_key)
@@ -105,12 +105,12 @@ public class Notifications_Util {
             .getAsJSONObject(new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("NOTIFICATION sent",response.toString());
+
                 }
                 @Override
                 public void onError(ANError error) {
                     // handle error
-                    Log.d("NOTIFICATION error",error.toString());
+
                 }
             });
 

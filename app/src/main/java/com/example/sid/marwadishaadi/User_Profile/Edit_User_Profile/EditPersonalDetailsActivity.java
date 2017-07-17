@@ -132,7 +132,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.d(TAG, "onResponse: ******************in personal details");
+
 
                             try {
                                 JSONArray array = response.getJSONArray(0);
@@ -194,7 +194,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
 
 
 
-                                Log.d(TAG, "onPostExecute: height is *******" +h);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -236,7 +236,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                             .getAsJSONArray(new JSONArrayRequestListener() {
                                 @Override
                                 public void onResponse(JSONArray response) {
-                                    Log.d(TAG, "onResponse: height is *************"+h);
+
                                 }
 
                                 @Override

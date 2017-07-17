@@ -230,7 +230,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     public void setData(DataSnapshot dataSnapshot){
-        Log.d("data", "setData: " + dataSnapshot.toString());
+
             NotificationsModel notificationsModel = dataSnapshot.getValue(NotificationsModel.class);
             notificationsModelList.add(notificationsModel);
             notificationsAdapter.notifyDataSetChanged();

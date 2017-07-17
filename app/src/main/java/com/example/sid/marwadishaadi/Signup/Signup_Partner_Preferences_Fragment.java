@@ -502,7 +502,7 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
-                Log.d("CRS=>", String.valueOf(minValue) + " : " + String.valueOf(maxValue));
+
             }
         });
 
@@ -527,7 +527,7 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: values are ********************************* " + s.toString().substring(0, s.length() - 1));
+
                 prefAnnualIncome = s.toString().substring(1, s.length() - 1);
                 pf.setPrefAnnualIncome(prefAnnualIncome);
 

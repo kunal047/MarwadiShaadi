@@ -20,6 +20,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -72,8 +73,12 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         String ag = interestReceivedModel.getName() + ", " + interestReceivedModel.getAge();
 
         holder.customerNo.setText(interestReceivedModel.getCustomerId());
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
 
-        Glide.with(context).load(interestReceivedModel.getUserImage()).into(holder.userImage);
+        Glide.with(context).load(interestReceivedModel.getUserImage()).apply(options).into(holder.userImage);
         holder.name.setText(ag);
         holder.highestDegree.setText(interestReceivedModel.getHighestDegree());
         holder.location.setText(interestReceivedModel.getLocation());

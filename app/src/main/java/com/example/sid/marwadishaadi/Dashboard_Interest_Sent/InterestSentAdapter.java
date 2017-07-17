@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -56,7 +57,11 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
         final InterestSentModel interestSentModel = interestSentModelList.get(position);
 
         String ag = interestSentModel.getName() + ", " + interestSentModel.getAge() + " years";
-        Glide.with(context).load(interestSentModel.getImgAdd()).into(holder.profilepic);
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
+        Glide.with(context).load(interestSentModel.getImgAdd()).apply(options).into(holder.profilepic);
         holder.name_age.setText(ag);
         holder.degree.setText(interestSentModel.getDegree());
         holder.location.setText(interestSentModel.getCity());

@@ -174,7 +174,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d(TAG, "doInBackground: called ----------------------------");
             AndroidNetworking.post("http://208.91.199.50:5000/sendMail")
                     .addBodyParameter("forgotPassEmail", user_email)
                     .setTag(this)
@@ -210,19 +209,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
-                                Log.d(TAG, "onResponse: ------------------------ " + response.toString());
                                 JSONArray result = response.getJSONArray(0);
                                 int res = Integer.parseInt(result.get(0).toString());
 
 
                                 if (res == 1) {
                                     sentmail = true;
-                                    Log.d(TAG, "onResponse: in response ^^^^^^^^^^^^^^^^ ");
                                     new SendMail().execute();
                                     Toast.makeText(ForgotPasswordActivity.this, "Please check your e-mail for temporary password", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                     startActivity(i);
-                                    Log.d(TAG, "onResponse: end of response ");
 
                                 } else {
                                     sentmail = false;
@@ -237,7 +233,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onError: errr ------------- " + error.toString());
+
                             // handle error
                         }
                     });

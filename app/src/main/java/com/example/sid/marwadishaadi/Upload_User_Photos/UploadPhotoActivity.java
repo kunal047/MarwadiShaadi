@@ -386,7 +386,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
 
                 for (String url : urls) {
-                    Log.d("urls from upload", "onCreate: " + url);
+
                 }
 
                 for (int i = 0; i < urls.size(); i++) {

@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Dashboard_Interest_Received;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,7 +22,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.R;
-import com.pdfjet.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,7 +79,7 @@ public class InterestReceivedFragment extends Fragment {
         mProgressBar.setIndeterminate(false);
         mProgressBar.setVisibility(View.GONE);
 
-        swipeRefreshLayout = (SwipeRefreshLayout)mview.findViewById(R.id.swipe);
+        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -158,7 +156,7 @@ public class InterestReceivedFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
 
-            AndroidNetworking.post( "http://208.91.199.50:5000/prepareReceivedInterest")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareReceivedInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -169,19 +167,17 @@ public class InterestReceivedFragment extends Fragment {
 
                             try {
                                 mProgressBar.setVisibility(View.GONE);
-
-                                Log.d(TAG, "onResponse: response from received interest ----------------------- " + response.toString());
                                 interestReceivedModelList.clear();
                                 interestReceivedAdapter.notifyDataSetChanged();
 
-                                if(response.length() == 0){
+                                if (response.length() == 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             empty_view.setVisibility(View.VISIBLE);
                                         }
                                     });
-                                }else{
+                                } else {
                                     empty_view.setVisibility(View.GONE);
 
 
@@ -191,11 +187,10 @@ public class InterestReceivedFragment extends Fragment {
                                         String customerNo = array.getString(0);
                                         String name = array.getString(1);
                                         String dateOfBirth = array.getString(2);
-                                        Log.d(TAG, "onResponse: dob is " + dateOfBirth);
+                                        
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -210,8 +205,7 @@ public class InterestReceivedFragment extends Fragment {
                                         String age = Integer.toString(a);
                                         String cityName = array.getString(3);
                                         String education = array.getString(4);
-                                        String imageUrl = array.getString(5);
-                                        String replyAction = array.getString(6);
+                                        String replyAction = array.getString(5);
                                         int resultReplyAction;
                                         if (replyAction.contains("Yes")) {
                                             resultReplyAction = 0;
@@ -220,19 +214,19 @@ public class InterestReceivedFragment extends Fragment {
                                         } else {
                                             resultReplyAction = 2;
                                         }
-                                        String interestSentOn = array.getString(7);
-                                        date = formatter.parse(interestSentOn);
+                                        String interestSentOn = array.getString(6);
+                                        String imageUrl = array.getString(7);
 
+                                        
                                         InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
 
-                                        if (!interestReceivedModelList.contains(interestReceivedModels)){
+                                        if (!interestReceivedModelList.contains(interestReceivedModels)) {
                                             interestReceivedModelList.add(0, interestReceivedModels);
                                             interestReceivedAdapter.notifyDataSetChanged();
 
-                                            Log.d(TAG, "onResponse: age of the user " + age);
-                                            Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+                                            
+                                            
                                         }
-
 
 
                                     }
@@ -248,7 +242,7 @@ public class InterestReceivedFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+                            
                             mProgressBar.setVisibility(View.GONE);
 
                         }

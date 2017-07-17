@@ -71,7 +71,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pgd = new ProgressDialog(DefaultDialogsActivity.this);
-        pgd.setMessage("Slow Network...");
+        pgd.setMessage("Loading your messages...");
         pgd.setCancelable(false);
         pgd.show();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chatRefresh);
@@ -138,11 +138,10 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
                 });
             }
 
-            query = "select tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on (tbl_user.customer_no!='" + customer_id + "') and (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no!='" + customer_id + "') and (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
+//            query = "SELECT tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on  (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
+            query = "SELECT tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on (tbl_user.customer_no!='" + customer_id + "') and (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no!='" + customer_id + "') and (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
             //inner join tbl_user on tbl_message.msg_from!="+
             Log.e("G", "initAdapter: ---query of response list is ---" + query);
-//        http://10.0.0.3:8081/connect.php
-//        "http://10.0.0.7:5050/GetChat"
             //TODO Changed here
             AndroidNetworking.post("http://208.91.199.50:5000/getChat")
                     .addBodyParameter("query", query)
@@ -168,7 +167,6 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
                                 for (int i = 0; i < response.length(); i++) {
                                     final JSONArray jsnrry = response.getJSONArray(i);
                                     if (jsnrry.getString(0).contains(customer_id)) {
-                                        Log.e(TAG, "onResponse: ************************************** item is at 0");
                                         if (!str.contains(jsnrry.getString(1).trim())) {
                                             //Blank code TODO nthng
                                             str.add(jsnrry.getString(1));
@@ -176,8 +174,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
                                             //string[1]=listofgetter, string[2]=ListOfSender,string[3]=ListOfmessage
                                             url = "http://www.marwadishaadi.com/uploads/cust_" + jsnrry.getString(1) + "/thumb/" + jsnrry.getString(7);
                                             Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL " + url);
-                                            ArrayList<User> me = new ArrayList<User>();
+                                            ArrayList<User> me = new ArrayList<>();
+                                            Log.e(TAG, "onResponse: ************************************** item is at 0" + jsnrry.getString(5) + " " + jsnrry.getString(1));
                                             User usrme = new User(jsnrry.getString(1), jsnrry.getString(5), url, false);
+
+
                                             me.add(usrme);
                                             String string = jsnrry.getString(3);
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
@@ -185,7 +186,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
-                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "&&" + dlg.getUsers().get(0).getName());
+                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + " && " + dlg.getUsers().get(0).getName());
                                             Log.e(TAG, "PrepareList: ---item added is " + i);
                                             dla.addItem(dlg);
                                             dla.notifyDataSetChanged();

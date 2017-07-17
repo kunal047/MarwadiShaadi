@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BlurMaskFilter;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -45,6 +47,8 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     private TextView edit_relatives;
     private Button similar;
     private String clickedID, customer_id;
+    private boolean isPaidMember;
+
     private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -133,7 +137,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
                     fatherName.setVisibility(View.GONE);
                 }
             }
@@ -154,7 +158,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
                     fatherOccupation.setVisibility(View.GONE);
                 }
             }
@@ -173,7 +177,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
                     fatherOccupationDetails.setVisibility(View.GONE);
                 }
             }
@@ -233,7 +237,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Natively from )","").trim().length() == 0 && customer_id != clickedID) {
                     nativePlace.setVisibility(View.GONE);
                 }
             }
@@ -253,7 +257,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Subcaste)","").trim().length() == 0 && customer_id != clickedID) {
                     subcaste.setVisibility(View.GONE);
                 }
             }
@@ -273,7 +277,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Grandfather)","").trim().length() == 0 && customer_id != clickedID) {
                     grandpaName.setVisibility(View.GONE);
                 }
             }
@@ -293,7 +297,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Mama's Surname)","").trim().length() == 0 && customer_id != clickedID) {
                     mamaSurname.setVisibility(View.GONE);
                 }
             }
@@ -393,7 +397,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.length() < 9 && customer_id != clickedID) {
                     relativeMobile.setVisibility(View.GONE);
                 }
             }
@@ -493,10 +497,43 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                                 relation.setText(result.getString(10));
                                 relativeName.setText(result.getString(11));
                                 relativeOccupation.setText(result.getString(12));
-                                String loc = "Lives in " + result.getString(13);
+                                String loc = result.getString(13);
                                 relativeLocation.setText(loc);
-                                String mob = "Contact: " + result.getString(14);
-                                relativeMobile.setText(mob);
+
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String[] array = getResources().getStringArray(R.array.communities);
+
+                                        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+                                        for (int i = 0; i < 5; i++) {
+
+                                            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                                                isPaidMember = true;
+                                            }
+                                        }
+
+                                    }
+                                });
+
+                                if (isPaidMember) {
+                                    String mob = result.getString(14);
+                                    relativeMobile.setText(mob);
+                                } else {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (Build.VERSION.SDK_INT >= 11) {
+                                                relativeMobile.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                                            }
+                                            float radius = relativeMobile.getTextSize() / 3;
+                                            BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                                            relativeMobile.getPaint().setMaskFilter(filter);
+                                        }
+                                    });
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -504,7 +541,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onError: *****************" + error.toString());
+
                         }
 
 

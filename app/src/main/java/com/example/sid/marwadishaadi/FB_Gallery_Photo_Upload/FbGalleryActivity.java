@@ -46,8 +46,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
         Intent data = getIntent();
         userid = data.getStringExtra("userid");
 
-        Log.d("fb->userid",userid);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.fbgallery_toolbar);
         toolbar.setTitle("Select Photos");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -79,7 +77,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                 }
 
                 for (String url : selected_photos_url) {
-                    Log.d("urls from gallery", "onCreate: " + url);
                 }
 
                 if (selected_photos_url.size() <= 5) {
@@ -104,7 +101,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
         final AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Set<String> permissions  = accessToken.getPermissions();
         for (String permission : permissions) {
-            Log.d("permissions", "getData: " + permission);
         }
 
         // getting all albums
@@ -115,7 +111,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                     @Override
                     public void onCompleted(GraphResponse response) {
 
-                        Log.d(TAG, "all albums -> onCompleted: response from fb is " + response.toString());
 
                         JSONObject obj = response.getJSONObject();
                         JSONArray data = null;
@@ -133,7 +128,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                 JSONObject album = data.getJSONObject(i);
                                 if (album.getString("name").equals("Profile Pictures")){
                                     album_id = album.getString("id");
-                                    Log.d("album id -->",album_id);
                                 }
                             }catch (JSONException e){
                                 e.printStackTrace();
@@ -147,9 +141,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                 new GraphRequest.Callback() {
                                     @Override
                                     public void onCompleted(GraphResponse response) {
-
-                                        Log.d(TAG, "onCompleted: response from fb is " + response.toString());
-
                                         JSONObject data = response.getJSONObject();
                                         try {
 

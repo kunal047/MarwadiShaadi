@@ -73,7 +73,7 @@ SignupActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                        Log.d("object", object.toString());
+
 
                         try {
                             String first_name = object.getString("first_name");

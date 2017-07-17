@@ -450,17 +450,32 @@ public class LoginActivity extends AppCompatActivity {
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
+
                                         SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         SharedPreferences.Editor editor = saved_values.edit();
                                         editor.putBoolean("isLoggedIn", true);
-                                        editor.putString("customer_id", customer_id);
-                                        editor.putString("gender", customer_gender);
                                         JSONArray communityArray = response.getJSONArray(5);
+                                        
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
-                                        Log.e(TAG, "onResponse: --community and response is " + saved_values.getString("Agarwal", null));
+
+                                        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                        editor = sharedpref.edit();
+
+                                        editor.putString("customer_id", customer_id);
+                                        editor.putString("gender", customer_gender);
+                                        editor.putString("firstname", response.getString(3));
+                                        editor.putString("surname", response.getString(4));
+
+                                        communityArray = response.getJSONArray(5);
+                                        
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                        }
+                                        editor.apply();
+
                                         LoginActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -529,18 +544,33 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-                                    Log.e(TAG, "onResponse: response is ------------- " + response.toString());
                                     str = response.getString(0);
                                     checker = true;
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
+
                                         SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         SharedPreferences.Editor editor = saved_values.edit();
                                         editor.putBoolean("isLoggedIn", true);
+                                        JSONArray communityArray = response.getJSONArray(5);
+                                        
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                        }
+                                        editor.apply();
+
+                                        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                        editor = sharedpref.edit();
+
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        JSONArray communityArray = response.getJSONArray(5);
+                                        editor.putString("firstname", response.getString(3));
+                                        editor.putString("surname", response.getString(4));
+
+
+                                        communityArray = response.getJSONArray(5);
+                                        
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Filter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
 
@@ -52,6 +52,8 @@ public class SuggestionsFragment extends Fragment {
     private String customer_id, customer_gender;
     private LinearLayout empty_view_suggestions;
     private ProgressBar mProgressBar;
+    private String res = "";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,8 +72,19 @@ public class SuggestionsFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        for (int i = 0; i < 5; i++) {
+            
+            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            }
+        }
+
         editprefs = (TextView) mview.findViewById(R.id.preference);
-        filters = (TextView) mview.findViewById(R.id.filter);
+//        filters = (TextView) mview.findViewById(R.id.filter);
 
         editprefs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,17 +96,17 @@ public class SuggestionsFragment extends Fragment {
             }
         });
 
-        filters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                Intent i = new Intent(getContext(), Filter.class);
-                startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-            }
-        });
+//        filters.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                Intent i = new Intent(getContext(), Filter.class);
+//                startActivity(i);
+//                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//
+//            }
+//        });
 
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
@@ -107,13 +120,18 @@ public class SuggestionsFragment extends Fragment {
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(suggestionAdapter);
+
+
+
         new PrepareSuggestions().execute();
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshContent();
             }
         });
+
 
         return mview;
     }
@@ -154,9 +172,10 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
+                    .addBodyParameter("membership", res)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -192,7 +211,6 @@ public class SuggestionsFragment extends Fragment {
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -206,16 +224,15 @@ public class SuggestionsFragment extends Fragment {
                                         String age = Integer.toString(a);
                                         String education = array.getString(3);
                                         String occupationLocation = array.getString(4);
-                                        String imageUrl = array.getString(5);
 
-                                        String height = array.getString(6);
+                                        String height = array.getString(5);
                                         double feet = Double.parseDouble(height) / 30.48;
                                         double inches = (Double.parseDouble(height) / 2.54) - ((int) feet * 12);
                                         height = (int) feet + "'" + (int) inches;
 
-                                        String occupationCompany = array.getString(7);
-                                        String occupationDesignation = array.getString(8);
-                                        String annualIncome = array.getString(9);
+                                        String occupationCompany = array.getString(6);
+                                        String occupationDesignation = array.getString(7);
+                                        String annualIncome = array.getString(8);
                                         annualIncome = annualIncome.replaceAll("[^-?0-9]+", " ");
                                         List<String> incomeArray = Arrays.asList(annualIncome.trim().split(" "));
 
@@ -234,19 +251,25 @@ public class SuggestionsFragment extends Fragment {
                                         }
 
 
-                                        String maritalStatus = array.getString(10);
-                                        String homeName = array.getString(11);
-                                        String stateName = array.getString(12);
+                                        String maritalStatus = array.getString(9);
+                                        String homeName = array.getString(10);
+                                        String stateName = array.getString(11);
                                         String hometown = homeName + ", " + stateName;
+                                        String imageUrl = array.getString(12);
                                         String favouriteStatus = array.getString(13);
                                         String interestStatus = array.getString(14);
 
 
                                         SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);
 
-                                        if (!suggestionModelList.contains(suggestionModel)) {
+                                        if (!suggestionModelList.contains(suggestionModel) && imageUrl.contains("null")) {
                                             suggestionModelList.add(suggestionModel);
                                             suggestionAdapter.notifyDataSetChanged();
+
+                                        } else {
+                                            suggestionModelList.add(0, suggestionModel);
+                                            suggestionAdapter.notifyDataSetChanged();
+
                                         }
 
 

@@ -158,12 +158,12 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         aboutMe.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d(TAG, "beforeTextChanged: called ");
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: called ");
+
                 if (s.length() == 0 && customer_id != clickedID) {
                     mCardViewAboutMe.setVisibility(View.GONE);
                 }
@@ -174,7 +174,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                 if (s.length() == 0 && customer_id != clickedID) {
                     mCardViewAboutMe.setVisibility(View.GONE);
                 }
-                Log.d(TAG, "afterTextChanged: called ");
+
 
             }
         });
@@ -450,7 +450,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                         }
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onError: errr ------------- " + error.toString());
+
                             // handle error
                         }
 

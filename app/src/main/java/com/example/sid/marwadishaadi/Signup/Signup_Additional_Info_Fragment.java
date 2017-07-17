@@ -343,7 +343,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
 
         NativePlace.setThreshold(1);
         placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_additional__info, R.id.editTextNativePlace, App.placeslist);
-        Log.d("sahjk", "onCreateView: placelist native-----------"+App.placeslist.size());
+
         NativePlace.setAdapter(placesAdapter);
 
         RelationLocation.setThreshold(1);
