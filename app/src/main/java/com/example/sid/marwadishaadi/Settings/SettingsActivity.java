@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected TextView paymentpolicy;
     protected LinearLayout morelinearlayout;
     protected TextView more;
+    protected SwitchCompat notificationOnOff;
     protected AlertDialog resetbox;
     String query="",old_pass_encrypt, user_old_pass,user_new_pass;
     private String customer_id, customer_gender;
@@ -79,6 +82,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+
+        dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -96,6 +102,20 @@ public class SettingsActivity extends AppCompatActivity {
         privacypolicy= (TextView) findViewById(R.id.privacypolicy);
         paymentpolicy = (TextView) findViewById(R.id.paymentpolicy);
         contactus= (TextView) findViewById(R.id.contactus);
+        notificationOnOff = (SwitchCompat) findViewById(R.id.switchNotifications);
+
+
+        notificationOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editors = userinfo.edit();
+                editors.putBoolean("Notification_Status",isChecked);
+                editors.apply();
+
+            }
+        });
+
 
         faq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +183,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
 
-        notifications = (SwitchCompat) findViewById(R.id.switchNot);
         reset_pass = (TextView) findViewById(R.id.reset_password);
         deactivate_acc = (TextView) findViewById(R.id.deactivate_acc);
         delete_acc = (TextView) findViewById(R.id.delete_acc);
@@ -202,6 +221,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 // perform check
                                 LoginManager.getInstance().logOut();
                                 AccessToken.setCurrentAccessToken(null);
+
+                                SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editors = userinfo.edit();
+                                editors.putBoolean("isLoggedIn",false);
+                                editors.apply();
+
                                 SharedPreferences sharedPre=getSharedPreferences("userinfo",MODE_PRIVATE);
                                 SharedPreferences.Editor editor=sharedPre.edit();
                                 editor.putBoolean("isLoggedIn",false);
@@ -318,13 +343,11 @@ public class SettingsActivity extends AppCompatActivity {
                                     // analytics
                                     Analytics_Util.logAnalytic(mFirebaseAnalytics,"Deactivate Acc","textview");
 
-                                    Toast.makeText(SettingsActivity.this, "cool!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(SettingsActivity.this, "ohh whyyy", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -349,7 +372,6 @@ public class SettingsActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(SettingsActivity.this, "cool!", Toast.LENGTH_SHORT).show();
                                 // analytics
                                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Delete acc","textview");
 
@@ -358,7 +380,6 @@ public class SettingsActivity extends AppCompatActivity {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(SettingsActivity.this, "ohh whyyy", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -421,9 +442,9 @@ private class BackEnd extends AsyncTask<String, String, String> {
                             try {
                                 user = response.getJSONArray(0);
                                 old_pass_encrypt=HashConverter(user_old_pass);
-                                if(user.getString(0).contains(old_pass_encrypt)){
-                                    Log.d(TAG, "onResponse2: ------ old password is --"+old_pass_encrypt);
-                                    final String quer="update tbl_login set password = \""+HashConverter(user_new_pass)+"\" where customer_no=\""+customer_id+"\";";
+                                if (user.getString(0).equals(old_pass_encrypt)) {
+                                    Log.d(TAG, "onResponse2: ------ old password is --" + user.getString(0));
+                                    final String quer = "update tbl_login set password = \"" + HashConverter(user_new_pass) + "\" where customer_no=\"" + customer_id + "\";";
                                     AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                                             .addBodyParameter("query", quer)
                                             .setPriority(Priority.HIGH)
@@ -431,15 +452,15 @@ private class BackEnd extends AsyncTask<String, String, String> {
                                             .getAsJSONArray(new JSONArrayRequestListener() {
                                                 @Override
                                                 public void onResponse(JSONArray response) {
-                                                    Log.d(TAG, "onResponse: ********** new passord ***      "+quer);
-                                                    Toast.makeText(getApplicationContext(),"Password has been changed successfully",Toast.LENGTH_LONG).show();
+                                                    Log.d(TAG, "onResponse: ********** new passord ***      " + quer);
+                                                    Toast.makeText(getApplicationContext(), "Password has been changed successfully", Toast.LENGTH_LONG).show();
                                                     SettingsActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            if(dialog.isShowing()){
+                                                            if (dialog.isShowing()) {
                                                                 dialog.dismiss();
                                                             }
-                                                            if(resetbox.isShowing()){
+                                                            if (resetbox.isShowing()) {
                                                                 resetbox.dismiss();
                                                             }
                                                         }
@@ -448,22 +469,21 @@ private class BackEnd extends AsyncTask<String, String, String> {
 
                                                 @Override
                                                 public void onError(ANError anError) {
-                                                    Toast.makeText(getApplicationContext(),"Network Error. Please try again.",Toast.LENGTH_LONG).show();
-                                                    Log.d(TAG, "onError: ----network error  88"+ anError);
+                                                    Toast.makeText(getApplicationContext(), "Network Error. Please try again.", Toast.LENGTH_LONG).show();
+                                                    Log.d(TAG, "onError: ----network error  88" + anError);
                                                     SettingsActivity.this.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            if(dialog.isShowing()){
+                                                            if (dialog.isShowing()) {
                                                                 dialog.dismiss();
                                                             }
                                                         }
                                                     });
                                                 }
                                             });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Entered password was incorrect. Please try again later", Toast.LENGTH_LONG).show();
                                 }
-
-                                else
-                                    Toast.makeText(getApplicationContext(),"Entered password was incorrect. Please try again later",Toast.LENGTH_LONG).show();
 
                             }
                             catch (JSONException e) {
@@ -500,6 +520,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String s) {
+        dialog.dismiss();
         super.onPostExecute(s);
     }
 }

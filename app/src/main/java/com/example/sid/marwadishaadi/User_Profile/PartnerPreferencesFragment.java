@@ -1,9 +1,7 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
-import android.accessibilityservice.GestureDescription;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -23,11 +20,9 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
-import com.pdfjet.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +35,7 @@ public class PartnerPreferencesFragment extends Fragment {
 
     private TextView edit_prefs;
     private Button similar;
-    private TextView age,height,build,complexion,physicalStatus,highestDegree,occup,maritalStatus,annualIncome,city;
+    private TextView age, height, build, complexion, physicalStatus, highestDegree, occup, maritalStatus, annualIncome, city;
 
     private String clickedID, customer_id;
     private LinearLayout complexionLayout;
@@ -84,16 +79,15 @@ public class PartnerPreferencesFragment extends Fragment {
         if (data.getStringExtra("customerNo") != null) {
             called = false;
             clickedID = data.getStringExtra("customerNo");
-            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
             new PartnerPreference().execute(clickedID);
 
         }
 
 
-        if ("suggestion".equals(from)|"recent".equals(from)|"reverseMatching".equals(from)|"favourites".equals(from)|"interestReceived".equals(from)|"interestSent".equals(from)) {
+        if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from) | "similar".equals(from)) {
 
-                edit_prefs.setVisibility(View.GONE);
-                edit_prefs.setVisibility(View.GONE);
+            edit_prefs.setVisibility(View.GONE);
+            edit_prefs.setVisibility(View.GONE);
 
         }
 
@@ -101,47 +95,47 @@ public class PartnerPreferencesFragment extends Fragment {
             new PartnerPreference().execute(clickedID);
         }
 
-            similar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getContext(), SimilarActivity.class);
-                    startActivity(i);
-                    getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                }
-            });
-            edit_prefs.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(getContext(), EditPreferencesActivity.class);
-                    startActivity(i);
-                    getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-                }
-            });
-
-            return mview;
-        }
-
-        class PartnerPreference extends AsyncTask<String, Void, Void> {
-
+        similar.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected Void doInBackground(String... strings) {
-                String cus = strings[0];
-                AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), SimilarActivity.class);
+                startActivity(i);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
+        edit_prefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        .addBodyParameter("customerNo", cus)
-                        .setTag(this)
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONArray(new JSONArrayRequestListener() {
-                            @Override
-                            public void onResponse(JSONArray response) {
+                Intent i = new Intent(getContext(), EditPreferencesActivity.class);
+                startActivity(i);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-                                try {
-                                    String str;
-                                    String a = response.getString(0) + " yrs to " + response.getString(1) + " yrs";
-                                    age.setText(a);
+            }
+        });
+
+        return mview;
+    }
+
+    class PartnerPreference extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String cus = strings[0];
+            AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+
+                    .addBodyParameter("customerNo", cus)
+                    .setTag(this)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(final JSONArray response) {
+
+                            try {
+                                String str;
+                                String a = response.getString(0) + " yrs to " + response.getString(1) + " yrs";
+                                age.setText(a);
 
 //                                    double feet = Double.parseDouble(response.getString(2)) / 30.48;
 //                                    double inches = (Double.parseDouble(response.getString(2)) / 2.54) - ((int) feet * 12);
@@ -151,122 +145,133 @@ public class PartnerPreferencesFragment extends Fragment {
 //                                    inches = (Double.parseDouble(response.getString(3)) / 2.54) - ((int) feet * 12);
 //                                    String heightTo = (int) feet + "ft " + (int) inches + "in";
 
-                                    String h = response.getString(2) + " to " + response.getString(3);
+                                String h = response.getString(2) + " to " + response.getString(3);
 
-                                    height.setText(h);
-
-
-                                    str = response.getString(4).replace("[", "").replace("]", "").replace("\"", "");
-                                    String c = str;
-                                    Log.d(TAG, "onResponse: complexion is" + c + "---");
-                                    if (c != null && c.trim().length() == 0) {
-                                        Log.d(TAG, "onResponse: in here");
-                                        complexionLayout.setVisibility(View.GONE);
-                                    } else {
-                                        Log.d(TAG, "onResponse: here ***** ");
-                                        complexion.setText(c);
-                                    }
+                                height.setText(h);
 
 
-                                    str = response.getString(5).replace("[", "").replace("]", "").replace("\"","");
-                                    String b = str;
+                                str = response.getString(4).replace("[", "").replace("]", "").replace("\"", "");
+                                final String c = str;
 
-                                    if (b != null && b.trim().length() == 0) {
-                                        build.setVisibility(View.GONE);
-                                    } else {
-                                        build.setText(b);
-                                    }
+                                str = response.getString(5).replace("[", "").replace("]", "").replace("\"", "");
+                                final String b = str;
 
-                                    if (response.getString(6) != null && response.getString(6).trim().length() == 0) {
-                                        physicalStatus.setVisibility(View.GONE);
-                                    } else {
-                                        physicalStatus.setText(response.getString(6));
-                                    }
-
-                                    if (response.getString(7) != null && response.getString(7).trim().length() == 0) {
-                                        city.setVisibility(View.GONE);
-                                    } else {
-                                        city.setText(response.getString(7));
-                                    }
-
-                                    str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
-
-                                    String hd = str;
-
-                                    if (response.getString(8) != null && response.getString(8).trim().length() == 0) {
-                                        highestDegree.setVisibility(View.GONE);
-                                    } else {
-                                        highestDegree.setText(hd);
-                                    }
+                                final String ps = response.getString(6);
 
 
-                                    str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
-                                    String o = str;
-                                    if (response.getString(9) != null && response.getString(9).trim().length() == 0) {
-                                        occup.setVisibility(View.GONE);
-                                    } else {
-                                        occup.setText(o);
-                                    }
-
-
-
-
-                                    if (response.getString(10) != null && response.getString(10).trim().length() == 0) {
-                                        maritalStatus.setVisibility(View.GONE);
-
-                                    } else {
-                                        maritalStatus.setText(response.getString(10));
-                                    }
-
-                                    if (response.getString(11) != null && response.getString(11).trim().length() == 0) {
-                                        annualIncome.setText("No Income mentioned.");
-
-                                    } else {
-                                        String annualIn = response.getString(11).replace("[", "").replace("]", "").replace("\"", "");
-                                        annualIncome.setText(annualIn);
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                if (response.getString(7) != null && response.getString(7).trim().length() == 0) {
+                                    city.setVisibility(View.GONE);
+                                } else {
+                                    city.setText(response.getString(7));
                                 }
 
+                                str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
+
+                                final String hd = str;
+                                Log.d(TAG, "onResponse: highest  for user is --" + str + " and length is " + str.length());
+
+
+                                str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
+
+                                final String o = str;
+
+                                final String ms = response.getString(10);
+
+                                final String ai = response.getString(11);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        if (c != null && c.trim().length() == 0) {
+                                            complexionLayout.setVisibility(View.GONE);
+                                        } else {
+                                            complexion.setText(c);
+                                        }
+
+                                        if (b != null && b.trim().length() == 0) {
+                                            build.setVisibility(View.GONE);
+                                        } else {
+                                            build.setText(b);
+                                        }
+
+                                        if ( ps != null && ps.trim().length() == 0) {
+                                            physicalStatus.setVisibility(View.GONE);
+                                        } else {
+                                            physicalStatus.setText(ps);
+                                        }
+
+                                        if (o != null && o.trim().length() == 0) {
+                                            occup.setVisibility(View.GONE);
+                                        } else {
+                                            occup.setText(o);
+                                        }
+
+                                        if (ms != null && ms.trim().length() == 0) {
+                                            maritalStatus.setVisibility(View.GONE);
+
+                                        } else {
+                                            maritalStatus.setText(ms);
+                                        }
+
+                                        if (hd != null && hd.trim().length() == 0) {
+                                            highestDegree.setVisibility(View.GONE);
+                                        } else {
+                                            highestDegree.setText(hd);
+                                        }
+
+                                        if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
+                                            annualIncome.setText("No Income mentioned.");
+
+                                        } else {
+                                            String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
+                                            annualIncome.setText(annualIn);
+                                        }
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
-                            @Override
-                            public void onError(ANError error) {
-                                Log.d(TAG, "onError: errr ------------- " + error.toString());
-                                // handle error
-                            }
-                        });
+                        }
 
-                return null;
+                        @Override
+                        public void onError(ANError error) {
+                            Log.d(TAG, "onError: errr ------------- " + error.toString());
+                            // handle error
+                        }
+                    });
 
-            }
-
-            public String income(String aincome) {
-
-                String annualI = aincome;
-                annualI = annualI.replaceAll("[^-?0-9]+", " ");
-                List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                Log.d(TAG, "onResponse: income str is " + incomeArray);
-                if (annualI.contains("Upto")) {
-                    annualI = "Upto 3L";
-                } else if (annualI.contains("Above")) {
-                    annualI = "Above 50L";
-
-                } else if (incomeArray.size() == 3) {
-                    Log.d(TAG, "onResponse: when three");
-                    double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                    double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                    annualI = (int) first + "L - " + (int) second + "L";
-                } else {
-                    annualI = "No Income mentioned.";
-                }
-                return annualI;
-            }
-
+            return null;
 
         }
 
 
+        public String income(String aincome) {
+
+            String annualI = aincome;
+            annualI = annualI.replaceAll("[^-?0-9]+", " ");
+            List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
+            Log.d(TAG, "onResponse: income str is " + incomeArray);
+            if (annualI.contains("Upto")) {
+                annualI = "Upto 3L";
+            } else if (annualI.contains("Above")) {
+                annualI = "Above 50L";
+
+            } else if (incomeArray.size() == 3) {
+                Log.d(TAG, "onResponse: when three");
+                double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                annualI = (int) first + "L - " + (int) second + "L";
+            } else {
+                annualI = "No Income mentioned.";
+            }
+            return annualI;
+        }
+
+
     }
+
+
+}

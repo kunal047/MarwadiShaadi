@@ -8,6 +8,16 @@ public class SimilarModel {
 
     String name, city,education,imgAdd, age;
 
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
+    }
+
+    String customer_id;
+
     public String getImgAdd() {
         return imgAdd;
     }
@@ -16,8 +26,8 @@ public class SimilarModel {
         this.imgAdd = imgAdd;
     }
 
-    public SimilarModel(String name, String city, String education, String imgAdd, String age) {
-
+    public SimilarModel(String name, String city, String education, String imgAdd, String age,String customer_id) {
+        this.customer_id = customer_id;
         this.name = name;
         this.city = city;
         this.education = education;

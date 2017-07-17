@@ -103,7 +103,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             if (constraint != null) {
                 suggestions.clear();
                 for (Place place : tempItems) {
-                    if (place.getCity().toLowerCase().startsWith(constraint.toString())) {
+                    if (place.getCity().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
                         suggestions.add(place);
                     }
                 }

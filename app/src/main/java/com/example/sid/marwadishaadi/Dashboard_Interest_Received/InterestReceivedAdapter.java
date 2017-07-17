@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -125,7 +126,6 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
             accept = (ImageView) itemView.findViewById(R.id.interest_accept);
             reject = (ImageView) itemView.findViewById(R.id.interest_reject);
             customerNo = (TextView) itemView.findViewById(R.id.textViewCustomerNo);
-
 
 
             accept.setOnClickListener(new View.OnClickListener() {

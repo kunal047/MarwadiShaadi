@@ -4,11 +4,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,9 +31,17 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Permission_Util;
+
+import com.example.sid.marwadishaadi.Login.LoginActivity;
+
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +58,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private String user_email;
     private boolean sentmail;
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+    public static final int CALL_PHONE_PERMISSION=102;
+    private View view;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -59,17 +75,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_forgot_password);
 
+        view = getWindow().getDecorView().getRootView();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"forgot");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,"button");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "button");
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-
-
 
 
         call_us = (LinearLayout) findViewById(R.id.call_us);
@@ -77,20 +91,47 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         submit = (Button) findViewById(R.id.Submit_forgot);
         call_us_number = (TextView) findViewById((R.id.call_us_number));
 
-        call_us.setOnClickListener(new View.OnClickListener() {
+        call_us_number.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
-                Permission_Util permission_util = new Permission_Util(ForgotPasswordActivity.this, Manifest.permission.CALL_PHONE,"camera");
-                permission_util.checkPermission();
+                // add permission here
+                int permissionCheck = ContextCompat.checkSelfPermission(ForgotPasswordActivity.this, Manifest.permission.CALL_PHONE);
+
+                if (permissionCheck == PackageManager.PERMISSION_DENIED){
+
+                    if(!getPermissionStatus()){
+
+                        Dexter.withActivity(ForgotPasswordActivity.this)
+                            .withPermission(Manifest.permission.CALL_PHONE)
+                            .withListener(new PermissionListener() {
+                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    Call();
+                                }
+                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                                    setPermissionStatus();
+                                    showSettings();
+                                }
+                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                }
+                            }).check();
+                    }else{
+                      showSettings();
+                    }
+                }else{
+                    Call();
+                }
+
+
             }
         });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked --------------------------------------------- ");
-                System.out.println("adfsjlkadsjklfj klasjfk as as ");
+
                 user_email = email.getText().toString();
                 new ForgotPassword().execute();
 
@@ -99,26 +140,26 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     public void Call(){
+
         final Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + call_us_number.getText().toString()));//change the number
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-            Toast.makeText(getApplicationContext(), "Permission_Util for Call Denied!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Permission for Call Denied!", Toast.LENGTH_LONG).show();
             return;
         } else {
             AlertDialog.Builder discarduser = new AlertDialog.Builder(ForgotPasswordActivity.this);
             discarduser.setMessage("Do you want to call " + call_us_number.getText().toString() + " ? ")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(callIntent);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(callIntent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
             // setting up dialog box
             AlertDialog alertbox = discarduser.create();
@@ -128,6 +169,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         }
     }
+
     private class SendMail extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -168,18 +210,23 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
+                                Log.d(TAG, "onResponse: ------------------------ " + response.toString());
                                 JSONArray result = response.getJSONArray(0);
                                 int res = Integer.parseInt(result.get(0).toString());
-                                Log.d(TAG, "onResponse: ------------------------ " + res);
+
 
                                 if (res == 1) {
                                     sentmail = true;
                                     Log.d(TAG, "onResponse: in response ^^^^^^^^^^^^^^^^ ");
                                     new SendMail().execute();
+                                    Toast.makeText(ForgotPasswordActivity.this, "Please check your e-mail for temporary password", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivity(i);
                                     Log.d(TAG, "onResponse: end of response ");
 
                                 } else {
-                                     sentmail = false;
+                                    sentmail = false;
+                                    Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -196,44 +243,57 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     });
 
 
-
-
-
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (!sentmail) {
-                Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            if (!sentmail) {
+//                Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
+//            }
+//        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CALL_PHONE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Call();
+            } else {
+                    Toast.makeText(ForgotPasswordActivity.this,"Unable to get Permission",Toast.LENGTH_LONG).show();
+                }
             }
         }
-    }
-}
-               /* new AsyncTask<String, String, String>() {
+
+        private void showSettings(){
+            Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
                     @Override
-                    protected String doInBackground(String... strings) {
-
-
-
-
-
-
-                       /* if (user_email.equals()) {
-
-
-                        } else {
-                            Toast.makeText(getApplicationContext(), "This email-id is not registered!", Toast.LENGTH_SHORT);
-                        }
-                        return null;
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
                     }
-            }.execute();
+                });
 
-            }
-        });
+            snackbar.show();
+        }
+        private Boolean getPermissionStatus(){
+            SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            return sharedpref.getBoolean("isPhonePermissionDenied", false);
+        }
 
+        private void setPermissionStatus(){
 
+            SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor edit =  sharedpref.edit();
+            edit.putBoolean("isPhonePermissionDenied",true);
+            edit.apply();
+        }
     }
 
-}*/
+

@@ -12,9 +12,12 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -31,6 +34,8 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.example.sid.marwadishaadi.App;
+import com.example.sid.marwadishaadi.PlacesAdapter;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -56,7 +61,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
     LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
     int colorg, colorb;
     CheckBox veryFair, fair, wheatish, wheatishBrown, dark, slim, athletic, heavy, average, professional, job, retired, business, notEmployed, studying, complexionDontMatter, occupationDontMatter, bodyTypeDontMatter;
-    EditText workLocation;
+    AutoCompleteTextView workLocation;
     Spinner heightTo, heightFrom;
     CrystalRangeSeekbar age;
     TextView tvMin;
@@ -144,7 +149,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         lg = (LinearLayout) findViewById(R.id.list_g);
         lug = (LinearLayout) findViewById(R.id.list_ug);
 
-        workLocation = (EditText) findViewById(R.id.work_location);
+        workLocation = (AutoCompleteTextView) findViewById(R.id.work_location);
 
         heightFrom = (Spinner) findViewById(R.id.height_from);
         heightTo = (Spinner) findViewById(R.id.height_to);
@@ -174,6 +179,9 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         new FetchEditPartnerPreferences().execute();
 
+        workLocation.setThreshold(1);
+        PlacesAdapter placesAdapter = new PlacesAdapter(EditPreferencesActivity.this, R.layout.activity_edit_preferences, R.id.work_location, App.placeslist);
+        workLocation.setAdapter(placesAdapter);
 
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,6 +283,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 uai = sharedpref.getString("ai", null);
                 ai = uai;
                 Log.d(TAG, "onClick: value is " + ai);
+                strArrayAnnual = prefannualincome.getText().toString().split(",");
 
                 new EditPartnerPreferences().execute();
 
@@ -327,8 +336,24 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
                 BottomSheetDialogFragment btm = new BottomSheet(112, strArrayAnnual);
                 btm.show(getSupportFragmentManager(), btm.getTag());
-                Log.d(TAG, "onClick: context for application " + getApplicationContext().toString());
 
+            }
+        });
+        prefannualincome.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: value is " + s.toString());
+//                strArrayAnnual = s.toString().split(",");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                strArrayAnnual = s.toString().replace(", ", ",").split(",");
             }
         });
         physicalstatus = (Spinner) findViewById(R.id.edit_physical_status);
@@ -834,8 +859,12 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", ""));
 
+
+                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", "").replace("\"", "").replace("000000","0L").replace("00000", "L"));
+
+
+                                strArrayAnnual = prefannualincome.getText().toString().split(",");
 
 
 

@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Favourites;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -19,6 +22,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.pdfjet.Line;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,18 +37,20 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
-import static com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.URL;
-
 
 public class FavouritesFragment extends Fragment {
 
     private static final String TAG = "FavouritesFragment";
+    private static final int MODE_PRIVATE = 0;
     private List<FavouriteModel> favouritesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FavouritesAdapter favouritesAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private String customer_id;
+    private LinearLayout empty_view;
+    private ProgressBar mProgressBar;
+
 //    private TextView favouriteZero;
 
     @Override
@@ -53,18 +59,25 @@ public class FavouritesFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.swipe_to_refresh, container, false);
-
+        empty_view = (LinearLayout) mview.findViewById(R.id.empty_view_favourites);
+        empty_view.setVisibility(View.GONE);
 //        favouriteZero = (TextView) mview.findViewById(R.id.favouriteZero);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
 
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setVisibility(View.GONE);
+
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
-        favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList);
+        favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList,empty_view);
 
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
@@ -87,11 +100,7 @@ public class FavouritesFragment extends Fragment {
     }
 
     private void refreshContent() {
-
-        favouritesList.clear();
         new PrepareFavourites().execute();
-        favouritesAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -118,10 +127,19 @@ public class FavouritesFragment extends Fragment {
 
     private class PrepareFavourites extends AsyncTask<String, Void, Void> {
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setIndeterminate(true);
+        }
+
         @Override
         protected Void doInBackground(String... params) {
 
-            AndroidNetworking.post(URL + "prepareFavourites")
+
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareFavourites")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -129,43 +147,64 @@ public class FavouritesFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
                             try {
-                                FavouriteModel[] favouriteModel = new FavouriteModel[response.length()];
-                                for (int i = 0; i < response.length(); i++) {
 
-                                    JSONArray array = response.getJSONArray(i);
-                                    String customerNo = array.getString(0);
-                                    String name = array.getString(1);
-                                    String dateOfBirth = array.getString(2);
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
+                                mProgressBar.setVisibility(View.GONE);
 
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+                                if(response.length() == 0){
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            empty_view.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                }else{
 
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int a = getAge(year, month, day);
-                                    String age = Integer.toString(a);
-                                    String education = array.getString(3);
-                                    String occupationLocation = array.getString(4);
-                                    String imageUrl = array.getString(5);
-
-
-                                    favouriteModel[i] = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
-
-                                    favouritesList.add(favouriteModel[i]);
+                                    empty_view.setVisibility(View.GONE);
+                                    favouritesList.clear();
                                     favouritesAdapter.notifyDataSetChanged();
+                                    for (int i = 0; i < response.length(); i++) {
 
-                                    Log.d(TAG, "onResponse: age of the user " + age);
-                                    Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+                                        JSONArray array = response.getJSONArray(i);
+                                        String customerNo = array.getString(0);
+                                        String name = array.getString(1);
+                                        String dateOfBirth = array.getString(2);
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date date = formatter.parse(dateOfBirth);
+                                        System.out.println(date);
+
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int a = getAge(year, month, day);
+                                        String age = Integer.toString(a);
+                                        String education = array.getString(3);
+                                        String occupationLocation = array.getString(4);
+                                        String imageUrl = array.getString(5);
+
+
+                                        FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
+
+                                        if (!favouritesList.contains(favouriteModel)){
+
+                                            favouritesList.add(0, favouriteModel);
+
+                                            Log.d(TAG, "onResponse: age of the user " + age);
+                                            Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
+
+
+                                        }
+
+                                    }
 
 
                                 }
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -178,6 +217,7 @@ public class FavouritesFragment extends Fragment {
                         public void onError(ANError error) {
                             Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     });
             return null;
@@ -186,6 +226,8 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

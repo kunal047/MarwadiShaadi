@@ -89,11 +89,15 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             if(sh!=null)
                 smokingHabits.setText(sh);
 
+
             if(bt!=null || bp!=null)
                 birthtime.setText(bt+" at "+bp);
 
             if(g!=null)
                 gotra.setText(g);
+            else{
+                gotra.setVisibility(View.GONE);
+            }
 
             if(m!=null)
                 manglik.setText(m);
@@ -146,6 +150,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         gotra = (TextView) mview.findViewById(R.id.gotra);
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
+
+
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
 
@@ -194,6 +200,137 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             }
         });
 
+        eatingHabits.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    eatingHabits.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        drinkingHabits.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    drinkingHabits.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        smokingHabits.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    smokingHabits.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        birthtime.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    birthtime.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        gotra.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    gotra.setVisibility(View.GONE);
+                }
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        manglik.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    manglik.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        matchHoroscope.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    matchHoroscope.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
@@ -203,8 +340,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             edit_hobbies.setVisibility(View.GONE);
             edit_horoscope.setVisibility(View.GONE);
             edit_lifestyle.setVisibility(View.GONE);
-
-            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
         }
 
         new ProfileAdditionalDetails().execute(clickedID);
@@ -285,12 +420,26 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                                 eatingHabits.setText(result.getString(2));
                                 drinkingHabits.setText(result.getString(3));
                                 smokingHabits.setText(result.getString(4));
+                                String bl;
+                                if (result.getString(5).length() == 0 && result.getString(6).length() == 0) {
+                                    bl = "";
+                                } else if (result.getString(5).length() == 0) {
+                                    bl = result.getString(6);
+                                } else if (result.getString(6).length() == 0) {
+                                    bl = result.getString(5);
+                                } else {
+                                    bl = result.getString(5) + " at " + result.getString(6);
 
-                                String bl= result.getString(5) + " at " + result.getString(6);
+                                }
 
                                 birthtime.setText(bl);
+
                                 gotra.setText(result.getString(7));
+
                                 manglik.setText(result.getString(8));
+                                if(result.getString(9).isEmpty()){
+                                    matchHoroscope.setVisibility(View.GONE);
+                                }
                                 matchHoroscope.setText(result.getString(9));
 
 

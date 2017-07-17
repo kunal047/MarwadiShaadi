@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -47,11 +49,16 @@ public class RecentProfilesFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String customer_id, customer_gender;
+    private LinearLayout empty_view_recent;
+    private ProgressBar mProgressBar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mview = inflater.inflate(R.layout.fragment_recent__profiles, container, false);
+        empty_view_recent = (LinearLayout) mview.findViewById(R.id.empty_view_recent);
+        empty_view_recent.setVisibility(View.GONE);
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -62,6 +69,10 @@ public class RecentProfilesFragment extends Fragment {
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Recent Profiles","button");
 
+
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setVisibility(View.GONE);
 
         recentRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -106,24 +117,18 @@ public class RecentProfilesFragment extends Fragment {
     }
 
     private void refreshData() {
-
-        recentList.clear();
         new PrepareRecent().execute();
-        recentAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
+
     }
 
     private class PrepareRecent extends AsyncTask<Void, Void, Void> {
 
-        ProgressDialog mProgressDialog = new ProgressDialog(getContext());
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog.setTitle("Loading");
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
             super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setIndeterminate(true);
         }
 
         @Override
@@ -140,68 +145,89 @@ public class RecentProfilesFragment extends Fragment {
                             // do anything with response
 
                             try {
+                                mProgressBar.setVisibility(View.GONE);
 
                                 recentList.clear();
-                                for (int i = 0; i < response.length(); i++) {
+                                recentAdapter.notifyDataSetChanged();
 
-                                    JSONArray array = response.getJSONArray(i);
+                                if(response.length() == 0){
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            empty_view_recent.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                }else {
 
-                                    String name = array.getString(0);
-                                    String dateOfBirth = array.getString(1);
-
-                                    // Thu, 18 Jan 1990 00:00:00 GMT - Date Format
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date now = new Date();
-                                    Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
-
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int a = getAge(year, month, day);
-                                    String age = Integer.toString(a);
-
-                                    String education = array.getString(2);
-                                    String location = array.getString(3);
-                                    String imageUrl = array.getString(4);
-                                    String customerNo = array.getString(5);
-                                    String createdOn = array.getString(6);
-                                    String favouriteStatus = array.getString(7);
-                                    String recentStatus = array.getString(8);
+                                    empty_view_recent.setVisibility(View.GONE);
 
 
-                                    Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** " + favouriteStatus + " 000000000000 " + recentStatus);
-                                    date = formatter.parse(createdOn);
-                                    long diff = now.getTime() - date.getTime();
-                                    long diffSeconds = diff / 1000 % 60;
-                                    long diffMinutes = diff / (60 * 1000) % 60;
-                                    long diffHours = diff / (60 * 60 * 1000);
-                                    int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+                                    for (int i = 0; i < response.length(); i++) {
 
-                                    if (diffInDays >= 365) {
-                                        createdOn = "More than a year ago";
-                                    } else if (diffInDays > 1) {
+                                        JSONArray array = response.getJSONArray(i);
+
+                                        String name = array.getString(0);
+                                        String dateOfBirth = array.getString(1);
+
+                                        // Thu, 18 Jan 1990 00:00:00 GMT - Date Format
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date now = new Date();
+                                        Date date = formatter.parse(dateOfBirth);
+                                        System.out.println(date);
+
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int a = getAge(year, month, day);
+                                        String age = Integer.toString(a);
+
+                                        String education = array.getString(2);
+                                        String location = array.getString(3);
+                                        String imageUrl = array.getString(4);
+                                        String customerNo = array.getString(5);
+                                        String createdOn = array.getString(6);
+                                        String favouriteStatus = array.getString(7);
+                                        String recentStatus = array.getString(8);
+
+
+                                        Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** " + favouriteStatus + " 000000000000 " + recentStatus);
+                                        date = formatter.parse(createdOn);
+                                        long diff = now.getTime() - date.getTime();
+                                        long diffSeconds = diff / 1000 % 60;
+                                        long diffMinutes = diff / (60 * 1000) % 60;
+                                        long diffHours = diff / (60 * 60 * 1000);
+                                        int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+                                        if (diffInDays >= 365) {
+                                            createdOn = "More than a year ago";
+                                        } else if (diffInDays > 1) {
 //                                        System.err.println("Difference in number of days (2) : " + diffInDays);
-                                        createdOn = diffInDays + " days ago";
-                                    } else if (diffHours >= 1) {
-                                        createdOn = diffHours + " hours ago";
-                                    } else if ((diffHours < 1) && (diffMinutes >= 1)) {
+                                            createdOn = diffInDays + " days ago";
+                                        } else if (diffHours >= 1) {
+                                            createdOn = diffHours + " hours ago";
+                                        } else if ((diffHours < 1) && (diffMinutes >= 1)) {
 //                                        System.err.println("minutes");
-                                        createdOn = diffMinutes + " minutes ago";
-                                    } else if (diffSeconds < 60) {
-                                        createdOn = diffSeconds + " seconds ago";
+                                            createdOn = diffMinutes + " minutes ago";
+                                        } else if (diffSeconds < 60) {
+                                            createdOn = diffSeconds + " seconds ago";
+                                        }
+
+                                        Log.d(TAG, "onResponse: created on *************************** " + createdOn);
+
+                                        RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
+
+                                        if (!recentList.contains(recentModel)){
+                                            recentList.add(recentModel);
+                                            recentAdapter.notifyDataSetChanged();
+                                        }
+
+
                                     }
-
-                                    Log.d(TAG, "onResponse: created on *************************** " + createdOn);
-
-                                    RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
-                                    recentList.add(recentModel);
-                                    recentAdapter.notifyDataSetChanged();
 
                                 }
 
@@ -220,7 +246,9 @@ public class RecentProfilesFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mProgressDialog.dismiss();
+                                    mProgressBar.setVisibility(View.GONE);
+
+                                    //here
                                 }
                             });
                         }
@@ -233,8 +261,8 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            recentAdapter.notifyDataSetChanged();
-            mProgressDialog.dismiss();
+            mProgressBar.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

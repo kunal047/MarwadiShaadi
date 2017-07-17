@@ -22,10 +22,17 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
@@ -33,6 +40,7 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
@@ -41,7 +49,8 @@ import java.util.List;
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
 
-    private Context context;
+    private DatabaseReference mDatabase;
+    private final Context context;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -99,7 +108,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.height.setText(suggest.getHeight());
         holder.workLoc.setText(suggest.getWorkLoc());
 
-        holder.annInc.setText(suggest.getAnnInc());
+        holder.annInc.setText(suggest.getAnnInc().replace("000000","0L").replace("00000","L"));
+
         holder.hometown.setText(suggest.getHometown());
         holder.mariSta.setText(suggest.getMariSta());
         holder.company.setText(cd);
@@ -154,6 +164,29 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             public void onEvent(ImageView button, boolean buttonState) {
 
                 if (buttonState) {
+
+                    mDatabase = FirebaseDatabase.getInstance().getReference("users");
+
+                    mDatabase.child(suggestionModelList.get(position).getCusId()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                     /*       DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+                            String registration_id = device.getDevice_id();
+                            SharedPreferences sharedpref = context.getSharedPreferences("userinfo", MODE_PRIVATE);
+                            String customer_name = sharedpref.getString("customer_name", null);
+                            String body = customer_name + " has sent you an Interest";
+                            // sending notification
+                            Notifications_Util.SendNotification(registration_id,body,"New Interest","Interest Request");*/
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
                     interestState = "added";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
@@ -222,7 +255,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                     Intent i = new Intent(context, UserProfileActivity.class);
                     i.putExtra("customerNo", cusId.getText());
                     i.putExtra("from","suggestion");
-
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
             });
@@ -231,6 +264,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
+                    i.putExtra("customerNo", cusId.getText());
+                    i.putExtra("from","suggestion");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
             });
@@ -281,7 +317,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
 
 
-    class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
+    public class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
 
 
         @Override
@@ -316,7 +352,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         }
     }
 
-    class AddFavouriteFromSuggestion extends AsyncTask<String, Void, Void> {
+    public class AddFavouriteFromSuggestion extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
@@ -345,5 +381,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }

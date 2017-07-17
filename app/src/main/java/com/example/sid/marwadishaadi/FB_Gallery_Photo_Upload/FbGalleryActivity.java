@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
@@ -44,6 +45,8 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
 
         Intent data = getIntent();
         userid = data.getStringExtra("userid");
+
+        Log.d("fb->userid",userid);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.fbgallery_toolbar);
         toolbar.setTitle("Select Photos");
@@ -99,6 +102,10 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
 
         // access token
         final AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        Set<String> permissions  = accessToken.getPermissions();
+        for (String permission : permissions) {
+            Log.d("permissions", "getData: " + permission);
+        }
 
         // getting all albums
         GraphRequest request = GraphRequest.newGraphPathRequest(
@@ -107,6 +114,8 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                 new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
+
+                        Log.d(TAG, "all albums -> onCompleted: response from fb is " + response.toString());
 
                         JSONObject obj = response.getJSONObject();
                         JSONArray data = null;
@@ -124,6 +133,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                 JSONObject album = data.getJSONObject(i);
                                 if (album.getString("name").equals("Profile Pictures")){
                                     album_id = album.getString("id");
+                                    Log.d("album id -->",album_id);
                                 }
                             }catch (JSONException e){
                                 e.printStackTrace();
@@ -138,11 +148,11 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
                                     @Override
                                     public void onCompleted(GraphResponse response) {
 
+                                        Log.d(TAG, "onCompleted: response from fb is " + response.toString());
 
                                         JSONObject data = response.getJSONObject();
                                         try {
 
-                                            Log.d(TAG, "onCompleted: response from fb is " + response.toString());
                                             final JSONArray photos = data.getJSONArray("data");
 
                                             for (int i=0;i<photos.length();i++){

@@ -1,16 +1,24 @@
 package com.example.sid.marwadishaadi.Upload_User_Photos;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +35,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity;
+import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.AccessToken;
@@ -39,6 +48,14 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -52,6 +69,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -62,15 +80,20 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private static final int SELECT_FILE = 2;
     private static int number = 0;
     protected Button fblogin;
-    CallbackManager callbackManager;
-    LoginManager loginManager;
-    File file_one, file_two, file_three, file_four, file_five;
+    private CallbackManager callbackManager;
+    private LoginManager loginManager;
+    private File file_one, file_two, file_three, file_four, file_five;
     private FirebaseAnalytics mFirebaseAnalytics;
     private Button submit;
     private CircleImageView img;
     private boolean isSelected = false;
     private CircleImageView photo1, photo2, photo3, photo4, photo5;
     private String customer_id;
+    private View view;
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+    public static final int CAMERA_PERMISSION = 100;
+    public static  final int READ_EXTERNAL_STORAGE=103;
+    public static final int WRITE_EXTERNAL_STORAGE=104;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -84,6 +107,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_upload_photo);
+
+        view = getWindow().getDecorView().getRootView();
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -100,10 +125,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
 
-                    loginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("email","user_photos"));
-                    loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    LoginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("user_photos", "email", "public_profile"));
+                    LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
+
 
                             // getting user profile
                             GraphRequest request = GraphRequest.newMeRequest(
@@ -126,7 +152,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                         }
                                     });
                             request.executeAsync();
-                                    }
+                        }
 
                             @Override
                             public void onCancel() {
@@ -441,12 +467,148 @@ public class UploadPhotoActivity extends AppCompatActivity {
         image.show();
     }
 
+
     private void cameraIntent() {
+
+        // add permission here
+        int permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this, Manifest.permission.CAMERA);
+
+        if (permissionCheck == PackageManager.PERMISSION_DENIED){
+
+            if(!getCameraPermissionStatus()){
+
+                Dexter.withActivity(UploadPhotoActivity.this)
+                    .withPermission(Manifest.permission.CAMERA)
+                    .withListener(new PermissionListener() {
+                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                            CameraIntent();
+                        }
+                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                            setCameraPermissionStatus();
+                            showSettings();
+                        }
+                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                        }
+                    }).check();
+            }else{
+                showSettings();
+            }
+        }else{
+            CameraIntent();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                CameraIntent();
+            } else {
+                Toast.makeText(UploadPhotoActivity.this,"Unable to get Permission",Toast.LENGTH_LONG).show();
+            }
+        }else{
+            GalleryIntent();
+        }
+    }
+    private void CameraIntent(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
 
+
     private void galleryIntent() {
+
+        // add permission here
+        int read_permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int write_permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
+
+            // first time asks for both permission
+            if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
+
+                Dexter.withActivity(UploadPhotoActivity.this)
+                    .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ).withListener(new MultiplePermissionsListener() {
+                    @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+
+                        // if both are accepted
+                        if(report.areAllPermissionsGranted()){
+                            GalleryIntent();
+
+                         // if both are rejected
+                        }else if (report.getDeniedPermissionResponses().size() == 2){
+                            showStorageSettings();
+
+                            // one of them is accepted
+                        }else{
+                            List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
+                            for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
+                                if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
+                                    setReadStoragePermissionStatus();
+                                    showStorageSettings();
+                                }else{
+                                    setWriteStoragePermissionStatus();
+                                    showStorageSettings();
+                                }
+                            }
+                        }
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
+                }).check();
+
+            }
+            // other times
+            // write allowed, read rejected
+            else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
+
+                Dexter.withActivity(UploadPhotoActivity.this)
+                    .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                            GalleryIntent();
+                        }
+                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                            showStorageSettings();
+                        }
+                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                        }
+                    }).check();
+
+            }
+            // read allowed, write rejected
+            else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
+
+                Dexter.withActivity(UploadPhotoActivity.this)
+                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                            GalleryIntent();
+                        }
+                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                            showStorageSettings();
+                        }
+                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                        }
+                    }).check();
+
+            }else{
+                showStorageSettings();
+            }
+        }else{
+            GalleryIntent();
+        }
+
+    }
+    private void GalleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
@@ -579,5 +741,75 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     });
             return null;
         }
+    }
+
+    private void showStorageSettings(){
+        Snackbar snackbar = Snackbar
+            .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
+            .setAction("Settings", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                }
+            });
+
+        snackbar.show();
+    }
+
+    private void showSettings(){
+        Snackbar snackbar = Snackbar
+            .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+            .setAction("Settings", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                }
+            });
+
+        snackbar.show();
+    }
+    private Boolean getCameraPermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isCameraPermissionDenied", false);
+    }
+
+    private void setCameraPermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isCameraPermissionDenied",true);
+        edit.apply();
+    }
+
+    private Boolean getReadStoragePermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isReadPermissionDenied", false);
+    }
+
+    private void setReadStoragePermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isReadPermissionDenied",true);
+        edit.apply();
+    }
+
+    private Boolean getWriteStoragePermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isWritePermissionDenied", false);
+    }
+
+    private void setWriteStoragePermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isWritePermissionDenied",true);
+        edit.apply();
     }
 }

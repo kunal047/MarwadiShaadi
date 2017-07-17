@@ -5,17 +5,31 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.util.Log;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.Notifications.NotificationsActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -27,6 +41,8 @@ public class Notifications_Util {
     // notification sound
     static final Uri notifsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     static final Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
+    static String api_key = "key=AAAAUe8pB3Q:APA91bGbd9V8mrZ8dtvzXqjgcbtdqlRHXVzBcZpX1mM_f2jPe1EcH6p0Ksl4MjmORMRUGM7tCQUUhH9dAxHdvGEkQpwn11D5YQ9ag5ZGRRDI1UWX_G19UirKcSSbi9eAHf8nexG5jPd9";
+    static DatabaseReference mDatabase;
 
     public static Notification.Builder createNotification(String type, String title, String message, Context context, int notifyid){
 
@@ -46,6 +62,59 @@ public class Notifications_Util {
 
     }
 
+    public static void RegisterDevice(String customer_id,String registration_id){
+
+        mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("devices");
+        mDatabase.child(registration_id).setValue(registration_id);
+    }
+
+    public static void SendNotification(String registration_id,String bodymsg,String titlemsg,String type){
+
+        JSONObject notification = new JSONObject();
+        try {
+            notification.put("to",registration_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("body",bodymsg);
+            body.put("title",titlemsg);
+            notification.put("notification",body);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("Type",type);
+            notification.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("Test--------------->", "SendNotification: ");
+        AndroidNetworking.post("https://fcm.googleapis.com/fcm/send")
+            .addHeaders("Content-Type","application/json")
+            .addHeaders("Authorization",api_key)
+            .addJSONObjectBody(notification)
+            .setTag("test")
+            .setPriority(Priority.MEDIUM)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("NOTIFICATION sent",response.toString());
+                }
+                @Override
+                public void onError(ANError error) {
+                    // handle error
+                    Log.d("NOTIFICATION error",error.toString());
+                }
+            });
+
+    }
     public static void stackNotification(Notification.Builder notification, int times, Context context,List<Notif_Message> allmsg,String type,int notifyid){
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

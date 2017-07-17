@@ -10,8 +10,8 @@ public class NotificationsModel {
     int number;
     boolean suggested,interestRec,interestAcc,msgRec,premMem,memExp,reminders,offers,bday;
 
-
-
+    public NotificationsModel() {
+    }
 
     public int getNumber() {
         return number;

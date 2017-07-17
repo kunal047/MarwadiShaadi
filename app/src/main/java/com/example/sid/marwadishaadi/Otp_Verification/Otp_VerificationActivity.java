@@ -4,11 +4,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,10 +28,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
-import com.example.sid.marwadishaadi.Permission_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,6 +56,10 @@ public class Otp_VerificationActivity extends AppCompatActivity {
     protected Button submit;
     protected TextView otp_call,resend_otp;
     protected LinearLayout otp_contact;
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+    public static final int CALL_PHONE_PERMISSION=102;
+    private View view;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -58,6 +73,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_otp__verification);
 
+        view = getWindow().getDecorView().getRootView();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         otp = (EditText) findViewById(R.id.user_otp);
@@ -110,49 +126,78 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Permission_Util permission_util = new Permission_Util(Otp_VerificationActivity.this,Manifest.permission.CALL_PHONE,"camera");
-                permission_util.checkPermission();
+                // add permission here
+                int permissionCheck = ContextCompat.checkSelfPermission(Otp_VerificationActivity.this, Manifest.permission.CALL_PHONE);
 
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"OTP_Call_US","button");
+                if (permissionCheck == PackageManager.PERMISSION_DENIED){
 
-                final Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + otp_call.getText().toString()));//change the number
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    if(!getPermissionStatus()){
 
-                    Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
-                    return;
+                        Dexter.withActivity(Otp_VerificationActivity.this)
+                            .withPermission(Manifest.permission.CALL_PHONE)
+                            .withListener(new PermissionListener() {
+                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    Call();
+                                }
+                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                                    setPermissionStatus();
+                                    showSettings();
+                                }
+                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                }
+                            }).check();
+                    }else{
+                        showSettings();
+                    }
                 }else{
-                    AlertDialog.Builder discarduser = new AlertDialog.Builder(Otp_VerificationActivity.this);
-                    discarduser.setMessage("Do you want to call " + otp_call.getText().toString() + " ? ")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id)
-                                {
-                                    startActivity(callIntent);
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    // setting up dialog box
-                    AlertDialog alertbox = discarduser.create();
-                    alertbox.setTitle("Contact Us");
-                    alertbox.show();
-
+                    Call();
                 }
+
             }
         });
 
     }
 
+    private void Call(){
+
+        // analytics
+        Analytics_Util.logAnalytic(mFirebaseAnalytics,"OTP_Call_US","button");
+
+        final Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + otp_call.getText().toString()));//change the number
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getApplicationContext(),"Permission_Util for Call Denied!",Toast.LENGTH_LONG).show();
+            return;
+        }else{
+            AlertDialog.Builder discarduser = new AlertDialog.Builder(Otp_VerificationActivity.this);
+            discarduser.setMessage("Do you want to call " + otp_call.getText().toString() + " ? ")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        startActivity(callIntent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+            // setting up dialog box
+            AlertDialog alertbox = discarduser.create();
+            alertbox.setTitle("Contact Us");
+            alertbox.show();
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Permission_Util.REQUEST_PERMISSION_SETTING) {
+        if (requestCode == REQUEST_PERMISSION_SETTING) {
             if (ActivityCompat.checkSelfPermission(Otp_VerificationActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 //Got Permission
                 Toast.makeText(Otp_VerificationActivity.this, "coollll", Toast.LENGTH_SHORT).show();
@@ -160,6 +205,17 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CALL_PHONE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Call();
+            } else {
+                Toast.makeText(Otp_VerificationActivity.this,"Unable to get Permission",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     class SendingSMS extends AsyncTask<String, Object, Void> {
 
@@ -238,7 +294,33 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         }
     }
 
+    private void showSettings(){
+        Snackbar snackbar = Snackbar
+            .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+            .setAction("Settings", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                }
+            });
 
+        snackbar.show();
+    }
+    private Boolean getPermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isPhonePermissionDenied", false);
+    }
+
+    private void setPermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isPhonePermissionDenied",true);
+        edit.apply();
+    }
 
 
 }

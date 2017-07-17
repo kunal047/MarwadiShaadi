@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +27,10 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Signup.SignupActivity;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -53,24 +57,43 @@ import java.util.regex.Pattern;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_gender;
-import static com.example.sid.marwadishaadi.Login.LoginActivity.customer_id;
+
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static String customer_gender;
     public ProgressDialog dialog;
+    public String str = "";
     protected EditText login_email;
     protected EditText login_pass;
     protected Button login;
     protected TextView forgot;
-    public static String customer_id = "A1001";
-    public static String customer_gender;
     protected TextView signup;
     protected LoginButton fblogin;
-    private String str = "";
-    private  String email,pass;
-    private FirebaseAnalytics mFirebaseAnalytics;
-
     CallbackManager callbackManager;
+    private boolean checker = false;
+    private String email, pass;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private String customer_id;
+
+    //    anita.k@makindia.com
+    public static String HashConverter(String pswrd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(pswrd.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+            // Now we need to zero pad it if you actually want the full 32 chars.
+            while (hashtext.length(
+            ) < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -84,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         AndroidNetworking.initialize(getApplicationContext());
+        //        AndroidNetworking.setParserFactory(new JacksonParserFactory());
+
         dialog = new ProgressDialog(LoginActivity.this);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -98,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login);
 
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
-        fblogin.setReadPermissions(Arrays.asList("email"));
+        fblogin.setReadPermissions(Arrays.asList("email", "user_photos"));
         fblogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -107,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
 
-                        Log.d("object", object.toString());
 
                         try {
                             String first_name = object.getString("first_name");
@@ -152,6 +176,12 @@ public class LoginActivity extends AppCompatActivity {
 
         forgot = (TextView) findViewById(R.id.forgot_link);
         signup = (TextView) findViewById(R.id.signup_link);
+        //        while ()
+        //        {
+        //            Snackbar.make(findViewById(R.id.llLogin),"Internet Connection ?",Snackbar.LENGTH_SHORT).show();
+        //        }
+
+
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,34 +209,186 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login.setOnClickListener(new View.OnClickListener() {
+                                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                                      @Override
                                      public void onClick(View v) {
 
                                          email = login_email.getText().toString();
                                          pass = login_pass.getText().toString();
 
-                                         if (EmailChecker(email)&!pass.trim().isEmpty()) {
+                                         if (EmailChecker(email) & !pass.trim().isEmpty()) {
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
-                                             new BackGround().execute("email", email, pass);
-                                             Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
-                                         }
-                                         else if((email.trim().contains("M")|email.trim().contains("m")|email.trim().contains("a")|email.trim().contains("A")|email.trim().contains("o")|email.trim().contains("O")|email.trim().contains("J")|email.trim().contains("j")|email.trim().contains("K")|email.trim().contains("k"))&!pass.trim().isEmpty()){
-                                             dialog.setMessage("Please Wait...");
-                                             dialog.show();
-                                             pass = HashConverter(pass);
-                                             char charEmail= email.charAt(0);
-                                             char character=email.charAt(0);
-                                             if((int)charEmail<123 & (int)charEmail>96){
-                                                 charEmail=(char)((int)charEmail-32);
-                                                 email=email.replace(character,charEmail);
+
+                                             char charEmail = email.charAt(0);
+                                             char character = email.charAt(0);
+                                             if ((int) charEmail < 123 & (int) charEmail > 96) {
+                                                 charEmail = (char) ((int) charEmail - 32);
+                                                 email = email.replace(character, charEmail);
+
                                              }
-                                             //Toast.makeText(LoginActivity.this, "User ID is **************** "+ email, Toast.LENGTH_SHORT).show();
-                                             new BackGround().execute("user_id", email, pass);
+
+                                             new BackGround().execute("email", email, pass);
+                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     try {
+                                                         checker = true;
+                                                         Log.e(TAG, "run: checker is " + checker);
+                                                         if (!checker) {
+                                                             Log.e(TAG, "run: --I am running after 3 second");
+                                                         } else {
+                                                             if (Looper.myLooper() == null) {
+                                                                 Looper.prepare();
+                                                             }
+                                                             Log.e(TAG, "run: -- pro t next step");
+
+                                                             if (str.equals("success")) {
+
+                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                 SharedPreferences.Editor editors = userinfo.edit();
+                                                                 editors.putBoolean("isLoggedIn", true);
+                                                                 editors.apply();
+
+                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                 SharedPreferences.Editor editor = sharedpref.edit();
+                                                                 editor.putBoolean("isLoggedIn", true);
+                                                                 editor.putString("email", email);
+                                                                 editor.putString("password", pass);
+                                                                 editor.putString("customer_id", customer_id);
+                                                                 editor.putString("gender", customer_gender);
+                                                                 editor.apply();
+                                                                 dialog.dismiss();
+
+                                                                 //Notifications_Util.RegisterDevice(customer_id);
+
+
+                                                                 Intent deeplink_data = getIntent();
+                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                 if (deeplink != null) {
+                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                     i.putExtra("deeplink", deeplink);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                                 }
+
+                                                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                                 startActivity(i);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                                             } else if (str.equals("failure")) {
+                                                                 Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             } else if (str.equals("----")) {
+                                                                 //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
+                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+
+                                                             } else {
+                                                                 Toast.makeText(getApplicationContext(), " Please Enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             }
+                                                             Looper.loop();
+                                                         }
+                                                     } catch (Exception e) {
+                                                         Log.e(TAG, "run: exception si " + e);
+                                                     }
+                                                 }
+                                             }, 1, 3, TimeUnit.SECONDS);
+
+
+                                             // @TODO to be changed
+                                             // analytics
                                              Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
-                                         }
-                                         else {
+                                                 /*email = login_email.getText().toString();
+                                                 pass = login_pass.getText().toString();*/
+                                             // @TODO to be changed
+                                                /* Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                 startActivity(intent);*/
+
+                                             // rest
+                                         } else if ((email.trim().contains("M") | email.trim().contains("m") | email.trim().contains("a") | email.trim().contains("A") | email.trim().contains("o") | email.trim().contains("O") | email.trim().contains("J") | email.trim().contains("j") | email.trim().contains("K") | email.trim().contains("k")) & !pass.trim().isEmpty()) {
+                                             dialog.setMessage("Please Wait...");
+                                             dialog.show();
+                                             pass = HashConverter(pass);
+                                             new BackGround().execute("user_id", email, pass);
+                                             Toast.makeText(getApplicationContext(), "Please use ID ", Toast.LENGTH_SHORT).show();
+                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     try {
+                                                         Log.e(TAG, "run: checker is " + checker);
+                                                         if (!checker) {
+                                                             Log.e(TAG, "run: --I am running after 3 second");
+                                                         } else {
+                                                             if (Looper.myLooper() == null) {
+                                                                 Looper.prepare();
+                                                             }
+                                                             Log.e(TAG, "run: -- pro t next step");
+
+                                                             if (str.equals("success")) {
+                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                 SharedPreferences.Editor editors = userinfo.edit();
+                                                                 editors.putBoolean("isLoggedIn", true);
+                                                                 editors.apply();
+
+                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                 SharedPreferences.Editor editor = sharedpref.edit();
+                                                                 editor.putBoolean("isLoggedIn", true);
+                                                                 editor.putString("email", email);
+                                                                 editor.putString("password", pass);
+                                                                 editor.putString("customer_id", customer_id);
+                                                                 editor.putString("gender", customer_gender);
+                                                                 editor.apply();
+                                                                 dialog.dismiss();
+                                                                 //Notifications_Util.RegisterDevice(customer_id);
+
+
+                                                                 Intent deeplink_data = getIntent();
+                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                 if (deeplink != null) {
+                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                     i.putExtra("deeplink", deeplink);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                                 }
+
+
+                                                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                                 startActivity(i);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                                             } else if (str.equals("failure")) {
+                                                                 Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             } else if (str.equals("----")) {
+                                                                 //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
+                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+
+                                                             } else {
+                                                                 Toast.makeText(getApplicationContext(), " Please Enter correct password or User ID", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             }
+                                                             Looper.loop();
+                                                         }
+                                                     } catch (Exception e) {
+                                                         Log.e(TAG, "run: exception si " + e);
+                                                     }
+                                                 }
+                                             }, 1, 3, TimeUnit.SECONDS);
+                                             Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
+
+                                         } else {
                                              Toast.makeText(LoginActivity.this, "Enter right email address or userId", Toast.LENGTH_SHORT).show();
                                          }
                                      }
@@ -218,6 +400,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
+
     }
 
     boolean EmailChecker(String s) {
@@ -227,36 +411,18 @@ public class LoginActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    //    anita.k@makindia.com
-    public static String HashConverter(String pswrd) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(pswrd.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String hashtext = number.toString(16);
-            // Now we need to zero pad it if you actually want the full 32 chars.
-            while (hashtext.length(
-
-            ) < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-
     private class BackGround extends AsyncTask<String, String, String> {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(strings[0].contains("email")) {
+
+            if (strings[0].contains("email")) {
                 AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
                         .addPathParameter("check", "email")
                         .addBodyParameter("email", strings[1])
@@ -268,63 +434,82 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONArray response) {
                                 try {
-                                    str = response.getString(0);
+
+
                                     LoginActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(dialog.isShowing()) {
+                                            if (dialog.isShowing()) {
                                                 dialog.dismiss();
                                             }
                                         }
                                     });
+
+
+                                    str = response.getString(0);
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
                                         SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                        SharedPreferences.Editor editor=saved_values.edit();
+                                        SharedPreferences.Editor editor = saved_values.edit();
+                                        editor.putBoolean("isLoggedIn", true);
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        editor.putBoolean("isLoggedIn",true);
-                                        JSONArray communityArray=response.getJSONArray(3);
-                                        for(int i=0;i<5;i++){
-                                            editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
+                                        JSONArray communityArray = response.getJSONArray(5);
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
-                                        Log.e(TAG, "onResponse: --community and response is "+saved_values.getString("Agarwal",null));
+                                        Log.e(TAG, "onResponse: --community and response is " + saved_values.getString("Agarwal", null));
                                         LoginActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(dialog.isShowing()) {
+                                                if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Intent intent=new Intent(getApplicationContext(),DashboardActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                                                 startActivity(intent);
                                             }
                                         });
                                     }
-                                    else
-                                    {Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();}
-                                }catch (JSONException e) {
+                                /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);		 +                                    else
+ -                                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {		 +                                    {Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();}
+
+
+
+                                        Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
+                                    }
+                                   /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
+                                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                        }
+                                    },1,1)*/
+
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                //                         
                             }
 
                             @Override
                             public void onError(ANError error) {
+                                // handle error
                                 LoginActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(dialog.isShowing()) {
+                                        if (dialog.isShowing()) {
                                             dialog.dismiss();
                                         }
                                     }
                                 });
-                                Log.d(TAG, "onResponse: ----Network Error in Email Login" + error.toString());
+
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
                             }
                         });
-            }
-            else {
+            } else {
                 AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
                         .addPathParameter("check", "id")
                         .addBodyParameter("email", strings[1])
@@ -335,69 +520,86 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(JSONArray response) {
-                                LoginActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if(dialog.isShowing()) {
-                                            dialog.dismiss();
-                                        }
-                                    }
-                                });
                                 try {
+                                    LoginActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (dialog.isShowing()) {
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                    });
                                     Log.e(TAG, "onResponse: response is ------------- " + response.toString());
                                     str = response.getString(0);
+                                    checker = true;
                                     if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
                                         SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         SharedPreferences.Editor editor = saved_values.edit();
+                                        editor.putBoolean("isLoggedIn", true);
                                         editor.putString("customer_id", customer_id);
                                         editor.putString("gender", customer_gender);
-                                        editor.putBoolean("isLoggedIn",true);
-                                        JSONArray communityArray=response.getJSONArray(3);
-                                        for(int i=0;i<5;i++){
-                                            editor.putString(communityArray.getJSONArray(i).getString(0),communityArray.getJSONArray(i).getString(1));
+                                        JSONArray communityArray = response.getJSONArray(5);
+                                        for (int i = 0; i < 5; i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
                                         LoginActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(dialog.isShowing()) {
+                                                if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Intent intent=new Intent(getApplicationContext(),DashboardActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                                                 startActivity(intent);
                                             }
                                         });
-                                    }
-                                    else{
+
+                                    } else {
                                         Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();
                                     }
+                                   /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
+                                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                        }
+                                    },1,1)*/
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                //                         
                             }
 
                             @Override
                             public void onError(ANError error) {
+
                                 LoginActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(dialog.isShowing()) {
+                                        if (dialog.isShowing()) {
                                             dialog.dismiss();
                                         }
                                     }
                                 });
-                                Log.d(TAG, "onResponse: ----Network Error in User ID Login" + error.toString());
+
                                 Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+
+                                // handle error
+
                             }
                         });
             }
             return null;
         }
 
+
         @Override
         protected void onPostExecute(String s) {
+
             super.onPostExecute(s);
         }
     }
