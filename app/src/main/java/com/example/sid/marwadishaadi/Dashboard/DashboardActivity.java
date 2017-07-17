@@ -88,7 +88,7 @@ public class DashboardActivity extends AppCompatActivity
         customer_gender = sharedpref.getString("gender", null);
 
 
-        Log.d(TAG, "onCreate: " + customer_id + " gender is " + customer_gender);
+        
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -127,9 +127,11 @@ public class DashboardActivity extends AppCompatActivity
             public void onClick(View v) {
                 int counter=0;
                 String[] array=getResources().getStringArray(R.array.communities);
-                SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                SharedPreferences communityChecker = getSharedPreferences("userinfo", MODE_PRIVATE);
 
                 for(int i=0;i<5;i++) {
+
                     if (communityChecker.getString(array[i], null).contains("Yes")) {
                         counter++;
                     }
@@ -334,7 +336,7 @@ public class DashboardActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            Log.d(TAG, "doInBackground: customer id is +++++++++++++++++++++++++ " + customer_id);
+            
             AndroidNetworking.post("http://208.91.199.50:5000/fetchProfilePictureDrawer")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
@@ -347,19 +349,12 @@ public class DashboardActivity extends AppCompatActivity
 
                             try {
 
-                                Log.d(TAG, "onResponse: resposne is " + response.toString());
-                                Log.d(TAG, "onResponse: length of response is " + response.length());
-
                                 String name = response.getString(0) + " " + response.getString(1);
                                 if (response.length() == 3) {
                                     Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + response.getString(2)).into(userdp);
                                 }
                                 nameDrawer.setText(name);
 
-                                SharedPreferences sharedpref = getSharedPreferences("customername", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedpref.edit();
-                                editor.putString("name", nameDrawer.getText().toString());
-                                editor.apply();
 
                             }catch (JSONException e) {
                                 e.printStackTrace();

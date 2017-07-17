@@ -17,7 +17,6 @@ public class MyService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
 
         String registration_id = FirebaseInstanceId.getInstance().getToken();
-        Log.d("registration-device -> ", registration_id);
 
         // algo
         // if user logged in -> get userid and store device id

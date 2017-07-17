@@ -19,9 +19,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +73,7 @@ public class InterestSentFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        swipeRefreshLayout = (SwipeRefreshLayout)mview.findViewById(R.id.swipe);
+        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         interestListSent = new ArrayList<>();
         interestSentAdapter = new InterestSentAdapter(getContext(), interestListSent);
@@ -152,16 +150,16 @@ public class InterestSentFragment extends Fragment {
                             try {
                                 mProgressBar.setVisibility(View.GONE);
 
-                                Log.d(TAG, "onResponse: response from interest sent fragment ----------------------- " + response.toString());
+                                
 
-                                if(response.length() == 0){
+                                if (response.length() == 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             empty_view_sent.setVisibility(View.VISIBLE);
                                         }
                                     });
-                                }else{
+                                } else {
 
                                     empty_view_sent.setVisibility(View.GONE);
                                     interestListSent.clear();
@@ -173,11 +171,11 @@ public class InterestSentFragment extends Fragment {
                                         String customerNo = array.getString(0);
                                         String name = array.getString(1);
                                         String dateOfBirth = array.getString(2);
-                                        Log.d(TAG, "onResponse: dob is " + dateOfBirth);
+                                        
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
+
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -192,21 +190,19 @@ public class InterestSentFragment extends Fragment {
                                         String age = Integer.toString(a);
                                         String cityName = array.getString(3);
                                         String education = array.getString(4);
-                                        String imageUrl = array.getString(5);
-                                        String replyAction = array.getString(6);
-                                        String interestSentOn = array.getString(7);
+                                        String replyAction = array.getString(5);
+                                        String interestSentOn = array.getString(6);
+                                        String imageUrl = array.getString(7);
                                         date = formatter.parse(interestSentOn);
                                         interestSentOn = new SimpleDateFormat("E, dd MMM yyyy").format(date);
 
-                                        InterestSentModel interestSentModels = new InterestSentModel(customerNo,name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
+                                        InterestSentModel interestSentModels = new InterestSentModel(customerNo, name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
                                         if (!interestListSent.contains(interestSentModels)) {
 
                                             interestListSent.add(0, interestSentModels);
                                             interestSentAdapter.notifyDataSetChanged();
 
-                                            Log.d(TAG, "onResponse: age of the user " + age);
-                                            Log.d(TAG, "onResponse: element " + i + " " + array.getString(0));
                                         }
 
                                     }
@@ -222,7 +218,7 @@ public class InterestSentFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+                            
                             mProgressBar.setVisibility(View.GONE);
 
                         }

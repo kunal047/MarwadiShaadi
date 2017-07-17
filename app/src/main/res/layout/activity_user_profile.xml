@@ -26,21 +26,6 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             >
-            <com.synnapps.carouselview.CarouselView
-                android:id="@+id/carouselView"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_gravity="center_horizontal"
-                app:fillColor="#FFFFFFFF"
-                app:pageColor="#00000000"
-                app:radius="3dp"
-                app:indicatorGravity="end"
-                app:indicatorOrientation="vertical"
-                app:autoPlay="false"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:layout_collapseMode="pin"
-                app:strokeColor="#FF777777"
-                app:strokeWidth="0.5dp"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -49,6 +34,22 @@
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 />
+
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/carouselView"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_gravity="center_horizontal"
+                app:autoPlay="false"
+                app:fillColor="#FFFFFFFF"
+                app:indicatorGravity="end"
+                app:indicatorOrientation="vertical"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:pageColor="#00000000"
+                app:radius="3dp"
+                app:strokeColor="#FF777777"
+                app:strokeWidth="0.5dp"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

@@ -19,6 +19,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.varunest.sparkbutton.SparkButton;
@@ -41,12 +42,14 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     private List<RecentModel> recentModelList;
     private String favouriteState, interestState;
     private String customer_id, customer_gender;
+    private RecyclerView recentRecyclerView;
     View iView;
 
 
-    public RecentAdapter(Context context, List<RecentModel> recentModelList) {
+    public RecentAdapter(Context context, List<RecentModel> recentModelList, RecyclerView recyclerView) {
         this.context = context;
         this.recentModelList = recentModelList;
+        this.recentRecyclerView = recyclerView;
     }
 
     @Override
@@ -82,19 +85,22 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
                 Intent i = new Intent(context, UserProfileActivity.class);
                 i.putExtra("from","recent");
                 i.putExtra("customerNo",recentModelList.get(position).getRecentCustomerId());
-                Log.d(TAG, "onClick: customer id is-------"+recentModelList.get(position).getRecentCustomerId());
+                
                 context.startActivity(i);
             }
         });
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
 
-
-        Glide.with(context).load(recentModel.getRecentUserImage()).into(holder.recentUserImage);
+        Glide.with(context).load(recentModel.getRecentUserImage()).apply(options).into(holder.recentUserImage);
         holder.recentName.setText(recentModel.getRecentName());
         holder.recentAge.setText(recentModel.getRecentAge());
         holder.recentOnline.setText(recentModel.getRecentOnline());
         holder.recentHighestDegree.setText(recentModel.getRecentHighestDegree());
         holder.recentLocation.setText(recentModel.getRecentLocation());
-        Log.d(TAG, "onBindViewHolder: recentModel.getRecentFavouriteStatus().toCharArray()[0]" + recentModel.getRecentInterestStatus().toCharArray()[0]);
+        
         if (recentModel.getRecentFavouriteStatus().contains("contain")) {
             holder.sparkButtonFavourite.setChecked(false);
             holder.sparkButtonFavourite.setInactiveImage(R.mipmap.heart_disable);
@@ -114,14 +120,14 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
                     favouriteState = "added";
                     new RecentAdapter.AddFavouriteFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), favouriteState);
-                    Snackbar snackbar = Snackbar.make(iView, "Added to Favourites", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(recentRecyclerView, "Added to Favourites", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
                 } else {
 
                     favouriteState = "removed";
                     new RecentAdapter.AddFavouriteFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), favouriteState);
-                    Snackbar snackbar = Snackbar.make(iView, "Removed from Favourites", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(recentRecyclerView, "Removed from Favourites", Snackbar.LENGTH_SHORT);
                     snackbar.show();
 
                 }
@@ -143,17 +149,17 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             public void onEvent(ImageView button, boolean buttonState) {
 
                 if (buttonState) {
-                    Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    
                     interestState = "added";
                     new RecentAdapter.AddInterestFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), interestState);
-                    Snackbar snackbar = Snackbar.make(iView, "Interest Sent", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(recentRecyclerView, "Interest Sent", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
                 } else {
-                    Log.d(TAG, "onEvent: interest removed ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    
                     interestState = "removed";
                     new RecentAdapter.AddInterestFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), interestState);
-                    Snackbar snackbar = Snackbar.make(iView, "Removed from interest", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(recentRecyclerView, "Removed from interest", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
 
@@ -213,12 +219,12 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         @Override
         protected Void doInBackground(String... params) {
 
-            Log.d(TAG, "doInBackground: in here ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+            
 
             String customerId = params[0];
             String interestId = params[1];
             String status = params[2];
-            Log.d(TAG, "doInBackground: interest is ------------------ " + status);
+            
 
             AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)

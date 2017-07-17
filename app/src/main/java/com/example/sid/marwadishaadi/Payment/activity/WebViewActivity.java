@@ -146,7 +146,6 @@ public class WebViewActivity extends Activity {
 			params.add(new BasicNameValuePair(AvenuesParams.ORDER_ID, mainIntent.getStringExtra(AvenuesParams.ORDER_ID)));
 
 			String vResponse = sh.makeServiceCall(mainIntent.getStringExtra(AvenuesParams.RSA_KEY_URL), ServiceHandler.POST, params);
-			System.out.println("-----------------------------------------------------Ye kya hai----------------params--"+params.toString());
 			if(!ServiceUtility.chkNull(vResponse).equals("")
 					&& ServiceUtility.chkNull(vResponse).toString().indexOf("ERROR")==-1){
 				StringBuffer vEncVal = new StringBuffer("");

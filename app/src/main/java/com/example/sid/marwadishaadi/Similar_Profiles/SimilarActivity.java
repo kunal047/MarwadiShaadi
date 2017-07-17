@@ -132,7 +132,6 @@ public class SimilarActivity extends AppCompatActivity{
                             // do anything with response
                             try {
 
-                                Log.d(TAG, "onResponse: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + response.toString());
 
                                 for (int i = 0; i < response.length(); i++) {
 
@@ -146,7 +145,6 @@ public class SimilarActivity extends AppCompatActivity{
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                     DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                     Date date = formatter.parse(dateOfBirth);
-                                    System.out.println(date);
 
                                     Calendar cal = Calendar.getInstance();
                                     cal.setTime(date);
@@ -180,7 +178,6 @@ public class SimilarActivity extends AppCompatActivity{
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
                             // handle error
                         }
                     });

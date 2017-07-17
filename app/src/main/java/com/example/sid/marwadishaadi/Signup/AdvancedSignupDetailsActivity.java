@@ -61,7 +61,7 @@ public class AdvancedSignupDetailsActivity extends AppCompatActivity implements 
 
     @Override
     public void onStepSelected(int newStepPosition) {
-        Log.d(TAG, "onStepSelected: selected step is - --------------------- " + newStepPosition);
+
 
     }
 

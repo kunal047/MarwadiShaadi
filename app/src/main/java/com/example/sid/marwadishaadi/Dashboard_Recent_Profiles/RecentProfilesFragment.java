@@ -1,6 +1,5 @@
 package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +42,7 @@ public class RecentProfilesFragment extends Fragment {
 
     private static final String TAG = "RecentProfilesFragment";
     private List<RecentModel> recentList;
+    private List<RecentModel> recentListWithoutPic;
     private RecyclerView recentRecyclerView;
     private RecentAdapter recentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -51,6 +50,7 @@ public class RecentProfilesFragment extends Fragment {
     private String customer_id, customer_gender;
     private LinearLayout empty_view_recent;
     private ProgressBar mProgressBar;
+    private String res = "";
 
 
     @Override
@@ -63,6 +63,17 @@ public class RecentProfilesFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        for (int i = 0; i < 5; i++) {
+            
+            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            }
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
@@ -77,7 +88,8 @@ public class RecentProfilesFragment extends Fragment {
         recentRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         recentList = new ArrayList<>();
-        recentAdapter = new RecentAdapter(getContext(), recentList);
+        recentListWithoutPic = new ArrayList<>();
+        recentAdapter = new RecentAdapter(getContext(), recentList, recentRecyclerView);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recentRecyclerView.setItemAnimator(fadeInLeftAnimator);
@@ -90,6 +102,8 @@ public class RecentProfilesFragment extends Fragment {
                 refreshData();
             }
         });
+
+
 
         new PrepareRecent().execute();
         return mview;
@@ -134,9 +148,10 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.get("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
+                    .addBodyParameter("membership", res)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -173,7 +188,7 @@ public class RecentProfilesFragment extends Fragment {
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date now = new Date();
                                         Date date = formatter.parse(dateOfBirth);
-                                        System.out.println(date);
+
 
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(date);
@@ -188,14 +203,14 @@ public class RecentProfilesFragment extends Fragment {
 
                                         String education = array.getString(2);
                                         String location = array.getString(3);
-                                        String imageUrl = array.getString(4);
-                                        String customerNo = array.getString(5);
-                                        String createdOn = array.getString(6);
+                                        String customerNo = array.getString(4);
+                                        String createdOn = array.getString(5);
+                                        String imageUrl = array.getString(6);
                                         String favouriteStatus = array.getString(7);
                                         String recentStatus = array.getString(8);
 
 
-                                        Log.d(TAG, "onResponse: favour status ----------- recent - --------- " + i + " **** " + favouriteStatus + " 000000000000 " + recentStatus);
+                                        
                                         date = formatter.parse(createdOn);
                                         long diff = now.getTime() - date.getTime();
                                         long diffSeconds = diff / 1000 % 60;
@@ -217,21 +232,27 @@ public class RecentProfilesFragment extends Fragment {
                                             createdOn = diffSeconds + " seconds ago";
                                         }
 
-                                        Log.d(TAG, "onResponse: created on *************************** " + createdOn);
+                                        
 
                                         RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
 
-                                        if (!recentList.contains(recentModel)){
+                                        if (!recentList.contains(recentModel) && imageUrl.contains("null")) {
+
+                                            recentListWithoutPic.add(recentModel);
+
+                                        } else if (!recentList.contains(recentModel)) {
                                             recentList.add(recentModel);
                                             recentAdapter.notifyDataSetChanged();
                                         }
 
-
                                     }
+
+                                    recentList.addAll(recentListWithoutPic);
+                                    recentAdapter.notifyDataSetChanged();
 
                                 }
 
-//                            Log.d(TAG, "onResponse: json response array is " + response);
+//                            
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (ParseException e) {
@@ -241,7 +262,7 @@ public class RecentProfilesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.d(TAG, "onResponse: json response array is " + error.toString());
+                            
                             // handle error
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

@@ -41,6 +41,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
         Bundle bundle=getIntent().getExtras();
         //        sm.size();
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_results_toolbar);
@@ -62,7 +63,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

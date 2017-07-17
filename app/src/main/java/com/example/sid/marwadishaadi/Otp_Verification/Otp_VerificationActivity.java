@@ -265,13 +265,13 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 sbPostData.append("&message="+encoded_message);
                 sbPostData.append("&accusage="+accusage);
                 sbPostData.append("&senderid="+senderId);
-                Log.d("Kuch bhi---------",mainUrl);
+                
                 //final string
                 mainUrl = sbPostData.toString();
                 try
                 {
                     //prepare connection
-                    Log.d(TAG, "OTPSender: mainurl is " + mainUrl);
+                    
                     myURL = new URL(mainUrl);
                     myURLConnection = myURL.openConnection();
                     myURLConnection.connect();
@@ -280,7 +280,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                     String response;
                     while ((response = reader.readLine()) != null)
                         //print response
-                        System.out.println(response);
 
                     //finally close connection
                     reader.close();

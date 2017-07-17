@@ -21,10 +21,9 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
-import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
-import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -40,50 +39,45 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
  */
 
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
-
-    private DatabaseReference mDatabase;
     private final Context context;
+    View iView;
+    private DatabaseReference mDatabase;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String favouriteState, interestState;
-    private static final String TAG = "SuggestionAdapter";
     private String customer_id;
-    View iView;
 
     public SuggestionAdapter(Context context, List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
         this.suggestionModelList = suggestionModelList;
         this.context = context;
-        this.mFirebaseAnalytics=FirebaseAnalytics.getInstance(context);
+        this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         this.rv = recyclerView;
 
     }
 
     @Override
     public SuggestionAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-         iView = LayoutInflater.from(parent.getContext())
+        iView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.suggestions_row, parent, false);
 
 
         SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        Log.d(TAG, "onCreateViewHolder: customer id in suggestion is " + customer_id);
+        
         return new SuggestionAdapter.MyViewHolder(iView);
     }
 
     @Override
     public void onBindViewHolder(SuggestionAdapter.MyViewHolder holder, final int position) {
         SuggestionModel suggest = suggestionModelList.get(position);
-
 
 
         String ag = suggest.getName() + ", " + suggest.getAge();
@@ -100,23 +94,27 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.name.setText(ag);
         holder.cusId.setText(suggest.getCusId());
 
-
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
         Glide.with(context)
                 .load(suggest.getImgAdd())
+                .apply(options)
                 .into(holder.imgAdd);
 
         holder.height.setText(suggest.getHeight());
         holder.workLoc.setText(suggest.getWorkLoc());
 
-        holder.annInc.setText(suggest.getAnnInc().replace("000000","0L").replace("00000","L"));
+        holder.annInc.setText(suggest.getAnnInc().replace("000000", "0L").replace("00000", "L"));
 
         holder.hometown.setText(suggest.getHometown());
         holder.mariSta.setText(suggest.getMariSta());
         holder.company.setText(cd);
         holder.highDeg.setText(suggest.getHighDeg());
-        Log.d(TAG, "onBindViewHolder: $$$$$$$$$$$$$$$$$$$$$$$$$$ valus " + suggest.getFavouriteStatus());
+
         if (suggest.getFavouriteStatus().toCharArray()[0] == '1') {
-            Log.d(TAG, "onBindViewHolder: heart is faslse ****************************************** ");
+            
             holder.sparkButtonFav.setChecked(false);
             holder.sparkButtonFav.setInactiveImage(R.mipmap.heart_disable);
         }
@@ -135,6 +133,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
                     favouriteState = "added";
                     new AddFavouriteFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), favouriteState);
+
                     Snackbar snackbar = Snackbar.make(rv, "Added to Favourites", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
@@ -187,14 +186,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                         }
                     });
 
-                    Log.d(TAG, "onEvent: interest added ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    
                     interestState = "added";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
                     Snackbar snackbar = Snackbar.make(rv, "Interest Sent", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
                 } else {
-                    Log.d(TAG, "onEvent: interest removed ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+                    
                     interestState = "removed";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
                     Snackbar snackbar = Snackbar.make(rv, "Removed from interest", Snackbar.LENGTH_SHORT);
@@ -220,9 +219,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: ^^^^^^^^^^^^^^^^^ " + suggestionModelList.size());
+        
 
         return suggestionModelList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -254,7 +258,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
                     i.putExtra("customerNo", cusId.getText());
-                    i.putExtra("from","suggestion");
+                    i.putExtra("from", "suggestion");
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
@@ -265,7 +269,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
                     i.putExtra("customerNo", cusId.getText());
-                    i.putExtra("from","suggestion");
+                    i.putExtra("from", "suggestion");
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
@@ -276,29 +280,28 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 public void onEvent(ImageView button, boolean buttonState) {
 
 
-                    int counter=0;
-                    String[] array=context.getResources().getStringArray(R.array.communities);
+                    int counter = 0;
+                    String[] array = context.getResources().getStringArray(R.array.communities);
                     SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
-                    for(int i=0;i<5;i++) {
-                        if (communityChecker.getString(array[i], null).contains("Yes")) {
+                    for (int i = 0; i < 5; i++) {
+                        if (communityChecker.getString(array[i], "null").contains("Yes")) {
                             counter++;
                         }
                     }
-                    if(counter>0) {
+                    if (counter > 0) {
                         Intent intent = new Intent(context, DefaultMessagesActivity.class);
                         Bundle extras = new Bundle();
                         extras.putString("customerName", name.getText().toString());
                         extras.putString("customerId", cusId.getText().toString());
                         intent.putExtras(extras);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(context, " This feature is only for premium members", Toast.LENGTH_LONG).show();
-                        Intent intent=new Intent(context,UpgradeMembershipActivity.class);
+                    } else {
+                        Toast.makeText(context, "This feature is only for premium members", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, UpgradeMembershipActivity.class);
                         context.startActivity(intent);
                     }
                 }
-
 
 
                 @Override
@@ -315,21 +318,15 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         }
     }
 
-
-
     public class AddInterestFromSuggestion extends AsyncTask<String, Void, Void> {
 
 
         @Override
         protected Void doInBackground(String... params) {
 
-            Log.d(TAG, "doInBackground: in here ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
-
             String customerId = params[0];
             String interestId = params[1];
             String status = params[2];
-            Log.d(TAG, "doInBackground: interest is ------------------ " + status);
-
             AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
@@ -379,11 +376,6 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                     });
             return null;
         }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
     }
 
 }
