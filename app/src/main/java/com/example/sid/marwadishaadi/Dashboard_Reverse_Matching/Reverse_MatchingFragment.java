@@ -83,7 +83,7 @@ public class Reverse_MatchingFragment extends Fragment {
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_progress_bar);
         mProgressBar.setIndeterminate(false);
         mProgressBar.setVisibility(View.GONE);
 

@@ -43,7 +43,6 @@
                 app:autoPlay="false"
                 app:fillColor="#FFFFFFFF"
                 app:indicatorGravity="end"
-                app:indicatorOrientation="vertical"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:pageColor="#00000000"
