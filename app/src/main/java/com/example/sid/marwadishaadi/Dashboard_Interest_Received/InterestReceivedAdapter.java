@@ -93,6 +93,18 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
             }
         });
+
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context,UserProfileActivity.class);
+                i.putExtra("from","interestReceived");
+                i.putExtra("customerNo",interestReceivedModel.getCustomerId());
+                context.startActivity(i);
+
+            }
+        });
+
         if (interestReceivedModel.getStatus() == 0) {
             holder.status.setText("Accepted");
             holder.status.setBackgroundColor(Color.parseColor("#00c864"));

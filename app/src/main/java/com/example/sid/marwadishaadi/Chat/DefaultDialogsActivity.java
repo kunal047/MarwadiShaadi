@@ -61,7 +61,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
         ListOfName = new ArrayList<>();
         ListOfUrl = new ArrayList<>();
         ListOFMessageOn = new ArrayList<>();
-        dla = new DialogsListAdapter<Dialog>(super.imageLoader);
+        dla = new DialogsListAdapter<>(super.imageLoader);
 
         dialogsList = (DialogsList) findViewById(R.id.dialogsList);
         dla.setDatesFormatter(this);
@@ -95,6 +95,8 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                 startActivity(intnt);
             }
         });
+
+
 
         new ListCreater().execute();
     }

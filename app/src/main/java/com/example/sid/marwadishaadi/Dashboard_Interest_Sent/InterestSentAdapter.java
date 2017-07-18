@@ -77,6 +77,17 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
                 context.startActivity(i);
             }
         });
+
+
+        holder.name_age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from","interestSent");
+                i.putExtra("customerNo",interestSentModel.getCustomerId());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

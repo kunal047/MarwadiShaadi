@@ -88,13 +88,13 @@ public class PartnerPreferencesFragment extends Fragment {
 
             edit_prefs.setVisibility(View.GONE);
             edit_prefs.setVisibility(View.GONE);
-
+            similar.setVisibility(View.GONE);
         }
 
         if (called) {
             new PartnerPreference().execute(clickedID);
         }
-
+        similar.setVisibility(View.GONE);
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

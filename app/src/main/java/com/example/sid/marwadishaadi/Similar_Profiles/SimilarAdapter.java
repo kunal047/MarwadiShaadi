@@ -83,6 +83,20 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.MyViewHo
 
                 }
             });
+
+            name_age.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = getAdapterPosition();
+                    Intent i = new Intent(context, UserProfileActivity.class);
+                    i.putExtra("customerNo", similarModelList.get(position).getCustomer_id());
+                    i.putExtra("from","similar");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+
+                }
+            });
         }
 
 

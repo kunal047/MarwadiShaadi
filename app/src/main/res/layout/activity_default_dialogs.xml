@@ -19,10 +19,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/chatRefresh">
         <!--TODO-->
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <com.stfalcon.chatkit.dialogs.DialogsList
         android:id="@+id/dialogsList"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

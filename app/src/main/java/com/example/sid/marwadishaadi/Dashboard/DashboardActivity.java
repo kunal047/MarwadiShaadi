@@ -110,6 +110,15 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
+        nameDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DashboardActivity.this, UserProfileActivity.class);
+                startActivity(i);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
+
         interest = (LinearLayout) mview.findViewById(R.id.nav_interest);
         interest.setOnClickListener(new View.OnClickListener() {
             @Override

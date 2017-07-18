@@ -422,10 +422,10 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             edit_family.setVisibility(View.GONE);
             edit_relatives.setVisibility(View.GONE);
-
+            similar.setVisibility(View.VISIBLE);
         }
         new ProfileFamilyDetails().execute(clickedID);
-
+        similar.setVisibility(View.GONE);
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
