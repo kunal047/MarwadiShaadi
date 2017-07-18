@@ -97,6 +97,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private Boolean isMsgSent;
     private View view;
     private String userid_from_deeplink;
+    int[] sampleImages = {R.drawable.default_drawer};
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -464,6 +465,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                     for (int i = 2; i < response.length(); i++) {
 
+                                        Log.d(TAG, "onResponse: images are here -------------------- ");
                                         images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getString(i).replace("[ ", "").replace("]", "").replace("\"", ""));
                                     }
                                 }
@@ -471,20 +473,37 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 toolbarLayout.setTitle(name);
 
+                                if (images.size() > 0) {
+                                    Log.d(TAG, "onResponse: setting images " + images.get(0));
 
-                                carouselView.setImageListener(new ImageListener() {
+                                    carouselView.setImageListener(new ImageListener() {
 
 
-                                    @Override
-                                    public void setImageForPosition(int position, ImageView imageView) {
+                                        @Override
+                                        public void setImageForPosition(int position, ImageView imageView) {
 
-                                        Picasso.with(UserProfileActivity.this)
-                                                .load(images.get(position).replace("[", ""))
-                                                .fit()
-                                                .into(imageView);
-                                    }
-                                });
-                                carouselView.setPageCount(images.size());
+                                            Picasso.with(UserProfileActivity.this)
+                                                    .load(images.get(position).replace("[", ""))
+                                                    .fit()
+                                                    .into(imageView);
+                                        }
+                                    });
+
+                                    carouselView.setPageCount(images.size());
+
+
+                                } else {
+                                    carouselView.setImageListener(new ImageListener() {
+                                        @Override
+                                        public void setImageForPosition(int position, ImageView imageView) {
+                                            imageView.setImageResource(sampleImages[position]);
+                                        }
+                                    });
+
+                                    carouselView.setPageCount(sampleImages.length);
+
+                                }
+
 
 
                             } catch (JSONException e) {

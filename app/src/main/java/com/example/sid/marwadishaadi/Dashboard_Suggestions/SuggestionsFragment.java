@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Suggestions;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -51,7 +52,7 @@ public class SuggestionsFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
     private LinearLayout empty_view_suggestions;
-    private ProgressBar mProgressBar;
+    private ProgressDialog progressDialog;
     private String res = "";
 
 
@@ -65,8 +66,10 @@ public class SuggestionsFragment extends Fragment {
         empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
         empty_view_suggestions.setVisibility(View.GONE);
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
-        mProgressBar.setVisibility(View.VISIBLE);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading your suggestions...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -166,8 +169,6 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.showContextMenu();
         }
 
         @Override
@@ -290,7 +291,7 @@ public class SuggestionsFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mProgressBar.setVisibility(View.GONE);
+                                    progressDialog.dismiss();
                                 }
                             });
                         }
@@ -301,8 +302,9 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mProgressBar.setVisibility(View.GONE);
+
             swipeRefreshLayout.setRefreshing(false);
+            progressDialog.dismiss();
         }
 
 
