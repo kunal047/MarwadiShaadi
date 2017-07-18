@@ -18,6 +18,7 @@ import com.example.sid.marwadishaadi.R;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter.OnDialogClickListener;
+import com.stfalcon.chatkit.utils.DateFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 //Inbox TODO top bar should work
-public class DefaultDialogsActivity extends DemoDialogsActivity {
+public class DefaultDialogsActivity extends DemoDialogsActivity implements DateFormatter.Formatter {
     static boolean fire = false, fire2 = false, MainFire = false, CalledOnce = false;
     String success = "", query = "";
     String name, url;
@@ -63,6 +64,8 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
         dla = new DialogsListAdapter<Dialog>(super.imageLoader);
 
         dialogsList = (DialogsList) findViewById(R.id.dialogsList);
+        dla.setDatesFormatter(this);
+
         dialogsList.setAdapter(dla);
         Toolbar toolbar = (Toolbar) findViewById(R.id.chat_toolbar);
         toolbar.setTitle("Inbox");
@@ -85,7 +88,6 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
             @Override
 
             public void onDialogClick(Dialog dialog) {
-                Log.e("TAG", "onDialogClick: " + dialog.getId() + "------" + dialog.getDialogName() + " item photo is " + dialog.getDialogPhoto());
                 Intent intnt = new Intent(getApplicationContext(), DefaultMessagesActivity.class);
                 intnt.putExtra("customerId", dialog.getUsers().get(0).getId());
                 intnt.putExtra("customerName", dialog.getUsers().get(0).getName());
@@ -99,7 +101,18 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
 
 //TODO Noob CTF
 
-
+    @Override
+    public String format(Date date) {
+        if (DateFormatter.isToday(date)) {
+            return DateFormatter.format(date, DateFormatter.Template.TIME);
+        } else if (DateFormatter.isYesterday(date)) {
+            return getString(R.string.date_header_yesterday);
+        } else if (DateFormatter.isCurrentYear(date)) {
+            return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH);
+        } else {
+            return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
+        }
+    }
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -122,8 +135,8 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
                     @Override
                     public void run() {
                         pgd = new ProgressDialog(DefaultDialogsActivity.this);
-                        pgd.setTitle("Loading..");
-                        pgd.setMessage("Slow Connection...");
+//                        pgd.setTitle("Loading..");
+                        pgd.setMessage("Loading your messages...");
                         pgd.setCancelable(false);
                         pgd.show();
                     }
@@ -173,8 +186,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity {
 
                                             me.add(usrme);
                                             String string = jsnrry.getString(3);
+//                                            SimpleDateFormat format = new SimpleDateFormat("dd MMM");
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
+                                            DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
+                                            dialogsList.setAdapter(dla);
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);

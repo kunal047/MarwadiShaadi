@@ -81,7 +81,7 @@ public class RecentProfilesFragment extends Fragment {
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Recent Profiles","button");
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.recent_progress_bar);
         mProgressBar.setIndeterminate(false);
         mProgressBar.setVisibility(View.GONE);
 

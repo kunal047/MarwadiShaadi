@@ -63,9 +63,9 @@ public class InterestSentFragment extends Fragment {
         empty_view_sent.setVisibility(View.GONE);
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
-        mProgressBar.setIndeterminate(false);
-        mProgressBar.setVisibility(View.GONE);
+//        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+//        mProgressBar.setIndeterminate(false);
+//        mProgressBar.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
 
@@ -129,8 +129,8 @@ public class InterestSentFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setIndeterminate(true);
+//            mProgressBar.setVisibility(View.VISIBLE);
+//            mProgressBar.setIndeterminate(true);
         }
 
 
@@ -148,7 +148,7 @@ public class InterestSentFragment extends Fragment {
                             // do anything with response
 
                             try {
-                                mProgressBar.setVisibility(View.GONE);
+//                                mProgressBar.setVisibility(View.GONE);
 
                                 
 
@@ -219,7 +219,7 @@ public class InterestSentFragment extends Fragment {
                         @Override
                         public void onError(ANError error) {
                             
-                            mProgressBar.setVisibility(View.GONE);
+//                            mProgressBar.setVisibility(View.GONE);
 
                         }
                     });
@@ -229,7 +229,7 @@ public class InterestSentFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mProgressBar.setVisibility(View.GONE);
+//            mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

@@ -71,9 +71,9 @@ public class FavouritesFragment extends Fragment {
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
-        mProgressBar.setIndeterminate(false);
-        mProgressBar.setVisibility(View.GONE);
+//        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
+//        mProgressBar.setIndeterminate(false);
+//        mProgressBar.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -131,8 +131,8 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setIndeterminate(true);
+//            mProgressBar.setVisibility(View.VISIBLE);
+//            mProgressBar.setIndeterminate(true);
         }
 
         @Override
@@ -148,7 +148,7 @@ public class FavouritesFragment extends Fragment {
                             // do anything with response
                             try {
 
-                                mProgressBar.setVisibility(View.GONE);
+//                                mProgressBar.setVisibility(View.GONE);
 
                                 if(response.length() == 0){
                                     getActivity().runOnUiThread(new Runnable() {
@@ -190,13 +190,7 @@ public class FavouritesFragment extends Fragment {
                                         FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
 
                                         if (!favouritesList.contains(favouriteModel)){
-
                                             favouritesList.add(0, favouriteModel);
-
-
-
-
-
                                         }
 
                                     }
@@ -214,9 +208,8 @@ public class FavouritesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-
                             // handle error
-                            mProgressBar.setVisibility(View.GONE);
+//                            mProgressBar.setVisibility(View.GONE);
                         }
                     });
             return null;
@@ -225,7 +218,7 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mProgressBar.setVisibility(View.GONE);
+//            mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
