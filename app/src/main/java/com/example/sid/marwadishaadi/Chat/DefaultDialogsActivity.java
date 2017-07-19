@@ -202,11 +202,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
                                             dialogsList.setAdapter(dla);
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
-                                            Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
+                                            Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5) + " " + jsnrry.getString(6), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
                                             Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + " && " + dlg.getUsers().get(0).getName());
                                             Log.e(TAG, "PrepareList: ---item added is " + i);
-                                            dla.addItem(dlg);
+                                            dla.addItem(0, dlg);
                                             dla.notifyDataSetChanged();
 
                                         }
@@ -227,7 +227,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
                                             Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "  && " + dlg.getUsers().get(0).getName());
                                             Log.e(TAG, "PrepareList: ---item added is " + i);
-                                            dla.addItem(dlg);
+                                            dla.addItem(0, dlg);
                                             dla.notifyDataSetChanged();
 
                                         }

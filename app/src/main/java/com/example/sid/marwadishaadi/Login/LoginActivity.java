@@ -289,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  scheduledExecutorService.shutdown();
 
                                                              } else {
-                                                                 Toast.makeText(getApplicationContext(), " Please Enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                 Toast.makeText(getApplicationContext(), "Please Enter correct Email Address", Toast.LENGTH_SHORT).show();
                                                                  dialog.dismiss();
                                                                  scheduledExecutorService.shutdown();
                                                              }
@@ -375,7 +375,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  scheduledExecutorService.shutdown();
 
                                                              } else {
-                                                                 Toast.makeText(getApplicationContext(), " Please Enter correct password or User ID", Toast.LENGTH_SHORT).show();
+                                                                 Toast.makeText(getApplicationContext(), "Please enter correct password or User ID", Toast.LENGTH_SHORT).show();
                                                                  dialog.dismiss();
                                                                  scheduledExecutorService.shutdown();
                                                              }
@@ -389,7 +389,7 @@ public class LoginActivity extends AppCompatActivity {
                                              Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
 
                                          } else {
-                                             Toast.makeText(LoginActivity.this, "Enter right email address or userId", Toast.LENGTH_SHORT).show();
+                                             Toast.makeText(LoginActivity.this, "Please enter email address or userId", Toast.LENGTH_SHORT).show();
                                          }
                                      }
                                  }
@@ -525,7 +525,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
                             }
                         });
             } else {

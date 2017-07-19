@@ -13,12 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
 import com.example.sid.marwadishaadi.R;
 
 import org.json.JSONArray;
@@ -35,6 +35,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 
 
 public class InterestSentFragment extends Fragment {
@@ -47,14 +48,13 @@ public class InterestSentFragment extends Fragment {
     private String customer_id, customer_gender;
     private LinearLayout empty_view;
     private LinearLayout empty_view_sent;
-    private ProgressBar mProgressBar;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
+
 
         empty_view = (LinearLayout) mview.findViewById(R.id.empty_view);
         empty_view_sent = (LinearLayout) mview.findViewById(R.id.empty_view_sent);
@@ -124,7 +124,7 @@ public class InterestSentFragment extends Fragment {
         return age;
     }
 
-    private class PrepareSentInterest extends AsyncTask<Void, Void, Void> {
+    public class PrepareSentInterest extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -149,9 +149,6 @@ public class InterestSentFragment extends Fragment {
 
                             try {
 //                                mProgressBar.setVisibility(View.GONE);
-
-                                
-
                                 if (response.length() == 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -171,7 +168,7 @@ public class InterestSentFragment extends Fragment {
                                         String customerNo = array.getString(0);
                                         String name = array.getString(1);
                                         String dateOfBirth = array.getString(2);
-                                        
+
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
@@ -192,19 +189,25 @@ public class InterestSentFragment extends Fragment {
                                         String education = array.getString(4);
                                         String replyAction = array.getString(5);
                                         String interestSentOn = array.getString(6);
-                                        String imageUrl = array.getString(7);
+                                        name = name + array.getString(7);
+                                        String imageUrl = array.getString(8);
                                         date = formatter.parse(interestSentOn);
                                         interestSentOn = new SimpleDateFormat("E, dd MMM yyyy").format(date);
 
                                         InterestSentModel interestSentModels = new InterestSentModel(customerNo, name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
+                                        Log.d(TAG, "onResponse: reply action is " + replyAction);
+                                        Log.d(TAG, "onResponse: interest status is " + interestStatus);
+
                                         if (!interestListSent.contains(interestSentModels)) {
 
-                                            interestListSent.add(0, interestSentModels);
-                                            interestSentAdapter.notifyDataSetChanged();
+                                            if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
 
+                                                interestListSent.add(0, interestSentModels);
+                                                interestSentAdapter.notifyDataSetChanged();
+
+                                            }
                                         }
-
                                     }
                                 }
 
@@ -214,11 +217,12 @@ public class InterestSentFragment extends Fragment {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+
                         }
 
                         @Override
                         public void onError(ANError error) {
-                            
+
 //                            mProgressBar.setVisibility(View.GONE);
 
                         }

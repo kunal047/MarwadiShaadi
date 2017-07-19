@@ -43,7 +43,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SuggestionsFragment extends Fragment {
 
-    private static final String TAG = "SuggestionsFragment";
     private List<SuggestionModel> suggestionModelList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SuggestionAdapter suggestionAdapter;
@@ -124,16 +123,16 @@ public class SuggestionsFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(suggestionAdapter);
 
-
-
-        new PrepareSuggestions().execute();
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshContent();
             }
         });
+
+        new PrepareSuggestions().execute();
+
+
 
 
         return mview;
@@ -173,6 +172,7 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.d("dsf", "doInBackground: making network call");
             AndroidNetworking.post("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
@@ -187,6 +187,7 @@ public class SuggestionsFragment extends Fragment {
                             // do anything with response
                             try {
 
+                                Log.d("dsf", "doInBackground: making network call "  + response.toString());
 
                                 suggestionModelList.clear();
                                 suggestionAdapter.notifyDataSetChanged();
@@ -256,10 +257,11 @@ public class SuggestionsFragment extends Fragment {
                                         String homeName = array.getString(10);
                                         String stateName = array.getString(11);
                                         String hometown = homeName + ", " + stateName;
-                                        String imageUrl = array.getString(12);
-                                        String favouriteStatus = array.getString(13);
-                                        String interestStatus = array.getString(14);
-
+                                        String surname = array.getString(12);
+                                        String imageUrl = array.getString(13);
+                                        String favouriteStatus = array.getString(14);
+                                        String interestStatus = array.getString(15);
+                                        name = name + " " + surname;
 
                                         SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);
 

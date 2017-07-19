@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.User_Profile;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -111,7 +112,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private Boolean isMsgSent;
     private View view;
     private String userid_from_deeplink;
-    private int[] sampleImages = {R.drawable.default_drawer};
+
+    private ProgressDialog progressDialog;
+    int[] sampleImages = {R.drawable.default_drawer};
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -133,6 +136,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        progressDialog = new ProgressDialog(UserProfileActivity.this);
+        progressDialog.setMessage("Loading profile...");
+        progressDialog.setCancelable(false);
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle("");
@@ -468,7 +475,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
         tabLayout.setupWithViewPager(userinfo);
 
-
     }
 
     private void SaveAsPdf() {
@@ -545,6 +551,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     }
 
     public class ProfilePicture extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+        }
 
         @Override
         protected Void doInBackground(String... params) {
@@ -624,6 +636,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                     });
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
         }
     }
 
@@ -922,9 +940,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         public void onResponse(JSONArray response) {
                             try {
 
-                                customer_name = response.getString(0);
-                                isFavAdded = response.getString(1).equals("1");
-                                isInterestSent = response.getString(2).equals("1");
+                                customer_name = response.getString(0) + " " + response.getString(1);
+                                isFavAdded = response.getString(2).equals("1");
+                                isInterestSent = response.getString(3).equals("1");
 
 
                             } catch (JSONException e) {
