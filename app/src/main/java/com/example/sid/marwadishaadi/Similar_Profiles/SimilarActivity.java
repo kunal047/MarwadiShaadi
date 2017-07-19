@@ -163,7 +163,7 @@ public class SimilarActivity extends AppCompatActivity{
 
                                     String imageUrl = array.getString(7);
 
-                                    SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age) + " years",customerNo);
+                                    SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age) ,customerNo);
                                     similarModelList.add(similarModel);
                                     similarAdapter.notifyDataSetChanged();
 
