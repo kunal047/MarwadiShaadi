@@ -407,6 +407,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp(){
+        onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit,0);
 

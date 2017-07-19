@@ -14,6 +14,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.example.sid.marwadishaadi.R;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
@@ -117,10 +118,17 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
     }
     @Override
     public boolean onSupportNavigateUp() {
+        onBackPressed();
         finish();
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i= new Intent(getApplicationContext(), DashboardActivity.class);
+        startActivity(i);
+        super.onBackPressed();
+    }
 
     private class ListCreater extends AsyncTask<String, String, String> {
         @Override

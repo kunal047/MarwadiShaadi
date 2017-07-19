@@ -141,6 +141,7 @@ public class InterestActivity extends AppCompatActivity implements
 
     @Override
     public boolean onSupportNavigateUp(){
+        onBackPressed();
         finish();
         overridePendingTransition(R.anim.exit,0);
         return true;
