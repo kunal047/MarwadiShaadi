@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -51,7 +52,7 @@ public class Reverse_MatchingFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
     private LinearLayout empty_view_reverse;
-    private ProgressBar mProgressBar;
+    private ProgressDialog progressDialog;
     private String res = "";
 
     @Override
@@ -83,9 +84,9 @@ public class Reverse_MatchingFragment extends Fragment {
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_progress_bar);
-        mProgressBar.setIndeterminate(false);
-        mProgressBar.setVisibility(View.GONE);
+//        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_progress_bar);
+//        mProgressBar.setIndeterminate(false);
+//        mProgressBar.setVisibility(View.GONE);
 
         reverseRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -106,8 +107,10 @@ public class Reverse_MatchingFragment extends Fragment {
             }
         });
 
-
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading your reverse matches...");
+        progressDialog.setCancelable(false);
+        progressDialog.dismiss();
         new PrepareReverse().execute();
 
         return mview;
@@ -145,8 +148,8 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setIndeterminate(true);
+//            mProgressBar.setVisibility(View.VISIBLE);
+//            mProgressBar.setIndeterminate(true);
         }
 
         @Override
@@ -164,7 +167,7 @@ public class Reverse_MatchingFragment extends Fragment {
 
 
                             try {
-                                mProgressBar.setVisibility(View.GONE);
+//                                mProgressBar.setVisibility(View.GONE);
 
                                 reverseModelList.clear();
                                 reverseAdapter.notifyDataSetChanged();
@@ -203,7 +206,9 @@ public class Reverse_MatchingFragment extends Fragment {
                                         int age = getAge(year, month, day);
                                         String education = array.getString(3);
                                         String occupationLocation = array.getString(4);
-                                        String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(5);
+                                        name = name + " " + array.getString(5);
+
+                                        String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
 
                                         ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
 
@@ -232,7 +237,7 @@ public class Reverse_MatchingFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mProgressBar.setVisibility(View.GONE);
+//                                    mProgressBar.setVisibility(View.GONE);
 
                                 }
                             });
@@ -245,7 +250,7 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mProgressBar.setVisibility(View.GONE);
+//            mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
 

@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Favourites;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class FavouritesFragment extends Fragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private String customer_id;
     private LinearLayout empty_view;
-    private ProgressBar mProgressBar;
+    private ProgressDialog progressDialog;
 
 //    private TextView favouriteZero;
 
@@ -68,12 +69,8 @@ public class FavouritesFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
 
-//        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
-//        mProgressBar.setIndeterminate(false);
-//        mProgressBar.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -94,6 +91,10 @@ public class FavouritesFragment extends Fragment {
             }
         });
 
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading your favourite profiles...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         new PrepareFavourites().execute();
         return mview;
@@ -131,6 +132,7 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.dismiss();
 //            mProgressBar.setVisibility(View.VISIBLE);
 //            mProgressBar.setIndeterminate(true);
         }
@@ -209,6 +211,7 @@ public class FavouritesFragment extends Fragment {
                         @Override
                         public void onError(ANError error) {
                             // handle error
+                            progressDialog.dismiss();
 //                            mProgressBar.setVisibility(View.GONE);
                         }
                     });
@@ -219,6 +222,7 @@ public class FavouritesFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 //            mProgressBar.setVisibility(View.GONE);
+            progressDialog.dismiss();
             swipeRefreshLayout.setRefreshing(false);
         }
     }

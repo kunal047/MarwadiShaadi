@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 
 
 public class InterestReceivedFragment extends Fragment {
@@ -73,11 +73,6 @@ public class InterestReceivedFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
-
-
-//        mProgressBar = (ProgressBar) mview.findViewById(R.id.interest_progress_bar);
-//        mProgressBar.setIndeterminate(false);
-//        mProgressBar.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -144,7 +139,7 @@ public class InterestReceivedFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class PrepareReceivedInterest extends AsyncTask<Void, Void, Void> {
+    public class PrepareReceivedInterest extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -186,7 +181,7 @@ public class InterestReceivedFragment extends Fragment {
                                         String customerNo = array.getString(0);
                                         String name = array.getString(1);
                                         String dateOfBirth = array.getString(2);
-                                        
+
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date date = formatter.parse(dateOfBirth);
@@ -214,24 +209,21 @@ public class InterestReceivedFragment extends Fragment {
                                             resultReplyAction = 2;
                                         }
                                         String interestSentOn = array.getString(6);
-                                        String imageUrl = array.getString(7);
+                                        name = name + array.getString(7);
+                                        String imageUrl = array.getString(8);
 
-                                        
+
                                         InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
 
                                         if (!interestReceivedModelList.contains(interestReceivedModels)) {
-                                            interestReceivedModelList.add(0, interestReceivedModels);
-                                            interestReceivedAdapter.notifyDataSetChanged();
 
-                                            
-                                            
+                                            if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
+                                                interestReceivedModelList.add(0, interestReceivedModels);
+                                                interestReceivedAdapter.notifyDataSetChanged();
+                                            }
                                         }
-
-
                                     }
                                 }
-
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (ParseException e) {
@@ -250,7 +242,6 @@ public class InterestReceivedFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Dashboard_Interest;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,14 +20,25 @@ import com.example.sid.marwadishaadi.Dashboard_Interest_Sent.InterestSentFragmen
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeSet;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class InterestActivity extends AppCompatActivity implements
         ViewPager.OnPageChangeListener{
 
 
+
     private InterestSectionPagerAdaper interestSectionPagerAdaper;
     private ViewPager mviewpager;
+    public static Set<String> interestStatus = new TreeSet<>();
+    InterestSentFragment.PrepareSentInterest prepareSentInterest = new InterestSentFragment().new PrepareSentInterest();
+    InterestReceivedFragment.PrepareReceivedInterest prepareReceivedInterest = new InterestReceivedFragment().new PrepareReceivedInterest();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -33,17 +46,22 @@ public class InterestActivity extends AppCompatActivity implements
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.interest_toolbar);
         toolbar.setTitle("Interest");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        interestStatus.add("Accepted");
+        interestStatus.add("Rejected");
+        interestStatus.add("Awaiting");
 
         interestSectionPagerAdaper = new InterestSectionPagerAdaper(getSupportFragmentManager());
         mviewpager = (ViewPager) findViewById(R.id.interest_container);
@@ -117,27 +135,58 @@ public class InterestActivity extends AppCompatActivity implements
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_interest, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_interest, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_accepted:
+                if (item.isChecked()){
+                    item.setChecked(false);
+                    interestStatus.remove("Accepted");
+                }
+                else{
+                    item.setChecked(true);
+                    interestStatus.add("Accepted");
+                }
+                break;
+
+            case R.id.action_pending:
+                if (item.isChecked()) {
+                    interestStatus.remove("Awaiting");
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                    interestStatus.add("Awaiting");
+                }
+
+                break;
+            case R.id.action_rejected:
+                if (item.isChecked()) {
+                    interestStatus.remove("Rejected");
+                    item.setChecked(false);
+                } else {
+                    interestStatus.add("Rejected");
+                    item.setChecked(true);
+                }
+                break;
+        }
 //
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.action_accepted:
-//
-//                break;
-//            case R.id.action_pending:
-//                break;
-//            case R.id.action_rejected:
-//                break;
-//
+//        String currentFragment = getSupportActionBar().getTitle().toString();
+//        if (currentFragment.contains("Sent")) {
+//            prepareSentInterest.execute();
+//        } else {
+//            prepareReceivedInterest.execute();
 //        }
-//        return super.onOptionsItemSelected(item);
-//    }
+
+         return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onSupportNavigateUp(){
