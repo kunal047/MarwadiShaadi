@@ -104,7 +104,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
             holder.accept.setVisibility(View.INVISIBLE);
             holder.reject.setVisibility(View.INVISIBLE);
         } else if (interestReceivedModel.getStatus() == 2) {
-            holder.status.setText("Pending");
+            holder.status.setText("Awaiting");
             holder.status.setBackgroundColor(Color.parseColor("#7faeff"));
         }
 
