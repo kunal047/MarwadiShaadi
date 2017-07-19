@@ -1,16 +1,19 @@
 package com.example.sid.marwadishaadi.User_Profile;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +40,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.Chat.User;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
@@ -48,6 +53,14 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
@@ -60,6 +73,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -70,9 +84,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     public static final int REQUEST_PERMISSION_SETTING = 105;
     private static final String TAG = "UserProfileActivity";
     protected ImageView pref;
-    CollapsingToolbarLayout toolbarLayout;
-    NotificationCompat.Builder notification;
-    NotificationManager notificationManager;
+    private CollapsingToolbarLayout toolbarLayout;
+    private NotificationCompat.Builder notification;
+    private NotificationManager notificationManager;
     private ProfilePageAdapter profilePageAdapter;
     private ViewPager userinfo;
     private CarouselView carouselView;
@@ -97,7 +111,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private Boolean isMsgSent;
     private View view;
     private String userid_from_deeplink;
-    int[] sampleImages = {R.drawable.default_drawer};
+    private int[] sampleImages = {R.drawable.default_drawer};
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -124,7 +138,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         toolbarLayout.setTitle("");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         view = getWindow().getDecorView().getRootView();
 
@@ -347,7 +363,91 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(1, notification.build());
 
-                new FetchPdfDetails().execute();
+
+                // add permission here
+                int read_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                int write_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
+
+                    // first time asks for both permission
+                    if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
+
+                        Dexter.withActivity(UserProfileActivity.this)
+                            .withPermissions(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            ).withListener(new MultiplePermissionsListener() {
+                            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+
+                                // if both are accepted
+                                if(report.areAllPermissionsGranted()){
+                                    SaveAsPdf();
+
+                                    // if both are rejected
+                                }else if (report.getDeniedPermissionResponses().size() == 2){
+                                    showStorageSettings();
+
+                                    // one of them is accepted
+                                }else{
+                                    List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
+                                    for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
+                                        if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
+                                            setReadStoragePermissionStatus();
+                                            showStorageSettings();
+                                        }else{
+                                            setWriteStoragePermissionStatus();
+                                            showStorageSettings();
+                                        }
+                                    }
+                                }
+                            }
+                            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
+                        }).check();
+
+                    }
+                    // other times
+                    // write allowed, read rejected
+                    else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
+
+                        Dexter.withActivity(UserProfileActivity.this)
+                            .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .withListener(new PermissionListener() {
+                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    SaveAsPdf();
+                                }
+                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                    showStorageSettings();
+                                }
+                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                }
+                            }).check();
+
+                    }
+                    // read allowed, write rejected
+                    else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
+
+                        Dexter.withActivity(UserProfileActivity.this)
+                            .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            .withListener(new PermissionListener() {
+                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    SaveAsPdf();
+                                }
+                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                    showStorageSettings();
+                                }
+                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                }
+                            }).check();
+
+                    }else{
+                        showStorageSettings();
+                    }
+                }else{
+                    SaveAsPdf();
+                }
 
             }
         });
@@ -369,6 +469,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         tabLayout.setupWithViewPager(userinfo);
 
 
+    }
+
+    private void SaveAsPdf() {
+        new FetchPdfDetails().execute();
     }
 
 
@@ -849,6 +953,83 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     });
             return null;
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        overridePendingTransition(R.anim.exit,0);
+        return true;
+    }
+
+    private void showStorageSettings(){
+        Snackbar snackbar = Snackbar
+            .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
+            .setAction("Settings", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                }
+            });
+
+        snackbar.show();
+    }
+
+    private void showSettings(){
+        Snackbar snackbar = Snackbar
+            .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+            .setAction("Settings", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
+                    intent.setData(uri);
+                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                }
+            });
+
+        snackbar.show();
+    }
+    private Boolean getCameraPermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isCameraPermissionDenied", false);
+    }
+
+    private void setCameraPermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isCameraPermissionDenied",true);
+        edit.apply();
+    }
+
+    private Boolean getReadStoragePermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isReadPermissionDenied", false);
+    }
+
+    private void setReadStoragePermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isReadPermissionDenied",true);
+        edit.apply();
+    }
+
+    private Boolean getWriteStoragePermissionStatus(){
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isWritePermissionDenied", false);
+    }
+
+    private void setWriteStoragePermissionStatus(){
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit =  sharedpref.edit();
+        edit.putBoolean("isWritePermissionDenied",true);
+        edit.apply();
     }
 }
 
