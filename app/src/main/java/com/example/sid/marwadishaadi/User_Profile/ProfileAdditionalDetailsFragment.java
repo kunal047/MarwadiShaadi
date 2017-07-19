@@ -33,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -44,7 +43,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private TextView edit_hobbies;
     private TextView edit_lifestyle;
     private TextView edit_horoscope;
-    private static  int casebreak;
+    private static int casebreak;
     private Button similar;
     private CardView mCardViewAboutMe, mCardViewHobbies;
 
@@ -61,59 +60,61 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
-            String hobby= bundle.getString("hobbies");
-            String am=bundle.getString("aboutMe");
-            String eh=bundle.getString("eatingHabit");
-            String dh=bundle.getString("drinkingHabit");
-            String sh=bundle.getString("smokingHabit");
-            String bt=bundle.getString("birthTime");
-            String bp=bundle.getString("birthPlace");
-            String g=bundle.getString("gotra");
-            String m=bundle.getString("manglik");
-            String mh=bundle.getString("matchHoroscope");
+            String hobby = bundle.getString("hobbies");
+            String am = bundle.getString("aboutMe");
+            String eh = bundle.getString("eatingHabit");
+            String dh = bundle.getString("drinkingHabit");
+            String sh = bundle.getString("smokingHabit");
+            String bt = bundle.getString("birthTime");
+            String bp = bundle.getString("birthPlace");
+            String g = bundle.getString("gotra");
+            String m = bundle.getString("manglik");
+            String mh = bundle.getString("matchHoroscope");
             Log.e(TAG, "onReceive: empty *************************************** " + hobby);
 
-            if(hobby!=null)
+            if (hobby != null)
                 hobbies.setText(hobby);
 
-            if(am!=null)
+            if (am != null)
                 aboutMe.setText(am);
 
-            if(eh!=null) {
+            if (eh != null) {
                 eatingHabits.setText(eh);
             }
 
-            if(dh!=null)
+            if (dh != null)
                 drinkingHabits.setText(dh);
 
-            if(sh!=null)
+            if (sh != null)
                 smokingHabits.setText(sh);
 
 
-            if(bt!=null || bp!=null)
-                birthtime.setText(bt+" at "+bp);
+            if (bt != null || bp != null)
+                birthtime.setText(bt + " at " + bp);
 
-            if(g!=null)
+            if (g != null)
                 gotra.setText(g);
-            else{
+            else {
                 gotra.setVisibility(View.GONE);
             }
 
-            if(m!=null)
+            if (m != null)
                 manglik.setText(m);
 
-            if(mh!=null)
+            if (mh != null)
                 matchHoroscope.setText(mh);
 
 
         }
     };
+
     @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(someBroadcastReceiver,
                 new IntentFilter(SOME_INTENT_FILTER_NAME));
     }
+
     @Override
     public void onPause() {
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(someBroadcastReceiver);
@@ -136,8 +137,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         mCardViewHobbies = (CardView) mview.findViewById(R.id.cardViewHobbies);
 
         edit_about = (TextView) mview.findViewById(R.id.aboutme_clear);
-        edit_hobbies=(TextView) mview.findViewById(R.id.hobbies_clear);
-        edit_lifestyle=(TextView)mview.findViewById(R.id.lifestyle_clear);
+        edit_hobbies = (TextView) mview.findViewById(R.id.hobbies_clear);
+        edit_lifestyle = (TextView) mview.findViewById(R.id.lifestyle_clear);
         edit_horoscope = (TextView) mview.findViewById(R.id.horoscope_clear);
         similar = (Button) mview.findViewById(R.id.similar);
 
@@ -340,43 +341,46 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             edit_hobbies.setVisibility(View.GONE);
             edit_horoscope.setVisibility(View.GONE);
             edit_lifestyle.setVisibility(View.GONE);
+
         }
 
         new ProfileAdditionalDetails().execute(clickedID);
-
+        if (customer_id.equals(clickedID)) {
+            similar.setVisibility(View.GONE);
+        }
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
                 startActivity(i);
-                getActivity().overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
 
         edit_horoscope.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=24;
-                BottomSheetDialogFragment btm= new BottomSheet(2);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 24;
+                BottomSheetDialogFragment btm = new BottomSheet(2);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
 
         edit_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=21;
-                BottomSheetDialogFragment btm= new BottomSheet(2);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 21;
+                BottomSheetDialogFragment btm = new BottomSheet(2);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
 
         edit_hobbies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=22;
-                BottomSheetDialogFragment btm= new BottomSheet(2);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 22;
+                BottomSheetDialogFragment btm = new BottomSheet(2);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
 
@@ -384,32 +388,27 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         edit_lifestyle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=23;
-                BottomSheetDialogFragment btm= new BottomSheet(2);
-                btm.show(getFragmentManager(),btm.getTag());
+                casebreak = 23;
+                BottomSheetDialogFragment btm = new BottomSheet(2);
+                btm.show(getFragmentManager(), btm.getTag());
             }
         });
-
-
 
 
         return mview;
     }
 
 
-
-
-
-    private class ProfileAdditionalDetails extends AsyncTask<String,Void,Void>{
+    private class ProfileAdditionalDetails extends AsyncTask<String, Void, Void> {
         @Override
 
-        protected Void doInBackground(String... strings){
-            String cus=strings[0];
+        protected Void doInBackground(String... strings) {
+            String cus = strings[0];
             AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
-                    .addBodyParameter("customerNo",cus)
+                    .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
-                    .getAsJSONArray(new JSONArrayRequestListener(){
+                    .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
@@ -437,7 +436,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                                 gotra.setText(result.getString(7));
 
                                 manglik.setText(result.getString(8));
-                                if(result.getString(9).isEmpty()){
+                                if (result.getString(9).isEmpty()) {
                                     matchHoroscope.setVisibility(View.GONE);
                                 }
                                 matchHoroscope.setText(result.getString(9));
@@ -448,13 +447,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                             }
 
                         }
+
                         @Override
                         public void onError(ANError error) {
 
                             // handle error
                         }
 
-                        });
+                    });
             return null;
         }
 
@@ -465,8 +465,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         }
     }
 
-    public int getCasebreak()
-    {
+    public int getCasebreak() {
         return this.casebreak;
     }
 }

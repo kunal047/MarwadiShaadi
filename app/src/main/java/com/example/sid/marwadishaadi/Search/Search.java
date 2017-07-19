@@ -1409,7 +1409,7 @@ public class Search extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.e(TAG, "onResponse: -------------- "+response.toString());
-                            Vector<String> customers=new Vector<String>();
+                            Vector<String> customers=new Vector<>();
                             for(int i=0;i<response.length();i++){
                                 JSONArray user= null;
                                 try {

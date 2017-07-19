@@ -484,6 +484,8 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
 
         new PersonalDetails().execute(clickedID);
+        if(customer_id.equals(clickedID)){
+            similar.setVisibility(View.GONE);}
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override

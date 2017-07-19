@@ -133,7 +133,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.MyViewHolder
                 String query="";
                 query+="update tbl_block set blocked_id=replace(blocked_id ,\""+strings[1]+"\" , '' ) where customer_no = \""+strings[0]+"\" ; ";
                 Log.e(TAG, "doInBackground: --- query of unblock is----"+query );
-                AndroidNetworking.post("http://10.0.0.3:5050/unblock")
+                AndroidNetworking.post("http://208.91.199.50:5000/unblock")
                         .addBodyParameter("query", query)
                         .setPriority(Priority.HIGH)
                         .build()

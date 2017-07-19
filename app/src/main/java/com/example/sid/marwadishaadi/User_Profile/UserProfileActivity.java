@@ -469,7 +469,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                             try {
 
-                                String name = response.getString(0) + " " + response.getString(1);
+                                String name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
                                 final ArrayList<String> images = new ArrayList<>();
 
                                 if (response.length() > 2) {

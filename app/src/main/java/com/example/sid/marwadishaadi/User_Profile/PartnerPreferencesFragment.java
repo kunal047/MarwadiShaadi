@@ -94,7 +94,8 @@ public class PartnerPreferencesFragment extends Fragment {
         if (called) {
             new PartnerPreference().execute(clickedID);
         }
-
+        if(customer_id.equals(clickedID)){
+        similar.setVisibility(View.GONE);}
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
