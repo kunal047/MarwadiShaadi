@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -49,8 +49,8 @@ public class RecentProfilesFragment extends Fragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private String customer_id, customer_gender;
     private LinearLayout empty_view_recent;
-    private ProgressBar mProgressBar;
     private String res = "";
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -69,7 +69,7 @@ public class RecentProfilesFragment extends Fragment {
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
         for (int i = 0; i < 5; i++) {
-            
+
             if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                 res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
             }
@@ -78,12 +78,7 @@ public class RecentProfilesFragment extends Fragment {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         // analytics
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Recent Profiles","button");
-
-
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.recent_progress_bar);
-        mProgressBar.setIndeterminate(false);
-        mProgressBar.setVisibility(View.GONE);
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Recent Profiles", "button");
 
         recentRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -103,7 +98,10 @@ public class RecentProfilesFragment extends Fragment {
             }
         });
 
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading recent profiles...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         new PrepareRecent().execute();
         return mview;
@@ -141,8 +139,6 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setIndeterminate(true);
         }
 
         @Override
@@ -160,19 +156,18 @@ public class RecentProfilesFragment extends Fragment {
                             // do anything with response
 
                             try {
-                                mProgressBar.setVisibility(View.GONE);
 
                                 recentList.clear();
                                 recentAdapter.notifyDataSetChanged();
 
-                                if(response.length() == 0){
+                                if (response.length() == 0) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             empty_view_recent.setVisibility(View.VISIBLE);
                                         }
                                     });
-                                }else {
+                                } else {
 
                                     empty_view_recent.setVisibility(View.GONE);
 
@@ -205,12 +200,12 @@ public class RecentProfilesFragment extends Fragment {
                                         String location = array.getString(3);
                                         String customerNo = array.getString(4);
                                         String createdOn = array.getString(5);
-                                        String imageUrl = array.getString(6);
-                                        String favouriteStatus = array.getString(7);
-                                        String recentStatus = array.getString(8);
+                                        String surname = array.getString(6);
+                                        String imageUrl = array.getString(7);
+                                        String favouriteStatus = array.getString(8);
+                                        String recentStatus = array.getString(9);
+                                        name = name + " " + surname;
 
-
-                                        
                                         date = formatter.parse(createdOn);
                                         long diff = now.getTime() - date.getTime();
                                         long diffSeconds = diff / 1000 % 60;
@@ -232,7 +227,6 @@ public class RecentProfilesFragment extends Fragment {
                                             createdOn = diffSeconds + " seconds ago";
                                         }
 
-                                        
 
                                         RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
 
@@ -262,13 +256,12 @@ public class RecentProfilesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-                            
+
                             // handle error
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mProgressBar.setVisibility(View.GONE);
-
+                                    progressDialog.dismiss();
                                     //here
                                 }
                             });
@@ -282,7 +275,7 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mProgressBar.setVisibility(View.GONE);
+            progressDialog.dismiss();
             swipeRefreshLayout.setRefreshing(false);
         }
     }
