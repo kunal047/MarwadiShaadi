@@ -128,7 +128,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         relativeMobile = (TextView) mview.findViewById(R.id.relative_mobile);
 
 
-
         fatherName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -137,7 +136,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)", "").trim().length() == 0 && customer_id != clickedID) {
                     fatherName.setVisibility(View.GONE);
                 }
             }
@@ -158,7 +157,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)", "").trim().length() == 0 && customer_id != clickedID) {
                     fatherOccupation.setVisibility(View.GONE);
                 }
             }
@@ -177,7 +176,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Father)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Father)", "").trim().length() == 0 && customer_id != clickedID) {
                     fatherOccupationDetails.setVisibility(View.GONE);
                 }
             }
@@ -237,7 +236,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Natively from )","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Natively from )", "").trim().length() == 0 && customer_id != clickedID) {
                     nativePlace.setVisibility(View.GONE);
                 }
             }
@@ -257,7 +256,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Subcaste)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Subcaste)", "").trim().length() == 0 && customer_id != clickedID) {
                     subcaste.setVisibility(View.GONE);
                 }
             }
@@ -277,7 +276,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Grandfather)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Grandfather)", "").trim().length() == 0 && customer_id != clickedID) {
                     grandpaName.setVisibility(View.GONE);
                 }
             }
@@ -297,7 +296,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace("(Mama's Surname)","").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace("(Mama's Surname)", "").trim().length() == 0 && customer_id != clickedID) {
                     mamaSurname.setVisibility(View.GONE);
                 }
             }
@@ -422,10 +421,12 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             edit_family.setVisibility(View.GONE);
             edit_relatives.setVisibility(View.GONE);
-            similar.setVisibility(View.VISIBLE);
+
         }
         new ProfileFamilyDetails().execute(clickedID);
-        similar.setVisibility(View.GONE);
+        if (customer_id.equals(clickedID)) {
+            similar.setVisibility(View.GONE);
+        }
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

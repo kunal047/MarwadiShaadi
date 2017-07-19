@@ -341,11 +341,13 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             edit_hobbies.setVisibility(View.GONE);
             edit_horoscope.setVisibility(View.GONE);
             edit_lifestyle.setVisibility(View.GONE);
-            similar.setVisibility(View.VISIBLE);
+
         }
 
         new ProfileAdditionalDetails().execute(clickedID);
-        similar.setVisibility(View.GONE);
+        if (customer_id.equals(clickedID)) {
+            similar.setVisibility(View.GONE);
+        }
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

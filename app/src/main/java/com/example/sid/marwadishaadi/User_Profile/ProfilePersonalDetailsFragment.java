@@ -479,12 +479,14 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             edit_individual.setVisibility(View.GONE);
             edit_education.setVisibility(View.GONE);
             edit_profession.setVisibility(View.GONE);
-            similar.setVisibility(View.VISIBLE);
+
         }
 
 
         new PersonalDetails().execute(clickedID);
-        similar.setVisibility(View.GONE);
+        if(customer_id.equals(clickedID)){
+            similar.setVisibility(View.GONE);}
+
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
