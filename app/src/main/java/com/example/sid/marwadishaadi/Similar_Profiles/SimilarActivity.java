@@ -40,12 +40,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by Lawrence Dalmet on 13-06-2017.
  */
 
-public class SimilarActivity extends AppCompatActivity{
+public class SimilarActivity extends AppCompatActivity {
 
     private static final String TAG = "SimilarActivity";
     private FirebaseAnalytics mFirebaseAnalytics;
     private SimilarAdapter similarAdapter;
-    private List<SimilarModel> similarModelList = new ArrayList<>();;
+    private List<SimilarModel> similarModelList = new ArrayList<>();
+    ;
     private RecyclerView recyclerView;
     private String customer_id, customer_gender;
 
@@ -53,6 +54,7 @@ public class SimilarActivity extends AppCompatActivity{
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,7 @@ public class SimilarActivity extends AppCompatActivity{
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
         // analytics
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Similar Profiles","button");
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Similar Profiles", "button");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.similar_toolbar);
         toolbar.setTitle("Similar Profiles");
@@ -72,8 +74,8 @@ public class SimilarActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        similarAdapter = new SimilarAdapter(similarModelList,getApplicationContext());
-        recyclerView = (RecyclerView)findViewById(R.id.recycler);
+        similarAdapter = new SimilarAdapter(similarModelList, getApplicationContext());
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(similarAdapter);
@@ -163,7 +165,7 @@ public class SimilarActivity extends AppCompatActivity{
 
                                     String imageUrl = array.getString(7);
 
-                                    SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age) ,customerNo);
+                                    SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age), customerNo);
                                     similarModelList.add(similarModel);
                                     similarAdapter.notifyDataSetChanged();
 
@@ -204,7 +206,7 @@ public class SimilarActivity extends AppCompatActivity{
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
         return true;

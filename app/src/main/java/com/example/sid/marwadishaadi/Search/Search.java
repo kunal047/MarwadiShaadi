@@ -49,8 +49,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -753,10 +757,10 @@ public class Search extends AppCompatActivity {
                     gender = "Male";
                 }
                 String query = "";
-                query = "select  YEAR(tbl_user.birthdate),tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  (tbl_user_files.file_type='profile_image') and ( tbl_user.gender='"+gender+"' ) ";
+                query = "select tbl_user.birthdate,tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  (tbl_user_files.file_type='profile_image') and ( tbl_user.gender='"+gender+"' ) ";
 //                ON tbl_user.customer_no=tbl_user_files.customer_no
                 int year = Calendar.getInstance().get(Calendar.YEAR);
-                query += "and ( YEAR(tbl_user.birthdate)>=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
+                query += "and ( tbl_user.birthdate>=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
                 String s1, s2;
                 s1 = height_from.getSelectedItem().toString();
                 s2 = height_to.getSelectedItem().toString();
@@ -1416,13 +1420,31 @@ public class Search extends AppCompatActivity {
                                     user = response.getJSONArray(i);
                                     if((customers.indexOf(user.getString(3))==-1)){
                                         customers.add(user.getString(3));
-                                        Calendar calender = Calendar.getInstance();
-                                        int year = calender.get(Calendar.YEAR);
+                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                                        Date now = new Date();
+                                        Date date = null;
+                                        try {
+                                            date = formatter.parse(user.get(0).toString());
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                                        String[] partsOfDate = formatedDate.split("-");
+                                        int day = Integer.parseInt(partsOfDate[0]);
+                                        int month = Integer.parseInt(partsOfDate[1]);
+                                        int year = Integer.parseInt(partsOfDate[2]);
+                                        int a = getAge(year, month, day);
+                                        String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
                                         if(user.get(8).equals("")){
-                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }else{
-                                            suggestionModel = new SuggestionModel(year - (int) user.get(0), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }
                                         suggestionModelList2.add(suggestionModel);}
                                 }
@@ -1468,6 +1490,25 @@ public class Search extends AppCompatActivity {
 
         }
     }
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
 
+        int age;
+
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+
+        age = currentYear - DOByear;
+
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
+                --age;
+            }
+        }
+        return age;
+    }
 
 }
