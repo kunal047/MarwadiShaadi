@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -281,7 +282,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().replace(",", "").trim().length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace(" in Complexion, has ", "").replace(" body type", "").trim().length() == 0 && customer_id != clickedID) {
                     complexion_build.setVisibility(View.GONE);
                 }
             }
@@ -300,7 +301,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (s.toString().replace(" (Physical Status)", "").length() == 0 && customer_id != clickedID) {
                     physicalStatus.setVisibility(View.GONE);
                 }
             }
@@ -462,6 +463,19 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                     snackbar.setActionTextColor(Color.RED);
                 }
             });
+        } else {
+            mobileNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    String phoneNo = "tel:" + mobileNo.getText().toString();
+                    intent.setData(Uri.parse(phoneNo));
+                    startActivity(intent);
+
+                }
+            });
+
         }
 
 
@@ -604,7 +618,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 int year = Integer.parseInt(partsOfDate[2]);
                                 int a = getAge(year, month, day);
 
-                                String na = array.getString(0) + " " + array.getString(1) + ", " + a + " yrs";
+                                String na = array.getString(0) + " " + array.getString(1) + ", " + a;
                                 name_age.setText(na);
                                 maritalStatus.setText(array.getString(3));
                                 birthdate.setText(strDate);
@@ -647,13 +661,13 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
 
                                 height.setText(array.getString(8));
-                                String w = "weighs " + array.getString(9) + " kgs";
+                                String w = "Weighs " + array.getString(9) + " kgs";
                                 weight.setText(w);
 
-                                String cb = array.getString(10) + ", " + array.getString(11);
+                                String cb = array.getString(10) + " in Complexion, has " + array.getString(11) + " body type";
 
                                 complexion_build.setText(cb);
-                                physicalStatus.setText(array.getString(12));
+                                physicalStatus.setText(array.getString(12) + " (Physical Status)");
                                 education.setText(array.getString(13));
                                 educationDegree.setText(array.getString(14));
 
@@ -697,7 +711,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 } else {
                                     annualI = "No Income mentioned.";
                                 }
-                                annualIncome.setText(annualI);
+                                annualIncome.setText("Rs. " + annualI);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
