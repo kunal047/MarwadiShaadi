@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
@@ -26,6 +29,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
@@ -101,12 +105,20 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View mview = inflater.inflate(R.layout.fragment_profile__family__details, container, false);
+        final View mview = inflater.inflate(R.layout.fragment_profile__family__details, container, false);
 
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        for (int i = 0; i < 5; i++) {
+
+            if (sharedpref.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                isPaidMember = true;
+            }
+        }
 
         edit_family = (TextView) mview.findViewById(R.id.family_clear);
         edit_relatives = (TextView) mview.findViewById(R.id.relatives_clear);
@@ -398,12 +410,45 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() < 9 && customer_id != clickedID) {
                     relativeMobile.setVisibility(View.GONE);
+                } else {
+
+                    float radius = relativeMobile.getTextSize() / 3;
+                    BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    relativeMobile.getPaint().setMaskFilter(filter);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        relativeMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isPaidMember) {
+                    Snackbar snackbar = Snackbar
+                            .make(mview, "Become a paid member.", Snackbar.LENGTH_LONG)
+                            .setAction("GO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                                    getContext().startActivity(intent);
+                                }
+                            });
+
+                    // Changing message text color
+                    snackbar.setActionTextColor(Color.RED);
+
+                } else {
+
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    String phoneNo = "tel:" + relativeMobile.getText().toString();
+                    intent.setData(Uri.parse(phoneNo));
+                    startActivity(intent);
+
+                }
             }
         });
 
@@ -500,41 +545,9 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                                 relativeOccupation.setText(result.getString(12));
                                 String loc = result.getString(13);
                                 relativeLocation.setText(loc);
+                                String mob = result.getString(14);
+                                relativeMobile.setText(mob);
 
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String[] array = getResources().getStringArray(R.array.communities);
-
-                                        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
-
-                                        for (int i = 0; i < 5; i++) {
-
-                                            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                                                isPaidMember = true;
-                                            }
-                                        }
-
-                                    }
-                                });
-
-                                if (isPaidMember) {
-                                    String mob = result.getString(14);
-                                    relativeMobile.setText(mob);
-                                } else {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (Build.VERSION.SDK_INT >= 11) {
-                                                relativeMobile.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                                            }
-                                            float radius = relativeMobile.getTextSize() / 3;
-                                            BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
-                                            relativeMobile.getPaint().setMaskFilter(filter);
-                                        }
-                                    });
-                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

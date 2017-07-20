@@ -13,13 +13,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -42,7 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -195,6 +192,13 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     address.setVisibility(View.GONE);
+                } else if (!isPaidMember){
+                    if (Build.VERSION.SDK_INT >= 11) {
+                        mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    }
+                    float radius = address.getTextSize() / 3;
+                    BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    address.getPaint().setMaskFilter(filter);
                 }
             }
 
@@ -214,6 +218,13 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() < 9 && customer_id != clickedID) {
                     mobileNo.setVisibility(View.GONE);
+                } else if (!isPaidMember){
+                    if (Build.VERSION.SDK_INT >= 11) {
+                        mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    }
+                    float radius = mobileNo.getTextSize() / 3;
+                    BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    mobileNo.getPaint().setMaskFilter(filter);
                 }
             }
 
@@ -445,12 +456,12 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             }
         });
 
-        if (!isPaidMember) {
-            mobileNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        mobileNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isPaidMember) {
                     Snackbar snackbar = Snackbar
-                            .make(mview, "Become a paid member.", Snackbar.LENGTH_LONG)
+                            .make(mview, "This feature is only available for paid member", Snackbar.LENGTH_LONG)
                             .setAction("GO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -459,14 +470,10 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 }
                             });
 
-// Changing message text color
+                    // Changing message text color
                     snackbar.setActionTextColor(Color.RED);
-                }
-            });
-        } else {
-            mobileNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+
+                } else {
 
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     String phoneNo = "tel:" + mobileNo.getText().toString();
@@ -474,9 +481,9 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                     startActivity(intent);
 
                 }
-            });
+            }
+        });
 
-        }
 
 
         Intent data = getActivity().getIntent();
@@ -498,8 +505,9 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
 
         new PersonalDetails().execute(clickedID);
-        if(customer_id.equals(clickedID)){
-            similar.setVisibility(View.GONE);}
+        if (customer_id.equals(clickedID)) {
+            similar.setVisibility(View.GONE);
+        }
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -582,7 +590,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            
+
                             try {
                                 JSONArray array = response.getJSONArray(0);
 
@@ -624,23 +632,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 birthdate.setText(strDate);
                                 gender.setText(array.getString(4));
                                 address.setText(array.getString(5));
-
-                                if (isPaidMember) {
-                                    mobileNo.setText(array.getString(6));
-                                } else {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (Build.VERSION.SDK_INT >= 11) {
-                                                mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                                            }
-                                            float radius = mobileNo.getTextSize() / 3;
-                                            BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
-                                            mobileNo.getPaint().setMaskFilter(filter);
-                                        }
-                                    });
-                                }
-
+                                mobileNo.setText(array.getString(6));
 
                                 String[] c = array.getString(7).split("");
                                 String cast = "";
@@ -697,14 +689,14 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                                 String annualI = array.getString(18);
                                 annualI = annualI.replaceAll("[^-?0-9]+", " ");
                                 List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-                                
+
                                 if (array.getString(18).contains("Upto")) {
                                     annualI = "Upto 3L";
                                 } else if (array.getString(18).contains("Above")) {
                                     annualI = "Above 50L";
 
                                 } else if (incomeArray.size() == 3) {
-                                    
+
                                     double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
                                     double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                                     annualI = (int) first + "L - " + (int) second + "L";
