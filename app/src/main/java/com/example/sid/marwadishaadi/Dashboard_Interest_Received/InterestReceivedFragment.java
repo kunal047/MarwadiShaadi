@@ -209,7 +209,7 @@ public class InterestReceivedFragment extends Fragment {
                                             resultReplyAction = 2;
                                         }
                                         String interestSentOn = array.getString(6);
-                                        name = name + array.getString(7);
+                                        name = name + " " + array.getString(7);
                                         String imageUrl = array.getString(8);
 
 

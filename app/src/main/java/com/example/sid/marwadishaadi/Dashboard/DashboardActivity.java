@@ -80,6 +80,8 @@ public class DashboardActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
+        ImageView toolbarSearch = (ImageView) findViewById(R.id.toolbar_search);
+
         setSupportActionBar(toolbar);
 
 
@@ -87,6 +89,14 @@ public class DashboardActivity extends AppCompatActivity
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
+
+        toolbarSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, Search.class);
+                startActivity(intent);
+            }
+        });
 
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,6 +111,7 @@ public class DashboardActivity extends AppCompatActivity
         userdp = (ImageView) mview.findViewById(R.id.user_dp);
         //fetch dp and name
         new FetchDrawer().execute();
+
         userdp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -120,6 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
+                    android:clickable="true"
                     android:drawableLeft="@drawable/profile_contact"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"

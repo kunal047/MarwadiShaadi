@@ -189,7 +189,7 @@ public class InterestSentFragment extends Fragment {
                                         String education = array.getString(4);
                                         String replyAction = array.getString(5);
                                         String interestSentOn = array.getString(6);
-                                        name = name + array.getString(7);
+                                        name = name + " " + array.getString(7);
                                         String imageUrl = array.getString(8);
                                         date = formatter.parse(interestSentOn);
                                         interestSentOn = new SimpleDateFormat("E, dd MMM yyyy").format(date);

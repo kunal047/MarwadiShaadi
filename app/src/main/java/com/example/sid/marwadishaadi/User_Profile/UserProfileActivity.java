@@ -64,6 +64,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
 
 import org.json.JSONArray;
@@ -116,6 +117,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private ProgressDialog progressDialog;
     int[] sampleImages = {R.drawable.default_drawer};
 
+    private boolean isPaidMember;
+
+    private ArrayList<String> images;
+
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
         Intent sendIntent = new Intent();
@@ -154,6 +159,16 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
+
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        for (int i = 0; i < 5; i++) {
+
+            if (sharedpref.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                isPaidMember = true;
+            }
+        }
+
 
         Intent data = getIntent();
         String deeplink = data.getStringExtra("deeplink");
@@ -357,18 +372,24 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
+                if (isPaidMember) {
+                    notification = new NotificationCompat.Builder(UserProfileActivity.this)
+                            .setContentTitle("Pdf Download")
+                            .setSmallIcon(R.drawable.ic_action_drawer_notification)
+                            .setAutoCancel(true)
+                            .setProgress(0, 0, true)
+                            .setContentText("Download in progress");
 
 
-                notification = new NotificationCompat.Builder(UserProfileActivity.this)
-                        .setContentTitle("Pdf Download")
-                        .setSmallIcon(R.drawable.ic_action_drawer_notification)
-                        .setAutoCancel(true)
-                        .setProgress(0, 0, true)
-                        .setContentText("Download in progress");
+                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(1, notification.build());
 
-
-                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(1, notification.build());
+                    new FetchPdfDetails().execute();
+                } else {
+                    Toast.makeText(UserProfileActivity.this, " This feature is only for premium members", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(UserProfileActivity.this, UpgradeMembershipActivity.class);
+                    startActivity(intent);
+                }
 
 
                 // add permission here
@@ -575,14 +596,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                             try {
 
                                 String name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
-                                final ArrayList<String> images = new ArrayList<>();
+                                 images = new ArrayList<>();
 
                                 if (response.length() > 2) {
 
                                     for (int i = 2; i < response.length(); i++) {
 
                                         Log.d(TAG, "onResponse: images are here -------------------- ");
-                                        images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getString(i).replace("[ ", "").replace("]", "").replace("\"", ""));
+                                        images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getString(i).replace("[", "").replace("]", "").replace("\"", ""));
                                     }
                                 }
 
@@ -599,9 +620,19 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                         public void setImageForPosition(int position, ImageView imageView) {
 
                                             Picasso.with(UserProfileActivity.this)
-                                                    .load(images.get(position).replace("[", ""))
+                                                    .load(images.get(position))
                                                     .fit()
                                                     .into(imageView);
+                                        }
+                                    });
+
+                                    carouselView.setImageClickListener(new ImageClickListener() {
+                                        @Override
+                                        public void onClick(int position) {
+                                            Intent intent = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
+                                            intent.putExtra("user_images", images);
+                                            startActivity(intent);
+
                                         }
                                     });
 
