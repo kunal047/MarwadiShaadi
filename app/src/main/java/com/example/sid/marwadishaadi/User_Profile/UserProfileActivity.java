@@ -41,6 +41,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.Chat.Message;
 import com.example.sid.marwadishaadi.Chat.User;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
@@ -81,7 +82,7 @@ import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ImageListener {
+public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     public static final int REQUEST_PERMISSION_SETTING = 105;
     private static final String TAG = "UserProfileActivity";
@@ -91,7 +92,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private NotificationManager notificationManager;
     private ProfilePageAdapter profilePageAdapter;
     private ViewPager userinfo;
-    private CarouselView carouselView;
+    private ImageView imageView;
     private FloatingActionButton fav;
     private FloatingActionButton sendmsg;
     private FloatingActionButton sendinterest;
@@ -481,7 +482,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         });
 
 
-        carouselView = (CarouselView) findViewById(R.id.carouselView);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         if (called) {
             new ProfilePicture().execute(clickedID);
@@ -518,10 +519,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
     }
 
-    @Override
-    public void setImageForPosition(int position, ImageView imageView) {
 
-    }
 
     public static class ProfilePageAdapter extends FragmentPagerAdapter {
 
@@ -608,10 +606,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 }
 
 
+                                toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));
                                 toolbarLayout.setTitle(name);
 
                                 if (images.size() > 0) {
                                     Log.d(TAG, "onResponse: setting images " + images.get(0));
+                                    Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
 
                                     carouselView.setImageListener(new ImageListener() {
 
@@ -639,17 +639,11 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                     carouselView.setPageCount(images.size());
 
 
-                                } else {
-                                    carouselView.setImageListener(new ImageListener() {
-                                        @Override
-                                        public void setImageForPosition(int position, ImageView imageView) {
-                                            imageView.setImageResource(sampleImages[position]);
-                                        }
-                                    });
-
-                                    carouselView.setPageCount(sampleImages.length);
+                                }else{
+                                    Glide.with(getApplicationContext()).load(R.drawable.default_drawer).into(imageView);
 
                                 }
+
 
 
 

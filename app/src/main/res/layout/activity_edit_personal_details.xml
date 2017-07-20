@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_below="@+id/text3"
-                    android:hint="Weight"
+                    android:hint="Weight (kgs)"
                     android:textSize="16dp"
                     android:textColorHint="#747474"
                     android:drawableLeft="@drawable/signup_weight"

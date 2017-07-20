@@ -95,7 +95,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
                 .error(R.drawable.default_drawer);
 
         Glide.with(context).load(recentModel.getRecentUserImage()).apply(options).into(holder.recentUserImage);
-        holder.recentName.setText(recentModel.getRecentName());
+        holder.recentName.setText(recentModel.getRecentName()+ ", ");
         holder.recentAge.setText(recentModel.getRecentAge());
         holder.recentOnline.setText(recentModel.getRecentOnline());
         holder.recentHighestDegree.setText(recentModel.getRecentHighestDegree());
