@@ -394,7 +394,6 @@ public class EditPreferencesActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(getApplicationContext(), professional.getText().toString(), Toast.LENGTH_LONG).show();
         lmbamca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

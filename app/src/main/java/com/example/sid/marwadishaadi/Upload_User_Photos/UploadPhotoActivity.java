@@ -21,7 +21,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,7 +34,6 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity;
-import com.example.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.AccessToken;
@@ -58,7 +56,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,6 +73,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class UploadPhotoActivity extends AppCompatActivity {
 
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+    public static final int CAMERA_PERMISSION = 100;
+    public static final int READ_EXTERNAL_STORAGE = 103;
+    public static final int WRITE_EXTERNAL_STORAGE = 104;
     private static final int REQUEST_CAMERA = 1;
     private static final int SELECT_FILE = 2;
     private static int number = 0;
@@ -90,10 +91,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private CircleImageView photo1, photo2, photo3, photo4, photo5;
     private String customer_id;
     private View view;
-    public static final int REQUEST_PERMISSION_SETTING = 105;
-    public static final int CAMERA_PERMISSION = 100;
-    public static  final int READ_EXTERNAL_STORAGE=103;
-    public static final int WRITE_EXTERNAL_STORAGE=104;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -120,10 +117,14 @@ public class UploadPhotoActivity extends AppCompatActivity {
             fblogin.setText("Upload photos from Facebook");
         }
 
+        if (getIntent().getParcelableExtra("user_images") != null) {
+            ArrayList<String> filelist = getIntent().getParcelableExtra("user_images");
+        }
+
         fblogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null){
+                if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null) {
 
                     LoginManager.getInstance().logInWithReadPermissions(UploadPhotoActivity.this, Arrays.asList("user_photos", "email", "public_profile"));
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -142,9 +143,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                                 String userid = object.getString("id");
                                                 fblogin.setText("Or upload photos from Facebook");
                                                 Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                                                i.putExtra("userid",userid);
+                                                i.putExtra("userid", userid);
                                                 startActivity(i);
-                                                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -154,273 +155,273 @@ public class UploadPhotoActivity extends AppCompatActivity {
                             request.executeAsync();
                         }
 
-                            @Override
-                            public void onCancel() {
+                        @Override
+                        public void onCancel() {
 
-                            }
+                        }
 
-                            @Override
-                            public void onError(FacebookException error) {
+                        @Override
+                        public void onError(FacebookException error) {
 
-                            }
-                        });
-                    } else {
+                        }
+                    });
+                } else {
 
-                        Profile profile = Profile.getCurrentProfile();
-                        String userid = profile.getId();
-                        Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
-                        i.putExtra("userid", userid);
-                        startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                    }
-
+                    Profile profile = Profile.getCurrentProfile();
+                    String userid = profile.getId();
+                    Intent i = new Intent(UploadPhotoActivity.this, FbGalleryActivity.class);
+                    i.putExtra("userid", userid);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }
-            });
+
+            }
+        });
 
 
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-            submit = (Button) findViewById(R.id.submit_photo);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        submit = (Button) findViewById(R.id.submit_photo);
         submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
 //                if (photo1.getTag() == "changed") {
-                    BitmapDrawable drawable = (BitmapDrawable) photo1.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    file_one = new File(getApplicationContext().getCacheDir(), "profile_photo.jpg");
-                    try {
-                        file_one.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                BitmapDrawable drawable = (BitmapDrawable) photo1.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                file_one = new File(getApplicationContext().getCacheDir(), "profile_photo.jpg");
+                try {
+                    file_one.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    byte[] bitmapdata = bos.toByteArray();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                byte[] bitmapdata = bos.toByteArray();
 
-                    FileOutputStream fos = null;
-                    try {
-                        fos = new FileOutputStream(file_one);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file_one);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    drawable = (BitmapDrawable) photo2.getDrawable();
-                    bitmap = drawable.getBitmap();
-                    file_two = new File(getApplicationContext().getCacheDir(), "two.jpg");
-                    try {
-                        file_two.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                drawable = (BitmapDrawable) photo2.getDrawable();
+                bitmap = drawable.getBitmap();
+                file_two = new File(getApplicationContext().getCacheDir(), "two.jpg");
+                try {
+                    file_two.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
+                bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_two);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                fos = null;
+                try {
+                    fos = new FileOutputStream(file_two);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 //                }
 
 //                if (photo3.getTag() == "changed") {
-                    drawable = (BitmapDrawable) photo3.getDrawable();
-                    bitmap = drawable.getBitmap();
-                    file_three = new File(getApplicationContext().getCacheDir(), "three.jpg");
-                    try {
-                        file_three.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                drawable = (BitmapDrawable) photo3.getDrawable();
+                bitmap = drawable.getBitmap();
+                file_three = new File(getApplicationContext().getCacheDir(), "three.jpg");
+                try {
+                    file_three.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
+                bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_three);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                fos = null;
+                try {
+                    fos = new FileOutputStream(file_three);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 //                }
 
 //                if (photo4.getTag() == "changed") {
-                    drawable = (BitmapDrawable) photo4.getDrawable();
-                    bitmap = drawable.getBitmap();
-                    file_four = new File(getApplicationContext().getCacheDir(), "four.jpg");
-                    try {
-                        file_four.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                drawable = (BitmapDrawable) photo4.getDrawable();
+                bitmap = drawable.getBitmap();
+                file_four = new File(getApplicationContext().getCacheDir(), "four.jpg");
+                try {
+                    file_four.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
+                bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_four);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                fos = null;
+                try {
+                    fos = new FileOutputStream(file_four);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    drawable = (BitmapDrawable) photo5.getDrawable();
-                    bitmap = drawable.getBitmap();
-                    file_five = new File(getApplicationContext().getCacheDir(), "five.jpg");
-                    try {
-                        file_five.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                drawable = (BitmapDrawable) photo5.getDrawable();
+                bitmap = drawable.getBitmap();
+                file_five = new File(getApplicationContext().getCacheDir(), "five.jpg");
+                try {
+                    file_five.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
+                bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_five);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                fos = null;
+                try {
+                    fos = new FileOutputStream(file_five);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 //                }
 
-                    new UploadPhoto().execute();
-                    // analytics
-                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
-                    if (isSelected) {
-                        Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
-                    }
+                new UploadPhoto().execute();
+                // analytics
+                Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
+                if (isSelected) {
+                    Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
+        });
 
 
-            photo1 = (CircleImageView) findViewById(R.id.photo1);
-            photo2 = (CircleImageView) findViewById(R.id.photo2);
-            photo3 = (CircleImageView) findViewById(R.id.photo3);
-            photo4 = (CircleImageView) findViewById(R.id.photo4);
-            photo5 = (CircleImageView) findViewById(R.id.photo5);
+        photo1 = (CircleImageView) findViewById(R.id.photo1);
+        photo2 = (CircleImageView) findViewById(R.id.photo2);
+        photo3 = (CircleImageView) findViewById(R.id.photo3);
+        photo4 = (CircleImageView) findViewById(R.id.photo4);
+        photo5 = (CircleImageView) findViewById(R.id.photo5);
 
         photo1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    number = 1;
-                    selectImage();
+            @Override
+            public void onClick(View v) {
+                number = 1;
+                selectImage();
 
-                }
-            });
+            }
+        });
 
         photo2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    number = 2;
-                    selectImage();
-                }
-            });
+            @Override
+            public void onClick(View v) {
+                number = 2;
+                selectImage();
+            }
+        });
 
 
         photo3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    number = 3;
-                    selectImage();
+            @Override
+            public void onClick(View v) {
+                number = 3;
+                selectImage();
 
-                }
-            });
+            }
+        });
 
 
         photo4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    number = 4;
-                    selectImage();
+            @Override
+            public void onClick(View v) {
+                number = 4;
+                selectImage();
 
-                }
-            });
+            }
+        });
 
 
         photo5.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    number = 5;
-                    selectImage();
-                }
-            });
+            @Override
+            public void onClick(View v) {
+                number = 5;
+                selectImage();
+            }
+        });
 
 
         if (this.getIntent().getExtras() != null) {
-                Bundle b = this.getIntent().getExtras();
-                ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
+            Bundle b = this.getIntent().getExtras();
+            ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
 
-                for (String url : urls) {
+            for (String url : urls) {
 
-                }
+            }
 
-                for (int i = 0; i < urls.size(); i++) {
+            for (int i = 0; i < urls.size(); i++) {
 
-                    Picasso.with(UploadPhotoActivity.this)
-                            .load(urls.get(i))
-                            .into(getImageviewInstance(i));
-
-                }
+                Picasso.with(UploadPhotoActivity.this)
+                        .load(urls.get(i))
+                        .into(getImageviewInstance(i));
 
             }
 
         }
 
-        private CharSequence[] getItems() {
+    }
 
-            String tag = getImageview().getTag().toString();
-            if (tag.equals("default")) {
+    private CharSequence[] getItems() {
+
+        String tag = getImageview().getTag().toString();
+        if (tag.equals("default")) {
+            CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+            return items;
+        } else if (getImageview() == photo1) {
+            if (!tag.equals("default")) {
+                CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
+                return items;
+            } else {
                 CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
                 return items;
-            } else if (getImageview() == photo1) {
-                if (!tag.equals("default")) {
-                    CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
-                    return items;
-                } else {
-                    CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
-                    return items;
-                }
-            } else {
-                final CharSequence[] items = {"Take Photo", "Choose from Library", "Set as Profile picture", "Remove Photo",
-                        "Cancel"};
-                return items;
             }
+        } else {
+            final CharSequence[] items = {"Take Photo", "Choose from Library", "Set as Profile picture", "Remove Photo",
+                    "Cancel"};
+            return items;
         }
+    }
 
     private void selectImage() {
 
@@ -473,29 +474,34 @@ public class UploadPhotoActivity extends AppCompatActivity {
         // add permission here
         int permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this, Manifest.permission.CAMERA);
 
-        if (permissionCheck == PackageManager.PERMISSION_DENIED){
+        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
 
-            if(!getCameraPermissionStatus()){
+            if (!getCameraPermissionStatus()) {
 
                 Dexter.withActivity(UploadPhotoActivity.this)
-                    .withPermission(Manifest.permission.CAMERA)
-                    .withListener(new PermissionListener() {
-                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                            CameraIntent();
-                        }
-                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        .withPermission(Manifest.permission.CAMERA)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
+                                CameraIntent();
+                            }
 
-                            setCameraPermissionStatus();
-                            showSettings();
-                        }
-                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                        }
-                    }).check();
-            }else{
+                                setCameraPermissionStatus();
+                                showSettings();
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                            }
+                        }).check();
+            } else {
                 showSettings();
             }
-        }else{
+        } else {
             CameraIntent();
         }
 
@@ -508,13 +514,14 @@ public class UploadPhotoActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 CameraIntent();
             } else {
-                Toast.makeText(UploadPhotoActivity.this,"Unable to get Permission",Toast.LENGTH_LONG).show();
+                Toast.makeText(UploadPhotoActivity.this, "Unable to get Permission", Toast.LENGTH_LONG).show();
             }
-        }else{
+        } else {
             GalleryIntent();
         }
     }
-    private void CameraIntent(){
+
+    private void CameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
@@ -524,90 +531,105 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         // add permission here
         int read_permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int write_permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int write_permissionCheck = ContextCompat.checkSelfPermission(UploadPhotoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
+        if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED) {
 
             // first time asks for both permission
-            if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
+            if (!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus()) {
 
                 Dexter.withActivity(UploadPhotoActivity.this)
-                    .withPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ).withListener(new MultiplePermissionsListener() {
-                    @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        .withPermissions(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ).withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
 
                         // if both are accepted
-                        if(report.areAllPermissionsGranted()){
+                        if (report.areAllPermissionsGranted()) {
                             GalleryIntent();
 
-                         // if both are rejected
-                        }else if (report.getDeniedPermissionResponses().size() == 2){
+                            // if both are rejected
+                        } else if (report.getDeniedPermissionResponses().size() == 2) {
                             showStorageSettings();
 
                             // one of them is accepted
-                        }else{
+                        } else {
                             List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
                             for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
-                                if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
+                                if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE) {
                                     setReadStoragePermissionStatus();
                                     showStorageSettings();
-                                }else{
+                                } else {
                                     setWriteStoragePermissionStatus();
                                     showStorageSettings();
                                 }
                             }
                         }
                     }
-                    @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                    }
                 }).check();
 
             }
             // other times
             // write allowed, read rejected
-            else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
+            else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()) {
 
                 Dexter.withActivity(UploadPhotoActivity.this)
-                    .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .withListener(new PermissionListener() {
-                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                            GalleryIntent();
-                        }
-                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                            showStorageSettings();
-                        }
-                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
+                                GalleryIntent();
+                            }
 
-                        }
-                    }).check();
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+                                showStorageSettings();
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                            }
+                        }).check();
 
             }
             // read allowed, write rejected
-            else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
+            else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()) {
 
                 Dexter.withActivity(UploadPhotoActivity.this)
-                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(new PermissionListener() {
-                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                            GalleryIntent();
-                        }
-                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                            showStorageSettings();
-                        }
-                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
+                                GalleryIntent();
+                            }
 
-                        }
-                    }).check();
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+                                showStorageSettings();
+                            }
 
-            }else{
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                            }
+                        }).check();
+
+            } else {
                 showStorageSettings();
             }
-        }else{
+        } else {
             GalleryIntent();
         }
 
     }
+
     private void GalleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -707,6 +729,77 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
     }
 
+    private void showStorageSettings() {
+        Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    private void showSettings() {
+        Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    private Boolean getCameraPermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isCameraPermissionDenied", false);
+    }
+
+    private void setCameraPermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isCameraPermissionDenied", true);
+        edit.apply();
+    }
+
+    private Boolean getReadStoragePermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isReadPermissionDenied", false);
+    }
+
+    private void setReadStoragePermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isReadPermissionDenied", true);
+        edit.apply();
+    }
+
+    private Boolean getWriteStoragePermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isWritePermissionDenied", false);
+    }
+
+    private void setWriteStoragePermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isWritePermissionDenied", true);
+        edit.apply();
+    }
+
     private class UploadPhoto extends AsyncTask<Void, Void, Void> {
 
 
@@ -741,75 +834,5 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     });
             return null;
         }
-    }
-
-    private void showStorageSettings(){
-        Snackbar snackbar = Snackbar
-            .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
-            .setAction("Settings", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                }
-            });
-
-        snackbar.show();
-    }
-
-    private void showSettings(){
-        Snackbar snackbar = Snackbar
-            .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
-            .setAction("Settings", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                }
-            });
-
-        snackbar.show();
-    }
-    private Boolean getCameraPermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isCameraPermissionDenied", false);
-    }
-
-    private void setCameraPermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isCameraPermissionDenied",true);
-        edit.apply();
-    }
-
-    private Boolean getReadStoragePermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isReadPermissionDenied", false);
-    }
-
-    private void setReadStoragePermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isReadPermissionDenied",true);
-        edit.apply();
-    }
-
-    private Boolean getWriteStoragePermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isWritePermissionDenied", false);
-    }
-
-    private void setWriteStoragePermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isWritePermissionDenied",true);
-        edit.apply();
     }
 }

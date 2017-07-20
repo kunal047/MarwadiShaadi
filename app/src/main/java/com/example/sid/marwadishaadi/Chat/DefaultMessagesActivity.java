@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
@@ -90,6 +92,17 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
 
         toolbar = (Toolbar) findViewById(R.id.chat_msg_toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), UserProfileActivity.class);
+                i.putExtra("customerNo", customerId);
+                i.putExtra("from", "chat");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(i);
+            }
+        });
+        Log.d(TAG, "onCreate: customer nmae is dma is " + customerName);
         toolbar.setTitle(customerName.split(",")[0]);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
@@ -104,59 +117,6 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
 
     }
-
-    private class FetchingMessages extends AsyncTask<String, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            query = params[0];
-            AndroidNetworking.post("http://208.91.199.50:5000/getChat")
-                    .addBodyParameter("query", query)
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONArray jsnrry = response.getJSONArray(i);
-                                    String string = jsnrry.getString(0);
-                                    SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
-                                    Date date = format.parse(string);
-                                    Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
-
-                                    Message message;
-                                    if (jsnrry.getString(3).contains(customerId)) {
-                                        User user = new User("1", customerName, null, true);
-                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                        // Log.e(TAG, "onResponse: Add it in left" );
-                                    } else {
-                                        User user = new User("0", customerName, null, true);
-                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                        // Log.e(TAG, "onResponse: Add it in Right" );
-                                    }
-
-                                    adapter.addToStart(message, true);
-                                } catch (JSONException | ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-                            Toast.makeText(DefaultMessagesActivity.this, "Network Error ", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-            return null;
-        }
-    }
-
-
 
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
@@ -267,5 +227,56 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 });
 
         return true;
+    }
+
+    private class FetchingMessages extends AsyncTask<String, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            query = params[0];
+            AndroidNetworking.post("http://208.91.199.50:5000/getChat")
+                    .addBodyParameter("query", query)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    JSONArray jsnrry = response.getJSONArray(i);
+                                    String string = jsnrry.getString(0);
+                                    SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
+                                    Date date = format.parse(string);
+                                    Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
+
+                                    Message message;
+                                    if (jsnrry.getString(3).contains(customerId)) {
+                                        User user = new User("1", customerName, null, true);
+                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
+                                        // Log.e(TAG, "onResponse: Add it in left" );
+                                    } else {
+                                        User user = new User("0", customerName, null, true);
+                                        message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
+                                        // Log.e(TAG, "onResponse: Add it in Right" );
+                                    }
+
+                                    adapter.addToStart(message, true);
+                                } catch (JSONException | ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(DefaultMessagesActivity.this, "Network Error ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+            return null;
+        }
     }
 }
