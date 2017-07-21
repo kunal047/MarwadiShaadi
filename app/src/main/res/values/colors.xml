@@ -40,8 +40,7 @@
     <color name="border_remove">#ffb400</color>
     <color name="border_send_interest">#9d1e27</color>
 
-
-
+    <color name="black_overlay">#66000000</color>
 
 
 </resources>

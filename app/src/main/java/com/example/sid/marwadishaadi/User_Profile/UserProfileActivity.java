@@ -143,6 +143,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        imageView = (ImageView) findViewById(R.id.imageView);
+
         progressDialog = new ProgressDialog(UserProfileActivity.this);
         progressDialog.setMessage("Loading profile...");
         progressDialog.setCancelable(false);
@@ -211,6 +213,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             sendmsg.setVisibility(View.GONE);
             sendinterest.setVisibility(View.GONE);
         }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(UserProfileActivity.this, FullscreenImageActivity.class);
+                i.putExtra("customerNo", clickedID);
+                i.putExtra("from", "userprofile");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
 
         editphotos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -482,7 +495,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         });
 
 
-        imageView = (ImageView) findViewById(R.id.imageView);
 
         if (called) {
             new ProfilePicture().execute(clickedID);
@@ -613,30 +625,30 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                     Log.d(TAG, "onResponse: setting images " + images.get(0));
                                     Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
 
-                                    carouselView.setImageListener(new ImageListener() {
-
-
-                                        @Override
-                                        public void setImageForPosition(int position, ImageView imageView) {
-
-                                            Picasso.with(UserProfileActivity.this)
-                                                    .load(images.get(position))
-                                                    .fit()
-                                                    .into(imageView);
-                                        }
-                                    });
-
-                                    carouselView.setImageClickListener(new ImageClickListener() {
-                                        @Override
-                                        public void onClick(int position) {
-                                            Intent intent = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
-                                            intent.putExtra("user_images", images);
-                                            startActivity(intent);
-
-                                        }
-                                    });
-
-                                    carouselView.setPageCount(images.size());
+//                                    carouselView.setImageListener(new ImageListener() {
+//
+//
+//                                        @Override
+//                                        public void setImageForPosition(int position, ImageView imageView) {
+//
+//                                            Picasso.with(UserProfileActivity.this)
+//                                                    .load(images.get(position))
+//                                                    .fit()
+//                                                    .into(imageView);
+//                                        }
+//                                    });
+//
+//                                    carouselView.setImageClickListener(new ImageClickListener() {
+//                                        @Override
+//                                        public void onClick(int position) {
+//                                            Intent intent = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
+//                                            intent.putExtra("user_images", images);
+//                                            startActivity(intent);
+//
+//                                        }
+//                                    });
+//
+//                                    carouselView.setPageCount(images.size());
 
 
                                 }else{

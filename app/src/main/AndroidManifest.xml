@@ -22,16 +22,17 @@
             android:name=".SplashScreen"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="marwadishaadi.com"
                     android:scheme="http" />
@@ -47,11 +48,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".MyService">
+        <service android:name=".MyService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
@@ -127,8 +126,7 @@
         <activity
             android:name=".User_Profile.UserProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".Payment_Policy.PaymentPolicyActivity"
             android:label="Payment Policy"
@@ -193,11 +191,15 @@
         <activity
             android:name=".Upload_User_Photos.UploadPhotoActivity"
             android:hardwareAccelerated="false"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".Payment.activity.WebViewActivity" />
         <activity android:name=".Payment.activity.StatusActivity" />
-        <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity"></activity>
+        <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity" />
+        <activity
+            android:name=".User_Profile.FullscreenImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_image"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

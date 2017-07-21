@@ -216,6 +216,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    eatingHabits.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -234,6 +237,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    drinkingHabits.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -253,6 +259,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    smokingHabits.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -273,6 +282,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    birthtime.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -292,6 +304,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    gotra.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -310,6 +325,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    manglik.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -328,6 +346,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() == 0 && customer_id != clickedID) {
+                    matchHoroscope.setVisibility(View.GONE);
+                }
 
             }
         });
@@ -416,30 +437,31 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
                                 aboutMe.setText(result.getString(0));
                                 hobbies.setText(result.getString(1));
-                                eatingHabits.setText(result.getString(2));
-                                drinkingHabits.setText(result.getString(3));
-                                smokingHabits.setText(result.getString(4));
+                                String eh = result.getString(2) + " Diet";
+                                eatingHabits.setText(eh);
+                                String dh =  result.getString(3) + " (Drinking habit)";
+                                drinkingHabits.setText(dh);
+                                String sh = result.getString(4) + " (Smoking habit)";
+                                smokingHabits.setText(sh);
                                 String bl;
                                 if (result.getString(5).length() == 0 && result.getString(6).length() == 0) {
                                     bl = "";
                                 } else if (result.getString(5).length() == 0) {
-                                    bl = result.getString(6);
+                                    bl = "Born at "+result.getString(6);
                                 } else if (result.getString(6).length() == 0) {
-                                    bl = result.getString(5);
+                                    bl = "Born on "+result.getString(5);
                                 } else {
-                                    bl = result.getString(5) + " at " + result.getString(6);
+                                    bl = "Born on "+result.getString(5) + " at " + result.getString(6);
 
                                 }
 
                                 birthtime.setText(bl);
-
-                                gotra.setText(result.getString(7));
-
-                                manglik.setText(result.getString(8));
-                                if (result.getString(9).isEmpty()) {
-                                    matchHoroscope.setVisibility(View.GONE);
-                                }
-                                matchHoroscope.setText(result.getString(9));
+                                String g = result.getString(7) + " (Gotra)";
+                                gotra.setText(g);
+                                String m = result.getString(8) + " (Manglik)";
+                                manglik.setText(m);
+                                String mh = result.getString(9) + " (Match horoscope?)";
+                                matchHoroscope.setText(mh);
 
 
                             } catch (JSONException e) {
