@@ -250,7 +250,6 @@
     </string-array>
 
 
-
     <string-array name="height_array">
         <item>Select Height</item>
         <item>4ft - 121cm</item>
@@ -471,5 +470,9 @@
     <!-- Example settings for NotificationsActivity -->
 
     <string name="title_activity_user_profile">UserProfile</string>
+
+    <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>
