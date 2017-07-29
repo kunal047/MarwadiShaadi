@@ -113,6 +113,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private Boolean isInterestSent;
     private Boolean isMsgSent;
     private View view;
+    private String name;
     private String userid_from_deeplink;
 
     private ProgressDialog progressDialog;
@@ -359,7 +360,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                             Uri shortLink = task.getResult().getShortLink();
 
                             Intent sendIntent = new Intent();
-                            String msg = "Hey, Check this profile of " + username + ":" + shortLink.toString();
+                            String msg = "Hey, Check this profile of " + name + ":" + shortLink.toString();
                             sendIntent.setAction(Intent.ACTION_SEND);
                             sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
                             sendIntent.setType("text/plain");
@@ -386,109 +387,100 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Save as PDF", "button");
+
                 if (isPaidMember) {
-                    notification = new NotificationCompat.Builder(UserProfileActivity.this)
-                            .setContentTitle("Pdf Download")
-                            .setSmallIcon(R.drawable.ic_action_drawer_notification)
-                            .setAutoCancel(true)
-                            .setProgress(0, 0, true)
-                            .setContentText("Download in progress");
 
 
-                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, notification.build());
+                    // add permission here
+                    int read_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    int write_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                    new FetchPdfDetails().execute();
+                    if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
+
+                        // first time asks for both permission
+                        if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
+
+                            Dexter.withActivity(UserProfileActivity.this)
+                                    .withPermissions(
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    ).withListener(new MultiplePermissionsListener() {
+                                @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+
+                                    // if both are accepted
+                                    if(report.areAllPermissionsGranted()){
+                                        SaveAsPdf();
+
+                                        // if both are rejected
+                                    }else if (report.getDeniedPermissionResponses().size() == 2){
+                                        showStorageSettings();
+
+                                        // one of them is accepted
+                                    }else{
+                                        List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
+                                        for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
+                                            if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
+                                                setReadStoragePermissionStatus();
+                                                showStorageSettings();
+                                            }else{
+                                                setWriteStoragePermissionStatus();
+                                                showStorageSettings();
+                                            }
+                                        }
+                                    }
+                                }
+                                @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
+                            }).check();
+
+                        }
+                        // other times
+                        // write allowed, read rejected
+                        else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
+
+                            Dexter.withActivity(UserProfileActivity.this)
+                                    .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    .withListener(new PermissionListener() {
+                                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                            SaveAsPdf();
+                                        }
+                                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                            showStorageSettings();
+                                        }
+                                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                        }
+                                    }).check();
+
+                        }
+                        // read allowed, write rejected
+                        else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
+
+                            Dexter.withActivity(UserProfileActivity.this)
+                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .withListener(new PermissionListener() {
+                                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                            SaveAsPdf();
+                                        }
+                                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                            showStorageSettings();
+                                        }
+                                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                        }
+                                    }).check();
+
+                        }else{
+                            showStorageSettings();
+                        }
+                    }else{
+                        SaveAsPdf();
+                    }
+
+
                 } else {
                     Toast.makeText(UserProfileActivity.this, " This feature is only for premium members", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(UserProfileActivity.this, UpgradeMembershipActivity.class);
                     startActivity(intent);
-                }
-
-
-                // add permission here
-                int read_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-                int write_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
-
-                    // first time asks for both permission
-                    if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
-
-                        Dexter.withActivity(UserProfileActivity.this)
-                            .withPermissions(
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            ).withListener(new MultiplePermissionsListener() {
-                            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
-
-                                // if both are accepted
-                                if(report.areAllPermissionsGranted()){
-                                    SaveAsPdf();
-
-                                    // if both are rejected
-                                }else if (report.getDeniedPermissionResponses().size() == 2){
-                                    showStorageSettings();
-
-                                    // one of them is accepted
-                                }else{
-                                    List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
-                                    for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
-                                        if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
-                                            setReadStoragePermissionStatus();
-                                            showStorageSettings();
-                                        }else{
-                                            setWriteStoragePermissionStatus();
-                                            showStorageSettings();
-                                        }
-                                    }
-                                }
-                            }
-                            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
-                        }).check();
-
-                    }
-                    // other times
-                    // write allowed, read rejected
-                    else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
-
-                        Dexter.withActivity(UserProfileActivity.this)
-                            .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            .withListener(new PermissionListener() {
-                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                                    SaveAsPdf();
-                                }
-                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                                    showStorageSettings();
-                                }
-                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
-                                }
-                            }).check();
-
-                    }
-                    // read allowed, write rejected
-                    else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
-
-                        Dexter.withActivity(UserProfileActivity.this)
-                            .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            .withListener(new PermissionListener() {
-                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                                    SaveAsPdf();
-                                }
-                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                                    showStorageSettings();
-                                }
-                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
-                                }
-                            }).check();
-
-                    }else{
-                        showStorageSettings();
-                    }
-                }else{
-                    SaveAsPdf();
                 }
 
             }
@@ -605,7 +597,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                             try {
 
-                                String name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
+                                 name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
                                  images = new ArrayList<>();
 
                                 if (response.length() > 2) {
@@ -686,6 +678,23 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     class FetchPdfDetails extends AsyncTask<String, Void, Void> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            notification = new NotificationCompat.Builder(UserProfileActivity.this)
+                    .setContentTitle("PDF Download")
+                    .setSmallIcon(R.drawable.ic_action_drawer_notification)
+                    .setAutoCancel(true)
+                    .setProgress(0, 0, true)
+                    .setContentText("Download in progress");
+
+
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, notification.build());
+
+        }
+
+        @Override
         protected Void doInBackground(String... params) {
 
 
@@ -698,6 +707,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         @Override
                         public void onResponse(final JSONArray response) {
 
+                            Log.d("PDFVIEW",response.toString());
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                                 @Override
@@ -764,14 +774,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                             }
                                         });
 
-                                        String pdfname = response.getString(1) + " " + response.getString(2);
+                                        String pdfname = response.getString(0) + " " + response.getString(1);
                                         pdfImageName.setText(pdfname);
-                                        pdfImageId.setText(response.getString(3));
+                                        pdfImageId.setText(response.getString(2));
                                         pdfName.setText(pdfname);
-                                        int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(response.getString(4));
+                                        int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(response.getString(3));
                                         pdfAge.setText(String.valueOf(age));
-                                        pdfMaritalStatus.setText(response.getString(5));
-                                        pdfDob.setText(response.getString(4));
+                                        pdfMaritalStatus.setText(response.getString(4));
+                                        pdfDob.setText(response.getString(5));
                                         pdfGender.setText(response.getString(6));
                                         pdfLocation.setText(response.getString(7));
                                         pdfContact.setText(response.getString(8));

@@ -1412,7 +1412,7 @@ public class Search extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: -------------- "+ response.toString());
+                            Log.e(TAG, "onResponse: -------------- "+ response.length());
                             Vector<String> customers=new Vector<>();
                             for(int i=0;i<response.length();i++){
                                 JSONArray user= null;
@@ -1441,7 +1441,7 @@ public class Search extends AppCompatActivity {
                                         int a = getAge(year, month, day);
                                         String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
-                                        Log.d(TAG, "onResponse: respinse name is " + user.getString(12));
+                                        Log.d(TAG, "onResponse: respinse name is " + user.getString(11));
                                         if(user.get(8).equals("")){
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }else{

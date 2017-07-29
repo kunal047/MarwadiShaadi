@@ -27,13 +27,13 @@
 
         <ImageView
             android:id="@+id/recentUserImage"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="250dp"
-            android:background="#1afb6542"
             android:clickable="true"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
             android:src="@drawable/default_drawer"
+            android:layout_marginLeft="40dp"
+            android:background="#1afb6542"
             />
 
         <TextView
