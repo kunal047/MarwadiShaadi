@@ -411,9 +411,10 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                 if (s.length() < 9 && customer_id != clickedID) {
                     relativeMobile.setVisibility(View.GONE);
                 } else {
-
+                    Log.d(TAG, "onTextChanged: relative mobile is " + relativeMobile.getText().toString());
                     float radius = relativeMobile.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    relativeMobile.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     relativeMobile.getPaint().setMaskFilter(filter);
                 }
             }
@@ -427,14 +428,23 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         relativeMobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked on relative mobile");
                 if (!isPaidMember) {
+
+
+                    Log.d(TAG, "onClick: paid member status " + isPaidMember);
+
+                    Toast.makeText(getContext(), "This feature is available only for paid members", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                    getContext().startActivity(intent);
+
                     Snackbar snackbar = Snackbar
                             .make(mview, "Become a paid member.", Snackbar.LENGTH_LONG)
                             .setAction("GO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
-                                    getContext().startActivity(intent);
+
                                 }
                             });
 
@@ -459,7 +469,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             clickedID = data.getStringExtra("customerNo");
             new ProfileFamilyDetails().execute(clickedID);
 
-            Toast.makeText(getContext(), clickedID, Toast.LENGTH_SHORT).show();
         }
 
         if ("suggestion".equals(from) | "recent".equals(from) | "reverseMatching".equals(from) | "favourites".equals(from) | "interestReceived".equals(from) | "interestSent".equals(from) | "similar".equals(from)) {

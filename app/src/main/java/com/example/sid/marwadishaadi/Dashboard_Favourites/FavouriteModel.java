@@ -5,10 +5,10 @@ package com.example.sid.marwadishaadi.Dashboard_Favourites;
  */
 
 public class FavouriteModel {
-    private String name, location, highest_degree, imageurl, customerId;
+    private String name, location, highest_degree, imageurl, customerId, interestStatus;
     private int age;
 
-    public FavouriteModel(String customerId, String name, String location, String highest_degree, int age, String imageurl) {
+    public FavouriteModel(String customerId, String name, String location, String highest_degree, int age, String imageurl, String interestStatus) {
 
         this.customerId = customerId;
         this.name = name;
@@ -16,8 +16,16 @@ public class FavouriteModel {
         this.highest_degree = highest_degree;
         this.age = age;
         this.imageurl = imageurl;
+        this.interestStatus = interestStatus;
     }
 
+    public String getInterestStatus() {
+        return interestStatus;
+    }
+
+    public void setInterestStatus(String interestStatus) {
+        this.interestStatus = interestStatus;
+    }
 
     public String getCustomerId() {
         return customerId;

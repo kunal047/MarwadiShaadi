@@ -73,7 +73,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         holder.fav_name_age.setText(name_age);
         holder.fav_education.setText(favouriteModel.getHighest_degree());
         holder.fav_city.setText(favouriteModel.getLocation());
-        Log.d("Favourite->ImageURL",favouriteModel.getImageurl());
+        if (!favouriteModel.getInterestStatus().contains("Not")) {
+            holder.sendInterest.setText(favouriteModel.getInterestStatus());
+            holder.sendInterest.setEnabled(false);
+        }
+
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.default_drawer)

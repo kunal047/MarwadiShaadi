@@ -289,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  scheduledExecutorService.shutdown();
 
                                                              } else {
-                                                                 Toast.makeText(getApplicationContext(), "Please Enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                 Toast.makeText(getApplicationContext(), "Please enter correct Email Address", Toast.LENGTH_SHORT).show();
                                                                  dialog.dismiss();
                                                                  scheduledExecutorService.shutdown();
                                                              }
@@ -317,7 +317,7 @@ public class LoginActivity extends AppCompatActivity {
                                              dialog.show();
                                              pass = HashConverter(pass);
                                              new BackGround().execute("user_id", email, pass);
-                                             Toast.makeText(getApplicationContext(), "Please use ID ", Toast.LENGTH_SHORT).show();
+
                                              final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
                                              scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                                                  @Override
@@ -621,7 +621,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
 
                                 // handle error
 
