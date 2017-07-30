@@ -31,6 +31,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.example.sid.marwadishaadi.Dashboard_Favourites.FavouritesFragment;
 import com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
@@ -371,7 +372,18 @@ public class DashboardActivity extends AppCompatActivity
 
                                 String name = response.getString(0) + " " + response.getString(1);
                                 if (response.length() == 3) {
-                                    Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + response.getString(2)).into(userdp);
+
+                                    String imageURL = "http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + response.getString(2);
+
+                                    SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    SharedPreferences.Editor editors = userinfo.edit();
+                                    editors.putString("imageURL",imageURL);
+                                    editors.apply();
+
+                                    Picasso.with(getApplicationContext())
+                                            .load(imageURL)
+                                            .placeholder(R.drawable.default_drawer)
+                                            .into(userdp);
                                 }
                                 nameDrawer.setText(name);
 

@@ -25,6 +25,8 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.meg7.widget.CircleImageView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +47,8 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     TextView name,id;
     public ProgressDialog dialog;
     private String customer_id;
+    private de.hdodenhof.circleimageview.CircleImageView membership_photo;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -97,6 +101,18 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         others_start=(TextView)findViewById(R.id.start_others);
         others_end=(TextView)findViewById(R.id.end_others);
 
+        membership_photo = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.membership_photo);
+
+
+        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String imageURL = userinfo.getString("imageURL",null);
+        if (imageURL!=null){
+            Picasso.with(getApplicationContext())
+                    .load(imageURL)
+                    .placeholder(R.drawable.default_drawer)
+                    .into(membership_photo);
+        }
+
         jain.setVisibility(View.GONE);
         agarwal.setVisibility(View.GONE);
         khandelwal.setVisibility(View.GONE);
@@ -145,7 +161,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: -------------- "+response.toString());
+                            Log.e("membershipupgrade->", "onResponse: -------------- "+response.toString());
                             if (response.length()==0){
                                 no.setVisibility(View.VISIBLE);
                             }

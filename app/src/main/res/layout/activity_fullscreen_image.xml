@@ -8,18 +8,19 @@
 
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
 
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/carouselView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:layout_gravity="center_vertical"
             app:fillColor="#FFFFFFFF"
             app:pageColor="#00000000"
-            app:radius="6dp"
+            app:radius="4dp"
             app:slideInterval="3000"
             app:strokeColor="#FF777777"
             app:strokeWidth="1dp" />
@@ -27,8 +28,9 @@
         <ImageView
             android:id="@+id/imageViewExit"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="20dp"
             android:layout_gravity="end"
+            android:layout_margin="10dp"
             app:srcCompat="@drawable/delete" />
 
 

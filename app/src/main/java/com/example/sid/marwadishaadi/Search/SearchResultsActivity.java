@@ -44,6 +44,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         Bundle bundle=getIntent().getExtras();
         //        sm.size();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_results_toolbar);
         String str=bundle.get("which").toString();
         if(str.contains("advSearch")) {

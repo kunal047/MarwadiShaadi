@@ -167,6 +167,8 @@ public class FavouritesFragment extends Fragment {
                                     for (int i = 0; i < response.length(); i++) {
 
                                         JSONArray array = response.getJSONArray(i);
+                                        Log.d("Favourtiesarray->",array.toString());
+
                                         String customerNo = array.getString(0);
                                         String name = array.getString(1);
                                         String dateOfBirth = array.getString(2);
@@ -186,7 +188,7 @@ public class FavouritesFragment extends Fragment {
                                         String age = Integer.toString(a);
                                         String education = array.getString(3);
                                         String occupationLocation = array.getString(4);
-                                        String imageUrl = array.getString(5);
+                                        String imageUrl = array.getString(6);
 
 
                                         FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
