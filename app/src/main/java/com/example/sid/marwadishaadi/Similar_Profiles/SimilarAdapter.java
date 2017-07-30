@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
@@ -50,7 +51,14 @@ public class SimilarAdapter extends RecyclerView.Adapter<SimilarAdapter.MyViewHo
         holder.name_age.setText(name_age);
         holder.city.setText(similarModel.getCity());
         holder.education.setText(similarModel.getEducation());
-        Glide.with(context).load(similarModel.getImgAdd()).into(holder.imgAdd);
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.default_drawer)
+                .error(R.drawable.default_drawer);
+        Glide.with(context)
+                .load(similarModel.getImgAdd())
+                .apply(options)
+                .into(holder.imgAdd);
 
     }
 

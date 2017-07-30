@@ -1098,10 +1098,8 @@ public class Search extends AppCompatActivity {
                 editor.putString("heightLow",s1);
                 editor.putString("heightHigh",s2);
                 editor.putString("communities",spinnerCastSearch.getText().toString());
-                editor.putString("stateArray",statesList.toString());
                 editor.putString("educationArray", education.toString());
                 editor.putString("sortBy",itm);
-                editor.putString("cityArray", cityList.toString());
                 editor.putString("maritalStatusArray",maritalstatus.getText().toString());
                 editor.putString("familyStatusArray",familystatus.getText().toString());
                 editor.putString("manglik",mangli);
@@ -1193,15 +1191,7 @@ public class Search extends AppCompatActivity {
                 spinnerCastSearch.setText(sharedPreferences.getString("communities",null));
             }
 
-            if (sharedPreferences.getString("stateArray",null) != null) {
-                String[] stat = sharedPreferences.getString("stateArray",null).replace("[","").replace("]","").split(",");
-                String str="";
-                for (String s : stat) {
-                    str = str+"\n"+s;
-                    statesList.add(s);
-                }
-                statetextView.setText(str);
-            }
+
             if (sharedPreferences.getString("educationArray",null) != null) {
                 if (sharedPreferences.getString("educationArray",null).contains("Engineer")) {
                     intengineer = true;
@@ -1276,16 +1266,7 @@ public class Search extends AppCompatActivity {
                     }
                 }
             }
-            if (sharedPreferences.getString("cityArray",null) != null) {
-                String[] stat = sharedPreferences.getString("cityArray",null).replace("[","").replace("]","").split(",");
 
-                String sta = "";
-                for (String st : stat) {
-                    sta = sta + "\n" + st;
-                    cityList.add(st);
-                }
-                citytextview.setText(sta);
-            }
             if (sharedPreferences.getString("maritalStatusArray",null) != null) {
                 String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(",");
                 for(String s : arr)
@@ -1949,6 +1930,7 @@ public class Search extends AppCompatActivity {
         return true;
     }
 
+
     private class BackEnd extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -2001,7 +1983,7 @@ public class Search extends AppCompatActivity {
                                         int a = getAge(year, month, day);
                                         String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
-                                         if(user.get(8).equals("")){
+                                        if(user.get(8).equals("")){
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }else{
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
