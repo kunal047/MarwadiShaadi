@@ -107,6 +107,8 @@ public class FullscreenImageActivity extends AppCompatActivity {
                                     Log.d("", "setImageForPosition: " + userImages.get(position));
                                     Picasso.with(FullscreenImageActivity.this)
                                                     .load(userImages.get(position))
+                                                    .placeholder(R.drawable.default_drawer)
+                                                    .error(R.drawable.default_drawer)
                                                     .fit()
                                                     .into(imageView);
                                 }

@@ -189,9 +189,10 @@ public class FavouritesFragment extends Fragment {
                                         String education = array.getString(3);
                                         String occupationLocation = array.getString(4);
                                         String imageUrl = array.getString(6);
+                                        String interestStatus = array.getString(7);
 
 
-                                        FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl);
+                                        FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, interestStatus);
 
                                         if (!favouritesList.contains(favouriteModel)){
                                             favouritesList.add(0, favouriteModel);

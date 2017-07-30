@@ -13,11 +13,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -192,12 +194,11 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     address.setVisibility(View.GONE);
-                } else if (!isPaidMember){
-                    if (Build.VERSION.SDK_INT >= 11) {
-                        mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    }
-                    float radius = address.getTextSize() / 3;
+                } else if (!isPaidMember) {
+
+                    float radius = address.getTextSize()/3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    address.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     address.getPaint().setMaskFilter(filter);
                 }
             }
@@ -218,12 +219,11 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() < 9 && customer_id != clickedID) {
                     mobileNo.setVisibility(View.GONE);
-                } else if (!isPaidMember){
-                    if (Build.VERSION.SDK_INT >= 11) {
-                        mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    }
+                } else if (!isPaidMember) {
+
                     float radius = mobileNo.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    mobileNo.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     mobileNo.getPaint().setMaskFilter(filter);
                 }
             }
@@ -456,22 +456,28 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             }
         });
 
-        mobileNo.setOnClickListener(new View.OnClickListener() {
+        address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isPaidMember) {
-                    Snackbar snackbar = Snackbar
-                            .make(mview, "This feature is only available for paid member", Snackbar.LENGTH_LONG)
-                            .setAction("GO", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
-                                    getContext().startActivity(intent);
-                                }
-                            });
 
-                    // Changing message text color
-                    snackbar.setActionTextColor(Color.RED);
+                    Toast.makeText(getContext(), "This feature is only available for paid members", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                    getContext().startActivity(intent);
+
+                }
+            }
+        });
+
+        mobileNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("", "onClick: mobile num clicked !");
+                if (!isPaidMember) {
+
+                    Toast.makeText(getContext(), "This feature is only available for paid members", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                    getContext().startActivity(intent);
 
                 } else {
 
@@ -483,7 +489,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                 }
             }
         });
-
 
 
         Intent data = getActivity().getIntent();

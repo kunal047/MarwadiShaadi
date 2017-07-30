@@ -384,6 +384,11 @@ public class DashboardActivity extends AppCompatActivity
                                             .load(imageURL)
                                             .placeholder(R.drawable.default_drawer)
                                             .into(userdp);
+
+//                                    keep below commented thing and remove above code if there is error
+//                                    Log.d(TAG, "onResponse: response of picture is " + response.getString(2));
+//
+//                                    Picasso.with(getApplicationContext()).load("http://www.marwadishaadi.com/uploads/cust_"+customer_id+"/thumb/" + response.getString(2)).into(userdp);
                                 }
                                 nameDrawer.setText(name);
 

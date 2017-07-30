@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
         SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        
+
         return new SuggestionAdapter.MyViewHolder(iView);
     }
 
@@ -98,6 +97,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                 .centerCrop()
                 .placeholder(R.drawable.default_drawer)
                 .error(R.drawable.default_drawer);
+
+
         Glide.with(context)
                 .load(suggest.getImgAdd())
                 .apply(options)
@@ -114,7 +115,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
         holder.highDeg.setText(suggest.getHighDeg());
 
         if (suggest.getFavouriteStatus().toCharArray()[0] == '1') {
-            
+
             holder.sparkButtonFav.setChecked(false);
             holder.sparkButtonFav.setInactiveImage(R.mipmap.heart_disable);
         }
@@ -186,14 +187,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                         }
                     });
 
-                    
+
                     interestState = "added";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
                     Snackbar snackbar = Snackbar.make(rv, "Interest Sent", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
                 } else {
-                    
+
                     interestState = "removed";
                     new AddInterestFromSuggestion().execute(customer_id, suggestionModelList.get(position).getCusId(), interestState);
                     Snackbar snackbar = Snackbar.make(rv, "Removed from interest", Snackbar.LENGTH_SHORT);
@@ -219,7 +220,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
     @Override
     public int getItemCount() {
-        
+
 
         return suggestionModelList.size();
     }

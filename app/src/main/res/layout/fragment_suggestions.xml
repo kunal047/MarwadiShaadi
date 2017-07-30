@@ -5,7 +5,6 @@
              android:orientation="vertical">
 
 
-
     <LinearLayout
         android:id="@+id/empty_view_suggestions"
         android:layout_width="match_parent"
@@ -31,33 +30,24 @@
     </LinearLayout>
 
     <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-        <!--<ProgressBar-->
-            <!--android:id="@+id/favourite_progress_bar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:indeterminate="true"-->
-            <!--/>-->
+    <!--<ProgressBar-->
+    <!--android:id="@+id/favourite_progress_bar"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:indeterminate="true"-->
+    <!--/>-->
     <!--</RelativeLayout>-->
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <FrameLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        >
+        android:layout_gravity="bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,35 +73,49 @@
                 />
 
             <!--<TextView-->
-                <!--android:id="@+id/filter"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:background="#b9b9b9"-->
-                <!--android:clickable="true"-->
-                <!--android:drawableLeft="@drawable/ic_action_filter"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:padding="5dp"-->
-                <!--android:text="Filter"-->
-                <!--android:textAlignment="center"-->
-                <!--android:textColor="#000"-->
-                <!--android:textSize="15dp"-->
-                <!--/>-->
-
+            <!--android:id="@+id/filter"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="#b9b9b9"-->
+            <!--android:clickable="true"-->
+            <!--android:drawableLeft="@drawable/ic_action_filter"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="Filter"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="15dp"-->
+            <!--/>-->
 
 
         </LinearLayout>
 
     </FrameLayout>
 
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/swipe_recyclerview"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="40dp"
-        >
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/swipe_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+        <include
+            android:id="@+id/loadItemsLayout_recyclerView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/progress_layout"
+            android:visibility="gone" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>

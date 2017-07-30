@@ -283,7 +283,7 @@ public class SettingsActivity extends AppCompatActivity {
                          user_new_pass = newpass.getText().toString();
 
 //                        customer_id="J1001";
-                         query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
+                        query = "SELECT password FROM `tbl_login` WHERE customer_no=\""+customer_id+"\";";
                         new BackEnd().execute(query);
 
 

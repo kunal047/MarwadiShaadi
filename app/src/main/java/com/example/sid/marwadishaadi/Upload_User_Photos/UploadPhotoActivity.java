@@ -21,6 +21,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
@@ -56,6 +58,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,8 +67,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -91,6 +96,12 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private CircleImageView photo1, photo2, photo3, photo4, photo5;
     private String customer_id;
     private View view;
+    private Bitmap bitmap;
+    private ByteArrayOutputStream bos;
+    private FileOutputStream fos;
+    private byte[] bitmapdata;
+    private String nameOfPhoto, timeStamp, file_type;
+    private List<String> userImages;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -121,6 +132,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
             ArrayList<String> filelist = getIntent().getParcelableExtra("user_images");
         }
 
+        new FetchPhoto().execute();
+
         fblogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +143,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
-
 
                             // getting user profile
                             GraphRequest request = GraphRequest.newMeRequest(
@@ -185,143 +197,174 @@ public class UploadPhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                if (photo1.getTag() == "changed") {
-                BitmapDrawable drawable = (BitmapDrawable) photo1.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                file_one = new File(getApplicationContext().getCacheDir(), "profile_photo.jpg");
-                try {
-                    file_one.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (photo1.getTag() == "changed") {
+                    Bitmap bitmap = ((BitmapDrawable) photo1.getDrawable()).getBitmap();
+                    String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    String nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
+                    file_one = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
+                    file_type = "profile_image";
+                    try {
+                        file_one.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    try {
+                        fos = new FileOutputStream(file_one);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    new UploadPhoto().execute(file_one);
                 }
 
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                byte[] bitmapdata = bos.toByteArray();
+                if (photo2.getTag() == "changed") {
 
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file_one);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    bitmap = ((BitmapDrawable) photo2.getDrawable()).getBitmap();
+                    timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    file_two = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
+                    file_type = "image";
+                    try {
+                        file_two.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
+
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_two);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    new UploadPhoto().execute(file_two);
                 }
 
-                drawable = (BitmapDrawable) photo2.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_two = new File(getApplicationContext().getCacheDir(), "two.jpg");
-                try {
-                    file_two.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (photo3.getTag() == "changed") {
+
+                    bitmap = ((BitmapDrawable) photo3.getDrawable()).getBitmap();
+                    timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    file_three = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
+                    file_type = "image";
+
+                    try {
+                        file_three.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
+
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_three);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    new UploadPhoto().execute(file_three);
+
                 }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                if (photo4.getTag() == "changed") {
+                    bitmap = ((BitmapDrawable) photo4.getDrawable()).getBitmap();
+                    timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    file_four = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
+                    file_type = "image";
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_two);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                }
+                    try {
+                        file_four.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-//                if (photo3.getTag() == "changed") {
-                drawable = (BitmapDrawable) photo3.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_three = new File(getApplicationContext().getCacheDir(), "three.jpg");
-                try {
-                    file_three.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_four);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_three);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                }
-
-//                if (photo4.getTag() == "changed") {
-                drawable = (BitmapDrawable) photo4.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_four = new File(getApplicationContext().getCacheDir(), "four.jpg");
-                try {
-                    file_four.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    new UploadPhoto().execute(file_four);
                 }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
+                if (photo5.getTag() == "changed") {
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_four);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    bitmap = ((BitmapDrawable) photo4.getDrawable()).getBitmap();
+                    timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    file_five = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
+                    file_type = "image";
+
+                    try {
+                        file_five.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
+
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_five);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    new UploadPhoto().execute(file_five);
                 }
 
-                drawable = (BitmapDrawable) photo5.getDrawable();
-                bitmap = drawable.getBitmap();
-                file_five = new File(getApplicationContext().getCacheDir(), "five.jpg");
-                try {
-                    file_five.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                bitmapdata = bos.toByteArray();
 
-                fos = null;
-                try {
-                    fos = new FileOutputStream(file_five);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                }
-
-                new UploadPhoto().execute();
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
                 if (isSelected) {
-                    Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
-                    startActivity(i);
+                    Toast.makeText(UploadPhotoActivity.this, "All photos uploaded ", Toast.LENGTH_SHORT).show();
+
+//                    Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
+//                    startActivity(i);
                 } else {
                     Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
                 }
@@ -454,6 +497,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     getImageview().setImageDrawable(photo);
 
                 } else if (items[item].equals("Remove Photo")) {
+
                     getImageview().setImageResource(R.drawable.photo);
                     getImageview().setTag("default");
                 } else if (items[item].equals("Cancel")) {
@@ -464,7 +508,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
 
         AlertDialog image = builder.create();
-        image.setTitle("Choose Photos !");
+        image.setTitle("Choose Photos");
         image.show();
     }
 
@@ -800,19 +844,67 @@ public class UploadPhotoActivity extends AppCompatActivity {
         edit.apply();
     }
 
-    private class UploadPhoto extends AsyncTask<Void, Void, Void> {
+    private class FetchPhoto extends AsyncTask<Void, Void, Void> {
 
 
         @Override
         protected Void doInBackground(Void... params) {
 
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchPhotos")
+                    .addBodyParameter("customerNo", customer_id)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+
+                                String profile_image = response.getString(0);
+                                userImages = new ArrayList<>();
+
+                                userImages.add("http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + profile_image);
+
+                                if (response.length() > 1) {
+                                    for (int i = 1; i < response.length(); i++) {
+                                        JSONArray u_image = response.getJSONArray(i);
+                                        userImages.add("http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + u_image.getString(0));
+                                    }
+                                }
+                                for (int i = 0; i < userImages.size(); i++) {
+
+                                    Picasso.with(UploadPhotoActivity.this)
+                                            .load(userImages.get(i))
+                                            .into(getImageviewInstance(i));
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+            ;
+            return null;
+        }
+    }
+
+    private class UploadPhoto extends AsyncTask<File, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(File... params) {
+
+            File file_name = params[0];
             AndroidNetworking.upload("http://208.91.199.50:5000/uploadPhotos")
-                    .addMultipartFile("image_one", file_one)
-                    .addMultipartFile("image_two", file_two)
-                    .addMultipartFile("image_three", file_three)
-                    .addMultipartFile("image_four", file_four)
-                    .addMultipartFile("image_five", file_five)
+                    .addMultipartFile("image_one", file_name)
                     .addMultipartParameter("customerNo", customer_id)
+                    .addMultipartParameter("file_type", file_type)
                     .setPriority(Priority.HIGH)
                     .build()
                     .setUploadProgressListener(new UploadProgressListener() {
@@ -824,11 +916,13 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Log.d("ok ->", "onResponse: " + response.toString());
                             // do anything with response
                         }
 
                         @Override
                         public void onError(ANError error) {
+                            Log.d("ok ->", "onResponse: " + error.toString());
                             // handle error
                         }
                     });
