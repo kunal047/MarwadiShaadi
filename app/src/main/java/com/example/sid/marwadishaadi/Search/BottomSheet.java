@@ -147,7 +147,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     public BottomSheet(int i, String[] array) {
         this.array = array;
-        if (i == 111) {
+        if (i == 0) {
+            Search search = new Search();
+            content = search.getCasebreak();
+        }else if (i == 111) {
             content = 111;
         } else if (i == 112) {
             content = 112;
@@ -200,7 +203,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
             //----------------- SEARCH ----------------------------------------------------------
 
             case 1:
-                contentView = viewGetter(R.array.caste_array);
+                if(array!= null && array.length>0)
+                {Log.d(TAG, "setupDialog: ----"+array[0]);
+                    contentView = viewGetter2(R.array.caste_array, array);}
+                else
+                    contentView = viewGetter(R.array.caste_array);
                 count = 2;
                 break;
 
@@ -212,22 +219,39 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
 
             case 3:
-                contentView = viewGetter(R.array.status_search_array);
+                if(array!= null && array.length>0) {
+                    Log.d(TAG, "setupDialog: ----" + array.length);
+                    contentView = viewGetter2(R.array.status_search_array, array);
+                } else
+                    contentView = viewGetter(R.array.status_search_array);
                 count = 2;
                 break;
 
             case 4:
-                contentView = viewGetter(R.array.fstatus_search_array);
+                if(array!= null && array.length>0) {
+                    Log.d(TAG, "setupDialog: ----" + array.length);
+                    contentView = viewGetter2(R.array.fstatus_search_array, array);
+                } else
+                    contentView = viewGetter(R.array.fstatus_search_array);
                 count = 2;
                 break;
 
             case 5:
-                contentView = viewGetter(R.array.aincome_search_array);
+                if(array!= null && array.length>0) {
+                    Log.d(TAG, "setupDialog: ----" + array.length);
+                    contentView = viewGetter2(R.array.aincome_search_array, array);
+                }else
+                    contentView = viewGetter(R.array.aincome_search_array);
                 count = 2;
                 break;
 
             case 6:
-                contentView = viewGetter(R.array.physicalstatus_search_array);
+                if(array!= null && array.length>0) {
+                    Log.d(TAG, "setupDialog: ----" + array.length);
+
+                    contentView = viewGetter2(R.array.physicalstatus_search_array, array);
+                } else
+                    contentView = viewGetter(R.array.physicalstatus_search_array);
                 count = 2;
                 break;
 
@@ -617,6 +641,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             String community_text= result.toString().replace("[", "").replace("]", "");
                             spinnerCastSearch.setText(community_text);
                             CastList = result;
+                            SharedPreferences sharedpref = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
+                            SharedPreferences.Editor editorcast = sharedpref.edit();
+                            editorcast.putString("communities",spinnerCastSearch.getText().toString());
+                            editorcast.apply();
                             countspinnerCastSearch = coun;
                             break;
                         case 3:
@@ -628,6 +656,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 String marital_text= result.toString().replace("[", "").replace("]", "");
                                 maritalstatus.setText(marital_text);
                                 maritalstatusList = result;
+                                SharedPreferences sharedprefmari = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editormari = sharedprefmari.edit();
+                                editormari.putString("maritalStatusArray",maritalstatus.getText().toString());
+                                Log.d(TAG, "onClickkkkkkkkkkkkk: "+maritalstatus.getText().toString());
+                                editormari.apply();
                                 countmaritalstatus = coun;
                                 break;
                             }
@@ -635,6 +668,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             String family_text= result.toString().replace("[", "").replace("]", "");
                             familystatus.setText(family_text);
                             familystatusList = result;
+                            SharedPreferences sharedpreffam = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
+                            SharedPreferences.Editor editorfam = sharedpreffam.edit();
+                            editorfam.putString("familyStatusArray",familystatus.getText().toString());
+                            editorfam.apply();
                             countfamilystatus = coun;
                             break;
                         case 5:
@@ -645,6 +682,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 prefannualincome.setText(result.toString().replace("[", "").replace("]", ""));
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences("prefai", MODE_PRIVATE).edit();
                                 editor.putString("ai", result.toString());
+
                                 editor.apply();
 
 
@@ -653,6 +691,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 annualincome.setText(result.toString().replace("[","").replace("]",""));
                                 AIList = result;
                                 countannualincome = coun;
+                                SharedPreferences sharedprefai = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editorai = sharedprefai.edit();
+                                editorai.putString("annualArray",annualincome.getText().toString());
+                                editorai.apply();
                             }
                             break;
                         case 6:
@@ -664,6 +706,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 String physical_text = result.toString().replace("[", "").replace("]", "");
                                 physicalstatus.setText(physical_text);
                                 physicalstatusList = (result);
+                                SharedPreferences sharedprephy = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editorphy = sharedprephy.edit();
+                                editorphy.putString("physicalStatusArray",physicalstatus.getText().toString());
+                                editorphy.apply();
                                 countphysicalstatus = coun;
                                 break;
                             }
@@ -688,6 +734,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
         String[] str = getResources().getStringArray(array);
         for (int i = 0; i < str.length; i++) {
             User user = new User(str[i], "null");
+            if(i==0)
+                user.setBox(true);
             arrayOfUsers.add(user);
         }
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
@@ -723,11 +771,42 @@ public class BottomSheet extends BottomSheetDialogFragment {
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
-        Toast.makeText(getContext(), "here", Toast.LENGTH_LONG).show();
         listView.setAdapter(adapter);
         return view;
     }
 
+
+    private View viewGetter2(int array, String[] arr) {
+
+
+        SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        Log.d(TAG, "viewGetter2: 0"+arr.length);
+
+        ArrayList<User> arrayOfUsers = new ArrayList<>();
+        boolean b;
+        String[] str = getResources().getStringArray(array);
+        for(String sts:arr)
+            Log.d(TAG, "viewGetter2: element------"+sts);
+        for (String ss : str) {
+            if(Arrays.asList(arr).indexOf(ss) == -1)
+            {
+                Log.d(TAG, "viewGetter2: 00-----"+ss+"-------index is---"+Arrays.asList(arr).indexOf(ss));
+                b=false;
+            }
+            else {
+                b = true;
+            }
+            User user = new User(ss, "null", false);
+            user.setBox(b);
+            arrayOfUsers.add(user);
+        }
+        adapter = new UsersAdapter(getContext(), arrayOfUsers);
+        View view = View.inflate(getContext(), R.layout.custom_list_view, null);
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+        return view;
+    }
 
     private class BackNd extends AsyncTask<String, String, String> {
         @Override

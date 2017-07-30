@@ -53,6 +53,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -78,6 +79,8 @@ public class Search extends AppCompatActivity {
     static String addTextcity, addPreviousc = "";
     public static EditText maritalstatus;
     public static EditText familystatus;
+    Bundle bundle;
+
 
     public static EditText annualincome;
     public static EditText physicalstatus;
@@ -155,6 +158,7 @@ public class Search extends AppCompatActivity {
         String[] community= getResources().getStringArray(R.array.communities);
         SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         CastList.clear();
+        final SharedPreferences sharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -217,7 +221,16 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 3;
-                BottomSheetDialogFragment btm = new BottomSheet(0);
+                BottomSheetDialogFragment btm=null;
+                if(sharedPreferences!=null){
+                    if(sharedPreferences.getString("maritalStatusArray",null)!=null && sharedPreferences.getString("maritalStatusArray",null).trim().length()>0){
+                        String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(", ");
+                        Log.d(TAG, "onClickesh: "+arr.length);
+                         btm = new BottomSheet(0,arr);
+                    }else
+                        btm = new BottomSheet(0);
+                }else
+                     btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
             }
         });
@@ -227,7 +240,15 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 4;
-                BottomSheetDialogFragment btm = new BottomSheet(0);
+                BottomSheetDialogFragment btm=null;
+                if(sharedPreferences!=null){
+                    if(sharedPreferences.getString("familyStatusArray",null)!=null && sharedPreferences.getString("familyStatusArray",null).trim().length()>0){
+                        String [] arr = sharedPreferences.getString("familyStatusArray",null).replace("[","").replace("]","").split(", ");
+                        btm = new BottomSheet(0,arr);
+                    }else
+                        btm = new BottomSheet(0);
+                }else
+                    btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
             }
         });
@@ -237,8 +258,17 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 5;
-                BottomSheetDialogFragment btm = new BottomSheet(0);
+                BottomSheetDialogFragment btm=null;
+                if(sharedPreferences!=null){
+                    if(sharedPreferences.getString("annualArray",null)!=null && sharedPreferences.getString("annualArray",null).trim().length()>0){
+                        String [] arr = sharedPreferences.getString("annualArray",null).replace("[","").replace("]","").split(", ");
+                        btm = new BottomSheet(0,arr);
+                    }else
+                        btm = new BottomSheet(0);
+                }else
+                    btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
+
             }
         });
 
@@ -247,8 +277,17 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 6;
-                BottomSheetDialogFragment btm = new BottomSheet(0);
+                BottomSheetDialogFragment btm=null;
+                if(sharedPreferences!=null){
+                    if(sharedPreferences.getString("physicalStatusArray",null)!=null && sharedPreferences.getString("physicalStatusArray",null).trim().length()>0){
+                        String [] arr = sharedPreferences.getString("physicalStatusArray",null).replace("[","").replace("]","").split(", ");
+                        btm = new BottomSheet(0,arr);
+                    }else
+                        btm = new BottomSheet(0);
+                }else
+                    btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
+
             }
         });
 
@@ -716,9 +755,16 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 casebreak = 1;
-                BottomSheetDialogFragment btm = new BottomSheet(0);
+                BottomSheetDialogFragment btm=null;
+                if(sharedPreferences!=null){
+                    if(sharedPreferences.getString("communities",null)!=null && sharedPreferences.getString("communities",null).trim().length()>0){
+                        String [] arr = sharedPreferences.getString("communities",null).replace("[","").replace("]","").split(", ");
+                        btm = new BottomSheet(0,arr);
+                    }else
+                        btm = new BottomSheet(0);
+                }else
+                    btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
-
             }
         });
 
@@ -734,8 +780,20 @@ public class Search extends AppCompatActivity {
 
             }
         });
-        FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search_Submit);
-        search.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+
+
+
+
+
+
+
+                FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search_Submit);
+                search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                 new BackEnd().execute("","","","","","","","","");
@@ -1011,6 +1069,51 @@ public class Search extends AppCompatActivity {
                     query += " order by tbl_login.last_activity_on asc ";
                 }
 
+                // Adding Bundles
+                /* bundle = new Bundle();
+                bundle.putString("ageLow",tvMin.getText().toString());
+                bundle.putString("ageHigh",tvMax.getText().toString());
+                bundle.putString("heightLow",s1);
+                bundle.putString("heightHigh",s2);
+                bundle.putString("communities",spinnerCastSearch.getText().toString());
+                bundle.putStringArrayList("stateArray",(ArrayList<String>)statesList);
+                bundle.putStringArrayList("educationArray", (ArrayList<String>) education);
+                bundle.putString("sortBy",itm);
+                bundle.putStringArrayList("cityArray", (ArrayList<String>) cityList);
+                bundle.putString("maritalStatusArray",maritalstatus.getText().toString());
+                bundle.putString("familyStatusArray",familystatus.getText().toString());
+                bundle.putString("manglik",mangli);
+                bundle.putString("children",childs);
+                bundle.putStringArrayList("occupationArray", (ArrayList<String>) occupation);
+                bundle.putString("annualArray",annualincome.getText().toString());
+                bundle.putStringArrayList("complexionArray", (ArrayList<String>) complexion);
+                bundle.putStringArrayList("bodyTypeArray", (ArrayList<String>) bodyType);
+                bundle.putString("physicalStatusArray",physicalstatus.getText().toString());
+*/
+                SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedpref.edit();
+                editor.putString("ageLow",tvMin.getText().toString());
+                editor.putString("ageHigh",tvMax.getText().toString());
+                editor.putString("heightLow",s1);
+                editor.putString("heightHigh",s2);
+                editor.putString("communities",spinnerCastSearch.getText().toString());
+                editor.putString("stateArray",statesList.toString());
+                editor.putString("educationArray", education.toString());
+                editor.putString("sortBy",itm);
+                editor.putString("cityArray", cityList.toString());
+                editor.putString("maritalStatusArray",maritalstatus.getText().toString());
+                editor.putString("familyStatusArray",familystatus.getText().toString());
+                editor.putString("manglik",mangli);
+                editor.putString("children",childs);
+                editor.putString("occupationArray", occupation.toString());
+                editor.putString("annualArray",annualincome.getText().toString());
+                editor.putString("complexionArray", complexion.toString());
+                editor.putString("bodyTypeArray", bodyType.toString());
+                editor.putString("physicalStatusArray",physicalstatus.getText().toString());
+                editor.apply();
+                Log.d(TAG, "Bndle-----Bundle Bundle---------"+editor.toString());
+
                 new BackEnd().execute(query);
 
 
@@ -1047,6 +1150,277 @@ public class Search extends AppCompatActivity {
         average = (CheckBox) findViewById(R.id.search_check_average);
         doesntMatter = (CheckBox) findViewById(R.id.bodytype_doesnt_matter);
 
+
+
+
+        //setting old search values
+
+        if(sharedPreferences!=null) {
+            Log.d(TAG, "bunbunbuhuhub----------====" + sharedPreferences.getString("ageLow",null));
+            if (sharedPreferences.getString("ageLow",null) != null) {
+                tvMin.setText(sharedPreferences.getString("ageLow",null));
+                rangeSeekbar.setMinStartValue(Float.valueOf(sharedPreferences.getString("ageLow",null)));
+            }
+            if (sharedPreferences.getString("ageHigh",null) != null) {
+                tvMax.setText(sharedPreferences.getString("ageHigh",null));
+                rangeSeekbar.setMaxStartValue(Float.valueOf(sharedPreferences.getString("ageHigh",null)));
+            }
+            String[] hf = getResources().getStringArray(R.array.height_array);
+
+            if (sharedPreferences.getString("heightLow",null) != null) {
+
+                for (String s : hf) {
+
+                    if (s.contains(sharedPreferences.getString("heightLow",null))) {
+                        height_from.setSelection(Arrays.asList(hf).indexOf(s));
+                    }
+                }
+            }
+
+            if (sharedPreferences.getString("heightHigh",null) != null) {
+                for (String s : hf) {
+
+                    if (s.contains(sharedPreferences.getString("heightHigh",null))) {
+                        height_to.setSelection(Arrays.asList(hf).indexOf(s));
+                    }
+                }
+            }
+            if (sharedPreferences.getString("communities",null) != null) {
+                String [] arr = sharedPreferences.getString("communities",null).replace("[","").replace("]","").split(",");
+                for(String s : arr)
+                CastList.add(s);
+                countspinnerCastSearch = CastList.size();
+                spinnerCastSearch.setText(sharedPreferences.getString("communities",null));
+            }
+
+            if (sharedPreferences.getString("stateArray",null) != null) {
+                String[] stat = sharedPreferences.getString("stateArray",null).replace("[","").replace("]","").split(",");
+                String str="";
+                for (String s : stat) {
+                    str = str+"\n"+s;
+                    statesList.add(s);
+                }
+                statetextView.setText(str);
+            }
+            if (sharedPreferences.getString("educationArray",null) != null) {
+                if (sharedPreferences.getString("educationArray",null).contains("Engineer")) {
+                    intengineer = true;
+                    tengineer.setTextColor(colorg);
+                    education.add(tengineer.getText().toString());
+                    iengineer.setImageResource(R.drawable.engineer);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains("Doctor")) {
+                    intdoctor = true;
+                    tdoctor.setTextColor(colorg);
+                    education.add(tdoctor.getText().toString());
+
+                    idoctor.setImageResource(R.drawable.doctor);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tcacs.getText().toString())) {
+                    intcacs = true;
+                    tcacs.setTextColor(colorg);
+                    education.add(tcacs.getText().toString());
+                    icacs.setImageResource(R.drawable.ca);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tllb.getText().toString())) {
+                    intllb = true;
+                    tllb.setTextColor(colorg);
+                    education.add(tllb.getText().toString());
+
+                    illb.setImageResource(R.drawable.llb);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tpg.getText().toString())) {
+                    intpg = true;
+                    tpg.setTextColor(colorg);
+                    education.add(tpg.getText().toString());
+
+                    ipg.setImageResource(R.drawable.mba);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tg.getText().toString())) {
+                    intg = true;
+                    tg.setTextColor(colorg);
+                    education.add(tg.getText().toString());
+
+                    ig.setImageResource(R.drawable.grad);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tug.getText().toString())) {
+                    intug = true;
+                    tug.setTextColor(colorg);
+                    education.add(tug.getText().toString());
+
+                    iug.setImageResource(R.drawable.undergrad);
+
+                }
+                if (sharedPreferences.getString("educationArray",null).contains(tmbamca.getText().toString())) {
+                    intmbamca = true;
+                    tmbamca.setTextColor(colorg);
+                    education.add(tmbamca.getText().toString());
+
+                    imbamca.setImageResource(R.drawable.mba);
+
+                }
+            }
+            if (sharedPreferences.getString("sortBy",null) != null) {
+                hf = getResources().getStringArray(R.array.sort_by_array);
+
+                for (String s : hf) {
+
+                    if (sharedPreferences.getString("sortBy",null).contains(s)) {
+                        sort_by.setSelection(Arrays.asList(hf).indexOf(s));
+                    }
+                }
+            }
+            if (sharedPreferences.getString("cityArray",null) != null) {
+                String[] stat = sharedPreferences.getString("cityArray",null).replace("[","").replace("]","").split(",");
+
+                String sta = "";
+                for (String st : stat) {
+                    sta = sta + "\n" + st;
+                    cityList.add(st);
+                }
+                citytextview.setText(sta);
+            }
+            if (sharedPreferences.getString("maritalStatusArray",null) != null) {
+                String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(",");
+                for(String s : arr)
+                maritalstatusList.add(s);
+                countmaritalstatus = maritalstatusList.size();
+                maritalstatus.setText(sharedPreferences.getString("maritalStatusArray",null));
+            }
+            if (sharedPreferences.getString("familyStatusArray",null) != null) {
+                String [] arr = sharedPreferences.getString("familyStatusArray",null).replace("[","").replace("]","").split(",");
+                for(String s : arr)
+                    familystatusList.add(s);
+                countfamilystatus = familystatusList.size();
+
+                familystatus.setText(sharedPreferences.getString("familyStatusArray",null));
+            }
+            if (sharedPreferences.getString("manglik",null) != null) {
+                hf = getResources().getStringArray(R.array.manglik_search_array);
+                for (String s : hf) {
+
+                    if (s.contains(sharedPreferences.getString("manglik",null))) {
+                        manglik.setSelection(Arrays.asList(hf).indexOf(s));
+                    }
+                }
+            }
+            if (sharedPreferences.getString("children",null) != null) {
+                hf = getResources().getStringArray(R.array.children_array);
+                for (String s : hf) {
+
+                    if (s.contains(sharedPreferences.getString("children",null))) {
+                        children.setSelection(Arrays.asList(hf).indexOf(s));
+                    }
+                }
+            }
+            if (sharedPreferences.getString("occupationArray",null) != null) {
+                if (sharedPreferences.getString("occupationArray",null).contains("Profession") ) {
+                    profession.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Job")) {
+                    job.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Retired")) {
+                    retired.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Business") ) {
+                    business.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Not Employed") ) {
+                    not_employed.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Studying-Not Employed") ) {
+                    studying.setChecked(true);
+                }
+                if (sharedPreferences.getString("occupationArray",null).contains("Doesn't Matter") ) {
+                    dont_matter.setChecked(true);
+                }
+            }
+            if (sharedPreferences.getString("annualArray",null) != null) {
+                String [] arr = sharedPreferences.getString("annualArray",null).replace("[","").replace("]","").split(",");
+                for(String s : arr)
+                    AIList.add(s);
+                countannualincome = AIList.size();
+
+                annualincome.setText(sharedPreferences.getString("annualArray",null));
+            }
+            if (sharedPreferences.getString("complexionArray",null) != null) {
+                if (sharedPreferences.getString("complexionArray",null).contains("Very Fair") ) {
+                    very_fair.setChecked(true);
+                }
+                if (sharedPreferences.getString("complexionArray",null).contains("Fair") ) {
+                    fair.setChecked(true);
+                }
+                if (sharedPreferences.getString("complexionArray",null).contains("Wheatish") ) {
+                    wheatish.setChecked(true);
+                }
+                if (sharedPreferences.getString("complexionArray",null).contains("Wheatish Brown") ) {
+                    wheatish_brown.setChecked(true);
+                }
+                if (sharedPreferences.getString("complexionArray",null).contains("Dark") ) {
+                    dark.setChecked(true);
+                }
+                if (sharedPreferences.getString("complexionArray",null).contains("Doesn't Matter") ) {
+                    doesnt_matter.setChecked(true);
+                }
+
+            }
+            if (sharedPreferences.getString("bodyTypeArray",null) != null) {
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Slim") ) {
+                    slim.setChecked(true);
+                }
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Athletic") ) {
+                    athletic.setChecked(true);
+                }
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Average") ) {
+                    average.setChecked(true);
+                }
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Heavy") ) {
+                    heavy.setChecked(true);
+                }
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Doesn't Matter") ) {
+                    doesntMatter.setChecked(true);
+                }
+
+
+            }
+            if (sharedPreferences.getString("physicalStatusArray",null) != null) {
+                String [] arr = sharedPreferences.getString("physicalStatusArray",null).replace("[","").replace("]","").split(",");
+                for(String s : arr)
+                    physicalstatusList.add(s);
+                countphysicalstatus = physicalstatusList.size();
+
+                physicalstatus.setText(sharedPreferences.getString("physicalStatusArray",null));
+            }
+
+
+        }
+
+
+
+        //doesnt matter all deselect anything selected doesnt matter deselected
+        doesnt_matter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(doesnt_matter.isChecked()){
+                    very_fair.setChecked(false);
+                    fair.setChecked(false);
+                    wheatish.setChecked(false);
+                    wheatish_brown.setChecked(false);
+                    dark.setChecked(false);
+                }
+            }
+        });
+
+
+
+       // pizza
         very_fair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1061,6 +1435,16 @@ public class Search extends AppCompatActivity {
                     complexion.add(very_fair.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(false);
+                    int_doesnt_matter = false;
+                    complexion.remove(doesnt_matter.getText().toString());
+                }
+                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(true);
+                    int_doesnt_matter = true;
+                    complexion.add(doesnt_matter.getText().toString());
                 }
             }
         });
@@ -1079,6 +1463,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(false);
+                    int_doesnt_matter = false;
+                    complexion.remove(doesnt_matter.getText().toString());
+                }
+                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(true);
+                    int_doesnt_matter = true;
+                    complexion.add(doesnt_matter.getText().toString());
+                }
             }
         });
         wheatish.setOnClickListener(new View.OnClickListener() {
@@ -1095,6 +1489,16 @@ public class Search extends AppCompatActivity {
                     complexion.add(wheatish.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(false);
+                    int_doesnt_matter = false;
+                    complexion.remove(doesnt_matter.getText().toString());
+                }
+                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(true);
+                    int_doesnt_matter = true;
+                    complexion.add(doesnt_matter.getText().toString());
                 }
             }
         });
@@ -1113,22 +1517,15 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-            }
-        });
-        very_fair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (int_very_fair) {
-                    int_very_fair = false;
-                    complexion.remove(very_fair.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
-
-                } else if (!int_very_fair) {
-                    int_very_fair = true;
-                    complexion.add(very_fair.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
-
+                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(false);
+                    int_doesnt_matter = false;
+                    complexion.remove(doesnt_matter.getText().toString());
+                }
+                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(true);
+                    int_doesnt_matter = true;
+                    complexion.add(doesnt_matter.getText().toString());
                 }
             }
         });
@@ -1147,6 +1544,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(false);
+                    int_doesnt_matter = false;
+                    complexion.remove(doesnt_matter.getText().toString());
+                }
+                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                    doesnt_matter.setChecked(true);
+                    int_doesnt_matter = true;
+                    complexion.add(doesnt_matter.getText().toString());
+                }
             }
         });
         doesnt_matter.setOnClickListener(new View.OnClickListener() {
@@ -1164,6 +1571,23 @@ public class Search extends AppCompatActivity {
                     complexion.add(doesnt_matter.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(doesnt_matter.isChecked()){
+                    very_fair.setChecked(false);
+                    int_very_fair = false;
+                    complexion.remove(very_fair.getText().toString());
+                    fair.setChecked(false);
+                    int_fair = false;
+                    complexion.remove(fair.getText().toString());
+                    wheatish.setChecked(false);
+                    int_wheatish = false;
+                    complexion.remove(wheatish.getText().toString());
+                    wheatish_brown.setChecked(false);
+                    int_wheatish_brown = false;
+                    complexion.remove(wheatish_brown.getText().toString());
+                    dark.setChecked(false);
+                    int_dark = false;
+                    complexion.remove(dark.getText().toString());
                 }
             }
         });
@@ -1184,6 +1608,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
+                }
             }
         });
         job.setOnClickListener(new View.OnClickListener() {
@@ -1200,6 +1634,16 @@ public class Search extends AppCompatActivity {
                     occupation.add(job.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
                 }
             }
         });
@@ -1218,6 +1662,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
+                }
             }
         });
         business.setOnClickListener(new View.OnClickListener() {
@@ -1235,6 +1689,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
+                }
             }
         });
         not_employed.setOnClickListener(new View.OnClickListener() {
@@ -1250,6 +1714,16 @@ public class Search extends AppCompatActivity {
                     int_not_employed = true;
                     occupation.add(not_employed.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
+                }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
                 }
             }
         });
@@ -1268,6 +1742,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                    dont_matter.setChecked(false);
+                    int_dont_matter = false;
+                    occupation.remove(dont_matter.getText().toString());
+                }
+                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                    dont_matter.setChecked(true);
+                    int_dont_matter = true;
+                    occupation.add(dont_matter.getText().toString());
+                }
             }
         });
         dont_matter.setOnClickListener(new View.OnClickListener() {
@@ -1283,6 +1767,27 @@ public class Search extends AppCompatActivity {
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
                     Toast.makeText(getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
+
+                }
+                if(dont_matter.isChecked()){
+                    profession.setChecked(false);
+                    int_profession = false;
+                    occupation.remove(profession.getText().toString());
+                    job.setChecked(false);
+                    int_job = false;
+                    occupation.remove(job.getText().toString());
+                    retired.setChecked(false);
+                    int_retired = false;
+                    occupation.remove(retired.getText().toString());
+                    business.setChecked(false);
+                    int_business = false;
+                    occupation.remove(business.getText().toString());
+                    not_employed.setChecked(false);
+                    int_not_employed = false;
+                    occupation.remove(not_employed.getText().toString());
+                    studying.setChecked(false);
+                    int_studying = false;
+                    occupation.remove(studying.getText().toString());
 
                 }
             }
@@ -1304,6 +1809,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                    doesntMatter.setChecked(false);
+                    intDoesntMatter = false;
+                    bodyType.remove(doesntMatter.getText().toString());
+                }
+                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                    doesntMatter.setChecked(true);
+                    intDoesntMatter = true;
+                    bodyType.add(doesntMatter.getText().toString());
+                }
             }
         });
         athletic.setOnClickListener(new View.OnClickListener() {
@@ -1320,6 +1835,16 @@ public class Search extends AppCompatActivity {
                     bodyType.add(athletic.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                    doesntMatter.setChecked(false);
+                    intDoesntMatter = false;
+                    bodyType.remove(doesntMatter.getText().toString());
+                }
+                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                    doesntMatter.setChecked(true);
+                    intDoesntMatter = true;
+                    bodyType.add(doesntMatter.getText().toString());
                 }
             }
         });
@@ -1338,6 +1863,16 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
+                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                    doesntMatter.setChecked(false);
+                    intDoesntMatter = false;
+                    bodyType.remove(doesntMatter.getText().toString());
+                }
+                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                    doesntMatter.setChecked(true);
+                    intDoesntMatter = true;
+                    bodyType.add(doesntMatter.getText().toString());
+                }
             }
         });
         heavy.setOnClickListener(new View.OnClickListener() {
@@ -1354,6 +1889,16 @@ public class Search extends AppCompatActivity {
                     bodyType.add(heavy.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
+                }
+                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                    doesntMatter.setChecked(false);
+                    intDoesntMatter = false;
+                    bodyType.remove(doesntMatter.getText().toString());
+                }
+                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                    doesntMatter.setChecked(true);
+                    intDoesntMatter = true;
+                    bodyType.add(doesntMatter.getText().toString());
                 }
             }
         });
@@ -1372,7 +1917,22 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-            }
+                if(doesntMatter.isChecked()) {
+                    slim.setChecked(false);
+                    intSlim = false;
+                    bodyType.remove(slim.getText().toString());
+                    athletic.setChecked(false);
+                    intAthletic = false;
+                    bodyType.remove(athletic.getText().toString());
+                    average.setChecked(false);
+                    intAverage = false;
+                    bodyType.remove(average.getText().toString());
+                    heavy.setChecked(false);
+                    intHeavy = false;
+                    bodyType.remove(heavy.getText().toString());
+
+                }
+                }
         });
 
 
@@ -1441,8 +2001,7 @@ public class Search extends AppCompatActivity {
                                         int a = getAge(year, month, day);
                                         String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
-                                        Log.d(TAG, "onResponse: respinse name is " + user.getString(12));
-                                        if(user.get(8).equals("")){
+                                         if(user.get(8).equals("")){
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }else{
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");

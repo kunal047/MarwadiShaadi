@@ -65,10 +65,10 @@ public class UsersAdapter extends ArrayAdapter<User> {
         checkbox.setOnCheckedChangeListener(myCheckChangList);
         checkbox.setTag(position);
         checkbox.setChecked(user.box);
-        if (position == 0 && !mContext.toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity"))
+      /*  if (position == 0 && !mContext.toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity"))
         {
             checkbox.setChecked(true);
-        }
+        }*/
 //        tvHome.setText(user.hometown);
         // Return the completed view to render on screen
         return convertView;
