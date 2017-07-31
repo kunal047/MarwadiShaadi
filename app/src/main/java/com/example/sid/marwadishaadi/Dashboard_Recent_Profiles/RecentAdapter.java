@@ -90,7 +90,6 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             }
         });
         RequestOptions options = new RequestOptions()
-                .centerCrop()
                 .placeholder(R.drawable.default_drawer)
                 .error(R.drawable.default_drawer);
 

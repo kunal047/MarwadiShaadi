@@ -34,6 +34,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
     private String customer_id;
     private CarouselView carouselView;
     private List<String> userImages;
+    private boolean isPaidMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+
 
         ImageView imageViewExit = (ImageView) findViewById(R.id.imageViewExit);
 

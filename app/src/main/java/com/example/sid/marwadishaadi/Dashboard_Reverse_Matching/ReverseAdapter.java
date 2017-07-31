@@ -43,7 +43,7 @@ public class ReverseAdapter extends RecyclerView.Adapter<ReverseAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final ReverseModel rev = reverseModelList.get(position);
         RequestOptions options = new RequestOptions()
-                .centerCrop()
+                .centerInside()
                 .placeholder(R.drawable.default_drawer)
                 .error(R.drawable.default_drawer);
         Glide.with(context)

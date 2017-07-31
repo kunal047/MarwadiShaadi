@@ -216,13 +216,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                 if (res == 1) {
                                     sentmail = true;
                                     new SendMail().execute();
-                                    Toast.makeText(ForgotPasswordActivity.this, "Please check your e-mail for temporary password", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ForgotPasswordActivity.this, "Please check your e-mail for temporary password", Toast.LENGTH_LONG).show();
                                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                     startActivity(i);
 
                                 } else {
                                     sentmail = false;
-                                    Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "This e-mail is not registered with us", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
