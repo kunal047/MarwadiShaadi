@@ -742,6 +742,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         return view;

@@ -62,6 +62,7 @@ import java.util.Vector;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Search extends AppCompatActivity {
+
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
@@ -85,8 +86,6 @@ public class Search extends AppCompatActivity {
     public static EditText annualincome;
     public static EditText physicalstatus;
     public static EditText spinnerCastSearch;
-    public static ArrayList<SuggestionModel> suggestionModelSearch=new ArrayList<SuggestionModel>();
-    public  static SuggestionAdapter suggestionAdapter;
     public static int countmaritalstatus = 0, countfamilystatus = 0, countannualincome = 0, countphysicalstatus = 0, countspinnerCastSearch = 0;
     public static List<SuggestionModel> suggestionModelList2;
 
@@ -1920,7 +1919,7 @@ public class Search extends AppCompatActivity {
     }
 
     public int getCasebreak() {
-        return this.casebreak;
+        return casebreak;
     }
 
 

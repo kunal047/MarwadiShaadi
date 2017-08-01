@@ -10,6 +10,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.squareup.leakcanary.LeakCanary;
 
 
 import org.json.JSONArray;
@@ -42,6 +43,12 @@ public class App extends Application{
                 .build()
         );
 
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
 
@@ -49,7 +56,7 @@ public class App extends Application{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-                    }
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {

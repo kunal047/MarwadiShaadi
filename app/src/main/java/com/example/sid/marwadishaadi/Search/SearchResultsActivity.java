@@ -28,7 +28,6 @@ import static com.example.sid.marwadishaadi.Search.Search.suggestionModelList2;
 public class SearchResultsActivity extends AppCompatActivity {
 
     int size=0;
-    private ArrayList<SuggestionModel> suggestionModelList = new ArrayList<>();
     public static RecyclerView recyclerView;
     private SuggestionAdapter suggestionAdapter;
     private AlertDialog prompt ;
@@ -47,7 +46,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         Bundle bundle=getIntent().getExtras();
-        //        sm.size();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_results_toolbar);
@@ -127,7 +125,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 prompt.show();
 
             }}
-//        prepareBlockData();
 
     }
 
