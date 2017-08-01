@@ -31,6 +31,7 @@ public class UsersAdapter extends ArrayAdapter<User> {
         arraylist=users;
     }
 
+
     @Nullable
     @Override
     public User getItem(int position) {
@@ -73,6 +74,8 @@ public class UsersAdapter extends ArrayAdapter<User> {
                 box.add(p);
         }
         return box;
+
+
     }
     User getUser(int position) {
         return ((User) getItem(position));
@@ -82,7 +85,42 @@ public class UsersAdapter extends ArrayAdapter<User> {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
             getUser((Integer) buttonView.getTag()).box = isChecked;
-        }
+            if(isChecked){
+                if(getUser((Integer) buttonView.getTag()).getName().equals("Doesn\'t Matter")){
+                    for( User p: arraylist ){
+                        if(!p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(false);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }else{
+                    for( User p: arraylist ){
+                        if(p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(false);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                }else{
+                boolean allunchecked=true;
+                for (User p: arraylist ){
+                    if(p.box==true) {
+                        allunchecked = false;
+                        break;
+                    }
+                }
+                if(allunchecked){
+                    for (User p: arraylist ){
+                        if(p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(true);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+            }
+
     };
 }
 
