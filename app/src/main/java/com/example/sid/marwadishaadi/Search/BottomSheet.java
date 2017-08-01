@@ -204,7 +204,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 1:
                 if(array!= null && array.length>0)
-                {Log.d(TAG, "setupDialog: ----"+array[0]);
+                {
                     contentView = viewGetter2(R.array.caste_array, array);}
                 else
                     contentView = viewGetter(R.array.caste_array);
@@ -220,7 +220,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 3:
                 if(array!= null && array.length>0) {
-                    Log.d(TAG, "setupDialog: ----" + array.length);
+
                     contentView = viewGetter2(R.array.status_search_array, array);
                 } else
                     contentView = viewGetter(R.array.status_search_array);
@@ -229,7 +229,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 4:
                 if(array!= null && array.length>0) {
-                    Log.d(TAG, "setupDialog: ----" + array.length);
+
                     contentView = viewGetter2(R.array.fstatus_search_array, array);
                 } else
                     contentView = viewGetter(R.array.fstatus_search_array);
@@ -238,7 +238,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 5:
                 if(array!= null && array.length>0) {
-                    Log.d(TAG, "setupDialog: ----" + array.length);
+
                     contentView = viewGetter2(R.array.aincome_search_array, array);
                 }else
                     contentView = viewGetter(R.array.aincome_search_array);
@@ -247,7 +247,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             case 6:
                 if(array!= null && array.length>0) {
-                    Log.d(TAG, "setupDialog: ----" + array.length);
+
 
                     contentView = viewGetter2(R.array.physicalstatus_search_array, array);
                 } else
@@ -659,7 +659,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 SharedPreferences sharedprefmari = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editormari = sharedprefmari.edit();
                                 editormari.putString("maritalStatusArray",maritalstatus.getText().toString());
-                                Log.d(TAG, "onClickkkkkkkkkkkkk: "+maritalstatus.getText().toString());
+
                                 editormari.apply();
                                 countmaritalstatus = coun;
                                 break;
@@ -781,17 +781,17 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        Log.d(TAG, "viewGetter2: 0"+arr.length);
+
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b;
         String[] str = getResources().getStringArray(array);
         for(String sts:arr)
-            Log.d(TAG, "viewGetter2: element------"+sts);
+
         for (String ss : str) {
             if(Arrays.asList(arr).indexOf(ss) == -1)
             {
-                Log.d(TAG, "viewGetter2: 00-----"+ss+"-------index is---"+Arrays.asList(arr).indexOf(ss));
+
                 b=false;
             }
             else {
@@ -861,7 +861,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                         int year = Integer.parseInt(partsOfDate[2]);
                                         int a = getAge(year, month, day);
                                         String age = Integer.toString(a);
-                                        Log.d(TAG, "onResponse: age is ////////***********"+age);
+
 
 
 

@@ -102,7 +102,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 getApplicationContext().startActivity(i);
             }
         });
-        Log.d(TAG, "onCreate: customer nmae is dma is " + customerName);
+
         toolbar.setTitle(customerName.split(",")[0]);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

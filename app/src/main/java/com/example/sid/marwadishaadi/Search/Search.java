@@ -225,7 +225,7 @@ public class Search extends AppCompatActivity {
                 if(sharedPreferences!=null){
                     if(sharedPreferences.getString("maritalStatusArray",null)!=null && sharedPreferences.getString("maritalStatusArray",null).trim().length()>0){
                         String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(", ");
-                        Log.d(TAG, "onClickesh: "+arr.length);
+
                          btm = new BottomSheet(0,arr);
                     }else
                         btm = new BottomSheet(0);
@@ -1110,7 +1110,7 @@ public class Search extends AppCompatActivity {
                 editor.putString("bodyTypeArray", bodyType.toString());
                 editor.putString("physicalStatusArray",physicalstatus.getText().toString());
                 editor.apply();
-                Log.d(TAG, "Bndle-----Bundle Bundle---------"+editor.toString());
+
 
                 new BackEnd().execute(query);
 
@@ -1154,7 +1154,7 @@ public class Search extends AppCompatActivity {
         //setting old search values
 
         if(sharedPreferences!=null) {
-            Log.d(TAG, "bunbunbuhuhub----------====" + sharedPreferences.getString("ageLow",null));
+
             if (sharedPreferences.getString("ageLow",null) != null) {
                 tvMin.setText(sharedPreferences.getString("ageLow",null));
                 rangeSeekbar.setMinStartValue(Float.valueOf(sharedPreferences.getString("ageLow",null)));

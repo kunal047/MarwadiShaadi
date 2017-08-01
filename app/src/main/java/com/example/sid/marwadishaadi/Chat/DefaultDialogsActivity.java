@@ -89,7 +89,6 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
             @Override
 
             public void onDialogClick(Dialog dialog) {
-                Log.d(TAG, "onDialogClick: name is " + dialog.getUsers().get(0).getName());
                 Intent intnt = new Intent(getApplicationContext(), DefaultMessagesActivity.class);
                 intnt.putExtra("customerId", dialog.getUsers().get(0).getId());
                 intnt.putExtra("customerName", dialog.getDialogName());
