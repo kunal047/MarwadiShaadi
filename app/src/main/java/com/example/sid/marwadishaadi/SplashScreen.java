@@ -74,7 +74,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 Intent i;
-                
+
                 // from deeplink -> go to profile
                 if (activitycode == 0) {
                     if (isUserLoggedIn()){

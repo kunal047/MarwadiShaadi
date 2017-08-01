@@ -604,7 +604,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                     for (int i = 2; i < response.length(); i++) {
 
-                                        Log.d(TAG, "onResponse: images are here -------------------- ");
+
                                         images.add("http://www.marwadishaadi.com/uploads/cust_" + cus + "/thumb/" + response.getString(i).replace("[", "").replace("]", "").replace("\"", ""));
                                     }
                                 }
@@ -614,7 +614,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 toolbarLayout.setTitle(name);
 
                                 if (images.size() > 0) {
-                                    Log.d(TAG, "onResponse: setting images " + images.get(0));
+
                                     Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
 
 //                                    carouselView.setImageListener(new ImageListener() {
@@ -707,7 +707,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         @Override
                         public void onResponse(final JSONArray response) {
 
-                            Log.d("PDFVIEW",response.toString());
+
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                                 @Override

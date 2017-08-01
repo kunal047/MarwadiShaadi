@@ -55,7 +55,6 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
         Intent data = getIntent();
         customer_id = data.getStringExtra("customerNo");
-        Log.d("fsa -> ", "onResponse: " + customer_id);
 
         carouselView = (CarouselView) findViewById(R.id.carouselView);
 
@@ -81,13 +80,10 @@ public class FullscreenImageActivity extends AppCompatActivity {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.d("fsa -> ", "onResponse: " + response.toString());
-                            Log.d("fsa -> ", "onResponse: " + response.length());
 
                             try {
-                                String profile_image = response.getString(0);
+                                String profile_image = response.getString(0).replace("[", "").replace("]","").replace("\"", "");
                                 userImages = new ArrayList<>();
-                                Log.d("", "onResponse: " + "http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + profile_image);
                                 userImages.add("http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + profile_image);
 
                                 if (response.length() > 1) {
@@ -104,7 +100,6 @@ public class FullscreenImageActivity extends AppCompatActivity {
                             carouselView.setImageListener(new ImageListener() {
                                 @Override
                                 public void setImageForPosition(int position, ImageView imageView) {
-                                    Log.d("", "setImageForPosition: " + userImages.get(position));
                                     Picasso.with(FullscreenImageActivity.this)
                                                     .load(userImages.get(position))
                                                     .placeholder(R.drawable.default_drawer)
@@ -119,7 +114,6 @@ public class FullscreenImageActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(ANError anError) {
-                            Log.d("fsa -> ", "onResponse: " + anError.toString());
 
                         }
                     });

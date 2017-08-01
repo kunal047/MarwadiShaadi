@@ -472,7 +472,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         mobileNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("", "onClick: mobile num clicked !");
+
                 if (!isPaidMember) {
 
                     Toast.makeText(getContext(), "This feature is only available for paid members", Toast.LENGTH_LONG).show();

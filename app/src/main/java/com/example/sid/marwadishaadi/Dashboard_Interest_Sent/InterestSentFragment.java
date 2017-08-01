@@ -196,8 +196,8 @@ public class InterestSentFragment extends Fragment {
 
                                         InterestSentModel interestSentModels = new InterestSentModel(customerNo, name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
-                                        Log.d(TAG, "onResponse: reply action is " + replyAction);
-                                        Log.d(TAG, "onResponse: interest status is " + interestStatus);
+
+
 
                                         if (!interestListSent.contains(interestSentModels)) {
 

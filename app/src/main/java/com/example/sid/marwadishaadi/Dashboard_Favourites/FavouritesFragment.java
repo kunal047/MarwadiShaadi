@@ -167,10 +167,10 @@ public class FavouritesFragment extends Fragment {
                                     for (int i = 0; i < response.length(); i++) {
 
                                         JSONArray array = response.getJSONArray(i);
-                                        Log.d("Favourtiesarray->",array.toString());
+
 
                                         String customerNo = array.getString(0);
-                                        String name = array.getString(1);
+                                        String name = array.getString(1) + " " + array.getString(5);
                                         String dateOfBirth = array.getString(2);
 //                                Thu, 18 Jan 1990 00:00:00 GMT
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");

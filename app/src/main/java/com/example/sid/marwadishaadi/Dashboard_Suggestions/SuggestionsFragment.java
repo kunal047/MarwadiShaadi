@@ -172,7 +172,7 @@ public class SuggestionsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d("dsf", "doInBackground: making network call");
+
             AndroidNetworking.post("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
@@ -187,7 +187,7 @@ public class SuggestionsFragment extends Fragment {
                             // do anything with response
                             try {
 
-                                Log.d("dsf", "doInBackground: making network call "  + response.toString());
+
 
                                 suggestionModelList.clear();
                                 suggestionAdapter.notifyDataSetChanged();
