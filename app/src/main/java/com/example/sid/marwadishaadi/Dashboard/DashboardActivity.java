@@ -110,6 +110,14 @@ public class DashboardActivity extends AppCompatActivity
         View mview = navigationView.getHeaderView(0);
         nameDrawer = (TextView) mview.findViewById((R.id.name_drawer));
         userdp = (ImageView) mview.findViewById(R.id.user_dp);
+
+        if(userdp.getDrawable() == getResources().getDrawable(R.drawable.default_drawer)){
+
+            SharedPreferences sharedPref = getSharedPreferences("userDp", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("dashboard","noDp");
+            editor.apply();
+        }
         //fetch dp and name
         new FetchDrawer().execute();
 

@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 
@@ -78,11 +79,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             holder.sendInterest.setEnabled(false);
         }
 
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.default_drawer)
-                .error(R.drawable.default_drawer);
-        Glide.with(context).load(favouriteModel.getImageurl()).apply(options).into(holder.fav_profile_image);
+//        RequestOptions options = new RequestOptions()
+//                .centerCrop()
+//                .placeholder(R.drawable.default_drawer)
+//                .error(R.drawable.default_drawer);
+        Picasso.with(context).load(favouriteModel.getImageurl()).fit().into(holder.fav_profile_image);
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

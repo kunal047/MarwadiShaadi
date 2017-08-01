@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Search;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,9 @@ public class SearchResultsActivity extends AppCompatActivity {
     public static RecyclerView recyclerView;
     private SuggestionAdapter suggestionAdapter;
     private AlertDialog prompt ;
+    private String customer_id;
+    private boolean isPaidMember;
+    private String clickedID;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -71,10 +75,25 @@ public class SearchResultsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(suggestionAdapter);
+
+        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+        customer_id = sharedpref.getString("customer_id", null);
+        clickedID = customer_id;
+
+        String[] array = getResources().getStringArray(R.array.communities);
+
+        for (int i = 0; i < 5; i++) {
+
+            if (sharedpref.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                isPaidMember = true;
+            }
+        }
+
         if(size==0){
+            if(!isPaidMember){
             AlertDialog.Builder buildPrompt=new AlertDialog.Builder(SearchResultsActivity.this);
             buildPrompt.setCancelable(false);
-            buildPrompt.setTitle("No Result").setMessage("This is because you are finding partner only in one community, take membership and get more results. ")
+            buildPrompt.setTitle("No Result").setMessage("Sorry! No search results found.")
                     .setPositiveButton("Membership", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -93,6 +112,21 @@ public class SearchResultsActivity extends AppCompatActivity {
             prompt.show();
 
         }
+        else{
+                AlertDialog.Builder buildPrompt=new AlertDialog.Builder(SearchResultsActivity.this);
+                buildPrompt.setCancelable(false);
+                buildPrompt.setTitle("No Result").setMessage("Sorry! No search results found.")
+                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent= new Intent(getApplicationContext(), Search.class);
+                                startActivity(intent);
+                            }
+                        });
+                prompt= buildPrompt.create();
+                prompt.show();
+
+            }}
 //        prepareBlockData();
 
     }

@@ -610,12 +610,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 }
 
 
-                                toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));
+                                toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
                                 toolbarLayout.setTitle(name);
 
                                 if (images.size() > 0) {
 
-                                    Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
+
+                                    // Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
+                                    Picasso.with(getApplicationContext()).load(images.get(0)).fit().into(imageView);
 
 //                                    carouselView.setImageListener(new ImageListener() {
 //

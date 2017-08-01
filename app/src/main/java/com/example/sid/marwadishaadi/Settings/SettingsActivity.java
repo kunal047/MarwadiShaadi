@@ -438,7 +438,7 @@ private class BackEnd extends AsyncTask<String, String, String> {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                            JSONArray user= null;
+                            JSONArray user;
                             try {
                                 user = response.getJSONArray(0);
                                 old_pass_encrypt=HashConverter(user_old_pass);

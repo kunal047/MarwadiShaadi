@@ -1,0 +1,5 @@
+<root>
+    <item name='org.json.JSONArray java.lang.String getString(int)'>
+        <annotation name='android.support.annotation.NonNull' />
+    </item>
+</root>

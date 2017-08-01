@@ -21,11 +21,11 @@
             android:layout_gravity="center_horizontal"
             android:fitsSystemWindows="true"
             android:titleTextColor="@color/colorPrimary"
-            android:background="#ffede9"
+            android:background="@color/colorPrimary"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             app:expandedTitleMarginBottom="10dp"
             app:expandedTitleMarginStart="10dp"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|enterAlways"
             >
 
@@ -33,7 +33,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
-                app:titleTextColor="@color/colorPrimary"
+                app:titleTextColor="@color/black"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 />

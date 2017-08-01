@@ -79,7 +79,7 @@ public class SuggestionsFragment extends Fragment {
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
         for (int i = 0; i < 5; i++) {
-            
+
             if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                 res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
             }
@@ -184,7 +184,7 @@ public class SuggestionsFragment extends Fragment {
                         public void onResponse(JSONArray response) {
 
 
-                            // do anything with response
+                            // do anything with responseprofile
                             try {
 
 
