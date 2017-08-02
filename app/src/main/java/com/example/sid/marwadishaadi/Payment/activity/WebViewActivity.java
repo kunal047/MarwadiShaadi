@@ -69,9 +69,9 @@ public class WebViewActivity extends Activity {
 			super.onPreExecute();
 			// Showing progress dialog
 			dialog = new ProgressDialog(WebViewActivity.this);
-//			dialog.setMessage("Please wait...");
-//			dialog.setCancelable(false);
-//			dialog.show();
+			dialog.setMessage("Please wait...");
+			dialog.setCancelable(false);
+			dialog.show();
 			String query="";
 			int size=PackageInfos.size();
 			Calendar c= Calendar.getInstance();
@@ -256,7 +256,7 @@ public class WebViewActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		final AlertDialog.Builder ald=new AlertDialog.Builder(this);
-		ald.setTitle("Alert"+getEmojiByUnicode(0xF1644));
+		ald.setTitle("Alert"+getEmojiByUnicode(0xFE1644));
 		ald.setMessage("Are you sure for cancel payment");
 		ald.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			@Override

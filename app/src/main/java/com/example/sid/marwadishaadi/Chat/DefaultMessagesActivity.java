@@ -28,6 +28,7 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
@@ -189,15 +191,13 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         String replyTo = "0"; // default is 0
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance(TimeZone.getTimeZone("IST")).getTime());
 //SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
-
         Log.e(TAG, "onSubmit: time sent is ----- " + timeStamp);
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
         String toDelete = ""; // use if deleted from receiver
-
         AndroidNetworking.post("http://208.91.199.50:5000/uploadChat")
                 .addBodyParameter("messageFromId", messageFromId)
                 .addBodyParameter("messageToId", messageToId)
@@ -251,7 +251,12 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                     SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                     Date date = format.parse(string);
                                     Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
-
+                                    Calendar cal=Calendar.getInstance();
+                                    cal.setTime(date);
+                                    cal.add(Calendar.HOUR_OF_DAY,-5);
+                                    cal.add(Calendar.MINUTE,-30);
+                                    date=cal.getTime();
+                                    Log.e(TAG, "onResponse: date converted is--------"+date);
                                     Message message;
                                     if (jsnrry.getString(3).contains(customerId)) {
                                         User user = new User("1", customerName, null, true);
