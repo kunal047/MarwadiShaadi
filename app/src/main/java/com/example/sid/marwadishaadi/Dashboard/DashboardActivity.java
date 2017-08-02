@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -156,8 +157,7 @@ public class DashboardActivity extends AppCompatActivity
             public void onClick(View v) {
                 int counter=0;
                 String[] array=getResources().getStringArray(R.array.communities);
-
-                SharedPreferences communityChecker = getSharedPreferences("userinfo", MODE_PRIVATE);
+                SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                 for(int i=0;i<5;i++) {
 

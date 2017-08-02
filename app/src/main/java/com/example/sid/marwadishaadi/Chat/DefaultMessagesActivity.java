@@ -78,7 +78,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-//        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        query = "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
