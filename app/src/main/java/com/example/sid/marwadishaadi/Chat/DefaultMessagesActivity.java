@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,16 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
+import com.example.sid.marwadishaadi.DeviceRegistration;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
@@ -53,7 +62,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     private Menu menu;
     private Handler handler = new Handler();
     private String query;
-
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,8 +194,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList.setAdapter(adapter);
 
 
-        String messageFromId = customer_id;
-        String messageToId = customerId;
+        final String messageFromId = customer_id;
+        final String messageToId = customerId;
         String replyTo = "0"; // default is 0
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
@@ -216,6 +226,49 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                     public void onResponse(JSONArray response) {
                         // do anything with response TODO
                         Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
+
+
+
+
+                        // adding it to her notifications list
+                        String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                        mDatabase = FirebaseDatabase.getInstance().getReference(messageToId).child("Notifications");
+                        final NotificationsModel notification= new NotificationsModel((String) toolbar.getTitle(),date,3,false,false,false,true,false,false,false,false,false);
+                        String hash = String.valueOf(notification.hashCode());
+                        mDatabase.child(hash).setValue(notification);
+
+                        // sending push notification to her
+                        // get all devices
+
+                        mDatabases = FirebaseDatabase.getInstance().getReference(messageToId).child("Devices");
+                        mDatabases.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                Log.d("response-->",dataSnapshot.toString());
+                                setData(dataSnapshot);
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -227,6 +280,12 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 });
 
         return true;
+    }
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), toolbar.getTitle() + " sent you an Message", "New Message", "Message");
     }
 
     private class FetchingMessages extends AsyncTask<String, Void, Void> {

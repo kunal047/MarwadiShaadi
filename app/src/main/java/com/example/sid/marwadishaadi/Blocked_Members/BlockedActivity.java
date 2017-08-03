@@ -34,7 +34,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class BlockedActivity extends AppCompatActivity {
-    Bundle bundle;
+
+    private Bundle bundle;
     private List<BlockModel> blockModelList = new ArrayList<>();
     private RecyclerView recyclerView;
     private BlockAdapter blockAdapter;

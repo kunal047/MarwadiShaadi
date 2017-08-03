@@ -45,7 +45,7 @@ import java.util.List;
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
     private final Context context;
-    View iView;
+    private View iView;
     private DatabaseReference mDatabase;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;

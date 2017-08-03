@@ -27,6 +27,11 @@ import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferen
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +44,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class SuggestionsFragment extends Fragment {
@@ -184,11 +190,12 @@ public class SuggestionsFragment extends Fragment {
                         public void onResponse(JSONArray response) {
 
 
-                            // do anything with responseprofile
+
+
+
                             try {
 
-
-
+                                
                                 suggestionModelList.clear();
                                 suggestionAdapter.notifyDataSetChanged();
 

@@ -24,6 +24,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,6 +40,7 @@ import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity;
 import com.example.sid.marwadishaadi.Membership.MembershipActivity;
 import com.example.sid.marwadishaadi.R;
+import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -82,14 +84,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
     public static final int REQUEST_PERMISSION_SETTING = 105;
     public static final int CAMERA_PERMISSION = 100;
-    public static final int READ_EXTERNAL_STORAGE = 103;
-    public static final int WRITE_EXTERNAL_STORAGE = 104;
     private static final int REQUEST_CAMERA = 1;
     private static final int SELECT_FILE = 2;
     private static int number = 0;
     protected Button fblogin;
     private CallbackManager callbackManager;
-    private LoginManager loginManager;
     private File file_one, file_two, file_three, file_four, file_five;
     private FirebaseAnalytics mFirebaseAnalytics;
     private Button submit;
@@ -99,9 +98,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private String customer_id;
     private View view;
     private Bitmap bitmap;
-    private ByteArrayOutputStream bos;
-    private FileOutputStream fos;
-    private byte[] bitmapdata;
     private String nameOfPhoto, timeStamp, file_type;
     private List<String> userImages;
     private ProgressDialog progressDialog;
@@ -134,6 +130,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
         if (getIntent().getParcelableExtra("user_images") != null) {
             ArrayList<String> filelist = getIntent().getParcelableExtra("user_images");
         }
+
+
 
         new FetchPhoto().execute();
 
@@ -201,7 +199,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Handler handler = new Handler();
 
                 new RemovePhoto().execute();
 
@@ -217,20 +214,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-
-                    try {
-                        fos = new FileOutputStream(file_one);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
                     try {
                         isSelected = true;
@@ -257,21 +240,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_two);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     SystemClock.sleep(1500);
                     try {
                         isSelected = true;
@@ -298,21 +267,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
 
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_three);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     SystemClock.sleep(1500);
 
                     try {
@@ -340,21 +295,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
-
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_four);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
                     SystemClock.sleep(1500);
 
@@ -382,21 +322,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
-                    bitmapdata = bos.toByteArray();
-
-                    fos = null;
-                    try {
-                        fos = new FileOutputStream(file_five);
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     SystemClock.sleep(1500);
 
                     try {
@@ -414,9 +339,16 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
                 if (isSelected) {
+                    Intent i;
                     Toast.makeText(UploadPhotoActivity.this, "All photos uploaded ", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
+                    String from = getIntent().getStringExtra("from");
+                    if (from!=null && from.equals("userprofile")){
+                        i = new Intent(UploadPhotoActivity.this, UserProfileActivity.class);
+                    }else{
+                        i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
+                    }
                     startActivity(i);
+
                 } else {
                     Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
                 }
@@ -477,16 +409,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         });
 
 
-        if (this.getIntent().getExtras() != null) {
+        if (this.getIntent().getExtras() != null && this.getIntent().getExtras().getStringArrayList("selected_photos_url") !=null) {
+
             Bundle b = this.getIntent().getExtras();
             ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
-
-            for (String url : urls) {
-
-            }
-
             for (int i = 0; i < urls.size(); i++) {
-
                 Picasso.with(UploadPhotoActivity.this)
                         .load(urls.get(i))
                         .into(getImageviewInstance(i));
@@ -748,22 +675,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
+
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         img = getImageview();
         img.setImageBitmap(thumbnail);
         img.setTag("changed");
@@ -913,6 +826,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
+                                Log.d("userImages",response.toString());
 
                                 String profile_image = response.getString(0);
                                 userImages = new ArrayList<>();
@@ -926,6 +840,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                     }
                                 }
                                 for (int i = 0; i < userImages.size(); i++) {
+
+                                    Log.d("userImages",userImages.get(i));
+
 
                                     Picasso.with(UploadPhotoActivity.this)
                                             .load(userImages.get(i))

@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +24,21 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.DeviceRegistration;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -43,7 +54,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<InterestReceivedModel> interestReceivedModelList;
     private List<InterestReceivedModel> mInterestReceivedModelList;
-    private String customer_id;
+    private String customer_id,customer_name;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
 
     public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
         this.context = context;
@@ -59,8 +72,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                 .inflate(R.layout.item_interest, parent, false);
 
 
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(this.context);
+        SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        customer_name = sharedpref.getString("firstname",null);
 
         return new MyViewHolder(itemView);
     }
@@ -157,6 +171,53 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     interestmodel.setStatus(0);
                     notifyItemChanged(position);
                     new PrepareInterest().execute(customerNo.getText().toString(), "Accepted");
+
+
+                    // ===================== NOTIFICATION ===================================
+
+                    String touserid = interestmodel.getCustomerId();
+
+                    // adding it to her notifications list
+                    String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                    mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
+                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,false,true,false,false,false,false,false,false);
+                    String hash = String.valueOf(notification.hashCode());
+                    mDatabase.child(hash).setValue(notification);
+
+                    // sending push notification to her
+                    // get all devices
+
+                    mDatabases = FirebaseDatabase.getInstance().getReference(touserid).child("Devices");
+                    mDatabases.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.d("response-->",dataSnapshot.toString());
+                            setData(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    // =======================================================================
+
                     Snackbar snackbar = Snackbar
                             .make(rv, "Interest Accepted !", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", new View.OnClickListener() {
@@ -205,6 +266,13 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                 }
             });
         }
+    }
+
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " accepted your Interest", "Interest Accepted", "Interest Accept");
     }
 
     private class PrepareInterest extends AsyncTask<String, Void, Void> {

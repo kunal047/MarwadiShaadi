@@ -1,6 +1,8 @@
 package com.example.sid.marwadishaadi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -16,13 +18,23 @@ public class MyService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
 
-        String registration_id = FirebaseInstanceId.getInstance().getToken();
-
         // algo
         // if user logged in -> get userid and store device id
         // if not -> store it in prefs
         // after successfull -> login/signup -> then update in firebase
-        Notifications_Util.RegisterDevice("A1001", registration_id);
+        String registration_id = FirebaseInstanceId.getInstance().getToken();
+        Log.d("token->on", "onTokenRefresh: " + registration_id);
+
+        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String userid = userinfo.getString("customer_id",null);
+        if(userid!=null){
+            Notifications_Util.RegisterDevice(userid, registration_id);
+        }else{
+            SharedPreferences.Editor editor = userinfo.edit();
+            editor.putString("device_token",registration_id);
+            editor.apply();
+        }
+
 
     }
 

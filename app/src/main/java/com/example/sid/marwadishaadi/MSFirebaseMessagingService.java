@@ -1,5 +1,8 @@
 package com.example.sid.marwadishaadi;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -19,8 +22,13 @@ public class MSFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        // checking if user has notification ON/OFF in settings
+        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean notificationStatus = userinfo.getBoolean("Notification_Status",true);
+        if (notificationStatus){
+            Notifications_Util.createNotification(remoteMessage.getData().get("Type"), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), this, 1);
+        }
 
-        Notifications_Util.createNotification(remoteMessage.getData().get("Type"), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), this, 1);
 
        /* Notif_Message message = new Notif_Message("Mervin","first");
         Notif_Message message1 = new Notif_Message("Maitree","second");

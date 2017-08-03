@@ -233,6 +233,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Edit photos", "button");
 
                 Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
+                i.putExtra("from","userprofile");
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
@@ -710,6 +711,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         public void onResponse(final JSONArray response) {
 
 
+                            Log.d("PDF", "onResponse: " + response.toString());
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                                 @Override
@@ -768,7 +770,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                             public void run() {
                                                 try {
                                                     Glide.with(UserProfileActivity.this)
-                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(0))
+                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(7)+".jpg")
                                                             .into(pdfImage);
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -850,6 +852,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 }
                             };
+
+
+
                             page1.setReuseBitmap(true);
 
 
