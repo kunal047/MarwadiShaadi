@@ -78,8 +78,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-        query = "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
-
+        query = "update tbl_message set msg_read=1 where (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        new Setseen().execute(query);
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
@@ -283,6 +283,44 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         }
                     });
             return null;
+        }
+    }
+    private class Setseen extends AsyncTask<String ,String,String>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            AndroidNetworking.post("http://208.91.199.50:5000/unblock")
+                    .addBodyParameter("query",strings[0])
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                if(response.getString(0).contains("success"))
+                                {
+                                    Log.e(TAG, "onResponse: Messages has been seen by one user and not by another user" );
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(DefaultMessagesActivity.this, "Network or Server Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }

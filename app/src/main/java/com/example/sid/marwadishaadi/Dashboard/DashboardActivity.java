@@ -44,6 +44,7 @@ import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.Notifications.NotificationsActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.Search;
+import com.example.sid.marwadishaadi.Services.ChatNotifyService;
 import com.example.sid.marwadishaadi.Settings.SettingsActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.squareup.picasso.Picasso;
@@ -79,7 +80,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        startService(new Intent(DashboardActivity.this, ChatNotifyService.class));
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         ImageView toolbarSearch = (ImageView) findViewById(R.id.toolbar_search);
