@@ -63,19 +63,18 @@ public class NotificationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
-/*
+
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-*/
+
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-/*
+
         if (customer_id !=null){
-*/
-            mDatabase = FirebaseDatabase.getInstance().getReference("A1001").child("Notifications");
-        //}
+            mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
+        }
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Notifications","view");
