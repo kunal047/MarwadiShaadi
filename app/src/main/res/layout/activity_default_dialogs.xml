@@ -18,12 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/chat_toolbar">
-    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <com.stfalcon.chatkit.dialogs.DialogsList
         android:id="@+id/dialogsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

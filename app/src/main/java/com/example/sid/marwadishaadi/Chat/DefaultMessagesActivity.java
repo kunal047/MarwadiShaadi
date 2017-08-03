@@ -37,6 +37,7 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
@@ -86,7 +88,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-//        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        query = "update tbl_message set msg_read=1 where (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        new Setseen().execute(query);
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
@@ -199,15 +202,13 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         String replyTo = "0"; // default is 0
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance(TimeZone.getTimeZone("IST")).getTime());
 //SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
-
         Log.e(TAG, "onSubmit: time sent is ----- " + timeStamp);
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
         String toDelete = ""; // use if deleted from receiver
-
         AndroidNetworking.post("http://208.91.199.50:5000/uploadChat")
                 .addBodyParameter("messageFromId", messageFromId)
                 .addBodyParameter("messageToId", messageToId)
@@ -310,7 +311,12 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                     SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                     Date date = format.parse(string);
                                     Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
-
+                                    Calendar cal=Calendar.getInstance();
+                                    cal.setTime(date);
+                                    cal.add(Calendar.HOUR_OF_DAY,-5);
+                                    cal.add(Calendar.MINUTE,-30);
+                                    date=cal.getTime();
+                                    Log.e(TAG, "onResponse: date converted is--------"+date);
                                     Message message;
                                     if (jsnrry.getString(3).contains(customerId)) {
                                         User user = new User("1", customerName, null, true);
@@ -336,6 +342,44 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         }
                     });
             return null;
+        }
+    }
+    private class Setseen extends AsyncTask<String ,String,String>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            AndroidNetworking.post("http://208.91.199.50:5000/unblock")
+                    .addBodyParameter("query",strings[0])
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                if(response.getString(0).contains("success"))
+                                {
+                                    Log.e(TAG, "onResponse: Messages has been seen by one user and not by another user" );
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(DefaultMessagesActivity.this, "Network or Server Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }
