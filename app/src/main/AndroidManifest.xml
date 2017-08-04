@@ -54,6 +54,8 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".Services.ChatNotifyService"/>
+
 
         <activity
             android:name="com.facebook.FacebookActivity"

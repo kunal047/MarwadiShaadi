@@ -33,6 +33,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class MembershipActivity extends AppCompatActivity {
     ProgressDialog dialog;
     TextView dash, clear1, clear2, clear3, clear4, clear5, clear6;
     private FirebaseAnalytics mFirebaseAnalytics;
+
 
     public static Integer getCalculate() {
         return calculate;

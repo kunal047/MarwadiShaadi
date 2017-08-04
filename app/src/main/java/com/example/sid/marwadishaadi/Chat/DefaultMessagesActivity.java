@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,16 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
+import com.example.sid.marwadishaadi.DeviceRegistration;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
@@ -35,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 //TODO check whether user is already blocked or not , also chat should be static not network dynamic
@@ -53,7 +63,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     private Menu menu;
     private Handler handler = new Handler();
     private String query;
-
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
+    private String customer_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         Bundle extras = getIntent().getExtras();
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        String first_name = sharedpref.getString("firstname",null);
+        String last_name = sharedpref.getString("surname",null);
+        customer_name = first_name + " " +last_name;
 
         if (extras.getString("customerId") != null) {
             customerId = extras.getString("customerId");
@@ -76,7 +91,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList = (MessagesList) findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
-//        query += "update tbl_message set msg_read=1 where ( msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\" ) or (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        query = "update tbl_message set msg_read=1 where (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
+        new SetSeen().execute(query);
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
@@ -184,20 +200,18 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         messagesList.setAdapter(adapter);
 
 
-        String messageFromId = customer_id;
-        String messageToId = customerId;
+        final String messageFromId = customer_id;
+        final String messageToId = customerId;
         String replyTo = "0"; // default is 0
         String subject = "from mobile"; //make it fixed
         String messageString = input.toString();
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance(TimeZone.getTimeZone("IST")).getTime());
 //SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
-
         Log.e(TAG, "onSubmit: time sent is ----- " + timeStamp);
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
         String toDelete = ""; // use if deleted from receiver
-
         AndroidNetworking.post("http://208.91.199.50:5000/uploadChat")
                 .addBodyParameter("messageFromId", messageFromId)
                 .addBodyParameter("messageToId", messageToId)
@@ -216,6 +230,49 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                     public void onResponse(JSONArray response) {
                         // do anything with response TODO
                         Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
+
+
+
+
+                        // adding it to her notifications list
+                        String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                        mDatabase = FirebaseDatabase.getInstance().getReference(messageToId).child("Notifications");
+                        final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,false,false,true,false,false,false,false,false);
+                        String hash = String.valueOf(notification.hashCode());
+                        mDatabase.child(hash).setValue(notification);
+
+                        // sending push notification to her
+                        // get all devices
+
+                        mDatabases = FirebaseDatabase.getInstance().getReference(messageToId).child("Devices");
+                        mDatabases.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                Log.d("response-->",dataSnapshot.toString());
+                                setData(dataSnapshot);
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -227,6 +284,12 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 });
 
         return true;
+    }
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), toolbar.getTitle() + " sent you an Message", "New Message", "Message");
     }
 
     private class FetchingMessages extends AsyncTask<String, Void, Void> {
@@ -251,7 +314,12 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                     SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                     Date date = format.parse(string);
                                     Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
-
+                                    Calendar cal=Calendar.getInstance();
+                                    cal.setTime(date);
+                                    cal.add(Calendar.HOUR_OF_DAY,-5);
+                                    cal.add(Calendar.MINUTE,-30);
+                                    date=cal.getTime();
+                                    Log.e(TAG, "onResponse: date converted is--------"+date);
                                     Message message;
                                     if (jsnrry.getString(3).contains(customerId)) {
                                         User user = new User("1", customerName, null, true);
@@ -277,6 +345,42 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         }
                     });
             return null;
+        }
+    }
+    private class SetSeen extends AsyncTask<String ,String,String>
+    {
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.e(TAG, "doInBackground: query of seen messages is "+ strings[0] );
+            AndroidNetworking.post("http://208.91.199.50:5000/unblock")
+                    .addBodyParameter("query",strings[0])
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.e(TAG, "onResponse: response of set msg_read='1' is "+ response );
+                            try {
+                                if(response.getString(0).contains("success"))
+                                {
+                                    Log.e(TAG, "onResponse: Messages has been seen by one user and not by another user" );
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Toast.makeText(DefaultMessagesActivity.this, "Network or Server Error", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "onError: error is       908078787878787878787878786    " + anError );
+                        }
+                    });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }

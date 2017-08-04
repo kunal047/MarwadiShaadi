@@ -42,6 +42,7 @@ public class App extends Application{
                 .build()
         );
 
+
     }
 
 
@@ -49,7 +50,7 @@ public class App extends Application{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-                    }
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {

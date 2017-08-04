@@ -24,10 +24,15 @@ import com.stfalcon.chatkit.utils.DateFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -35,11 +40,8 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 //Inbox TODO top bar should work
 public class DefaultDialogsActivity extends DemoDialogsActivity implements DateFormatter.Formatter {
-    static boolean fire = false, fire2 = false, MainFire = false, CalledOnce = false;
     String success = "", query = "";
     String name, url;
-    ScheduledExecutorService scheduleTaskExecutor1, scheduleTaskExecutor;
-    int count = 0, count2 = 0, time = 0;
     ArrayList<String> ListOfQueries, ListOfMessage, ListOfSender, ListOfGetter, ListOfName, ListOfUrl, ListOFMessageOn;
     ProgressDialog pgd;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -199,14 +201,19 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
 //                                            SimpleDateFormat format = new SimpleDateFormat("dd MMM");
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
+                                            Calendar cal=Calendar.getInstance();
+                                            cal.setTime(date);
+                                            cal.add(Calendar.HOUR_OF_DAY,-5);
+                                            cal.add(Calendar.MINUTE,-30);
+                                            date=cal.getTime();
                                             DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
-                                            dialogsList.setAdapter(dla);
+                                            format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5) + " " + jsnrry.getString(6), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
                                             Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + " && " + dlg.getUsers().get(0).getName());
                                             Log.e(TAG, "PrepareList: ---item added is " + i);
-                                            dla.addItem(0, dlg);
+                                            dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
                                         }
@@ -222,12 +229,19 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             String string = jsnrry.getString(3);
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
+                                            Calendar cal=Calendar.getInstance();
+                                            cal.setTime(date);
+                                            cal.add(Calendar.HOUR_OF_DAY,-5);
+                                            cal.add(Calendar.MINUTE,-30);
+                                            date=cal.getTime();
+                                            DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
+                                            format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
                                             //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
                                             Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "  && " + dlg.getUsers().get(0).getName());
                                             Log.e(TAG, "PrepareList: ---item added is " + i);
-                                            dla.addItem(0, dlg);
+                                            dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
                                         }

@@ -28,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +44,10 @@ import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
 import com.example.sid.marwadishaadi.Chat.Message;
 import com.example.sid.marwadishaadi.Chat.User;
+import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
@@ -51,6 +55,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.hendrix.pdfmyxml.PdfDocument;
@@ -115,13 +124,11 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private View view;
     private String name;
     private String userid_from_deeplink;
-
     private ProgressDialog progressDialog;
-    int[] sampleImages = {R.drawable.default_drawer};
-
     private boolean isPaidMember;
-
     private ArrayList<String> images;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -162,6 +169,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        customer_name = sharedpref.getString("firstname",null);
         clickedID = customer_id;
 
         String[] array = getResources().getStringArray(R.array.communities);
@@ -233,6 +241,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Edit photos", "button");
 
                 Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
+                i.putExtra("from","userprofile");
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
@@ -310,6 +319,55 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     // analytics
                     Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest", "button");
                     new AddInterestFromSuggestion().execute(customer_id, clickedID, "added");
+
+
+                    // ========================= NOTIFICATION =======================================
+
+
+                    // adding it to her notifications list
+                    String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                    mDatabase = FirebaseDatabase.getInstance().getReference(clickedID).child("Notifications");
+                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
+                    String hash = String.valueOf(notification.hashCode());
+                    mDatabase.child(hash).setValue(notification);
+
+                    // sending push notification to her
+                    // get all devices
+
+                    mDatabases = FirebaseDatabase.getInstance().getReference(clickedID).child("Devices");
+                    mDatabases.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.d("response-->",dataSnapshot.toString());
+                            setData(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    //======================================================================
+
+
+
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Interest Sent", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
@@ -710,6 +768,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         public void onResponse(final JSONArray response) {
 
 
+                            Log.d("PDF", "onResponse: " + response.toString());
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                                 @Override
@@ -768,7 +827,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                             public void run() {
                                                 try {
                                                     Glide.with(UserProfileActivity.this)
-                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(0))
+                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(7)+".jpg")
                                                             .into(pdfImage);
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -850,6 +909,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 }
                             };
+
+
+
                             page1.setReuseBitmap(true);
 
 
@@ -1098,5 +1160,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         edit.putBoolean("isWritePermissionDenied",true);
         edit.apply();
     }
+
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
+    }
+
 }
 

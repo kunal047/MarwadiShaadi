@@ -205,9 +205,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
             case 1:
                 if(array!= null && array.length>0)
                 {
-                    contentView = viewGetter2(R.array.caste_array, array);}
+                    contentView = viewGetter2(R.array.caste_array_search, array);}
                 else
-                    contentView = viewGetter(R.array.caste_array);
+                    contentView = viewGetter(R.array.caste_array_search);
                 count = 2;
                 break;
 
@@ -742,6 +742,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         return view;
@@ -786,8 +787,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         boolean b;
         String[] str = getResources().getStringArray(array);
-        for(String sts:arr)
-
         for (String ss : str) {
             if(Arrays.asList(arr).indexOf(ss) == -1)
             {

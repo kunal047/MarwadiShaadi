@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +20,22 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.sid.marwadishaadi.DeviceRegistration;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
 import org.json.JSONArray;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,9 +50,11 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     private Context context;
     private List<RecentModel> recentModelList;
     private String favouriteState, interestState;
-    private String customer_id, customer_gender;
+    private String customer_id, customer_gender,customer_name;
     private RecyclerView recentRecyclerView;
-    View iView;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
+    private View iView;
 
 
     public RecentAdapter(Context context, List<RecentModel> recentModelList, RecyclerView recyclerView) {
@@ -60,6 +71,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+        customer_name = sharedpref.getString("firstname",null);
         return new MyViewHolder(iView);
     }
 
@@ -148,7 +160,54 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             public void onEvent(ImageView button, boolean buttonState) {
 
                 if (buttonState) {
-                    
+
+                    // ========================= NOTIFICATION =======================================
+
+
+                    String touserid = recentModelList.get(position).getRecentCustomerId();
+
+                    // adding it to her notifications list
+                    String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                    mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
+                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
+                    String hash = String.valueOf(notification.hashCode());
+                    mDatabase.child(hash).setValue(notification);
+
+                    // sending push notification to her
+                    // get all devices
+
+                    mDatabases = FirebaseDatabase.getInstance().getReference(touserid).child("Devices");
+                    mDatabases.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.d("response-->",dataSnapshot.toString());
+                            setData(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    //======================================================================
+
                     interestState = "added";
                     new RecentAdapter.AddInterestFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), interestState);
                     Snackbar snackbar = Snackbar.make(recentRecyclerView, "Interest Sent", Snackbar.LENGTH_LONG);
@@ -178,6 +237,12 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         });
 
 
+    }
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
     }
 
     @Override

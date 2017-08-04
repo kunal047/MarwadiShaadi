@@ -808,7 +808,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:text="Studying-Not Employed"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="fill"
                             />
                     </LinearLayout>

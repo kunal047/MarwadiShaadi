@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +21,23 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.sid.marwadishaadi.DeviceRegistration;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,8 +51,10 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
     private static final String TAG = "FavouritesAdapter";
     Context context;
     private List<FavouriteModel> fav;
-    private String customer_id;
+    private String customer_id,customer_name;
     private LinearLayout empty_view_favourites;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
 
     public FavouritesAdapter(Context context, List<FavouriteModel> fav,LinearLayout empty_view_favourites) {
         this.context = context;
@@ -58,6 +70,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 
         SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        customer_name = sharedpref.getString("firstname",null);
 
         return new MyViewHolder(itemView);
 
@@ -101,8 +114,59 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         holder.sendInterest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 holder.sendInterest.setText("Interest Sent");
                 holder.sendInterest.setEnabled(false);
+
+
+                // ========================= NOTIFICATION =======================================
+
+
+                String touserid = fav.get(position).getCustomerId();
+
+                // adding it to her notifications list
+                String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
+                final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
+                String hash = String.valueOf(notification.hashCode());
+                mDatabase.child(hash).setValue(notification);
+
+                // sending push notification to her
+                // get all devices
+
+                mDatabases = FirebaseDatabase.getInstance().getReference(touserid).child("Devices");
+                mDatabases.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Log.d("response-->",dataSnapshot.toString());
+                        setData(dataSnapshot);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                //======================================================================
+
                 new SendInterestFromFavourite().execute(favouriteModel.getCustomerId());
 
             }
@@ -129,6 +193,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         });
     }
 
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
+    }
     @Override
     public int getItemCount() {
         return fav.size();

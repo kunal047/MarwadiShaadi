@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     protected TextView forgot;
     protected TextView signup;
     protected LoginButton fblogin;
-    CallbackManager callbackManager;
+    protected CallbackManager callbackManager;
     private boolean checker = false;
     private String email, pass;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -107,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         AndroidNetworking.initialize(getApplicationContext());
-        //        AndroidNetworking.setParserFactory(new JacksonParserFactory());
 
         dialog = new ProgressDialog(LoginActivity.this);
         dialog.setCanceledOnTouchOutside(false);
@@ -176,10 +177,6 @@ public class LoginActivity extends AppCompatActivity {
 
         forgot = (TextView) findViewById(R.id.forgot_link);
         signup = (TextView) findViewById(R.id.signup_link);
-        //        while ()
-        //        {
-        //            Snackbar.make(findViewById(R.id.llLogin),"Internet Connection ?",Snackbar.LENGTH_SHORT).show();
-        //        }
 
 
         forgot.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +247,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
                                                                  editors.putBoolean("isLoggedIn", true);
+                                                                 editors.putString("id",customer_id);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -262,8 +260,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.apply();
                                                                  dialog.dismiss();
 
-                                                                 //Notifications_Util.RegisterDevice(customer_id);
-
+                                                              registerMe();
 
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
@@ -301,15 +298,8 @@ public class LoginActivity extends AppCompatActivity {
                                                  }
                                              }, 1, 3, TimeUnit.SECONDS);
 
-
-                                             // @TODO to be changed
                                              // analytics
                                              Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
-                                                 /*email = login_email.getText().toString();
-                                                 pass = login_pass.getText().toString();*/
-                                             // @TODO to be changed
-                                                /* Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                                                 startActivity(intent);*/
 
                                              // rest
                                          } else if ((email.trim().contains("M") | email.trim().contains("m") | email.trim().contains("a") | email.trim().contains("A") | email.trim().contains("o") | email.trim().contains("O") | email.trim().contains("J") | email.trim().contains("j") | email.trim().contains("K") | email.trim().contains("k")) & !pass.trim().isEmpty()) {
@@ -336,6 +326,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
                                                                  editors.putBoolean("isLoggedIn", true);
+                                                                 editors.putString("id",customer_id);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -347,9 +338,9 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.putString("gender", customer_gender);
                                                                  editor.apply();
                                                                  dialog.dismiss();
-                                                                 //Notifications_Util.RegisterDevice(customer_id);
 
 
+                                                           registerMe();
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
                                                                  if (deeplink != null) {
@@ -480,6 +471,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                         editor.apply();
 
+                                        registerMe();
                                         LoginActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -491,26 +483,12 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
-                                /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);		 +                                    else
- -                                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {		 +                                    {Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();}
 
-
-
-                                        Log.e(TAG, "onResponse: -------------------" + str + "---------" + customer_id + " ------------------- " + customer_gender);
-                                    }
-                                   /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
-                                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                        }
-                                    },1,1)*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
-                                //                         
                             }
 
                             @Override
@@ -580,6 +558,8 @@ public class LoginActivity extends AppCompatActivity {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
+
+                                        registerMe();
                                         LoginActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -594,19 +574,12 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();
                                     }
-                                   /* ScheduledExecutorService scheduledExecutorService=new ScheduledThreadPoolExecutor(5);
-                                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                                        @Override
-                                        public void run() {
 
-                                        }
-                                    },1,1)*/
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
-                                //                         
                             }
 
                             @Override
@@ -623,7 +596,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Toast.makeText(LoginActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
 
-                                // handle error
 
                             }
                         });
@@ -641,7 +613,25 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         super.onBackPressed();
+    }
+
+
+    public void registerMe(){
+        Log.d("token",FirebaseInstanceId.getInstance().getToken());
+
+        // registering device
+        SharedPreferences token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String registration_id = token.getString("device_token",null);
+        if(registration_id!=null){
+            Notifications_Util.RegisterDevice(customer_id, registration_id);
+        }else{
+            Notifications_Util.RegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
+        }
     }
 }
 

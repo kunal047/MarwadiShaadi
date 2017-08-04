@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,14 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
+import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +42,7 @@ import com.varunest.sparkbutton.SparkEventListener;
 
 import org.json.JSONArray;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,13 +52,14 @@ import java.util.List;
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
     private final Context context;
-    View iView;
-    private DatabaseReference mDatabase;
+    private View iView;
     private List<SuggestionModel> suggestionModelList;
     private RecyclerView rv;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String favouriteState, interestState;
-    private String customer_id;
+    private String customer_id,customer_name;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabases;
 
     public SuggestionAdapter(Context context, List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
@@ -70,6 +78,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
         SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        customer_name = sharedpref.getString("firstname",null);
 
         return new SuggestionAdapter.MyViewHolder(iView);
     }
@@ -165,19 +174,41 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
                 if (buttonState) {
 
-                    mDatabase = FirebaseDatabase.getInstance().getReference("users");
+                    // ========================= NOTIFICATION =======================================
 
-                    mDatabase.child(suggestionModelList.get(position).getCusId()).addValueEventListener(new ValueEventListener() {
+
+                    String touserid = suggestionModelList.get(position).getCusId();
+
+                    // adding it to her notifications list
+                    String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
+                    mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
+                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
+                    String hash = String.valueOf(notification.hashCode());
+                    mDatabase.child(hash).setValue(notification);
+
+                    // sending push notification to her
+                    // get all devices
+
+                    mDatabases = FirebaseDatabase.getInstance().getReference(touserid).child("Devices");
+                    mDatabases.addChildEventListener(new ChildEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Log.d("response-->",dataSnapshot.toString());
+                            setData(dataSnapshot);
+                        }
 
-                     /*       DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-                            String registration_id = device.getDevice_id();
-                            SharedPreferences sharedpref = context.getSharedPreferences("userinfo", MODE_PRIVATE);
-                            String customer_name = sharedpref.getString("customer_name", null);
-                            String body = customer_name + " has sent you an Interest";
-                            // sending notification
-                            Notifications_Util.SendNotification(registration_id,body,"New Interest","Interest Request");*/
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
                         }
 
@@ -186,6 +217,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
 
                         }
                     });
+
+
+                    //======================================================================
+
 
 
                     interestState = "added";
@@ -216,6 +251,13 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
             }
         });
 
+    }
+
+    public void setData(DataSnapshot dataSnapshot){
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
     }
 
     @Override

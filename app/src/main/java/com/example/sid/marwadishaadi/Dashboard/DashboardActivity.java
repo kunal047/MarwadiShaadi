@@ -3,6 +3,7 @@ package com.example.sid.marwadishaadi.Dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -43,8 +44,14 @@ import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.Notifications.NotificationsActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.Search;
+import com.example.sid.marwadishaadi.Services.ChatNotifyService;
 import com.example.sid.marwadishaadi.Settings.SettingsActivity;
 import com.example.sid.marwadishaadi.User_Profile.UserProfileActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -69,6 +76,9 @@ public class DashboardActivity extends AppCompatActivity
     private int click = 0;
     private String customer_id, customer_gender,customer_name;
     TextView nameDrawer;
+    private DatabaseReference mDatabase;
+    private int notificationCount = 0;
+    private int readCount = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -78,7 +88,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        startService(new Intent(DashboardActivity.this, ChatNotifyService.class));
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         ImageView toolbarSearch = (ImageView) findViewById(R.id.toolbar_search);
@@ -89,6 +99,41 @@ public class DashboardActivity extends AppCompatActivity
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+        readCount = sharedpref.getInt("readcount",-1);
+
+        if (customer_id !=null){
+            mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
+        }
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                notificationCount = (int) dataSnapshot.getChildrenCount();
+                //Log.d("notifications", notificationCount + "");
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                MenuItem m = menu.findItem(R.id.nav_notifications);
+                if (notificationCount == 0){
+                    m.setTitle("Notifications");
+                }else{
+                    if (readCount!=-1 && readCount > 0){
+                        notificationCount-=readCount;
+                    }
+                    if (notificationCount<0){
+                        m.setTitle("Notifications");
+                    }else{
+                        m.setTitle("Notifications ( " + notificationCount +" )");
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         toolbarSearch.setOnClickListener(new View.OnClickListener() {
@@ -156,8 +201,7 @@ public class DashboardActivity extends AppCompatActivity
             public void onClick(View v) {
                 int counter=0;
                 String[] array=getResources().getStringArray(R.array.communities);
-
-                SharedPreferences communityChecker = getSharedPreferences("userinfo", MODE_PRIVATE);
+                SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                 for(int i=0;i<5;i++) {
 
@@ -243,6 +287,11 @@ public class DashboardActivity extends AppCompatActivity
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         } else if (id == R.id.nav_notifications) {
             Intent i = new Intent(DashboardActivity.this, NotificationsActivity.class);
+            if (notificationCount == 0 || notificationCount < 0){
+                i.putExtra("count",-1);
+            }else{
+                i.putExtra("count",notificationCount);
+            }
             startActivity(i);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         } else if (id == R.id.nav_membership) {

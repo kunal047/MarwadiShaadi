@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -19,10 +20,8 @@ import java.util.ArrayList;
 
 
 public class UsersAdapter extends ArrayAdapter<User> {
+
     ArrayList<User> arraylist;
-    //    int count=0;
-    private int selectedPosition = -1;
-    private static final String TAG = "UsersAdapter";
     private  CheckBox checkbox;
     private Context mContext;
     public UsersAdapter(Context context, ArrayList<User> users) {
@@ -31,6 +30,7 @@ public class UsersAdapter extends ArrayAdapter<User> {
         this.mContext = context;
         arraylist=users;
     }
+
 
     @Nullable
     @Override
@@ -48,12 +48,11 @@ public class UsersAdapter extends ArrayAdapter<User> {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
 
         final User user = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
 
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_multiple_select, parent, false);
@@ -65,13 +64,7 @@ public class UsersAdapter extends ArrayAdapter<User> {
         checkbox.setOnCheckedChangeListener(myCheckChangList);
         checkbox.setTag(position);
         checkbox.setChecked(user.box);
-      /*  if (position == 0 && !mContext.toString().contains("User_Profile.Edit_User_Profile.EditPreferencesActivity"))
-        {
-            checkbox.setChecked(true);
-        }*/
-//        tvHome.setText(user.hometown);
-        // Return the completed view to render on screen
-        return convertView;
+         return convertView;
     }
 
     ArrayList<User> getBox() {
@@ -81,6 +74,8 @@ public class UsersAdapter extends ArrayAdapter<User> {
                 box.add(p);
         }
         return box;
+
+
     }
     User getUser(int position) {
         return ((User) getItem(position));
@@ -90,7 +85,42 @@ public class UsersAdapter extends ArrayAdapter<User> {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
             getUser((Integer) buttonView.getTag()).box = isChecked;
-        }
+            if(isChecked){
+                if(getUser((Integer) buttonView.getTag()).getName().equals("Doesn\'t Matter")){
+                    for( User p: arraylist ){
+                        if(!p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(false);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }else{
+                    for( User p: arraylist ){
+                        if(p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(false);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+
+                }else{
+                boolean allunchecked=true;
+                for (User p: arraylist ){
+                    if(p.box==true) {
+                        allunchecked = false;
+                        break;
+                    }
+                }
+                if(allunchecked){
+                    for (User p: arraylist ){
+                        if(p.getName().equals("Doesn\'t Matter")){
+                            p.setBox(true);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+            }
+
     };
 }
 
