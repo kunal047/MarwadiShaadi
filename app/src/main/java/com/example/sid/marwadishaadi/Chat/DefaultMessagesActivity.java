@@ -65,6 +65,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     private String query;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
+    private String customer_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         Bundle extras = getIntent().getExtras();
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        String first_name = sharedpref.getString("firstname",null);
+        String last_name = sharedpref.getString("surname",null);
+        customer_name = first_name + " " +last_name;
 
         if (extras.getString("customerId") != null) {
             customerId = extras.getString("customerId");
@@ -233,7 +237,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         // adding it to her notifications list
                         String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                         mDatabase = FirebaseDatabase.getInstance().getReference(messageToId).child("Notifications");
-                        final NotificationsModel notification= new NotificationsModel((String) toolbar.getTitle(),date,3,false,false,false,true,false,false,false,false,false);
+                        final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,false,false,true,false,false,false,false,false);
                         String hash = String.valueOf(notification.hashCode());
                         mDatabase.child(hash).setValue(notification);
 

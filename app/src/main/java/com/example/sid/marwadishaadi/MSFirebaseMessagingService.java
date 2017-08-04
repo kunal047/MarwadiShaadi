@@ -29,6 +29,7 @@ public class MSFirebaseMessagingService extends FirebaseMessagingService {
             Notifications_Util.createNotification(remoteMessage.getData().get("Type"), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), this, 1);
         }
 
+        // checking if rgt user is logged in
 
        /* Notif_Message message = new Notif_Message("Mervin","first");
         Notif_Message message1 = new Notif_Message("Maitree","second");

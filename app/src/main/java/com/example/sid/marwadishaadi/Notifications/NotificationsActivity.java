@@ -1,5 +1,6 @@
 package com.example.sid.marwadishaadi.Notifications;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultDialogsActivity;
@@ -37,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +55,11 @@ public class NotificationsActivity extends AppCompatActivity {
     private View ChildView ;
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference mDatabase;
+    private DatabaseReference count;
     private String customer_id;
+    private LinearLayout empty_view;
+    private int counts = 0;
+    private boolean isdata;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -74,7 +81,9 @@ public class NotificationsActivity extends AppCompatActivity {
 
         if (customer_id !=null){
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
+            count = FirebaseDatabase.getInstance().getReference(customer_id);
         }
+
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Notifications","view");
@@ -85,6 +94,9 @@ public class NotificationsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        empty_view = (LinearLayout) findViewById(R.id.empty_view_notifications);
+        empty_view.setVisibility(View.GONE);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         notificationsAdapter =  new NotificationsAdapter(this, notificationsModelList);
         recyclerView.setHasFixedSize(true);
@@ -93,6 +105,35 @@ public class NotificationsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(notificationsAdapter);
+        recyclerView.setVisibility(View.GONE);
+
+        isdata = false;
+        count.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                int size = (int) dataSnapshot.getChildrenCount();
+
+                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                    counts++;
+                    if (snap.getKey().equals("Notifications")){
+                        isdata=true;
+                        recyclerView.setVisibility(View.VISIBLE);
+                        empty_view.setVisibility(View.GONE);
+                    }
+                    if (counts==size && !isdata){
+                        empty_view.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
             GestureDetector gesturedetector = new GestureDetector(NotificationsActivity.this, new GestureDetector.OnGestureListener() {
@@ -223,9 +264,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsAdapter.notifyDataSetChanged();
 
     }
+
     public void prepareBlockData()
     {
-
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -276,6 +317,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         notificationsAdapter.notifyDataSetChanged();*/
     }
+
     @Override
     public boolean onSupportNavigateUp(){
         onBackPressed();

@@ -596,6 +596,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
+
                             try {
                                 JSONArray array = response.getJSONArray(0);
 

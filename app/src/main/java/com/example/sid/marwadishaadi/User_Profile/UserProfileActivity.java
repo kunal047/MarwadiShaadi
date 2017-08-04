@@ -115,12 +115,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private View view;
     private String name;
     private String userid_from_deeplink;
-
     private ProgressDialog progressDialog;
-    int[] sampleImages = {R.drawable.default_drawer};
-
     private boolean isPaidMember;
-
     private ArrayList<String> images;
 
     public static void shareApp(Context context) {
