@@ -124,7 +124,7 @@ public class RecentProfilesFragment extends Fragment {
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-                Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
                 parseRecentProfiles(response);
 
             } catch (JSONException e) {
@@ -286,7 +286,7 @@ public class RecentProfilesFragment extends Fragment {
                             // do anything with response
 
 
-                            Log.d("recent_profiles",response.toString());
+                            //Log.d("recent_profiles",response.toString());
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -294,12 +294,12 @@ public class RecentProfilesFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"recent_profiles");
 
-                                Log.d("latest",latestResponseHash);
-                                Log.d("cached",cacheResponseHash);
-                                Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                                //Log.d("latest",latestResponseHash);
+                                //Log.d("cached",cacheResponseHash);
+                                //Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                    Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                  //  Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
                                     return;
                                 }else{
 
