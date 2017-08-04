@@ -37,7 +37,6 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -15,18 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +42,7 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class Reverse_MatchingFragment extends Fragment {
@@ -54,6 +58,9 @@ public class Reverse_MatchingFragment extends Fragment {
     private LinearLayout empty_view_reverse;
     private ProgressDialog progressDialog;
     private String res = "";
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,14 +74,17 @@ public class Reverse_MatchingFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
+        cache = new File(getCacheDir() + "/" + "reversematching" +customer_id+ ".srl");
+
         String[] array = getResources().getStringArray(R.array.communities);
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        if (communityChecker!=null) {
+            for (int i = 0; i < 5; i++) {
 
-        for (int i = 0; i < 5; i++) {
-            
-            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+                if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                    res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+                }
             }
         }
 
@@ -111,9 +121,98 @@ public class Reverse_MatchingFragment extends Fragment {
         progressDialog.setMessage("Loading your reverse matches...");
         progressDialog.setCancelable(false);
         progressDialog.dismiss();
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("reverse_matching",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"reverse_matching");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseReverseMatches(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         new PrepareReverse().execute();
 
         return mview;
+    }
+
+    private void parseReverseMatches(JSONArray response) {
+
+        try {
+//                                mProgressBar.setVisibility(View.GONE);
+
+            reverseModelList.clear();
+            reverseAdapter.notifyDataSetChanged();
+
+
+
+            if(response.toString().contains("zero")){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        empty_view_reverse.setVisibility(View.VISIBLE);
+                    }
+                });
+            }else {
+                empty_view_reverse.setVisibility(View.GONE);
+
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONArray array = response.getJSONArray(i);
+                    String customerNo = array.getString(0);
+                    String name = array.getString(1);
+                    String dateOfBirth = array.getString(2);
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                    Date date = formatter.parse(dateOfBirth);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                    String[] partsOfDate = formatedDate.split("-");
+                    int day = Integer.parseInt(partsOfDate[0]);
+                    int month = Integer.parseInt(partsOfDate[1]);
+                    int year = Integer.parseInt(partsOfDate[2]);
+                    int age = getAge(year, month, day);
+                    String education = array.getString(3);
+                    String occupationLocation = array.getString(4);
+                    name = name + " " + array.getString(5);
+
+                    String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
+
+                    ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
+
+                    if (!reverseModelList.contains(reverseModel) && imageUrl.contains("null")){
+                        reverseModelList.add(reverseModel);
+                        reverseAdapter.notifyDataSetChanged();
+                    } else if (!reverseModelList.contains(reverseModel)) {
+                        reverseModelList.add(0, reverseModel);
+                        reverseAdapter.notifyDataSetChanged();
+                    }
+
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshContent() {
@@ -165,70 +264,32 @@ public class Reverse_MatchingFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
 
+                            Log.d("reverse_matching",response.toString());
 
-                            try {
-//                                mProgressBar.setVisibility(View.GONE);
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
 
-                                reverseModelList.clear();
-                                reverseAdapter.notifyDataSetChanged();
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"reverse_matching");
 
+                                Log.d("latest",latestResponseHash);
+                                Log.d("cached",cacheResponseHash);
+                                Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
 
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
 
-                                if(response.toString().contains("zero")){
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            empty_view_reverse.setVisibility(View.VISIBLE);
-                                        }
-                                    });
-                                }else {
-                                    empty_view_reverse.setVisibility(View.GONE);
-
-
-                                    for (int i = 0; i < response.length(); i++) {
-
-                                        JSONArray array = response.getJSONArray(i);
-                                        String customerNo = array.getString(0);
-                                        String name = array.getString(1);
-                                        String dateOfBirth = array.getString(2);
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                        Date date = formatter.parse(dateOfBirth);
-
-                                        Calendar cal = Calendar.getInstance();
-                                        cal.setTime(date);
-                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                                        String[] partsOfDate = formatedDate.split("-");
-                                        int day = Integer.parseInt(partsOfDate[0]);
-                                        int month = Integer.parseInt(partsOfDate[1]);
-                                        int year = Integer.parseInt(partsOfDate[2]);
-                                        int age = getAge(year, month, day);
-                                        String education = array.getString(3);
-                                        String occupationLocation = array.getString(4);
-                                        name = name + " " + array.getString(5);
-
-                                        String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
-
-                                        ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
-
-                                        if (!reverseModelList.contains(reverseModel) && imageUrl.contains("null")){
-                                            reverseModelList.add(reverseModel);
-                                            reverseAdapter.notifyDataSetChanged();
-                                        } else if (!reverseModelList.contains(reverseModel)) {
-                                            reverseModelList.add(0, reverseModel);
-                                            reverseAdapter.notifyDataSetChanged();
-                                        }
-
-                                    }
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
+
+
                         }
 
                         @Override
@@ -256,4 +317,20 @@ public class Reverse_MatchingFragment extends Fragment {
 
     }
 
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("reverse_matching",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"reverse_matching");
+
+        // displaying it
+        parseReverseMatches(response);
+
+    }
 }

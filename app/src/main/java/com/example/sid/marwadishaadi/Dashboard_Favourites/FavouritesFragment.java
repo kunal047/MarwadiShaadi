@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.pdfjet.Line;
@@ -28,6 +30,7 @@ import com.pdfjet.Line;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,8 @@ import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
+
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class FavouritesFragment extends Fragment {
@@ -51,6 +56,8 @@ public class FavouritesFragment extends Fragment {
     private String customer_id;
     private LinearLayout empty_view;
     private ProgressDialog progressDialog;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
 
 //    private TextView favouriteZero;
 
@@ -68,6 +75,8 @@ public class FavouritesFragment extends Fragment {
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+
+        cache = new File(getCacheDir() + "/" + "favourites" +customer_id+ ".srl");
 
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
 
@@ -96,8 +105,93 @@ public class FavouritesFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        // loading cached copy
+        String res = CacheHelper.retrieve("favourites",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"favourites");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseFavourites(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         new PrepareFavourites().execute();
         return mview;
+    }
+
+    private void parseFavourites(JSONArray response) {
+
+        try {
+
+//                                mProgressBar.setVisibility(View.GONE);
+
+            if(response.length() == 0){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        empty_view.setVisibility(View.VISIBLE);
+                    }
+                });
+            }else{
+
+                empty_view.setVisibility(View.GONE);
+                favouritesList.clear();
+                favouritesAdapter.notifyDataSetChanged();
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONArray array = response.getJSONArray(i);
+
+
+                    String customerNo = array.getString(0);
+                    String name = array.getString(1) + " " + array.getString(5);
+                    String dateOfBirth = array.getString(2);
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                    Date date = formatter.parse(dateOfBirth);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                    String[] partsOfDate = formatedDate.split("-");
+                    int day = Integer.parseInt(partsOfDate[0]);
+                    int month = Integer.parseInt(partsOfDate[1]);
+                    int year = Integer.parseInt(partsOfDate[2]);
+                    int a = getAge(year, month, day);
+                    String age = Integer.toString(a);
+                    String education = array.getString(3);
+                    String occupationLocation = array.getString(4);
+                    String imageUrl = array.getString(6);
+                    String interestStatus = array.getString(7);
+
+
+                    FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, interestStatus);
+
+                    if (!favouritesList.contains(favouriteModel)){
+                        favouritesList.add(0, favouriteModel);
+                    }
+
+                }
+
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshContent() {
@@ -148,67 +242,33 @@ public class FavouritesFragment extends Fragment {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         public void onResponse(JSONArray response) {
                             // do anything with response
-                            try {
 
-//                                mProgressBar.setVisibility(View.GONE);
 
-                                if(response.length() == 0){
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            empty_view.setVisibility(View.VISIBLE);
-                                        }
-                                    });
+                            Log.d("favourites",response.toString());
+
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
+
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"favourites");
+
+                                Log.d("latest",latestResponseHash);
+                                Log.d("cached",cacheResponseHash);
+                                Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
                                 }else{
 
-                                    empty_view.setVisibility(View.GONE);
-                                    favouritesList.clear();
-                                    favouritesAdapter.notifyDataSetChanged();
-                                    for (int i = 0; i < response.length(); i++) {
-
-                                        JSONArray array = response.getJSONArray(i);
-
-
-                                        String customerNo = array.getString(0);
-                                        String name = array.getString(1) + " " + array.getString(5);
-                                        String dateOfBirth = array.getString(2);
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                        Date date = formatter.parse(dateOfBirth);
-
-                                        Calendar cal = Calendar.getInstance();
-                                        cal.setTime(date);
-                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                                        String[] partsOfDate = formatedDate.split("-");
-                                        int day = Integer.parseInt(partsOfDate[0]);
-                                        int month = Integer.parseInt(partsOfDate[1]);
-                                        int year = Integer.parseInt(partsOfDate[2]);
-                                        int a = getAge(year, month, day);
-                                        String age = Integer.toString(a);
-                                        String education = array.getString(3);
-                                        String occupationLocation = array.getString(4);
-                                        String imageUrl = array.getString(6);
-                                        String interestStatus = array.getString(7);
-
-
-                                        FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, interestStatus);
-
-                                        if (!favouritesList.contains(favouriteModel)){
-                                            favouritesList.add(0, favouriteModel);
-                                        }
-
-                                    }
-
-
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
+
                         }
 
                         @Override
@@ -230,4 +290,20 @@ public class FavouritesFragment extends Fragment {
         }
     }
 
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("favourites",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"favourites");
+
+        // displaying it
+        parseFavourites(response);
+
+    }
 }
