@@ -20,11 +20,13 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +39,7 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class InterestReceivedFragment extends Fragment {
@@ -52,7 +55,8 @@ public class InterestReceivedFragment extends Fragment {
     private LinearLayout empty_view;
     private LinearLayout empty_view_sent;
     private ProgressBar mProgressBar;
-
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
     public InterestReceivedFragment() {
         // Required empty public constructor
     }
@@ -73,6 +77,8 @@ public class InterestReceivedFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
+        cache = new File(getCacheDir() + "/" + "interestreceived" +customer_id+ ".srl");
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -95,9 +101,104 @@ public class InterestReceivedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(interestReceivedAdapter);
+
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("interest_received",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"interest_received");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseInterest(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         new PrepareReceivedInterest().execute();
 
         return mview;
+    }
+
+    private void parseInterest(JSONArray response) {
+        try {
+
+            interestReceivedModelList.clear();
+            interestReceivedAdapter.notifyDataSetChanged();
+
+            if (response.length() == 0) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        empty_view.setVisibility(View.VISIBLE);
+                    }
+                });
+            } else {
+                empty_view.setVisibility(View.GONE);
+
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONArray array = response.getJSONArray(i);
+                    String customerNo = array.getString(0);
+                    String name = array.getString(1);
+                    String dateOfBirth = array.getString(2);
+
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                    Date date = formatter.parse(dateOfBirth);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                    String[] partsOfDate = formatedDate.split("-");
+                    int day = Integer.parseInt(partsOfDate[0]);
+                    int month = Integer.parseInt(partsOfDate[1]);
+                    int year = Integer.parseInt(partsOfDate[2]);
+                    int a = getAge(year, month, day);
+
+                    String age = Integer.toString(a);
+                    String cityName = array.getString(3);
+                    String education = array.getString(4);
+                    String replyAction = array.getString(5);
+                    int resultReplyAction;
+                    if (replyAction.contains("Yes")) {
+                        resultReplyAction = 0;
+                    } else if (replyAction.contains("No")) {
+                        resultReplyAction = 1;
+                    } else {
+                        resultReplyAction = 2;
+                    }
+                    String interestSentOn = array.getString(6);
+                    name = name + " " + array.getString(7);
+                    String imageUrl = array.getString(8);
+
+
+                    InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
+
+                    if (!interestReceivedModelList.contains(interestReceivedModels)) {
+
+                        if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
+                            interestReceivedModelList.add(0, interestReceivedModels);
+                            interestReceivedAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -159,76 +260,35 @@ public class InterestReceivedFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
 
-                            try {
-
-                                interestReceivedModelList.clear();
-                                interestReceivedAdapter.notifyDataSetChanged();
-
-                                if (response.length() == 0) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            empty_view.setVisibility(View.VISIBLE);
-                                        }
-                                    });
-                                } else {
-                                    empty_view.setVisibility(View.GONE);
 
 
-                                    for (int i = 0; i < response.length(); i++) {
+                            // Log.d("interestreceived",response.toString());
 
-                                        JSONArray array = response.getJSONArray(i);
-                                        String customerNo = array.getString(0);
-                                        String name = array.getString(1);
-                                        String dateOfBirth = array.getString(2);
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
 
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                        Date date = formatter.parse(dateOfBirth);
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"interest_received");
 
-                                        Calendar cal = Calendar.getInstance();
-                                        cal.setTime(date);
-                                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
 
-                                        String[] partsOfDate = formatedDate.split("-");
-                                        int day = Integer.parseInt(partsOfDate[0]);
-                                        int month = Integer.parseInt(partsOfDate[1]);
-                                        int year = Integer.parseInt(partsOfDate[2]);
-                                        int a = getAge(year, month, day);
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
 
-                                        String age = Integer.toString(a);
-                                        String cityName = array.getString(3);
-                                        String education = array.getString(4);
-                                        String replyAction = array.getString(5);
-                                        int resultReplyAction;
-                                        if (replyAction.contains("Yes")) {
-                                            resultReplyAction = 0;
-                                        } else if (replyAction.contains("No")) {
-                                            resultReplyAction = 1;
-                                        } else {
-                                            resultReplyAction = 2;
-                                        }
-                                        String interestSentOn = array.getString(6);
-                                        name = name + " " + array.getString(7);
-                                        String imageUrl = array.getString(8);
-
-
-                                        InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
-
-                                        if (!interestReceivedModelList.contains(interestReceivedModels)) {
-
-                                            if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
-                                                interestReceivedModelList.add(0, interestReceivedModels);
-                                                interestReceivedAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    }
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
+
+
+
                         }
 
                         @Override
@@ -238,6 +298,23 @@ public class InterestReceivedFragment extends Fragment {
                         }
                     });
             return null;
+        }
+
+        public void loadedFromNetwork(JSONArray response){
+
+
+            //saving fresh in cache
+            CacheHelper.save("interest_received",response.toString(),cache);
+
+            // marking cache
+            isAlreadyLoadedFromCache = true;
+
+            // storing latest cache hash
+            CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"interest_received");
+
+            // displaying it
+            parseInterest(response);
+
         }
 
         @Override
