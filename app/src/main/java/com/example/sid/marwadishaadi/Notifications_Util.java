@@ -62,6 +62,12 @@ public class Notifications_Util {
 
     }
 
+    public static void unRegisterDevice(String customer_id,String registration_id){
+
+        mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Devices");
+        mDatabase.child(registration_id).removeValue();
+    }
+
     public static void RegisterDevice(String customer_id,String registration_id){
 
         mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Devices");

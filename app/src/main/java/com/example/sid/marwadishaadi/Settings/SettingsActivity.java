@@ -36,12 +36,14 @@ import com.example.sid.marwadishaadi.Blocked_Members.BlockedActivity;
 import com.example.sid.marwadishaadi.Contact_Us.ContactUsActivity;
 import com.example.sid.marwadishaadi.Faq.FaqActivity;
 import com.example.sid.marwadishaadi.Login.LoginActivity;
+import com.example.sid.marwadishaadi.Notifications_Util;
 import com.example.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity;
 import com.example.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity;
 import com.example.sid.marwadishaadi.R;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -234,6 +236,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 editor.putString("password","");
                                 editor.putString("customer_id","");
                                 editor.commit();
+
+                                Notifications_Util.unRegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
 
                                 // analytics
                                 Analytics_Util.logAnalytic(mFirebaseAnalytics,"Logout","textview");
