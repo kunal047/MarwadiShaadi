@@ -188,18 +188,6 @@ public class NotificationsActivity extends AppCompatActivity {
 
         prepareBlockData();
 
-        Button clear = (Button) findViewById(R.id.clearnotifications);
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // analytics
-                Analytics_Util.logAnalytic(mFirebaseAnalytics,"Clear Notifications","button");
-
-                notificationsModelList.clear();
-                notificationsAdapter.notifyDataSetChanged();
-
-            }
-        });
 
 
         ItemTouchHelper.SimpleCallback touchevents = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
