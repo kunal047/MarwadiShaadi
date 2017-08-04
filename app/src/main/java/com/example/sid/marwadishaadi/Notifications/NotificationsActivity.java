@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultDialogsActivity;
@@ -60,6 +61,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private LinearLayout empty_view;
     private int counts = 0;
     private boolean isdata;
+    private int notificationCount = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -70,6 +72,9 @@ public class NotificationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+
+
+        notificationCount = getIntent().getIntExtra("count",-1);
 
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -89,7 +94,13 @@ public class NotificationsActivity extends AppCompatActivity {
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Notifications","view");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.notify_toolbar);
-        toolbar.setTitle("Notifications");
+
+        if (notificationCount!=-1 && notificationCount > 0){
+            toolbar.setTitle("Notifications(" + notificationCount +")");
+        }else{
+            toolbar.setTitle("Notifications");
+        }
+
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -106,6 +117,35 @@ public class NotificationsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(notificationsAdapter);
         recyclerView.setVisibility(View.GONE);
+
+        Button markAsRead = (Button) findViewById(R.id.read_notifications);
+        markAsRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toolbar toolbar = (Toolbar) findViewById(R.id.notify_toolbar);
+                toolbar.setTitle("Notifications");
+
+                Toast.makeText(NotificationsActivity.this, "no:" + notificationCount, Toast.LENGTH_SHORT).show();
+                if (notificationCount!=-1 && notificationCount > 0){
+
+                    SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpref.edit();
+
+                    int previous = sharedpref.getInt("readcount",-1);
+                    if (previous!=-1 ){
+                        int newcount = previous + notificationCount;
+                        toolbar.setTitle("Notifications(" + newcount +")");
+                        editor.putInt("readcount",newcount);
+                        editor.apply();
+                    }else{
+
+                        editor.putInt("readcount",notificationCount);
+                        editor.apply();
+                    }
+                }
+
+            }
+        });
 
         isdata = false;
         count.addListenerForSingleValueEvent(new ValueEventListener() {

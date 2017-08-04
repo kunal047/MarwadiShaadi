@@ -161,6 +161,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
                 if (buttonState) {
 
+                    // ========================= NOTIFICATION =======================================
+
+
                     String touserid = recentModelList.get(position).getRecentCustomerId();
 
                     // adding it to her notifications list
@@ -203,6 +206,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
                     });
 
 
+                    //======================================================================
 
                     interestState = "added";
                     new RecentAdapter.AddInterestFromSuggestion().execute(customer_id, recentModelList.get(position).getRecentCustomerId(), interestState);
