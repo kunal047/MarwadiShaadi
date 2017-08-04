@@ -74,25 +74,28 @@ public class ChatNotifyService extends Service {
                         public void onResponse(JSONArray response) {
                             Log.e(TAG, "onResponse: ----------------------   "+response );
                             try {
-                                if(!response.getJSONArray(0).getString(0).equals("0"))
-                                notification=new NotificationCompat.Builder(ChatNotifyService.this);
+                                if (!response.getJSONArray(0).getString(0).equals("0")&!sharedPreferences.getString("lastChatCount","1").equals(response.getJSONArray(0).getString(0))) {
+                                    notification = new NotificationCompat.Builder(ChatNotifyService.this);
+                                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                                    editor.putString("lastChatCount",response.getJSONArray(0).getString(0));
+                                    editor.apply();
+                                    try {
+                                        Intent intent = new Intent(ChatNotifyService.this, DefaultDialogsActivity.class);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(ChatNotifyService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                        notification.setContentTitle("MarwadiShaadi")
+                                                .setContentText("You are having " + response.getJSONArray(0).getString(0) + " new Messages")
+                                                .setSmallIcon(R.drawable.ic_forum_black_48dp)
+                                                .setContentIntent(pendingIntent);
+                                        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                        notificationManager.notify(0, notification.build());
 
-                            try {
-                                Intent intent= new Intent(ChatNotifyService.this, DefaultDialogsActivity.class);
-                                PendingIntent pendingIntent=PendingIntent.getBroadcast(ChatNotifyService.this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
-                                notification.setContentTitle("MarwadiShaadi")
-                                        .setContentText("You are having "+response.getJSONArray(0).getString(0)+" new Messages")
-                                        .setSmallIcon(R.drawable.ic_forum_black_48dp)
-                                        .setContentIntent(pendingIntent);
-                                NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                                notificationManager.notify(0,notification.build());
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                }catch(JSONException e){
+                                    e.printStackTrace();
+                                }
                         }
 
                         @Override
