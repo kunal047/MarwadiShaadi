@@ -82,10 +82,13 @@ public class ChatNotifyService extends Service {
                                     try {
                                         Intent intent = new Intent(ChatNotifyService.this, DefaultDialogsActivity.class);
                                         PendingIntent pendingIntent = PendingIntent.getActivity(ChatNotifyService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                        String notificationMessage="You are having " + response.getJSONArray(0).getString(0) + " new Messages";
                                         notification.setContentTitle("MarwadiShaadi")
-                                                .setContentText("You are having " + response.getJSONArray(0).getString(0) + " new Messages")
                                                 .setSmallIcon(R.drawable.ic_forum_black_48dp)
-                                                .setContentIntent(pendingIntent);
+                                                .setContentIntent(pendingIntent)
+                                        .setStyle(new NotificationCompat.BigTextStyle()
+                                                .bigText(notificationMessage))
+                                                .setContentText(notificationMessage).setAutoCancel(true);
                                         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                         notificationManager.notify(0, notification.build());
 
