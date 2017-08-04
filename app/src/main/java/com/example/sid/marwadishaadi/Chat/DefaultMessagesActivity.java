@@ -92,7 +92,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
         query = "update tbl_message set msg_read=1 where (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
-        new Setseen().execute(query);
+        new SetSeen().execute(query);
 //        or (msg_from=""+customerId+"\" and msg_to=\""+customer_id+"")INNER JOIN tbl_user on msg_to=customer_no
 
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
@@ -347,21 +347,18 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
             return null;
         }
     }
-    private class Setseen extends AsyncTask<String ,String,String>
+    private class SetSeen extends AsyncTask<String ,String,String>
     {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected String doInBackground(String... strings) {
+            Log.e(TAG, "doInBackground: query of seen messages is "+ strings[0] );
             AndroidNetworking.post("http://208.91.199.50:5000/unblock")
                     .addBodyParameter("query",strings[0])
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
+                            Log.e(TAG, "onResponse: response of set msg_read='1' is "+ response );
                             try {
                                 if(response.getString(0).contains("success"))
                                 {
@@ -375,6 +372,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         @Override
                         public void onError(ANError anError) {
                             Toast.makeText(DefaultMessagesActivity.this, "Network or Server Error", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "onError: error is       908078787878787878787878786    " + anError );
                         }
                     });
             return null;
