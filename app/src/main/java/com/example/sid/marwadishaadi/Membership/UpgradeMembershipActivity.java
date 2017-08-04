@@ -23,6 +23,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.meg7.widget.CircleImageView;
@@ -31,9 +32,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class UpgradeMembershipActivity extends AppCompatActivity {
@@ -47,6 +51,8 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     TextView name,id;
     public ProgressDialog dialog;
     private String customer_id;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
     private de.hdodenhof.circleimageview.CircleImageView membership_photo;
 
 
@@ -63,6 +69,8 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+
+        cache = new File(getCacheDir() + "/" + "membership" +customer_id+ ".srl");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.upgrademembership_toolbar);
         toolbar.setTitle("Membership Status");
@@ -121,6 +129,25 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
         no.setVisibility(View.GONE);
 
 
+        // loading cached copy
+        String res = CacheHelper.retrieve("membership",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(UpgradeMembershipActivity.this,CacheHelper.generateHash(res),"membership");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                 //Toast.makeText(UpgradeMembershipActivity.this, "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseMembership(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         String query = "SELECT community, duration, date(purchase_date), date(expiry_date), is_active FROM `tbl_user_community_package` WHERE customer_no=\""+customer_id+"\";";
         new BackEndMembership().execute(query);
@@ -137,6 +164,70 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void parseMembership(JSONArray response) {
+        Log.e("membershipupgrade->", "onResponse: -------------- "+response.toString());
+        if (response.length()==0){
+            no.setVisibility(View.VISIBLE);
+        }
+        else {
+            for (int i = 0; i < response.length(); i++) {
+                JSONArray membership = null;
+                try {
+                    membership = response.getJSONArray(i);
+                    if (membership.getString(4).contains("No")) {
+                        no.setVisibility(View.VISIBLE);
+                    } else if (membership.getString(0).contains("Agarwal")) {
+                        agarwal.setVisibility(View.VISIBLE);
+
+                        agarwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                        agarwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                        agarwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
+                    } else if (membership.getString(0).contains("Jain")) {
+                        jain.setVisibility(View.VISIBLE);
+
+                        jain_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                        jain_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                        jain_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
+                    } else if (membership.getString(0).contains("Khandelwal")) {
+                        khandelwal.setVisibility(View.VISIBLE);
+
+                        khandelwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                        khandelwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                        khandelwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
+                    } else if (membership.getString(0).contains("Maheshwari")) {
+                        maheshwari.setVisibility(View.VISIBLE);
+
+                        maheshwari_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                        maheshwari_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                        maheshwari_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
+                    } else if (membership.getString(0).contains("Other")) {
+                        others.setVisibility(View.VISIBLE);
+
+                        others_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
+                        others_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
+                        others_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
+                    }
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+            SharedPreferences prefs = getSharedPreferences("userinfo", MODE_PRIVATE);
+            String nameOfUser = prefs.getString("firstname", null);
+
+
+
+            name.setText("Hello, " + nameOfUser);
+            id.setText("Member ID : " + customer_id);
+        }
     }
 
     private class BackEndMembership extends AsyncTask<String, String, String> {
@@ -161,66 +252,30 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e("membershipupgrade->", "onResponse: -------------- "+response.toString());
-                            if (response.length()==0){
-                                no.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                for (int i = 0; i < response.length(); i++) {
-                                    JSONArray membership = null;
-                                    try {
-                                        membership = response.getJSONArray(i);
-                                        if (membership.getString(4).contains("No")) {
-                                            no.setVisibility(View.VISIBLE);
-                                        } else if (membership.getString(0).contains("Agarwal")) {
-                                            agarwal.setVisibility(View.VISIBLE);
 
-                                            agarwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
-                                            agarwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
-                                            agarwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
-                                        } else if (membership.getString(0).contains("Jain")) {
-                                            jain.setVisibility(View.VISIBLE);
+                            // Log.d("membership",response.toString());
 
-                                            jain_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
-                                            jain_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
-                                            jain_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
-                                        } else if (membership.getString(0).contains("Khandelwal")) {
-                                            khandelwal.setVisibility(View.VISIBLE);
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
 
-                                            khandelwal_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
-                                            khandelwal_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
-                                            khandelwal_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
-                                        } else if (membership.getString(0).contains("Maheshwari")) {
-                                            maheshwari.setVisibility(View.VISIBLE);
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(UpgradeMembershipActivity.this,"membership");
 
-                                            maheshwari_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
-                                            maheshwari_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
-                                            maheshwari_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
-                                        } else if (membership.getString(0).contains("Other")) {
-                                            others.setVisibility(View.VISIBLE);
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
 
-                                            others_duration.setText("Duration: " + membership.getString(1).replace("months", " months"));
-                                            others_start.setText("Started On: " + membership.getString(2).replace("00:00:00 GMT", ""));
-                                            others_end.setText("Ends On: " + membership.getString(3).replace("00:00:00 GMT", ""));
-                                        }
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                     //Toast.makeText(UpgradeMembershipActivity.this, "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
 
-
-
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-
-                                SharedPreferences prefs = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                String nameOfUser = prefs.getString("firstname", null);
-
-
-
-                                name.setText("Hello, " + nameOfUser);
-                                id.setText("Member ID : " + customer_id);
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
                         }
 
@@ -240,6 +295,25 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         }
     }
+
+
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("membership",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(UpgradeMembershipActivity.this,CacheHelper.generateHash(response.toString()),"membership");
+
+        // displaying it
+        parseMembership(response);
+
+    }
+
     @Override
     public boolean onSupportNavigateUp(){
         finish();
