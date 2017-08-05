@@ -45,7 +45,7 @@ public class ChatNotifyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand: chat service started :) :) :) _.._" );
+
         sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         scheduledExecutorService= new ScheduledThreadPoolExecutor(5);
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -64,7 +64,7 @@ public class ChatNotifyService extends Service {
 
             sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             query="select count(msg_id) from tbl_message where msg_to='"+sharedPreferences.getString("customer_id","A1001")+"' and msg_read='0';";
-            Log.e(TAG, "doInBackground: query is ----<<<<<<<<<<<<<<<<<<<<<< "+query);
+
             AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
                     .addBodyParameter("query",query)
                     .build()
@@ -72,7 +72,7 @@ public class ChatNotifyService extends Service {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: ----------------------   "+response );
+
                             try {
                                 if (!response.getJSONArray(0).getString(0).equals("0")&!sharedPreferences.getString("lastChatCount","1").equals(response.getJSONArray(0).getString(0))) {
                                     notification = new NotificationCompat.Builder(ChatNotifyService.this);

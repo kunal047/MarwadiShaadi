@@ -187,8 +187,8 @@ public class PdfDocument implements IDisposable{
         _orientation = orientation;
     }
 
-  
-  
+
+
     /**
      *
      * @return the pdf file name
@@ -281,7 +281,7 @@ public class PdfDocument implements IDisposable{
                 _handler.post(new Runnable() {
                     @Override
                     public void run() {
-                      
+
                         if(_listener != null) {
                             if(_error != null)
                                 _listener.onError(_error);
@@ -366,8 +366,10 @@ public class PdfDocument implements IDisposable{
         page.attachContext(_ctx);
 
         if(_renderWidth==0 || _renderHeight==0)
-            if(Build.VERSION.SDK_INT <= 17)
-                Log.e(TAG_PDF_MY_XML, "_renderWidth,_renderHeight==0 on API <= 17 can lead to bad behaviour with RelativeLayout and may crash, please use explicit values!!!");
+            if(Build.VERSION.SDK_INT <= 17){
+
+            }
+
 
         Bitmap bmp                  = page.render(_renderWidth, _renderHeight);
         ByteArrayInputStream stream = BitmapUtils.bitmapToPngInputStream(bmp);
@@ -552,7 +554,7 @@ public class PdfDocument implements IDisposable{
         }
 
 
-    
+
     }
 
 }

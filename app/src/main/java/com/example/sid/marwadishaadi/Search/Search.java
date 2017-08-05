@@ -166,12 +166,10 @@ public class Search extends AppCompatActivity {
             if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
             {
                 CastList.add(community[i]);
-       //         Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray()[0]);
             }else if(communityPackage.getString(community[i],null).contains("Yes")){
-         //       Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null).toCharArray());
                 CastList.add(community[i]);
             }
-            Log.e(TAG, "onCreate: -- my community is "+ communityPackage.getString(community[i],null));
+
         }
 
         spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
@@ -821,15 +819,15 @@ public class Search extends AppCompatActivity {
                 String s1, s2;
                 s1 = height_from.getSelectedItem().toString();
                 s2 = height_to.getSelectedItem().toString();
-                Log.e(TAG, "onClick: ------" + s1 + "----" + s2);
+
 
                 if (s1.equals("Doesn't matter") && s2.equals("Doesn't matter")) {
                     //no code is here *********** remove space from cm in first entry
-                    Log.e(TAG, "onClick: --why it loged");
+
                 } else {
                     if (s1.equals("Doesn't matter") & !s2.equals("Doesn't matter")) {
                         query += "and  tbl_user.height<=" + s2.substring(s2.length() - 5, s2.length() - 2);
-                        Log.e(TAG, "onClick: ----------------------" + s2.substring(s2.length() - 5, s2.length() - 2));
+
                     } else if (!s1.equals("Doesn't matter") & s2.equals("Doesn't matter")) {
                         query += "and tbl_user.height>=" + s1.substring(s1.length() - 5, s1.length() - 2);
                     } else {
@@ -840,7 +838,7 @@ public class Search extends AppCompatActivity {
 
 
                 String str = "";
-                Log.e(TAG, "onClick: countSpinnerSearch is ++++++++++++++++++++++++" );
+
                 str = spinnerCastSearch.getText().toString();
                 if (str.contains("[]") || str.equals("")) {
                     //no code is here
@@ -920,7 +918,7 @@ public class Search extends AppCompatActivity {
                         String string = arrayString[i];
                         String s = string.replace("L", "00000");
                         arrayString[i] = s;
-                        Log.e(TAG, "onClick: ----------- list is ----" + arrayString.toString());
+
                     }
                     for (int i = 1; i < arrayString.length - 1; i++) {
                         query += "tbl_user.anuual_income = \"" + arrayString[i] + "\" or ";
@@ -932,7 +930,7 @@ public class Search extends AppCompatActivity {
                         String string = AIList.get(i);
                         String s = string.replace("L", "00000");
                         AIList.set(i, s);
-                        Log.e(TAG, "onClick: ----------- list is ----" + AIList.toString());
+
                     }
                     for (int i = 0; i < countannualincome - 1; i++) {
                         query += "tbl_user.anuual_income = \"" + AIList.get(i) + "\" or ";
@@ -1114,7 +1112,6 @@ public class Search extends AppCompatActivity {
                 new BackEnd().execute(query);
 
 
-                Log.e(TAG, "onClick: ---------------------------query is\n  " + query);
 
               /*  Toast.makeText(getApplicationContext(),"Education are :------" + education.toString(),Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(),"Education are :------" + education.toString(),Toast.LENGTH_SHORT).show();
@@ -1944,7 +1941,7 @@ public class Search extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.e(TAG, "doInBackground: query is ------"+strings[0]);
+
             AndroidNetworking.post("http://208.91.199.50:5000/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
@@ -1953,7 +1950,7 @@ public class Search extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: -------------- "+ response.toString());
+
                             Vector<String> customers=new Vector<>();
                             for(int i=0;i<response.length();i++){
                                 JSONArray user= null;
@@ -2017,7 +2014,7 @@ public class Search extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             });
-                            Log.e(TAG, "onError: error in search is "+error );
+
                             Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG).show();
                         }
                     });

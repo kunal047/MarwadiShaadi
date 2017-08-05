@@ -226,7 +226,7 @@ public class MembershipActivity extends AppCompatActivity {
 
                     Button redeem = (Button) reset_view.findViewById(R.id.redeem);
 
-                    Log.e(TAG, "onClick: ------------" + counts);
+
                     redeem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -254,7 +254,7 @@ public class MembershipActivity extends AppCompatActivity {
                     resetbox.show();
 
                 } else {
-//                    Toast.makeText(getApplicationContext(),"Already Added one coupon code"+getEmojiByUnicode(0x1F636),Toast.LENGTH_SHORT).show();
+//                    .makeText(getApplicationContext(),"Already Added one coupon code"+getEmojiByUnicode(0x1F636),.LENGTH_SHORT).show();
                     AlertDialog.Builder ald = new AlertDialog.Builder(view.getRootView().getContext());
                     ald.setTitle("Coupon Code details are");
                     String ad = "";
@@ -374,7 +374,7 @@ public class MembershipActivity extends AppCompatActivity {
                     intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl.getText()).toString().trim());
 //
                     checker();
-                    Log.e(TAG, "onClick: ------------- details are ----------" + tvamount.getText().toString());
+
                     startActivity(intent);
                     finish();
 
@@ -725,7 +725,7 @@ public class MembershipActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             String query = "SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM tbl_coupans where c_code=\"" + strings[0] + "\"";
-            Log.e(TAG, "doInBackground: ------------------- query is " + query);
+
             AndroidNetworking.post("http://10.0.0.21:5050/checkCoupon")
                     .addBodyParameter("query", query)
                     .setPriority(Priority.HIGH)
@@ -734,7 +734,7 @@ public class MembershipActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             //query is SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM `tbl_coupans` where c_code="coupon_code"
-                            Log.e(TAG, "onResponse: --------------- response is " + response.toString());
+
                             try {
                                 if (response.getString(0).equals("no")) {
                                     Toast.makeText(MembershipActivity.this, "No coupon code found" + getEmojiByUnicode(0x1F60E), Toast.LENGTH_LONG).show();
@@ -769,7 +769,7 @@ public class MembershipActivity extends AppCompatActivity {
                                             goAway = "GO";
                                             //tvamount.setText(Integer.toString(calculate));
                                             counts = 1;
-                                            Log.e(TAG, "onResponse: ---" + counts);
+
                                             Toast.makeText(MembershipActivity.this, "Added coupon successfully Discount will added when go for payment " + getEmojiByUnicode(0x1F60A), Toast.LENGTH_LONG).show();
                                         } else {
                                             Toast.makeText(MembershipActivity.this, "This coupon code is no longer available" + getEmojiByUnicode(0x1F620), Toast.LENGTH_SHORT).show();
@@ -787,7 +787,7 @@ public class MembershipActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
                             Toast.makeText(MembershipActivity.this, "Network Error " + getEmojiByUnicode(0x1F631), Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "onError: --------------- error is " + anError);
+
                         }
                     });
             return null;
@@ -809,7 +809,7 @@ public class MembershipActivity extends AppCompatActivity {
                     intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(cancelUrl.getText()).toString().trim());
                     intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl.getText()).toString().trim());
 //
-                    Log.e(TAG, "onClick: ------------- details are ----------" + tvamount.getText().toString());
+
                     startActivity(intent);
                     finish();*/
         }

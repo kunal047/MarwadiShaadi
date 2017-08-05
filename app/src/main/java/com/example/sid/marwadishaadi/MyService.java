@@ -23,7 +23,7 @@ public class MyService extends FirebaseInstanceIdService {
         // if not -> store it in prefs
         // after successfull -> login/signup -> then update in firebase
         String registration_id = FirebaseInstanceId.getInstance().getToken();
-        Log.d("token->on", "onTokenRefresh: " + registration_id);
+
 
         SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String userid = userinfo.getString("customer_id",null);

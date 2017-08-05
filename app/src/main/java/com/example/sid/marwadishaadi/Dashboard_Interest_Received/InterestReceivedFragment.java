@@ -57,6 +57,7 @@ public class InterestReceivedFragment extends Fragment {
     private ProgressBar mProgressBar;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
+
     public InterestReceivedFragment() {
         // Required empty public constructor
     }
@@ -78,7 +79,7 @@ public class InterestReceivedFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        cache = new File(getCacheDir() + "/" + "interestreceived" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "interestreceived" + customer_id + ".srl");
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -104,18 +105,17 @@ public class InterestReceivedFragment extends Fragment {
 
 
         // loading cached copy
-        String res = CacheHelper.retrieve("interest_received",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("interest_received", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"interest_received");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "interest_received");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
                 parseInterest(response);
 
             } catch (JSONException e) {
@@ -260,33 +260,32 @@ public class InterestReceivedFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
 
+                            loadedFromNetwork(response);
 
-
-                            // Log.d("interestreceived",response.toString());
+                            //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
-
-                                String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"interest_received");
-
-                                // Log.d("latest",latestResponseHash);
-                                // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
-
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }else{
-
-                                    // hash not matched
-                                    loadedFromNetwork(response);
-                                }
-                            }else{
-                                // first time load
-                                loadedFromNetwork(response);
-                            }
-
+//                            if (isAlreadyLoadedFromCache){
+//
+//                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+//                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"interest_received");
+//
+//                                //
+//                                //
+//                                //
+//
+//                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+//                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+//                                    return;
+//                                }else{
+//
+//                                    // hash not matched
+//                                    loadedFromNetwork(response);
+//                                }
+//                            }else{
+//                                // first time load
+//                                loadedFromNetwork(response);
+//                            }
 
 
                         }
@@ -300,17 +299,17 @@ public class InterestReceivedFragment extends Fragment {
             return null;
         }
 
-        public void loadedFromNetwork(JSONArray response){
+        public void loadedFromNetwork(JSONArray response) {
 
 
             //saving fresh in cache
-            CacheHelper.save("interest_received",response.toString(),cache);
+            CacheHelper.save("interest_received", response.toString(), cache);
 
             // marking cache
             isAlreadyLoadedFromCache = true;
 
             // storing latest cache hash
-            CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"interest_received");
+            CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "interest_received");
 
             // displaying it
             parseInterest(response);

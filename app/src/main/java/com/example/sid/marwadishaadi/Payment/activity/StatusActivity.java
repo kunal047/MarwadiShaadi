@@ -132,7 +132,7 @@ public class StatusActivity extends Activity {
 								StatusActivity.this.runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-										Log.e(TAG, "run: execution number is " + i);
+
 										logout=false;
 										new UPDATE().execute(ListOfQueries.get(count), Integer.toString(i));
 										count++;
@@ -144,7 +144,7 @@ public class StatusActivity extends Activity {
 								scheduleTaskExecute.shutdown();
 							}
 						}else {
-							Log.e(TAG, "run: run run run run run runr urnr urnr urn r" );
+
 						}
 					}
 				},1,5, TimeUnit.SECONDS);
@@ -196,7 +196,7 @@ public class StatusActivity extends Activity {
 		@Override
 		protected void onPostExecute(String s) {
 			logout=true;
-			Log.e(TAG, "onPostExecute: I has been logoutted from here" );
+
 			super.onPostExecute(s);
 		}
 
@@ -241,7 +241,7 @@ public class StatusActivity extends Activity {
 							}
 						});
 			}else {
-				Log.e(TAG, "doInBackground:  I am calling this^^^^^^^^^^^^^^^^^^^^^^^^^"+strings[1]);
+
 				AndroidNetworking.post("http://208.91.199.50:5000/updateMembership")
 						.addBodyParameter("query", strings[0])
 						.setPriority(Priority.HIGH)
@@ -249,7 +249,7 @@ public class StatusActivity extends Activity {
 						.getAsString(new StringRequestListener() {
 							@Override
 							public void onResponse(String response) {
-								Log.e(TAG, "onResponse: Called for "+strings[1] );
+
 								if(i==PackageInfos.size()-3) {
 									Toast.makeText(StatusActivity.this, "Successfully Added as Premium Member", Toast.LENGTH_SHORT).show();
 									StatusActivity.this.runOnUiThread(new Runnable() {

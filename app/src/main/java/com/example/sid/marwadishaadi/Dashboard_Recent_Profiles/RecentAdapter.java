@@ -180,7 +180,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
                     mDatabases.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.d("response-->",dataSnapshot.toString());
+
                             setData(dataSnapshot);
                         }
 

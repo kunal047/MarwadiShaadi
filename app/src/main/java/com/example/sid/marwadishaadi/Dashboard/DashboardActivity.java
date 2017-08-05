@@ -108,7 +108,7 @@ public class DashboardActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 notificationCount = (int) dataSnapshot.getChildrenCount();
-                //Log.d("notifications", notificationCount + "");
+                //
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 Menu menu = navigationView.getMenu();
                 MenuItem m = menu.findItem(R.id.nav_notifications);

@@ -132,7 +132,7 @@ public class WebViewActivity extends Activity {
 					query += " customer_no=\"" + customer_id + "\" and community=\"" + PackageInfos.get(i) + "\";";
 				}
 			}
-			Log.e(TAG, "onPreExecute: ----------- query is  --------\n"+query );
+
 		}
 
 		@Override
@@ -152,7 +152,7 @@ public class WebViewActivity extends Activity {
 				vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.AMOUNT, mainIntent.getStringExtra(AvenuesParams.AMOUNT)));
 				vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.CURRENCY, mainIntent.getStringExtra(AvenuesParams.CURRENCY)));
 				encVal = RSAUtility.encrypt(vEncVal.substring(0,vEncVal.length()-1), vResponse);
-				Log.e(TAG, "doInBackground: -------------me----------"+vEncVal.substring(0,vEncVal.length()-1)+"---------------------------------------------------------------------------"+vResponse);
+
 			}
 
 			return null;
@@ -173,7 +173,7 @@ public class WebViewActivity extends Activity {
 				{
 
 					// process the html as needed by the app
-					Log.e(TAG, "processHTML: -------------------"+html.toString());
+
 					String status = null;
 					if(html.indexOf("Failure")!=-1){
 						status = "Transaction Declined!";
@@ -184,7 +184,7 @@ public class WebViewActivity extends Activity {
 					}else{
 						status = "Status Not Known!";
 					}
-					//Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
+					//.makeText(getApplicationContext(), status, .LENGTH_SHORT).show();
 					Intent intent = new Intent(getApplicationContext(),StatusActivity.class);
 					intent.putExtra("transStatus", status);
 					startActivity(intent);
@@ -213,7 +213,7 @@ public class WebViewActivity extends Activity {
 				@Override
 				public void onPageStarted(WebView view, String url, Bitmap favicon) {
 					super.onPageStarted(view, url, favicon);
-					Log.e(TAG, "onPageStarted: --------- url is ----------"+url);
+
 				}
 			});
 
@@ -238,10 +238,10 @@ public class WebViewActivity extends Activity {
 
 			String vPostParams = params.substring(0,params.length()-1);
 			try {
-				Log.e(TAG, "onPostExecute: ----------- encoded url is ----"+Constants.TRANS_URL+" ------------------ post codes are --------"+ vPostParams);
+
 
 				params.setLength(0);
-				Log.e(TAG, "onPostExecute: ------------- length is"+params.length()+"----"+params.toString() );
+
 				webview.postUrl(Constants.TRANS_URL, EncodingUtils.getBytes(vPostParams, "UTF-8"));
 			} catch (Exception e) {
 				showToast("Exception occured while opening webview.");

@@ -158,7 +158,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
 //            query = "SELECT tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on  (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
             query = "SELECT tbl_message.msg_from,tbl_message.msg_to,tbl_message.msg,tbl_message.msg_on,tbl_message.msg_read,tbl_user.first_name, tbl_user.surname,tbl_user_files.file_name from tbl_message inner join tbl_user on (tbl_user.customer_no!='" + customer_id + "') and (tbl_user.customer_no=tbl_message.msg_from or tbl_user.customer_no=tbl_message.msg_to) inner join tbl_user_files on (tbl_user_files.customer_no!='" + customer_id + "') and (tbl_user_files.customer_no=tbl_message.msg_from or tbl_user_files.customer_no=tbl_message.msg_to) where (tbl_message.msg_from=\"" + customer_id + "\" or tbl_message.msg_to =\"" + customer_id + "\") and tbl_user_files.file_type='profile_image' order by tbl_message.msg_on desc;";
             //inner join tbl_user on tbl_message.msg_from!="+
-            Log.e("G", "initAdapter: ---query of response list is ---" + query);
+
             //TODO Changed here
             AndroidNetworking.post("http://208.91.199.50:5000/getChat")
                     .addBodyParameter("query", query)
@@ -175,7 +175,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                             });
                             Vector<String> str = new Vector<String>();
                             success = "success";
-                            Log.e("Chat over list", "onResponse: of *********** getting all chat " + response);
+
 //                        TODO id,name,photo,UserArrayList,LastMessage,UnreadCount;
                             //TODO Later change it with response.length-1 to repsonse.length
 
@@ -190,9 +190,9 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
 //                                        new Asynctask().execute(query,jsnrry.getString(1),jsnrry.getString(0),jsnrry.getString(2));
                                             //string[1]=listofgetter, string[2]=ListOfSender,string[3]=ListOfmessage
                                             url = "http://www.marwadishaadi.com/uploads/cust_" + jsnrry.getString(1) + "/thumb/" + jsnrry.getString(7);
-                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL " + url);
+
                                             ArrayList<User> me = new ArrayList<>();
-                                            Log.e(TAG, "onResponse: ************************************** item is at 0" + jsnrry.getString(5) + " " + jsnrry.getString(1));
+
                                             User usrme = new User(jsnrry.getString(1), jsnrry.getString(5), url, false);
 
 
@@ -210,9 +210,9 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5) + " " + jsnrry.getString(6), url, me, msg, 0);
-                                            //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
-                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + " && " + dlg.getUsers().get(0).getName());
-                                            Log.e(TAG, "PrepareList: ---item added is " + i);
+                                            //
+
+
                                             dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
@@ -222,7 +222,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             //code will not do some
                                             str.add(jsnrry.getString(0));
                                             url = "http://www.marwadishaadi.com/uploads/cust_" + jsnrry.getString(0) + "/thumb/" + jsnrry.getString(7);
-                                            Log.e(TAG, "onResponse: URL is UUUURRRRRLLLL " + url);
+
                                             ArrayList<User> me = new ArrayList<User>();
                                             User usrme = new User(jsnrry.getString(0), jsnrry.getString(5), url, false);
                                             me.add(usrme);
@@ -238,9 +238,9 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
                                             Dialog dlg = new Dialog(jsnrry.getString(0), jsnrry.getString(5), url, me, msg, 0);
-                                            //Log.e("wtf", "onPostExecute: ----- " + dlg.toString() + "----name and url is --" + s[0] + "----**** " + s[1]);
-                                            Log.e(TAG, "PrepareList: id is " + dlg.getId() + " dialog message id " + dlg.getLastMessage().getId() + "dialog user is " + dlg.getUsers().get(0).getId() + " user avatar and name are " + dlg.getUsers().get(0).getAvatar() + "  && " + dlg.getUsers().get(0).getName());
-                                            Log.e(TAG, "PrepareList: ---item added is " + i);
+                                            //
+
+
                                             dla.addItem(dlg);
                                             dla.notifyDataSetChanged();
 
@@ -267,7 +267,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                 }
                             });
                             Toast.makeText(DefaultDialogsActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
-                            Log.e("Chat over list", "onResponse: of *********** getting all chat " + anError);
+
                         }
                     });
             return null;

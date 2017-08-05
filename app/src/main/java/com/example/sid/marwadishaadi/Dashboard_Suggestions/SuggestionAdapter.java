@@ -193,7 +193,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
                     mDatabases.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.d("response-->",dataSnapshot.toString());
+
                             setData(dataSnapshot);
                         }
 

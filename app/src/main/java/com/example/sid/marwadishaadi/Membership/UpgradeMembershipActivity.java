@@ -141,7 +141,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-                 //Toast.makeText(UpgradeMembershipActivity.this, "Loading from cache....", Toast.LENGTH_SHORT).show();
+                 //.makeText(UpgradeMembershipActivity.this, "Loading from cache....", .LENGTH_SHORT).show();
                 parseMembership(response);
 
             } catch (JSONException e) {
@@ -167,7 +167,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
     }
 
     private void parseMembership(JSONArray response) {
-        Log.e("membershipupgrade->", "onResponse: -------------- "+response.toString());
+
         if (response.length()==0){
             no.setVisibility(View.VISIBLE);
         }
@@ -253,7 +253,7 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                            // Log.d("membership",response.toString());
+                            //
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -261,12 +261,12 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(UpgradeMembershipActivity.this,"membership");
 
-                                // Log.d("latest",latestResponseHash);
-                                // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                                //
+                                //
+                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                     //Toast.makeText(UpgradeMembershipActivity.this, "data same found", Toast.LENGTH_SHORT).show();
+                                     //.makeText(UpgradeMembershipActivity.this, "data same found", .LENGTH_SHORT).show();
                                     return;
                                 }else{
 
