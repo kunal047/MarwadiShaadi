@@ -25,6 +25,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
@@ -34,6 +35,7 @@ import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPersonal
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +45,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class ProfilePersonalDetailsFragment extends Fragment {
@@ -56,6 +59,8 @@ public class ProfilePersonalDetailsFragment extends Fragment {
     private String clickedID, customer_id;
     private String res = "";
     private boolean isPaidMember;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
 
 
     public ProfilePersonalDetailsFragment() {
@@ -72,6 +77,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
+
 
         edit_individual = (TextView) mview.findViewById(R.id.individual_clear);
         edit_education = (TextView) mview.findViewById(R.id.edu_clear);
@@ -101,10 +107,12 @@ public class ProfilePersonalDetailsFragment extends Fragment {
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        for (int i = 0; i < 5; i++) {
+        if (communityChecker!=null) {
+            for (int i = 0; i < 5; i++) {
 
-            if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                isPaidMember = true;
+                if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                    isPaidMember = true;
+                }
             }
         }
 
@@ -495,9 +503,7 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         String from = data.getStringExtra("from");
 
         if (data.getStringExtra("customerNo") != null) {
-
             clickedID = data.getStringExtra("customerNo");
-            new PersonalDetails().execute(clickedID);
         }
 
 
@@ -509,7 +515,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
 
 
-        new PersonalDetails().execute(clickedID);
         if (customer_id.equals(clickedID)) {
             similar.setVisibility(View.GONE);
         }
@@ -553,7 +558,154 @@ public class ProfilePersonalDetailsFragment extends Fragment {
             }
         });
 
+
+        cache = new File(getCacheDir() + "/" + "personalprofile" +clickedID+ ".srl");
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("profile",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"profile");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parsePersonalProfile(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        new PersonalDetails().execute(clickedID);
+
+
         return mview;
+    }
+
+    private void parsePersonalProfile(JSONArray response) {
+
+        try {
+            JSONArray array = response.getJSONArray(0);
+
+            String dateOfBirth = array.getString(2);
+            // Thu, 18 Jan 1990 00:00:00 GMT
+            DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+            Date date = null;
+            try {
+                date = formatter.parse(dateOfBirth);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String[] str = {"January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December"};
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+            String strDate = cal.get(Calendar.DATE) + " " + str[(cal.get(Calendar.MONTH))] + " " + cal.get(Calendar.YEAR);
+
+            String[] partsOfDate = formatedDate.split("-");
+            int day = Integer.parseInt(partsOfDate[0]);
+            int month = Integer.parseInt(partsOfDate[1]);
+            int year = Integer.parseInt(partsOfDate[2]);
+            int a = getAge(year, month, day);
+
+            String na = array.getString(0) + " " + array.getString(1) + ", " + a;
+            name_age.setText(na);
+            maritalStatus.setText(array.getString(3));
+            birthdate.setText(strDate);
+            gender.setText(array.getString(4));
+            address.setText(array.getString(5));
+            mobileNo.setText(array.getString(6));
+
+            String[] c = array.getString(7).split("");
+            String cast = "";
+            if (c[1].equals("A")) {
+                cast = "Agarwal";
+            } else if (c[1].equals("K")) {
+                cast = "Khandelwal";
+            } else if (c[1].equals("J")) {
+                cast = "Jain";
+            } else if (c[1].equals("M")) {
+                cast = "Maheshwari";
+            } else if (c[1].equals("O")) {
+                cast = "Other";
+            }
+
+
+            caste.setText(cast);
+
+
+            height.setText(array.getString(8));
+            String w = "Weighs " + array.getString(9) + " kgs";
+            weight.setText(w);
+
+            String cb = array.getString(10) + " in Complexion, has " + array.getString(11) + " body type";
+
+            complexion_build.setText(cb);
+            physicalStatus.setText(array.getString(12) + " (Physical Status)");
+            education.setText(array.getString(13));
+            educationDegree.setText(array.getString(14));
+
+            if (array.getString(16).trim().length() > 0) {
+                String cnl = array.getString(15) + ", " + array.getString(16);
+                collegeName_collegeLocation.setText(cnl);
+            } else {
+                collegeName_collegeLocation.setText(array.getString(15));
+            }
+
+
+            currentOccupation.setText(array.getString(17));
+            String dc;
+
+            if (array.getString(20).length() == 0) {
+                dc = array.getString(19);
+            } else {
+                dc = array.getString(20) + " at " + array.getString(19);
+            }
+
+            designation_companyName.setText(dc);
+
+            String cl = array.getString(21);
+            companyLocation.setText(cl);
+
+
+            String annualI = array.getString(18);
+            annualI = annualI.replaceAll("[^-?0-9]+", " ");
+            List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
+
+            if (array.getString(18).contains("Upto")) {
+                annualI = "Upto 3L";
+            } else if (array.getString(18).contains("Above")) {
+                annualI = "Above 50L";
+
+            } else if (incomeArray.size() == 3) {
+
+                double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
+                double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
+                annualI = (int) first + "L - " + (int) second + "L";
+            } else {
+                annualI = "No Income mentioned.";
+            }
+            annualIncome.setText("Rs. " + annualI);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -581,6 +733,22 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         return this.casebreak;
     }
 
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("profile",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"profile");
+
+        // displaying it
+        parsePersonalProfile(response);
+
+    }
     class PersonalDetails extends AsyncTask<String, String, String> {
 
 
@@ -597,123 +765,32 @@ public class ProfilePersonalDetailsFragment extends Fragment {
                         public void onResponse(JSONArray response) {
 
 
-                            try {
-                                JSONArray array = response.getJSONArray(0);
 
-                                String dateOfBirth = array.getString(2);
-                                // Thu, 18 Jan 1990 00:00:00 GMT
-                                DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                Date date = null;
-                                try {
-                                    date = formatter.parse(dateOfBirth);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
+                            // Log.d("profile",response.toString());
+
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
+
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"profile");
+
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
+
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-                                String[] str = {"January",
-                                        "February",
-                                        "March",
-                                        "April",
-                                        "May",
-                                        "June",
-                                        "July",
-                                        "August",
-                                        "September",
-                                        "October",
-                                        "November",
-                                        "December"};
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(date);
-                                String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-                                String strDate = cal.get(Calendar.DATE) + " " + str[(cal.get(Calendar.MONTH))] + " " + cal.get(Calendar.YEAR);
-
-                                String[] partsOfDate = formatedDate.split("-");
-                                int day = Integer.parseInt(partsOfDate[0]);
-                                int month = Integer.parseInt(partsOfDate[1]);
-                                int year = Integer.parseInt(partsOfDate[2]);
-                                int a = getAge(year, month, day);
-
-                                String na = array.getString(0) + " " + array.getString(1) + ", " + a;
-                                name_age.setText(na);
-                                maritalStatus.setText(array.getString(3));
-                                birthdate.setText(strDate);
-                                gender.setText(array.getString(4));
-                                address.setText(array.getString(5));
-                                mobileNo.setText(array.getString(6));
-
-                                String[] c = array.getString(7).split("");
-                                String cast = "";
-                                if (c[1].equals("A")) {
-                                    cast = "Agarwal";
-                                } else if (c[1].equals("K")) {
-                                    cast = "Khandelwal";
-                                } else if (c[1].equals("J")) {
-                                    cast = "Jain";
-                                } else if (c[1].equals("M")) {
-                                    cast = "Maheshwari";
-                                } else if (c[1].equals("O")) {
-                                    cast = "Other";
-                                }
-
-
-                                caste.setText(cast);
-
-
-                                height.setText(array.getString(8));
-                                String w = "Weighs " + array.getString(9) + " kgs";
-                                weight.setText(w);
-
-                                String cb = array.getString(10) + " in Complexion, has " + array.getString(11) + " body type";
-
-                                complexion_build.setText(cb);
-                                physicalStatus.setText(array.getString(12) + " (Physical Status)");
-                                education.setText(array.getString(13));
-                                educationDegree.setText(array.getString(14));
-
-                                if (array.getString(16).trim().length() > 0) {
-                                    String cnl = array.getString(15) + ", " + array.getString(16);
-                                    collegeName_collegeLocation.setText(cnl);
-                                } else {
-                                    collegeName_collegeLocation.setText(array.getString(15));
-                                }
-
-
-                                currentOccupation.setText(array.getString(17));
-                                String dc;
-
-                                if (array.getString(20).length() == 0) {
-                                    dc = array.getString(19);
-                                } else {
-                                    dc = array.getString(20) + " at " + array.getString(19);
-                                }
-
-                                designation_companyName.setText(dc);
-
-                                String cl = array.getString(21);
-                                companyLocation.setText(cl);
-
-
-                                String annualI = array.getString(18);
-                                annualI = annualI.replaceAll("[^-?0-9]+", " ");
-                                List<String> incomeArray = Arrays.asList(annualI.trim().split(" "));
-
-                                if (array.getString(18).contains("Upto")) {
-                                    annualI = "Upto 3L";
-                                } else if (array.getString(18).contains("Above")) {
-                                    annualI = "Above 50L";
-
-                                } else if (incomeArray.size() == 3) {
-
-                                    double first = Integer.parseInt(incomeArray.get(0)) / 100000.0;
-                                    double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
-                                    annualI = (int) first + "L - " + (int) second + "L";
-                                } else {
-                                    annualI = "No Income mentioned.";
-                                }
-                                annualIncome.setText("Rs. " + annualI);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
+
 
                         }
 
@@ -727,7 +804,6 @@ public class ProfilePersonalDetailsFragment extends Fragment {
         }
     }
 
-    //Edit Educational details of User Personal Details
 
 
 }

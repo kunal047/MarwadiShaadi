@@ -55,11 +55,10 @@ public class FavouritesFragment extends Fragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private String customer_id;
     private LinearLayout empty_view;
-    private ProgressDialog progressDialog;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
+    private ProgressBar mProgressBar;
 
-//    private TextView favouriteZero;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +68,6 @@ public class FavouritesFragment extends Fragment {
         View mview = inflater.inflate(R.layout.swipe_to_refresh, container, false);
         empty_view = (LinearLayout) mview.findViewById(R.id.empty_view_favourites);
         empty_view.setVisibility(View.GONE);
-//        favouriteZero = (TextView) mview.findViewById(R.id.favouriteZero);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
@@ -80,6 +78,8 @@ public class FavouritesFragment extends Fragment {
 
         Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
 
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.favourites_loading);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -100,10 +100,7 @@ public class FavouritesFragment extends Fragment {
             }
         });
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading your favourite profiles...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+
 
         // loading cached copy
         String res = CacheHelper.retrieve("favourites",cache);
@@ -133,7 +130,7 @@ public class FavouritesFragment extends Fragment {
 
         try {
 
-//                                mProgressBar.setVisibility(View.GONE);
+                                mProgressBar.setVisibility(View.GONE);
 
             if(response.length() == 0){
                 getActivity().runOnUiThread(new Runnable() {
@@ -226,9 +223,7 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.dismiss();
-//            mProgressBar.setVisibility(View.VISIBLE);
-//            mProgressBar.setIndeterminate(true);
+            mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -274,8 +269,7 @@ public class FavouritesFragment extends Fragment {
                         @Override
                         public void onError(ANError error) {
                             // handle error
-                            progressDialog.dismiss();
-//                            mProgressBar.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     });
             return null;
@@ -284,8 +278,7 @@ public class FavouritesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            mProgressBar.setVisibility(View.GONE);
-            progressDialog.dismiss();
+            mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

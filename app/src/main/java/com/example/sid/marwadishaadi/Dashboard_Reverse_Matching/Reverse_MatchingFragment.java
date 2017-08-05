@@ -56,11 +56,10 @@ public class Reverse_MatchingFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
     private LinearLayout empty_view_reverse;
-    private ProgressDialog progressDialog;
     private String res = "";
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
-
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,9 +93,8 @@ public class Reverse_MatchingFragment extends Fragment {
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");
 
 
-//        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_progress_bar);
-//        mProgressBar.setIndeterminate(false);
-//        mProgressBar.setVisibility(View.GONE);
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_loading);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         reverseRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
@@ -117,10 +115,6 @@ public class Reverse_MatchingFragment extends Fragment {
             }
         });
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading your reverse matches...");
-        progressDialog.setCancelable(false);
-        progressDialog.dismiss();
 
         // loading cached copy
         String res = CacheHelper.retrieve("reverse_matching",cache);
@@ -151,7 +145,7 @@ public class Reverse_MatchingFragment extends Fragment {
     private void parseReverseMatches(JSONArray response) {
 
         try {
-//                                mProgressBar.setVisibility(View.GONE);
+                                mProgressBar.setVisibility(View.GONE);
 
             reverseModelList.clear();
             reverseAdapter.notifyDataSetChanged();
@@ -247,8 +241,8 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mProgressBar.setVisibility(View.VISIBLE);
-//            mProgressBar.setIndeterminate(true);
+           mProgressBar.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -298,7 +292,7 @@ public class Reverse_MatchingFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-//                                    mProgressBar.setVisibility(View.GONE);
+                                   mProgressBar.setVisibility(View.GONE);
 
                                 }
                             });
@@ -311,7 +305,7 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            mProgressBar.setVisibility(View.GONE);
+           mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
 

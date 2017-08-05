@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -55,9 +56,9 @@ public class RecentProfilesFragment extends Fragment {
     private String customer_id, customer_gender;
     private LinearLayout empty_view_recent;
     private String res = "";
-    private ProgressDialog progressDialog;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
+    private ProgressBar loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +66,10 @@ public class RecentProfilesFragment extends Fragment {
         View mview = inflater.inflate(R.layout.fragment_recent__profiles, container, false);
         empty_view_recent = (LinearLayout) mview.findViewById(R.id.empty_view_recent);
         empty_view_recent.setVisibility(View.GONE);
+
+        loading = (ProgressBar)mview.findViewById(R.id.loading);
+        loading.setVisibility(View.VISIBLE);
+
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -107,10 +112,6 @@ public class RecentProfilesFragment extends Fragment {
             }
         });
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading recent profiles...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         // loading cached copy
         String res = CacheHelper.retrieve("recent_profiles",cache);
@@ -136,6 +137,8 @@ public class RecentProfilesFragment extends Fragment {
     }
 
     private void parseRecentProfiles(JSONArray response) {
+
+        loading.setVisibility(View.GONE);
 
         try {
 
@@ -327,8 +330,8 @@ public class RecentProfilesFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    progressDialog.dismiss();
                                     //here
+                                    loading.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -341,7 +344,7 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+            loading.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

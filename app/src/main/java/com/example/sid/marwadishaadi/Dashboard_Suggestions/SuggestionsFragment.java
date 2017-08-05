@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -60,7 +61,6 @@ public class SuggestionsFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String customer_id, customer_gender;
     private LinearLayout empty_view_suggestions;
-    private ProgressDialog progressDialog;
     private String res = "";
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
@@ -76,10 +76,6 @@ public class SuggestionsFragment extends Fragment {
         empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
         empty_view_suggestions.setVisibility(View.GONE);
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading your suggestions...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -254,7 +250,11 @@ public class SuggestionsFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    progressDialog.dismiss();
+
+
+                                    // dismiss progress bar here
+
+
                                 }
                             });
                         }
@@ -267,7 +267,10 @@ public class SuggestionsFragment extends Fragment {
             super.onPostExecute(aVoid);
 
             swipeRefreshLayout.setRefreshing(false);
-            progressDialog.dismiss();
+
+            // dismiss progress bar here
+
+
         }
     }
 

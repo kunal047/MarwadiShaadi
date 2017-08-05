@@ -17,6 +17,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
@@ -24,11 +25,13 @@ import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferen
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class PartnerPreferencesFragment extends Fragment {
@@ -39,6 +42,8 @@ public class PartnerPreferencesFragment extends Fragment {
 
     private String clickedID, customer_id;
     private LinearLayout complexionLayout;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
 
     public PartnerPreferencesFragment() {
         // Required empty public constructor
@@ -54,7 +59,6 @@ public class PartnerPreferencesFragment extends Fragment {
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-
         clickedID = customer_id;
 
         edit_prefs = (TextView) mview.findViewById(R.id.partner_prefs_clear);
@@ -79,8 +83,6 @@ public class PartnerPreferencesFragment extends Fragment {
         if (data.getStringExtra("customerNo") != null) {
             called = false;
             clickedID = data.getStringExtra("customerNo");
-            new PartnerPreference().execute(clickedID);
-
         }
 
 
@@ -91,11 +93,10 @@ public class PartnerPreferencesFragment extends Fragment {
 
         }
 
-        if (called) {
-            new PartnerPreference().execute(clickedID);
-        }
+
         if(customer_id.equals(clickedID)){
         similar.setVisibility(View.GONE);}
+
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,9 +116,159 @@ public class PartnerPreferencesFragment extends Fragment {
             }
         });
 
+
+        cache = new File(getCacheDir() + "/" + "partnerprofile" +clickedID+ ".srl");
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("partnerprofile",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"partnerprofile");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parsePartnerProfile(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+            new PartnerPreference().execute(clickedID);
+
+
         return mview;
     }
 
+    private void parsePartnerProfile(JSONArray response) {
+
+
+        try {
+            String str;
+            String a = response.getString(0) + " yrs to " + response.getString(1) + " yrs";
+            age.setText(a);
+
+//                                    double feet = Double.parseDouble(response.getString(2)) / 30.48;
+//                                    double inches = (Double.parseDouble(response.getString(2)) / 2.54) - ((int) feet * 12);
+//                                    String heightFrom = (int) feet + "ft " + (int) inches + "in ";
+//
+//                                    feet = Double.parseDouble(response.getString(3)) / 30.48;
+//                                    inches = (Double.parseDouble(response.getString(3)) / 2.54) - ((int) feet * 12);
+//                                    String heightTo = (int) feet + "ft " + (int) inches + "in";
+
+            String h = response.getString(2) + " to " + response.getString(3);
+
+            height.setText(h);
+
+
+            str = response.getString(4).replace("[", "").replace("]", "").replace("\"", "");
+            final String c = str;
+
+            str = response.getString(5).replace("[", "").replace("]", "").replace("\"", "");
+            final String b = str;
+
+            final String ps = response.getString(6);
+
+
+            if (response.getString(7) != null && response.getString(7).trim().length() == 0) {
+                city.setVisibility(View.GONE);
+            } else {
+                city.setText(response.getString(7));
+            }
+
+            str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
+
+            final String hd = str;
+
+
+
+            str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
+
+            final String o = str;
+
+            final String ms = response.getString(10);
+
+            final String ai = response.getString(11);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (c != null && c.trim().length() == 0) {
+                        complexionLayout.setVisibility(View.GONE);
+                    } else {
+                        complexion.setText(c);
+                    }
+
+                    if (b != null && b.trim().length() == 0) {
+                        build.setVisibility(View.GONE);
+                    } else {
+                        build.setText(b);
+                    }
+
+                    if ( ps != null && ps.trim().length() == 0) {
+                        physicalStatus.setVisibility(View.GONE);
+                    } else {
+                        physicalStatus.setText(ps);
+                    }
+
+                    if (o != null && o.trim().length() == 0) {
+                        occup.setVisibility(View.GONE);
+                    } else {
+                        occup.setText(o);
+                    }
+
+                    if (ms != null && ms.trim().length() == 0) {
+                        maritalStatus.setVisibility(View.GONE);
+
+                    } else {
+                        maritalStatus.setText(ms);
+                    }
+
+                    if (hd != null && hd.trim().length() == 0) {
+                        highestDegree.setVisibility(View.GONE);
+                    } else {
+                        highestDegree.setText(hd);
+                    }
+
+                    if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
+                        annualIncome.setVisibility(View.GONE);
+
+                    } else {
+                        String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
+                        annualIncome.setText(annualIn);
+                    }
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("partnerprofile",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"partnerprofile");
+
+        // displaying it
+        parsePartnerProfile(response);
+
+    }
     class PartnerPreference extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -133,108 +284,31 @@ public class PartnerPreferencesFragment extends Fragment {
                         @Override
                         public void onResponse(final JSONArray response) {
 
-                            try {
-                                String str;
-                                String a = response.getString(0) + " yrs to " + response.getString(1) + " yrs";
-                                age.setText(a);
 
-//                                    double feet = Double.parseDouble(response.getString(2)) / 30.48;
-//                                    double inches = (Double.parseDouble(response.getString(2)) / 2.54) - ((int) feet * 12);
-//                                    String heightFrom = (int) feet + "ft " + (int) inches + "in ";
-//
-//                                    feet = Double.parseDouble(response.getString(3)) / 30.48;
-//                                    inches = (Double.parseDouble(response.getString(3)) / 2.54) - ((int) feet * 12);
-//                                    String heightTo = (int) feet + "ft " + (int) inches + "in";
+                            // Log.d("profile",response.toString());
 
-                                String h = response.getString(2) + " to " + response.getString(3);
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
 
-                                height.setText(h);
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"partnerprofile");
 
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
 
-                                str = response.getString(4).replace("[", "").replace("]", "").replace("\"", "");
-                                final String c = str;
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
 
-                                str = response.getString(5).replace("[", "").replace("]", "").replace("\"", "");
-                                final String b = str;
-
-                                final String ps = response.getString(6);
-
-
-                                if (response.getString(7) != null && response.getString(7).trim().length() == 0) {
-                                    city.setVisibility(View.GONE);
-                                } else {
-                                    city.setText(response.getString(7));
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-                                str = response.getString(8).replace("[", "").replace("]", "").replace("\"", "").replace("/", " ");
-
-                                final String hd = str;
-
-
-
-                                str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
-
-                                final String o = str;
-
-                                final String ms = response.getString(10);
-
-                                final String ai = response.getString(11);
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        if (c != null && c.trim().length() == 0) {
-                                            complexionLayout.setVisibility(View.GONE);
-                                        } else {
-                                            complexion.setText(c);
-                                        }
-
-                                        if (b != null && b.trim().length() == 0) {
-                                            build.setVisibility(View.GONE);
-                                        } else {
-                                            build.setText(b);
-                                        }
-
-                                        if ( ps != null && ps.trim().length() == 0) {
-                                            physicalStatus.setVisibility(View.GONE);
-                                        } else {
-                                            physicalStatus.setText(ps);
-                                        }
-
-                                        if (o != null && o.trim().length() == 0) {
-                                            occup.setVisibility(View.GONE);
-                                        } else {
-                                            occup.setText(o);
-                                        }
-
-                                        if (ms != null && ms.trim().length() == 0) {
-                                            maritalStatus.setVisibility(View.GONE);
-
-                                        } else {
-                                            maritalStatus.setText(ms);
-                                        }
-
-                                        if (hd != null && hd.trim().length() == 0) {
-                                            highestDegree.setVisibility(View.GONE);
-                                        } else {
-                                            highestDegree.setText(hd);
-                                        }
-
-                                        if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
-                                           annualIncome.setVisibility(View.GONE);
-
-                                        } else {
-                                            String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
-                                            annualIncome.setText(annualIn);
-                                        }
-                                    }
-                                });
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
-
                         }
 
                         @Override
