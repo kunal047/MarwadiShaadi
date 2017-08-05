@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -53,6 +54,7 @@ public class InterestSentFragment extends Fragment {
     private LinearLayout empty_view_sent;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,10 +70,8 @@ public class InterestSentFragment extends Fragment {
         empty_view_sent.setVisibility(View.GONE);
 
 
-
-//        mProgressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
-//        mProgressBar.setIndeterminate(false);
-//        mProgressBar.setVisibility(View.GONE);
+        mProgressBar = (ProgressBar) mview.findViewById(R.id.int_loading);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
 
@@ -127,7 +127,7 @@ public class InterestSentFragment extends Fragment {
 
     private void parseInterestSent(JSONArray response) {
         try {
-//                                mProgressBar.setVisibility(View.GONE);
+                                mProgressBar.setVisibility(View.GONE);
             if (response.length() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -230,8 +230,7 @@ public class InterestSentFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mProgressBar.setVisibility(View.VISIBLE);
-//            mProgressBar.setIndeterminate(true);
+            mProgressBar.setVisibility(View.VISIBLE);
         }
 
 
@@ -291,7 +290,7 @@ public class InterestSentFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
