@@ -1,7 +1,6 @@
 package com.example.sid.marwadishaadi.Upload_User_Photos;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -24,7 +22,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -98,9 +95,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private String customer_id;
     private View view;
     private Bitmap bitmap;
+    private ByteArrayOutputStream bos;
+    private FileOutputStream fos;
+    private byte[] bitmapdata;
     private String nameOfPhoto, timeStamp, file_type;
     private List<String> userImages;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -130,8 +129,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
         if (getIntent().getParcelableExtra("user_images") != null) {
             ArrayList<String> filelist = getIntent().getParcelableExtra("user_images");
         }
-
-
 
         new FetchPhoto().execute();
 
@@ -194,11 +191,12 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         submit = (Button) findViewById(R.id.submit_photo);
-        progressDialog = new ProgressDialog(UploadPhotoActivity.this);
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Toast.makeText(getApplicationContext(), "Saving your photos...", Toast.LENGTH_LONG).show();
 
                 new RemovePhoto().execute();
 
@@ -214,7 +212,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
 
+                    try {
+                        fos = new FileOutputStream(file_one);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    SystemClock.sleep(1500);
                     try {
                         isSelected = true;
                         new UploadPhoto().execute(file_one).get();
@@ -231,7 +243,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                     bitmap = ((BitmapDrawable) photo2.getDrawable()).getBitmap();
                     timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
                     file_two = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
                     file_type = "image";
                     try {
@@ -240,7 +252,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_two);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     SystemClock.sleep(1500);
                     try {
                         isSelected = true;
@@ -257,7 +283,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                     bitmap = ((BitmapDrawable) photo3.getDrawable()).getBitmap();
                     timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
                     file_three = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
                     file_type = "image";
 
@@ -267,7 +293,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
 
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_three);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     SystemClock.sleep(1500);
 
                     try {
@@ -285,7 +325,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 if (photo4.getTag() == "changed") {
                     bitmap = ((BitmapDrawable) photo4.getDrawable()).getBitmap();
                     timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
                     file_four = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
                     file_type = "image";
 
@@ -295,6 +335,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
+
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_four);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     SystemClock.sleep(1500);
 
@@ -312,7 +367,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                     bitmap = ((BitmapDrawable) photo4.getDrawable()).getBitmap();
                     timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                    nameOfPhoto = customer_id.substring(1) + timeStamp + ".jpg";
+                    nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
                     file_five = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
                     file_type = "image";
 
@@ -322,6 +377,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+                    bitmapdata = bos.toByteArray();
+
+                    fos = null;
+                    try {
+                        fos = new FileOutputStream(file_five);
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     SystemClock.sleep(1500);
 
                     try {
@@ -339,16 +409,19 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Upload Photo", "button");
                 if (isSelected) {
-                    Intent i;
+                    Intent i = null;
                     Toast.makeText(UploadPhotoActivity.this, "All photos uploaded ", Toast.LENGTH_SHORT).show();
                     String from = getIntent().getStringExtra("from");
-                    if (from!=null && from.equals("userprofile")){
+                    if (from != null && from.equals("userprofile")) {
                         i = new Intent(UploadPhotoActivity.this, UserProfileActivity.class);
-                    }else{
+                    } else if (photo1.getTag() != "changed" && (photo2.getTag() == "changed" || photo3.getTag() == "changed" || photo4.getTag() == "changed" || photo5.getTag() == "changed")) {
+
+
+                        Toast.makeText(UploadPhotoActivity.this, "Set your profile picture", Toast.LENGTH_SHORT).show();
+                    } else {
                         i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
                     }
                     startActivity(i);
-
                 } else {
                     Toast.makeText(UploadPhotoActivity.this, "Minimum 1 photo required ", Toast.LENGTH_SHORT).show();
                 }
@@ -409,7 +482,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         });
 
 
-        if (this.getIntent().getExtras() != null && this.getIntent().getExtras().getStringArrayList("selected_photos_url") !=null) {
+        if (this.getIntent().getExtras() != null && this.getIntent().getExtras().getStringArrayList("selected_photos_url") != null) {
 
             Bundle b = this.getIntent().getExtras();
             ArrayList<String> urls = b.getStringArrayList("selected_photos_url");
@@ -432,7 +505,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
             return items;
         } else if (getImageview() == photo1) {
             if (!tag.equals("default")) {
-                CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
+                CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+//                CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo", "Cancel"};
                 return items;
             } else {
                 CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
@@ -477,9 +551,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                 } else if (items[item].equals("Remove Photo")) {
                     int id = getImageview().getId();
-                    if (id == photo1.getId()) {
-
-                    }
                     getImageview().setImageResource(R.drawable.photo);
                     getImageview().setTag("default");
                 } else if (items[item].equals("Cancel")) {
@@ -677,6 +748,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private void onCaptureImageResult(Intent data) {
 
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         img = getImageview();
         img.setImageBitmap(thumbnail);
         img.setTag("changed");
@@ -826,7 +912,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
-                                Log.d("userImages",response.toString());
 
                                 String profile_image = response.getString(0);
                                 userImages = new ArrayList<>();
@@ -840,9 +925,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                     }
                                 }
                                 for (int i = 0; i < userImages.size(); i++) {
-
-                                    Log.d("userImages",userImages.get(i));
-
 
                                     Picasso.with(UploadPhotoActivity.this)
                                             .load(userImages.get(i))
@@ -893,8 +975,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Uploading Pics...");
-            progressDialog.show();
             super.onPreExecute();
         }
 
@@ -930,7 +1010,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
             super.onPostExecute(aVoid);
         }
     }

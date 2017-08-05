@@ -11,8 +11,6 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -57,8 +55,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -119,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
 
         login_email = (EditText) findViewById(R.id.login_email);
         login_pass = (EditText) findViewById(R.id.login_password);
-        login = (Button) findViewById(R.id.login);
-        fblogin = (LoginButton) findViewById(R.id.fb_login_button);
         login = (Button) findViewById(R.id.login);
 
         fblogin = (LoginButton) findViewById(R.id.fb_login_button);
@@ -233,21 +227,21 @@ public class LoginActivity extends AppCompatActivity {
                                                  public void run() {
                                                      try {
                                                          checker = true;
-                                                         Log.e(TAG, "run: checker is " + checker);
+
                                                          if (!checker) {
-                                                             Log.e(TAG, "run: --I am running after 3 second");
+
                                                          } else {
                                                              if (Looper.myLooper() == null) {
                                                                  Looper.prepare();
                                                              }
-                                                             Log.e(TAG, "run: -- pro t next step");
+
 
                                                              if (str.equals("success")) {
 
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
                                                                  editors.putBoolean("isLoggedIn", true);
-                                                                 editors.putString("id",customer_id);
+                                                                 editors.putString("id", customer_id);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -260,7 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  editor.apply();
                                                                  dialog.dismiss();
 
-                                                              registerMe();
+                                                                 registerMe();
 
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
@@ -293,7 +287,7 @@ public class LoginActivity extends AppCompatActivity {
                                                              Looper.loop();
                                                          }
                                                      } catch (Exception e) {
-                                                         Log.e(TAG, "run: exception si " + e);
+
                                                      }
                                                  }
                                              }, 1, 3, TimeUnit.SECONDS);
@@ -313,20 +307,20 @@ public class LoginActivity extends AppCompatActivity {
                                                  @Override
                                                  public void run() {
                                                      try {
-                                                         Log.e(TAG, "run: checker is " + checker);
+
                                                          if (!checker) {
-                                                             Log.e(TAG, "run: --I am running after 3 second");
+
                                                          } else {
                                                              if (Looper.myLooper() == null) {
                                                                  Looper.prepare();
                                                              }
-                                                             Log.e(TAG, "run: -- pro t next step");
+
 
                                                              if (str.equals("success")) {
                                                                  SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                                  SharedPreferences.Editor editors = userinfo.edit();
                                                                  editors.putBoolean("isLoggedIn", true);
-                                                                 editors.putString("id",customer_id);
+                                                                 editors.putString("id", customer_id);
                                                                  editors.apply();
 
                                                                  SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -340,7 +334,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  dialog.dismiss();
 
 
-                                                           registerMe();
+                                                                 registerMe();
                                                                  Intent deeplink_data = getIntent();
                                                                  String deeplink = deeplink_data.getStringExtra("deeplink");
                                                                  if (deeplink != null) {
@@ -373,7 +367,7 @@ public class LoginActivity extends AppCompatActivity {
                                                              Looper.loop();
                                                          }
                                                      } catch (Exception e) {
-                                                         Log.e(TAG, "run: exception si " + e);
+
                                                      }
                                                  }
                                              }, 1, 3, TimeUnit.SECONDS);
@@ -400,6 +394,28 @@ public class LoginActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(s);
         return matcher.matches();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        super.onBackPressed();
+    }
+
+    public void registerMe() {
+
+
+        // registering device
+        SharedPreferences token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String registration_id = token.getString("device_token", null);
+        if (registration_id != null) {
+            Notifications_Util.RegisterDevice(customer_id, registration_id);
+        } else {
+            Notifications_Util.RegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
+        }
     }
 
     private class BackGround extends AsyncTask<String, String, String> {
@@ -450,7 +466,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         JSONArray communityArray = response.getJSONArray(5);
-                                        
+
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
@@ -465,7 +481,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("surname", response.getString(4));
 
                                         communityArray = response.getJSONArray(5);
-                                        
+
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
@@ -540,7 +556,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         JSONArray communityArray = response.getJSONArray(5);
-                                        
+
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
@@ -553,7 +569,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         communityArray = response.getJSONArray(5);
-                                        
+
                                         for (int i = 0; i < 5; i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
@@ -608,29 +624,6 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        super.onBackPressed();
-    }
-
-
-    public void registerMe(){
-        Log.d("token",FirebaseInstanceId.getInstance().getToken());
-
-        // registering device
-        SharedPreferences token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String registration_id = token.getString("device_token",null);
-        if(registration_id!=null){
-            Notifications_Util.RegisterDevice(customer_id, registration_id);
-        }else{
-            Notifications_Util.RegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
         }
     }
 }

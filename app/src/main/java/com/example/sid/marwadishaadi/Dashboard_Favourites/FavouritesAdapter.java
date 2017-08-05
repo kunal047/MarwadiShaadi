@@ -139,7 +139,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                 mDatabases.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Log.d("response-->",dataSnapshot.toString());
+
                         setData(dataSnapshot);
                     }
 

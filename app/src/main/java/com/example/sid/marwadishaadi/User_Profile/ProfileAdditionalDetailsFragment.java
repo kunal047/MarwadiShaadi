@@ -13,7 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             String g = bundle.getString("gotra");
             String m = bundle.getString("manglik");
             String mh = bundle.getString("matchHoroscope");
-            Log.e(TAG, "onReceive: empty *************************************** " + hobby);
 
             if (hobby != null)
                 hobbies.setText(hobby);

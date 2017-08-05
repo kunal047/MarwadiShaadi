@@ -112,7 +112,7 @@ public class InterestSentFragment extends Fragment {
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseInterestSent(response);
 
             } catch (JSONException e) {
@@ -176,17 +176,13 @@ public class InterestSentFragment extends Fragment {
                     InterestSentModel interestSentModels = new InterestSentModel(customerNo, name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
 
-
-
-                    if (!interestListSent.contains(interestSentModels)) {
-
                         if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
 
                             interestListSent.add(0, interestSentModels);
                             interestSentAdapter.notifyDataSetChanged();
 
                         }
-                    }
+
                 }
             }
 
@@ -248,30 +244,30 @@ public class InterestSentFragment extends Fragment {
                             // do anything with response
 
 
-                            // Log.d("suggestions",response.toString());
-
+                            //
+                            loadedFromNetwork(response);
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
-
-                                String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"interest_sent");
-
-                                // Log.d("latest",latestResponseHash);
-                                // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
-
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }else{
-
-                                    // hash not matched
-                                    loadedFromNetwork(response);
-                                }
-                            }else{
-                                // first time load
-                                loadedFromNetwork(response);
-                            }
+//                            if (isAlreadyLoadedFromCache){
+//
+//                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+//                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"interest_sent");
+//
+//                                //
+//                                //
+//                                //
+//
+//                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+//                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+//                                    return;
+//                                }else{
+//
+//                                    // hash not matched
+//                                    loadedFromNetwork(response);
+//                                }
+//                            }else{
+//                                // first time load
+//                                loadedFromNetwork(response);
+//                            }
 
 
 

@@ -98,9 +98,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         //TODO Add this method in python file and check query with different users. Save URL in every activity not at sharedPreference,Also change jsonObject to jsonArray
 
 
-//        Log.e(TAG, "onCreate: ------------query is ----" + query);
+//
         query = "SELECT msg_on,msg_read,msg,msg_from,msg_to FROM `tbl_message`  where (msg_from=\"" + customer_id + "\" and msg_to =\"" + customerId + "\") or ( msg_from=\"" + customerId + "\" and msg_to =\"" + customer_id + "\") order by msg_on asc";
-        Log.e(TAG, "f " + query);
+
         pgd = new ProgressDialog(this);
         pgd.setTitle("Wait a while");
         pgd.setMessage("Waiting for connection...");
@@ -207,7 +207,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         String messageString = input.toString();
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance(TimeZone.getTimeZone("IST")).getTime());
 //SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
-        Log.e(TAG, "onSubmit: time sent is ----- " + timeStamp);
+
         String replyOn = "2010-01-01 01:01:01";
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
@@ -229,7 +229,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                     @Override
                     public void onResponse(JSONArray response) {
                         // do anything with response TODO
-                        Log.e(TAG, "onResponse: ----------response of creating list is \n" + response);
+
 
 
 
@@ -248,7 +248,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         mDatabases.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                Log.d("response-->",dataSnapshot.toString());
+
                                 setData(dataSnapshot);
                             }
 
@@ -279,7 +279,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                     public void onError(ANError error) {
                         // handle error TODO
                         Toast.makeText(DefaultMessagesActivity.this, "Network Error...", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "onError: error is " + error);
+
                     }
                 });
 
@@ -313,22 +313,22 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                     String string = jsnrry.getString(0);
                                     SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                     Date date = format.parse(string);
-                                    Log.e(TAG, "onResponse: date is " + jsnrry.getString(0));
+
                                     Calendar cal=Calendar.getInstance();
                                     cal.setTime(date);
                                     cal.add(Calendar.HOUR_OF_DAY,-5);
                                     cal.add(Calendar.MINUTE,-30);
                                     date=cal.getTime();
-                                    Log.e(TAG, "onResponse: date converted is--------"+date);
+
                                     Message message;
                                     if (jsnrry.getString(3).contains(customerId)) {
                                         User user = new User("1", customerName, null, true);
                                         message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                        // Log.e(TAG, "onResponse: Add it in left" );
+                                        //
                                     } else {
                                         User user = new User("0", customerName, null, true);
                                         message = new Message(jsnrry.getString(3), user, jsnrry.getString(2), date);
-                                        // Log.e(TAG, "onResponse: Add it in Right" );
+                                        //
                                     }
 
                                     adapter.addToStart(message, true);
@@ -351,18 +351,18 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
     {
         @Override
         protected String doInBackground(String... strings) {
-            Log.e(TAG, "doInBackground: query of seen messages is "+ strings[0] );
+
             AndroidNetworking.post("http://208.91.199.50:5000/unblock")
                     .addBodyParameter("query",strings[0])
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.e(TAG, "onResponse: response of set msg_read='1' is "+ response );
+
                             try {
                                 if(response.getString(0).contains("success"))
                                 {
-                                    Log.e(TAG, "onResponse: Messages has been seen by one user and not by another user" );
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -372,7 +372,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         @Override
                         public void onError(ANError anError) {
                             Toast.makeText(DefaultMessagesActivity.this, "Network or Server Error", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "onError: error is       908078787878787878787878786    " + anError );
+
                         }
                     });
             return null;

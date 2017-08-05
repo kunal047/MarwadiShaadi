@@ -114,7 +114,7 @@ public class FavouritesFragment extends Fragment {
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-               // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+               // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseFavourites(response);
 
             } catch (JSONException e) {
@@ -239,7 +239,7 @@ public class FavouritesFragment extends Fragment {
                             // do anything with response
 
 
-                            //Log.d("favourites",response.toString());
+                            //
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -247,12 +247,12 @@ public class FavouritesFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"favourites");
 
-                               // Log.d("latest",latestResponseHash);
-                               // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                               //
+                               //
+                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                   // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                   // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
                                 }else{
 

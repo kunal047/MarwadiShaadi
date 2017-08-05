@@ -242,13 +242,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return null;
         }
 
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            if (!sentmail) {
-//                Toast.makeText(getApplicationContext(), "This email is not registered with us", Toast.LENGTH_LONG).show();
-//            }
-//        }
+
     }
 
     @Override

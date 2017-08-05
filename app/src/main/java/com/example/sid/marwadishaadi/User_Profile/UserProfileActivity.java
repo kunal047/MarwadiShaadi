@@ -334,7 +334,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     mDatabases.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.d("response-->",dataSnapshot.toString());
+
                             setData(dataSnapshot);
                         }
 
@@ -736,7 +736,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                         public void onResponse(final JSONArray response) {
 
 
-                            Log.d("PDF", "onResponse: " + response.toString());
+
 
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {

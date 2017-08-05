@@ -125,7 +125,7 @@ class Sync extends AsyncTask<String,String,String>{
         else {
             query+="update tbl_block set blocked_id =concat( blocked_id , \""+strings[1]+" | \" ); ";
         }
-        Log.e("TAG", "doInBackground: ------------ block query is =-------"+query );
+
         AndroidNetworking.post("http://208.91.199.50:5000/unblockOrBlock")
                 .addBodyParameter("query", query)
                 .setPriority(Priority.HIGH)
@@ -156,7 +156,7 @@ class Sync extends AsyncTask<String,String,String>{
                             String quer="";
                             final String[] nam = new String[1];
                             quer+="select first_name from tbl_user where customer_no=\""+s+"\"";
-                            Log.e("TAG", "onResponse: ------------ gettig name query is ------"+quer);
+
                             AndroidNetworking.post("http://208.91.199.50:5000/unblockOrBlock")
                                     .addBodyParameter("query", quer)
                                     .setPriority(Priority.HIGH)

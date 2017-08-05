@@ -828,7 +828,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             String s = response.toString();
-                            Log.e(TAG, "onResponse:----------------" + s);
+
                             size = response.length();
                             sm.clear();
                             for (int i = 0; i < response.length(); i++) {
@@ -877,7 +877,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }
                                         sm.add(suggestionModel);
-//                                        Log.e(TAG, "onResponse: --- sm details are " + sm.get(i).getCusId());
+//
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -887,7 +887,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 @Override
                                 public void run() {
                                     dialog.dismiss();
-                                    Log.e(TAG, "run: sm size is *************" + sm.size());
+
                                     Intent i = new Intent(getContext(), SearchResultsActivity.class);
                                     i.putExtra("COUNT", size);
                                     i.putExtra("which", "second");
@@ -900,8 +900,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                         @Override
                         public void onError(ANError error) {
-//                        Toast.makeText(BottomSheet.this," ", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "onError: --------------------- error is " + error);
+
                             err = "Network Error, Check Connection";
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

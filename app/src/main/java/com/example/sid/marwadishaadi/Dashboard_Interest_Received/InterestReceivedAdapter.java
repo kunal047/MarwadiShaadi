@@ -191,7 +191,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     mDatabases.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.d("response-->",dataSnapshot.toString());
+
                             setData(dataSnapshot);
                         }
 

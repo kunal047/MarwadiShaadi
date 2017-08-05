@@ -125,7 +125,7 @@ public class RecentProfilesFragment extends Fragment {
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-               // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+               // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseRecentProfiles(response);
 
             } catch (JSONException e) {
@@ -192,10 +192,10 @@ public class RecentProfilesFragment extends Fragment {
                     name = name + " " + surname;
 
                     date = formatter.parse(createdOn);
-                    long diff = now.getTime() - date.getTime();
-                    long diffSeconds = diff / 1000 % 60;
-                    long diffMinutes = diff / (60 * 1000) % 60;
-                    long diffHours = diff / (60 * 60 * 1000);
+                    long diff =  now.getTime() - date.getTime();
+                    int diffSeconds = (int) diff / 1000 % 60;
+                    int diffMinutes = (int) diff / (60 * 1000) % 60;
+                    int diffHours = (int) diff / (60 * 60 * 1000);
                     int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
                     if (diffInDays >= 365) {
@@ -203,10 +203,17 @@ public class RecentProfilesFragment extends Fragment {
                     } else if (diffInDays > 1) {
 //                                        System.err.println("Difference in number of days (2) : " + diffInDays);
                         createdOn = diffInDays + " days ago";
-                    } else if (diffHours >= 1) {
-                        createdOn = diffHours + " hours ago";
+                    }else if (diffInDays == 1) {
+//                                        System.err.println("Difference in number of days (2) : " + diffInDays);
+                        createdOn = diffInDays + " day ago";
+                    }
+                    else if (diffHours >= 1) {
+                        if (diffHours == 1) {
+                            createdOn = diffHours + " hour ago";
+                        } else {
+                            createdOn = diffHours + " hours ago";
+                        }
                     } else if ((diffHours < 1) && (diffMinutes >= 1)) {
-//                                        System.err.println("minutes");
                         createdOn = diffMinutes + " minutes ago";
                     } else if (diffSeconds < 60) {
                         createdOn = diffSeconds + " seconds ago";
@@ -289,7 +296,7 @@ public class RecentProfilesFragment extends Fragment {
                             // do anything with response
 
 
-                            //Log.d("recent_profiles",response.toString());
+                            //
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -297,12 +304,12 @@ public class RecentProfilesFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"recent_profiles");
 
-                                //Log.d("latest",latestResponseHash);
-                                //Log.d("cached",cacheResponseHash);
-                                //Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                                //
+                                //
+                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                  //  Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                  //  .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
                                 }else{
 

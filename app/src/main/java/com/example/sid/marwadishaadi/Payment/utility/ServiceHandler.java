@@ -66,14 +66,14 @@ public class ServiceHandler extends Activity{
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"utf-8"));
                 }
                 httpResponse = httpClient.execute(httpPost);
-                Log.e(TAG, "makeServiceCall: ---------------------called after makeOnCall--- "+url+"entity"+new UrlEncodedFormEntity(params,"utf-8").toString()+"-------and -------"+httpPost.toString()+" --------------------------- ");
+
             } else if (method == GET) {
                 // appending params to url
                 if (params != null) {
                     String paramString = URLEncodedUtils.format(params, "utf-8");
                     url += "?" + paramString;
                 }
-                Log.e(TAG, "makeServiceCall: ----------------------get method-----------------------"  +  url );
+
 
 
                 HttpGet httpGet = new HttpGet(url);
