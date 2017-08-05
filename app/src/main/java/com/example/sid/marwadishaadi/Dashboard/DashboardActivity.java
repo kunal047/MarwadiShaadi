@@ -120,7 +120,7 @@ public class DashboardActivity extends AppCompatActivity
                     if (readCount!=-1 && readCount > 0){
                         notificationCount-=readCount;
                     }
-                    if (notificationCount<0){
+                    if (notificationCount<0 && notificationCount == 0){
                         m.setTitle("Notifications");
                     }else{
                         m.setTitle("Notifications ( " + notificationCount +" )");

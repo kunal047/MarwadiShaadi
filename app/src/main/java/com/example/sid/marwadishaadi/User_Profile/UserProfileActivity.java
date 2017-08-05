@@ -81,6 +81,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -770,6 +771,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                             Log.d("PDF", "onResponse: " + response.toString());
 
+
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
                                 @Override
                                 protected void initView(View view) {
@@ -786,37 +788,11 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                     pdfContact = (TextView) view.findViewById(R.id.pdfContact);
                                     pdfCommunity = (TextView) view.findViewById(R.id.pdfCommunity);
                                     pdfSubcaste = (TextView) view.findViewById(R.id.pdfSubcaste);
-                                    pdfHeight = (TextView) view.findViewById(R.id.pdfHeight);
-                                    pdfWeight = (TextView) view.findViewById(R.id.pdfWeight);
-                                    pdfComplexion = (TextView) view.findViewById(R.id.pdfComplexion);
-                                    pdfBodyType = (TextView) view.findViewById(R.id.pdfBodyType);
-                                    pdfPhysicalStatus = (TextView) view.findViewById(R.id.pdfPhysicalStatus);
-                                    pdfEduLevel = (TextView) view.findViewById(R.id.pdfEduLevel);
-                                    pdfHighestDegree = (TextView) view.findViewById(R.id.pdfHighestDegree);
-                                    pdfInstituteName = (TextView) view.findViewById(R.id.pdfInstituteName);
-                                    pdfOccupation = (TextView) view.findViewById(R.id.pdfOccupation);
-                                    pdfDesignation = (TextView) view.findViewById(R.id.pdfDesignation);
-                                    pdfCompany = (TextView) view.findViewById(R.id.pdfCompany);
-                                    pdfIncome = (TextView) view.findViewById(R.id.pdfIncome);
                                     pdfAbout = (TextView) view.findViewById(R.id.pdfAbout);
                                     pdfHobby = (TextView) view.findViewById(R.id.pdfHobby);
                                     pdfDiet = (TextView) view.findViewById(R.id.pdfDiet);
                                     pdfDrink = (TextView) view.findViewById(R.id.pdfDrink);
                                     pdfSmoke = (TextView) view.findViewById(R.id.pdfSmoke);
-                                    pdfBirthTime = (TextView) view.findViewById(R.id.pdfBirthTime);
-                                    pdfBirthPlace = (TextView) view.findViewById(R.id.pdfBirthplace);
-                                    pdfGotra = (TextView) view.findViewById(R.id.pdfGotra);
-                                    pdfManglik = (TextView) view.findViewById(R.id.pdfManglik);
-                                    pdfMatchHoroscope = (TextView) view.findViewById(R.id.pdfMatchHoroscope);
-                                    pdfFatherName = (TextView) view.findViewById(R.id.pdfFatherName);
-                                    pdfFatherOccupation = (TextView) view.findViewById(R.id.pdfFatherOccupation);
-                                    pdfFatherOccupationDetail = (TextView) view.findViewById(R.id.pdfFatherOccupationDetail);
-                                    pdfFamilyStatus = (TextView) view.findViewById(R.id.pdfFamilyStatus);
-                                    pdfFamilyType = (TextView) view.findViewById(R.id.pdfFamilyType);
-                                    pdfFamilyValues = (TextView) view.findViewById(R.id.pdfFamilyValues);
-                                    pdfNativePlaces = (TextView) view.findViewById(R.id.pdfNativePlace);
-                                    pdfGrandfatherName = (TextView) view.findViewById(R.id.pdfGrandfatherName);
-                                    pdfMama = (TextView) view.findViewById(R.id.pdfMama);
                                     pdfDate = (TextView) view.findViewById(R.id.date);
 
 
@@ -827,7 +803,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                             public void run() {
                                                 try {
                                                     Glide.with(UserProfileActivity.this)
-                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(7)+".jpg")
+                                                            .load("http://www.marwadishaadi.com/uploads/cust_" + clickedID + "/thumb/" + response.getString(0))
                                                             .into(pdfImage);
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -835,14 +811,14 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                             }
                                         });
 
-                                        String pdfname = response.getString(0) + " " + response.getString(1);
+                                        String pdfname = response.getString(1) + " " + response.getString(2);
                                         pdfImageName.setText(pdfname);
-                                        pdfImageId.setText(response.getString(2));
+                                        pdfImageId.setText(response.getString(3));
                                         pdfName.setText(pdfname);
-                                        int age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(response.getString(3));
+                                        int age = Calendar.getInstance().get(Calendar.YEAR) - response.getInt(4);
                                         pdfAge.setText(String.valueOf(age));
-                                        pdfMaritalStatus.setText(response.getString(4));
-                                        pdfDob.setText(response.getString(5));
+                                        pdfMaritalStatus.setText(response.getString(5));
+                                        pdfDob.setText(response.getString(4));
                                         pdfGender.setText(response.getString(6));
                                         pdfLocation.setText(response.getString(7));
                                         pdfContact.setText(response.getString(8));
@@ -864,6 +840,55 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                         pdfCommunity.setText(cast);
                                         pdfSubcaste.setText(response.getString(9));
+                                        pdfAbout.setText(response.getString(23));
+                                        pdfHobby.setText(response.getString(24));
+                                        pdfDiet.setText(response.getString(25));
+                                        pdfDrink.setText(response.getString(41));
+                                        pdfSmoke.setText(response.getString(26));
+                                        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                                        pdfDate.setText(currentDate);
+
+                                    } catch (JSONException E) {
+
+                                    }
+
+                                }
+                            };
+
+
+                            AbstractViewRenderer page2 = new AbstractViewRenderer(UserProfileActivity.this,R.layout.pdf2) {
+                                @Override
+                                protected void initView(View view) {
+
+                                    pdfHeight = (TextView) view.findViewById(R.id.pdfHeight);
+                                    pdfWeight = (TextView) view.findViewById(R.id.pdfWeight);
+                                    pdfComplexion = (TextView) view.findViewById(R.id.pdfComplexion);
+                                    pdfBodyType = (TextView) view.findViewById(R.id.pdfBodyType);
+                                    pdfPhysicalStatus = (TextView) view.findViewById(R.id.pdfPhysicalStatus);
+                                    pdfEduLevel = (TextView) view.findViewById(R.id.pdfEduLevel);
+                                    pdfHighestDegree = (TextView) view.findViewById(R.id.pdfHighestDegree);
+                                    pdfInstituteName = (TextView) view.findViewById(R.id.pdfInstituteName);
+                                    pdfOccupation = (TextView) view.findViewById(R.id.pdfOccupation);
+                                    pdfDesignation = (TextView) view.findViewById(R.id.pdfDesignation);
+                                    pdfCompany = (TextView) view.findViewById(R.id.pdfCompany);
+                                    pdfIncome = (TextView) view.findViewById(R.id.pdfIncome);
+                                    pdfBirthTime = (TextView) view.findViewById(R.id.pdfBirthTime);
+                                    pdfBirthPlace = (TextView) view.findViewById(R.id.pdfBirthplace);
+                                    pdfGotra = (TextView) view.findViewById(R.id.pdfGotra);
+                                    pdfManglik = (TextView) view.findViewById(R.id.pdfManglik);
+                                    pdfMatchHoroscope = (TextView) view.findViewById(R.id.pdfMatchHoroscope);
+                                    pdfFatherName = (TextView) view.findViewById(R.id.pdfFatherName);
+                                    pdfFatherOccupation = (TextView) view.findViewById(R.id.pdfFatherOccupation);
+                                    pdfFatherOccupationDetail = (TextView) view.findViewById(R.id.pdfFatherOccupationDetail);
+                                    pdfFamilyStatus = (TextView) view.findViewById(R.id.pdfFamilyStatus);
+                                    pdfFamilyType = (TextView) view.findViewById(R.id.pdfFamilyType);
+                                    pdfFamilyValues = (TextView) view.findViewById(R.id.pdfFamilyValues);
+                                    pdfNativePlaces = (TextView) view.findViewById(R.id.pdfNativePlace);
+                                    pdfGrandfatherName = (TextView) view.findViewById(R.id.pdfGrandfatherName);
+                                    pdfMama = (TextView) view.findViewById(R.id.pdfMama);
+
+
+                                    try {
                                         pdfHeight.setText(response.getString(10));
                                         pdfWeight.setText(response.getString(11));
                                         pdfComplexion.setText(response.getString(12));
@@ -881,11 +906,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                         pdfDesignation.setText(response.getString(20));
                                         pdfCompany.setText(response.getString(21));
                                         pdfIncome.setText(response.getString(22));
-                                        pdfAbout.setText(response.getString(23));
-                                        pdfHobby.setText(response.getString(24));
-                                        pdfDiet.setText(response.getString(25));
-                                        pdfDrink.setText(response.getString(41));
-                                        pdfSmoke.setText(response.getString(26));
+
                                         pdfBirthTime.setText(response.getString(27));
                                         pdfBirthPlace.setText(response.getString(28));
                                         pdfGotra.setText(response.getString(29));
@@ -900,25 +921,24 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                         pdfNativePlaces.setText(response.getString(38));
                                         pdfGrandfatherName.setText(response.getString(39));
                                         pdfMama.setText(response.getString(40));
-                                        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                                        pdfDate.setText(currentDate);
 
-                                    } catch (JSONException E) {
-
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
+
 
                                 }
                             };
 
-
-
                             page1.setReuseBitmap(true);
-
+                            page2.setReuseBitmap(true);
 
                             PdfDocument doc = new PdfDocument(UserProfileActivity.this);
                             doc.addPage(page1);
+                            doc.addPage(page2);
                             doc.setRenderWidth(1072);
                             doc.setRenderHeight(2000);
+                            doc.setInflateOnMainThread(false);
                             doc.setOrientation(PdfDocument.A4_MODE.PORTRAIT);
                             doc.setSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
                             try {
