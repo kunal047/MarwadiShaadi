@@ -78,7 +78,6 @@ public class DashboardActivity extends AppCompatActivity
     TextView nameDrawer;
     private DatabaseReference mDatabase;
     private int notificationCount = 0;
-    private int readCount = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -99,7 +98,6 @@ public class DashboardActivity extends AppCompatActivity
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
-        readCount = sharedpref.getInt("readcount",-1);
 
         if (customer_id !=null){
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
@@ -117,15 +115,7 @@ public class DashboardActivity extends AppCompatActivity
                 if (notificationCount == 0){
                     m.setTitle("Notifications");
                 }else{
-                    if (readCount!=-1 && readCount > 0){
-                        notificationCount-=readCount;
-                    }
-                    if (notificationCount<0 && notificationCount == 0){
-                        m.setTitle("Notifications");
-                    }else{
                         m.setTitle("Notifications ( " + notificationCount +" )");
-
-                    }
                 }
             }
 

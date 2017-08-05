@@ -116,7 +116,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             public void onClick(View v) {
 
 
-                holder.sendInterest.setText("Interest Sent");
+                holder.sendInterest.setText("Awaiting");
                 holder.sendInterest.setEnabled(false);
 
 
