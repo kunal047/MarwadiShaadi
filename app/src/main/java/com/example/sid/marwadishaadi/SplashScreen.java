@@ -22,7 +22,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 public class SplashScreen extends AppCompatActivity {
 
-    public static final int duration = 1500;
+    public static final int duration = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +30,6 @@ public class SplashScreen extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
-
-      /* final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("A1001").child("Notifications");
-        final NotificationsModel notification= new NotificationsModel("Mervin","12-9-17",3,true,false,false,false,false,false,false,false,false);
-        String hash = String.valueOf(notification.hashCode());
-        mDatabase.child(hash).setValue(notification);
-*/
-        // sending notification
-       // Notifications_Util.SendNotification(registration_id, "Mervin sent you an Interest", "New Interest", "Interest Request");
 
         FirebaseDynamicLinks.getInstance()
             .getDynamicLink(getIntent())

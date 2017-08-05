@@ -42,8 +42,6 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.example.sid.marwadishaadi.Analytics_Util;
 import com.example.sid.marwadishaadi.Chat.DefaultMessagesActivity;
-import com.example.sid.marwadishaadi.Chat.Message;
-import com.example.sid.marwadishaadi.Chat.User;
 import com.example.sid.marwadishaadi.DeviceRegistration;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.Notifications.NotificationsModel;
@@ -73,15 +71,11 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageClickListener;
-import com.synnapps.carouselview.ImageListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -131,14 +125,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
 
-    public static void shareApp(Context context) {
-        final String appPackageName = context.getPackageName();
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
-        sendIntent.setType("text/plain");
-        context.startActivity(sendIntent);
-    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -182,9 +169,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             }
         }
 
-
         Intent data = getIntent();
-        String deeplink = data.getStringExtra("deeplink");
+
         if (data.getStringExtra("customerNo") != null) {
             called = false;
             clickedID = data.getStringExtra("customerNo");
@@ -192,10 +178,19 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             //Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
         }
 
+
+
+        // ============================ DEEPLINK ========================================
+
+        String deeplink = data.getStringExtra("deeplink");
         if (deeplink != null) {
             userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
-            //  Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
+            clickedID = userid_from_deeplink;
+            new ProfilePicture().execute(clickedID);
+            Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
         }
+
+        // =================================================================================
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
 
@@ -674,35 +669,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 if (images.size() > 0) {
 
-
-                                    // Glide.with(getApplicationContext()).load(images.get(0).toString()).into(imageView);
                                     Picasso.with(getApplicationContext()).load(images.get(0)).fit().into(imageView);
-
-//                                    carouselView.setImageListener(new ImageListener() {
-//
-//
-//                                        @Override
-//                                        public void setImageForPosition(int position, ImageView imageView) {
-//
-//                                            Picasso.with(UserProfileActivity.this)
-//                                                    .load(images.get(position))
-//                                                    .fit()
-//                                                    .into(imageView);
-//                                        }
-//                                    });
-//
-//                                    carouselView.setImageClickListener(new ImageClickListener() {
-//                                        @Override
-//                                        public void onClick(int position) {
-//                                            Intent intent = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
-//                                            intent.putExtra("user_images", images);
-//                                            startActivity(intent);
-//
-//                                        }
-//                                    });
-//
-//                                    carouselView.setPageCount(images.size());
-
 
                                 }else{
                                     Glide.with(getApplicationContext()).load(R.drawable.default_drawer).into(imageView);
@@ -1188,5 +1155,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
     }
 
+    public static void shareApp(Context context) {
+        final String appPackageName = context.getPackageName();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
+    }
 }
 
