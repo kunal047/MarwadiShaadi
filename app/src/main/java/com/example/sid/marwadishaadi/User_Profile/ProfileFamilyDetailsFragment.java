@@ -29,6 +29,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
@@ -38,8 +39,11 @@ import com.example.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditFamilyDe
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class ProfileFamilyDetailsFragment extends Fragment {
@@ -52,6 +56,8 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     private Button similar;
     private String clickedID, customer_id;
     private boolean isPaidMember;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
 
     private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -111,6 +117,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
+
         String[] array = getResources().getStringArray(R.array.communities);
 
         for (int i = 0; i < 5; i++) {
@@ -466,7 +473,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
-            new ProfileFamilyDetails().execute(clickedID);
 
         }
 
@@ -476,10 +482,11 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             edit_relatives.setVisibility(View.GONE);
 
         }
-        new ProfileFamilyDetails().execute(clickedID);
+
         if (customer_id.equals(clickedID)) {
             similar.setVisibility(View.GONE);
         }
+
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -506,11 +513,89 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             }
         });
 
+
+        cache = new File(getCacheDir() + "/" + "familyprofile" +clickedID+ ".srl");
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("familyprofile",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"familyprofile");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseFamilyProfile(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        new ProfileFamilyDetails().execute(clickedID);
+
         return mview;
+    }
+
+    private void parseFamilyProfile(JSONArray response) {
+
+        try {
+            JSONArray result = response.getJSONArray(0);
+
+            String fn = result.getString(0) + " (Father)";
+            fatherName.setText(fn);
+            String fo = result.getString(1) + " (Father)";
+            fatherOccupation.setText(fo);
+            String fod = result.getString(2) + " (Father)";
+            fatherOccupationDetails.setText(fod);
+            String fs = result.getString(3) + " Family";
+            familyStatus.setText(fs);
+            String ftv = result.getString(4) + " family with " + result.getString(5) + " values";
+            familyType.setText(ftv);
+            String nat = "Natively from " + result.getString(6);
+            nativePlace.setText(nat);
+            String sc = result.getString(7) + " (Subcaste)";
+            subcaste.setText(sc);
+            String gn = result.getString(8) + " (Grandfather)";
+            grandpaName.setText(gn);
+            String ms = result.getString(9) + " (Mama's Surname)";
+            mamaSurname.setText(ms);
+            relation.setText(result.getString(10));
+            relativeName.setText(result.getString(11));
+            relativeOccupation.setText(result.getString(12));
+            String loc = result.getString(13);
+            relativeLocation.setText(loc);
+            String mob = result.getString(14);
+            relativeMobile.setText(mob);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getCasebreak() {
         return this.casebreak;
+    }
+
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("familyprofile",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"familyprofile");
+
+        // displaying it
+        parseFamilyProfile(response);
+
     }
 
     private class ProfileFamilyDetails extends AsyncTask<String, Void, Void> {
@@ -527,38 +612,32 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                            try {
-                                JSONArray result = response.getJSONArray(0);
 
-                                String fn = result.getString(0) + " (Father)";
-                                fatherName.setText(fn);
-                                String fo = result.getString(1) + " (Father)";
-                                fatherOccupation.setText(fo);
-                                String fod = result.getString(2) + " (Father)";
-                                fatherOccupationDetails.setText(fod);
-                                String fs = result.getString(3) + " Family";
-                                familyStatus.setText(fs);
-                                String ftv = result.getString(4) + " family with " + result.getString(5) + " values";
-                                familyType.setText(ftv);
-                                String nat = "Natively from " + result.getString(6);
-                                nativePlace.setText(nat);
-                                String sc = result.getString(7) + " (Subcaste)";
-                                subcaste.setText(sc);
-                                String gn = result.getString(8) + " (Grandfather)";
-                                grandpaName.setText(gn);
-                                String ms = result.getString(9) + " (Mama's Surname)";
-                                mamaSurname.setText(ms);
-                                relation.setText(result.getString(10));
-                                relativeName.setText(result.getString(11));
-                                relativeOccupation.setText(result.getString(12));
-                                String loc = result.getString(13);
-                                relativeLocation.setText(loc);
-                                String mob = result.getString(14);
-                                relativeMobile.setText(mob);
+                            // Log.d("profile",response.toString());
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
+
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"familyprofile");
+
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
+
+                                    // hash not matched
+                                    loadedFromNetwork(response);
+                                }
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
+
                         }
 
                         @Override
@@ -572,7 +651,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             return null;
         }
 
-        ;
+
 
     }
 }

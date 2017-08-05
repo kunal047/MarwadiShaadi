@@ -25,6 +25,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.R;
 import com.example.sid.marwadishaadi.Search.BottomSheet;
 import com.example.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
@@ -33,8 +34,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
+import java.io.File;
+
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getCacheDir;
 
 public class ProfileAdditionalDetailsFragment extends Fragment {
 
@@ -46,7 +50,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     private static int casebreak;
     private Button similar;
     private CardView mCardViewAboutMe, mCardViewHobbies;
-
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
     private String clickedID, customer_id;
 
 
@@ -133,6 +138,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
+
+
         mCardViewAboutMe = (CardView) mview.findViewById(R.id.cardViewAboutMe);
         mCardViewHobbies = (CardView) mview.findViewById(R.id.cardViewHobbies);
 
@@ -356,7 +363,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         if (data.getStringExtra("customerNo") != null) {
 
             clickedID = data.getStringExtra("customerNo");
-            new ProfileAdditionalDetails().execute(clickedID);
 
             edit_about.setVisibility(View.GONE);
             edit_hobbies.setVisibility(View.GONE);
@@ -365,7 +371,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
         }
 
-        new ProfileAdditionalDetails().execute(clickedID);
+
+
         if (customer_id.equals(clickedID)) {
             similar.setVisibility(View.GONE);
         }
@@ -416,9 +423,93 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         });
 
 
+        cache = new File(getCacheDir() + "/" + "additionalprofile" +clickedID+ ".srl");
+
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("additionalprofile",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"additionalprofile");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // Toast.makeText(getContext(), "Loading from cache....", Toast.LENGTH_SHORT).show();
+                parseAdditionalProfile(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        new ProfileAdditionalDetails().execute(clickedID);
+
+
         return mview;
     }
 
+    private void parseAdditionalProfile(JSONArray response) {
+
+        try {
+            JSONArray result = response.getJSONArray(0);
+
+            aboutMe.setText(result.getString(0));
+            hobbies.setText(result.getString(1));
+            String eh = result.getString(2) + " Diet";
+            eatingHabits.setText(eh);
+            String dh =  result.getString(3) + " (Drinking habit)";
+            drinkingHabits.setText(dh);
+            String sh = result.getString(4) + " (Smoking habit)";
+            smokingHabits.setText(sh);
+            String bl;
+            if (result.getString(5).length() == 0 && result.getString(6).length() == 0) {
+                bl = "";
+            } else if (result.getString(5).length() == 0) {
+                bl = "Born at "+result.getString(6);
+            } else if (result.getString(6).length() == 0) {
+                bl = "Born on "+result.getString(5);
+            } else {
+                bl = "Born on "+result.getString(5) + " at " + result.getString(6);
+
+            }
+
+            birthtime.setText(bl);
+            String g = result.getString(7) + " (Gotra)";
+            gotra.setText(g);
+            String m = result.getString(8) + " (Manglik)";
+            manglik.setText(m);
+            String mh = result.getString(9) + " (Match horoscope?)";
+            matchHoroscope.setText(mh);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("additionalprofile",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"additionalprofile");
+
+        // displaying it
+        parseAdditionalProfile(response);
+
+    }
 
     private class ProfileAdditionalDetails extends AsyncTask<String, Void, Void> {
         @Override
@@ -432,40 +523,30 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            try {
-                                JSONArray result = response.getJSONArray(0);
 
-                                aboutMe.setText(result.getString(0));
-                                hobbies.setText(result.getString(1));
-                                String eh = result.getString(2) + " Diet";
-                                eatingHabits.setText(eh);
-                                String dh =  result.getString(3) + " (Drinking habit)";
-                                drinkingHabits.setText(dh);
-                                String sh = result.getString(4) + " (Smoking habit)";
-                                smokingHabits.setText(sh);
-                                String bl;
-                                if (result.getString(5).length() == 0 && result.getString(6).length() == 0) {
-                                    bl = "";
-                                } else if (result.getString(5).length() == 0) {
-                                    bl = "Born at "+result.getString(6);
-                                } else if (result.getString(6).length() == 0) {
-                                    bl = "Born on "+result.getString(5);
-                                } else {
-                                    bl = "Born on "+result.getString(5) + " at " + result.getString(6);
+                            // Log.d("profile",response.toString());
 
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
+
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"additionalprofile");
+
+                                // Log.d("latest",latestResponseHash);
+                                // Log.d("cached",cacheResponseHash);
+                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }else{
+
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-                                birthtime.setText(bl);
-                                String g = result.getString(7) + " (Gotra)";
-                                gotra.setText(g);
-                                String m = result.getString(8) + " (Manglik)";
-                                manglik.setText(m);
-                                String mh = result.getString(9) + " (Match horoscope?)";
-                                matchHoroscope.setText(mh);
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
 
                         }
