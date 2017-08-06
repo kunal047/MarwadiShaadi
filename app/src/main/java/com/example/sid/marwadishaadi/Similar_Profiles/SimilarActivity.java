@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Similar_Profiles;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.example.sid.marwadishaadi.Analytics_Util;
+import com.example.sid.marwadishaadi.CacheHelper;
 import com.example.sid.marwadishaadi.Dashboard_Reverse_Matching.ReverseModel;
 import com.example.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -25,6 +27,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +39,8 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.facebook.FacebookSdk.getCacheDir;
+
 /**
  * Created by Lawrence Dalmet on 13-06-2017.
  */
@@ -46,7 +51,8 @@ public class SimilarActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
     private SimilarAdapter similarAdapter;
     private List<SimilarModel> similarModelList = new ArrayList<>();
-    ;
+    private File cache = null;
+    private boolean isAlreadyLoadedFromCache = false;
     private RecyclerView recyclerView;
     private String customer_id, customer_gender;
 
@@ -65,6 +71,14 @@ public class SimilarActivity extends AppCompatActivity {
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
+
+        Intent i = getIntent();
+        String clickedID = i.getStringExtra("similarOf");
+        if (clickedID!=null){
+            customer_id = clickedID;
+        }
+
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Similar Profiles", "button");
 
@@ -81,42 +95,122 @@ public class SimilarActivity extends AppCompatActivity {
         recyclerView.setAdapter(similarAdapter);
         recyclerView.setHasFixedSize(true);
 
+
+        cache = new File(getCacheDir() + "/" + "similarprofiles" +customer_id+ ".srl");
+
+        // loading cached copy
+        String res = CacheHelper.retrieve("similarprofiles",cache);
+        if(!res.equals("")){
+            try {
+
+                isAlreadyLoadedFromCache = true;
+
+                // storing cache hash
+                CacheHelper.saveHash(SimilarActivity.this,CacheHelper.generateHash(res),"similarprofiles");
+
+                // displaying it
+                JSONArray response = new JSONArray(res);
+                // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
+                parseSimilarProfiles(response);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         new PrepareSimilar().execute();
 
     }
 
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
 
-    private class PrepareSimilar extends AsyncTask<Void, Void, Void> {
-        ProgressDialog pd = new ProgressDialog(SimilarActivity.this);
+        int age;
 
-        @Override
-        protected void onPreExecute() {
-            pd.setMessage("Please wait..");
-            pd.show();
-//            super.onPreExecute();
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
 
-        }
+        age = currentYear - DOByear;
 
-        public int getAge(int DOByear, int DOBmonth, int DOBday) {
-
-            int age;
-
-            final Calendar calenderToday = Calendar.getInstance();
-            int currentYear = calenderToday.get(Calendar.YEAR);
-            int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
-            int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-
-            age = currentYear - DOByear;
-
-            if (DOBmonth > currentMonth) {
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
                 --age;
-            } else if (DOBmonth == currentMonth) {
-                if (DOBday > todayDay) {
-                    --age;
-                }
             }
-            return age;
         }
+        return age;
+    }
+
+    private void parseSimilarProfiles(JSONArray response) {
+
+        // do anything with response
+        try {
+
+
+            for (int i = 0; i < response.length(); i++) {
+
+                JSONArray array = response.getJSONArray(i);
+                String customerNo = array.getString(0);
+                String firstName = array.getString(1);
+                String surName = array.getString(2);
+                String name = firstName + " " + surName;
+
+                String dateOfBirth = array.getString(3);
+//                                Thu, 18 Jan 1990 00:00:00 GMT
+                DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                Date date = formatter.parse(dateOfBirth);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                String[] partsOfDate = formatedDate.split("-");
+                int day = Integer.parseInt(partsOfDate[0]);
+                int month = Integer.parseInt(partsOfDate[1]);
+                int year = Integer.parseInt(partsOfDate[2]);
+                int age = getAge(year, month, day);
+                String education = array.getString(4);
+
+                String cityName = array.getString(5);
+                String stateName = array.getString(6);
+                String occupationLocation = cityName + ", " + stateName;
+
+                String imageUrl = array.getString(7);
+
+                SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age), customerNo);
+                similarModelList.add(similarModel);
+                similarAdapter.notifyDataSetChanged();
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void loadedFromNetwork(JSONArray response){
+
+
+        //saving fresh in cache
+        CacheHelper.save("similarprofiles",response.toString(),cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(SimilarActivity.this,CacheHelper.generateHash(response.toString()),"similarprofiles");
+
+        // displaying it
+       parseSimilarProfiles(response);
+
+    }
+    private class PrepareSimilar extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -131,68 +225,32 @@ public class SimilarActivity extends AppCompatActivity {
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            // do anything with response
-                            try {
+
+                            // if no change in data
+                            if (isAlreadyLoadedFromCache){
+
+                                String latestResponseHash = CacheHelper.generateHash(response.toString());
+                                String cacheResponseHash = CacheHelper.retrieveHash(SimilarActivity.this,"similarprofiles");
 
 
-                                for (int i = 0; i < response.length(); i++) {
+                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                    return;
+                                }else{
 
-                                    JSONArray array = response.getJSONArray(i);
-                                    String customerNo = array.getString(0);
-                                    String firstName = array.getString(1);
-                                    String surName = array.getString(2);
-                                    String name = firstName + " " + surName;
-
-                                    String dateOfBirth = array.getString(3);
-//                                Thu, 18 Jan 1990 00:00:00 GMT
-                                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                                    Date date = formatter.parse(dateOfBirth);
-
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-                                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
-
-                                    String[] partsOfDate = formatedDate.split("-");
-                                    int day = Integer.parseInt(partsOfDate[0]);
-                                    int month = Integer.parseInt(partsOfDate[1]);
-                                    int year = Integer.parseInt(partsOfDate[2]);
-                                    int age = getAge(year, month, day);
-                                    String education = array.getString(4);
-
-                                    String cityName = array.getString(5);
-                                    String stateName = array.getString(6);
-                                    String occupationLocation = cityName + ", " + stateName;
-
-                                    String imageUrl = array.getString(7);
-
-                                    SimilarModel similarModel = new SimilarModel(name, occupationLocation, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, String.valueOf(age), customerNo);
-                                    similarModelList.add(similarModel);
-                                    similarAdapter.notifyDataSetChanged();
-
+                                    // hash not matched
+                                    loadedFromNetwork(response);
                                 }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            }else{
+                                // first time load
+                                loadedFromNetwork(response);
                             }
-                            SimilarActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
+
                         }
 
                         @Override
                         public void onError(ANError error) {
                             // handle error
-                            SimilarActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
+
                         }
                     });
             return null;
@@ -200,7 +258,6 @@ public class SimilarActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-//            pd.dismiss();
             super.onPostExecute(aVoid);
         }
     }

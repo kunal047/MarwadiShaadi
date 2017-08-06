@@ -491,6 +491,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
+                i.putExtra("similarOf",clickedID);
                 startActivity(i);
                 getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }

@@ -128,7 +128,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                         empty_view.setVisibility(View.GONE);
                     }
-                    if (counts==size && !isdata){
+                    if (counts==size && !isdata ){
                         empty_view.setVisibility(View.VISIBLE);
                     }
                 }
@@ -140,6 +140,16 @@ public class NotificationsActivity extends AppCompatActivity {
             }
         });
 
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (counts==0){
+            empty_view.setVisibility(View.VISIBLE);
+        }
 
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
