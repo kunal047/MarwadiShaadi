@@ -2,6 +2,7 @@ package com.example.sid.marwadishaadi.Similar_Profiles;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,7 +55,6 @@ public class SimilarActivity extends AppCompatActivity {
     private boolean isAlreadyLoadedFromCache = false;
     private RecyclerView recyclerView;
     private String customer_id, customer_gender;
-    private ProgressDialog pd;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -72,8 +72,12 @@ public class SimilarActivity extends AppCompatActivity {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        cache = new File(getCacheDir() + "/" + "similarprofiles" +customer_id+ ".srl");
 
+        Intent i = getIntent();
+        String clickedID = i.getStringExtra("similarOf");
+        if (clickedID!=null){
+            customer_id = clickedID;
+        }
 
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Similar Profiles", "button");
@@ -90,6 +94,9 @@ public class SimilarActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(similarAdapter);
         recyclerView.setHasFixedSize(true);
+
+
+        cache = new File(getCacheDir() + "/" + "similarprofiles" +customer_id+ ".srl");
 
         // loading cached copy
         String res = CacheHelper.retrieve("similarprofiles",cache);
@@ -183,12 +190,7 @@ public class SimilarActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimilarActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.dismiss();
-            }
-        });
+
     }
 
 
@@ -212,15 +214,6 @@ public class SimilarActivity extends AppCompatActivity {
 
 
         @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(SimilarActivity.this);
-            pd.setMessage("Please wait..");
-            pd.show();
-
-        }
-
-
-        @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.get("http://208.91.199.50:5000/prepareSimilar/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
@@ -239,12 +232,8 @@ public class SimilarActivity extends AppCompatActivity {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(SimilarActivity.this,"similarprofiles");
 
-                                //
-                                //
-                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
                                 }else{
 
@@ -261,12 +250,7 @@ public class SimilarActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError error) {
                             // handle error
-                            SimilarActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pd.dismiss();
-                                }
-                            });
+
                         }
                     });
             return null;
@@ -274,7 +258,6 @@ public class SimilarActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pd.dismiss();
             super.onPostExecute(aVoid);
         }
     }
