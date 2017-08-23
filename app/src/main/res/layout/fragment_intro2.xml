@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.sid.marwadishaadi.Intro_Slides.Intro2Fragment">
+    tools:context="com.sid.marwadishaadi.Intro_Slides.Intro2Fragment">
 
 
     <ImageView

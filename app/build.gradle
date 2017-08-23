@@ -6,16 +6,18 @@ android {
     buildToolsVersion "25.0.2"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.sid.marwadishaadi"
+        applicationId 'com.sid.marwadishaadi'
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
     }
-
+    lintOptions {
+        disable 'ValidFragment'
+    }
     buildTypes {
         release {
             minifyEnabled true
@@ -23,11 +25,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     aaptOptions {
         cruncherEnabled = false
     }
-
+    productFlavors {
+    }
 }
 allprojects {
     repositories {
@@ -38,14 +40,12 @@ allprojects {
 
 
 
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
-
     compile project(path: ':lib')
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -74,4 +74,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
 }
+
 apply plugin: 'com.google.gms.google-services'

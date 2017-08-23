@@ -1,4 +1,4 @@
-package com.example.sid.marwadishaadi;
+package com.sid.marwadishaadi;
 
 import org.junit.Test;
 

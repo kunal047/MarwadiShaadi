@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:351904794484:android:fc62203c72a837c5",
         "android_client_info": {
-          "package_name": "com.example.sid.marwadishaadi"
+          "package_name": "com.sid.marwadishaadi"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "351904794484-7eic0896evi8cs7m68ir58cp3b0d0fn7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sid.marwadishaadi",
+            "package_name": "com.sid.marwadishaadi",
             "certificate_hash": "f75a3a8e6ceb196350cee8e091dde53f1b837a23"
           }
         },

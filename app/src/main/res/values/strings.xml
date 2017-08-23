@@ -212,6 +212,13 @@
         <item>Physically Challenged</item>
     </string-array>
 
+    <string-array name="gotra_array">
+        <item>Gotra ?</item>
+        <item>Yes</item>
+        <item>No</item>
+        <item>Don\'t Know</item>
+    </string-array>
+
     <string-array name="manglik_array">
         <item>Manglik ?</item>
         <item>Yes</item>

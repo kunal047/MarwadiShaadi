@@ -119,14 +119,17 @@
                     >
 
                     <RadioButton
+                        android:id="@+id/radioButtonMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:padding="6dp"
                         android:text="Male"
                         />
 
                     <RadioButton
+                        android:id="@+id/radioButtonFemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -162,6 +165,9 @@
                 android:drawableLeft="@drawable/signup_location"
                 android:drawablePadding="10dp"
                 android:hint="Location"
+                android:imeOptions="actionDone"
+                android:inputType="text|textAutoComplete"
+                android:maxLines="1"
                 android:padding="6dp"
                 android:textSize="12dp"
                 />

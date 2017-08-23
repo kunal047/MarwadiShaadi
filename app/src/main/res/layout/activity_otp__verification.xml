@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffede9"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffede9">
 
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:focusableInTouchMode="true"
-    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_margin="10dp"
             app:cardBackgroundColor="#fff"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardUseCompatPadding="true"
-            android:layout_gravity="center_vertical"
             >
 
             <LinearLayout
@@ -33,7 +34,7 @@
                     android:layout_height="72dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="20dp"
-                    android:src="@drawable/msg" />
+                    android:src="@drawable/msg"/>
 
                 <TextView
                     android:id="@+id/text3"
@@ -42,7 +43,42 @@
                     android:layout_margin="10dp"
                     android:text="Please enter the OTP below in case we fail to detect the SMS automatically"
                     android:textAlignment="textStart"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="Sending OTP on "/>
+
+                    <TextView
+                        android:id="@+id/textViewEditNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="9662152651"/>
+
+                    <ImageView
+                        android:id="@+id/imageViewEditNumber"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        app:srcCompat="@drawable/ic_user_edit"
+                        android:layout_toEndOf="@+id/textViewEditNumber"
+                        android:layout_alignParentTop="true"/>
+
+                </RelativeLayout>
+
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -56,19 +92,19 @@
                         android:layout_marginTop="10dp"
                         android:hint=" Enter OTP"
                         android:inputType="textEmailAddress"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"/>
                 </android.support.design.widget.TextInputLayout>
 
-                  <Button
-                        android:id="@+id/Submit_otp"
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="40dp"
-                        android:text="Submit"
-                      android:background="@layout/button_border_corner_circle_"
-                        android:textColor="#fff"
-                        android:textSize="16dp"/>
+                <Button
+                    android:id="@+id/Submit_otp"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:background="@layout/button_border_corner_circle_"
+                    android:text="Submit"
+                    android:textColor="#fff"
+                    android:textSize="16dp"/>
 
 
                 <TextView
@@ -81,16 +117,16 @@
                     android:onClick="resend"
                     android:text="Resend OTP"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"/>
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text="Or"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"/>
 
                 <LinearLayout
                     android:id="@+id/otp_call_us"
@@ -98,30 +134,30 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:padding="10dp"
                     android:clickable="true"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CALL US:"
-                        android:textSize="14dp"
-                        android:textColor="#000"
                         android:drawableLeft="@drawable/signup_phone"
-                        android:gravity="center_vertical"/>
+                        android:gravity="center_vertical"
+                        android:text="CALL US:"
+                        android:textColor="#000"
+                        android:textSize="14dp"/>
 
                     <TextView
 
                         android:id="@+id/otp_call_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:text="90221 12277"
-                        android:textSize="14dp"
                         android:textColor="#000"
-                        android:layout_gravity="center_vertical"
+                        android:textSize="14dp"
                         />
                 </LinearLayout>
             </LinearLayout>

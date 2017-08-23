@@ -27,16 +27,16 @@
             tools:layout_editor_absoluteY="8dp">
 
             <ImageView
-                android:clickable="true"
                 android:id="@+id/imgAdd"
-                android:src="@drawable/default_drawer"
                 android:layout_width="wrap_content"
                 android:layout_height="290dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
                 android:layout_marginTop="0dp"
                 android:background="#1afb6542"
+                android:clickable="true"
                 android:scaleType="centerCrop"
+                android:src="@drawable/default_drawer"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -68,13 +68,13 @@
                     >
 
                     <TextView
-                        android:clickable="true"
                         android:id="@+id/name"
                         fontPath="fonts/OpenSans-Bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="5dp"
+                        android:clickable="true"
                         android:textColor="#2d2d2d"
                         android:textSize="16dp"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -83,13 +83,13 @@
 
 
                     <TextView
-                        android:clickable="true"
                         android:id="@+id/cusId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="25dp"
                         android:layout_marginRight="25dp"
                         android:layout_marginTop="5dp"
+                        android:clickable="true"
                         android:textColor="#000"
                         android:textSize="16dp"
                         app:layout_constraintRight_toRightOf="parent"
@@ -181,9 +181,9 @@
                 android:elevation="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cardView"
-                app:sparkbutton_activeImage="@mipmap/heart_disable"
+                app:sparkbutton_activeImage="@mipmap/ic_fav"
                 app:sparkbutton_iconSize="56dp"
-                app:sparkbutton_inActiveImage="@mipmap/ic_fav"
+                app:sparkbutton_inActiveImage="@mipmap/heart_disable"
                 app:sparkbutton_primaryColor="@color/fav_primary_color"
                 app:sparkbutton_secondaryColor="@color/fav_secondary_color"/>
 
@@ -213,9 +213,9 @@
                 android:elevation="10dp"
                 app:layout_constraintLeft_toRightOf="@+id/chat"
                 app:layout_constraintTop_toTopOf="@+id/cardView"
-                app:sparkbutton_activeImage="@mipmap/heart_disable1"
+                app:sparkbutton_activeImage="@mipmap/ic_heart"
                 app:sparkbutton_iconSize="56dp"
-                app:sparkbutton_inActiveImage="@mipmap/ic_heart"
+                app:sparkbutton_inActiveImage="@mipmap/heart_disable1"
                 app:sparkbutton_primaryColor="@color/heart_primary_color"
                 app:sparkbutton_secondaryColor="@color/heart_secondary_color"/>
 
@@ -266,7 +266,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="35dp"
                 app:layout_constraintRight_toLeftOf="@+id/height"
-               app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:srcCompat="@drawable/profile_height"/>
 
         </android.support.constraint.ConstraintLayout>

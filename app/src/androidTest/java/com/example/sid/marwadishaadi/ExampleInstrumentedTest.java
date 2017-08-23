@@ -1,4 +1,4 @@
-package com.example.sid.marwadishaadi;
+package com.sid.marwadishaadi;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.sid.marwadishaadi", appContext.getPackageName());
+        assertEquals("com.sid.marwadishaadi", appContext.getPackageName());
     }
 }

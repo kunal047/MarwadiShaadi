@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.example.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity">
+    tools:context="com.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/fbgallery_toolbar"
