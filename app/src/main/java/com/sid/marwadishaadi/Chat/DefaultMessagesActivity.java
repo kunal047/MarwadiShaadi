@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -236,8 +238,11 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         // adding it to her notifications list
                         String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                         mDatabase = FirebaseDatabase.getInstance().getReference(messageToId).child("Notifications");
-                        final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,false,false,true,false,false,false,false,false);
-                        String hash = String.valueOf(notification.hashCode());
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+                        Date currentDate = calendar.getTime();
+                        String hash = String.valueOf(currentDate.hashCode());
+                        Log.d(TAG, "onResponse: names are ------------------------------------------ " + customer_name + " " + customerName );
+                        final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,false,false,true,false,false,false,false,false, false);
                         mDatabase.child(hash).setValue(notification);
 
                         // sending push notification to her
@@ -288,7 +293,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), toolbar.getTitle() + " sent you an Message", "New Message", "Message");
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Message", "New Message", "Message");
     }
 
     private class FetchingMessages extends AsyncTask<String, Void, Void> {

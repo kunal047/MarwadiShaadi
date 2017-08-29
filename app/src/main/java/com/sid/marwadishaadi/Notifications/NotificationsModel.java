@@ -6,11 +6,45 @@ package com.sid.marwadishaadi.Notifications;
 
 public class NotificationsModel {
 
-    String name,timeStamp;
+    String name, timeStamp, id;
     int number;
-    boolean suggested,interestRec,interestAcc,msgRec,premMem,memExp,reminders,offers,bday;
+    boolean suggested, interestRec, interestAcc, msgRec, premMem, memExp, reminders, offers, bday, isRead;
 
     public NotificationsModel() {
+    }
+
+    public NotificationsModel(String id, String name, String timeStamp, int number, boolean suggested, boolean interestRec, boolean interestAcc, boolean msgRec, boolean premMem, boolean memExp, boolean reminders, boolean offers, boolean bday, boolean isRead) {
+
+        this.id = id;
+        this.name = name;
+        this.timeStamp = timeStamp;
+        this.number = number;
+        this.suggested = suggested;
+        this.interestRec = interestRec;
+        this.interestAcc = interestAcc;
+        this.msgRec = msgRec;
+        this.premMem = premMem;
+        this.memExp = memExp;
+        this.reminders = reminders;
+        this.offers = offers;
+        this.bday = bday;
+        this.isRead = isRead;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 
     public int getNumber() {
@@ -27,22 +61,6 @@ public class NotificationsModel {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
-    }
-
-    public NotificationsModel(String name, String timeStamp, int number, boolean suggested, boolean interestRec, boolean interestAcc, boolean msgRec, boolean premMem, boolean memExp, boolean reminders, boolean offers, boolean bday) {
-
-        this.name = name;
-        this.timeStamp = timeStamp;
-        this.number = number;
-        this.suggested = suggested;
-        this.interestRec = interestRec;
-        this.interestAcc = interestAcc;
-        this.msgRec = msgRec;
-        this.premMem = premMem;
-        this.memExp = memExp;
-        this.reminders = reminders;
-        this.offers = offers;
-        this.bday = bday;
     }
 
     public String getName() {

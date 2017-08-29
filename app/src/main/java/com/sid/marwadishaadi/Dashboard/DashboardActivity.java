@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.sid.marwadishaadi.Dashboard_Favourites.FavouritesFragment;
 import com.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
@@ -40,16 +46,12 @@ import com.sid.marwadishaadi.Dashboard_Suggestions.SuggestionsFragment;
 import com.sid.marwadishaadi.Feedback.FeedbackActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsActivity;
+import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.Search;
 import com.sid.marwadishaadi.Services.ChatNotifyService;
 import com.sid.marwadishaadi.Settings.SettingsActivity;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -74,6 +76,7 @@ public class DashboardActivity extends AppCompatActivity
     private String customer_id, customer_gender, customer_name;
     private DatabaseReference mDatabase;
     private int notificationCount = 0;
+    private MenuItem m;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -99,27 +102,36 @@ public class DashboardActivity extends AppCompatActivity
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
         }
 
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                notificationCount = (int) dataSnapshot.getChildrenCount();
-                //
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                Menu menu = navigationView.getMenu();
-                MenuItem m = menu.findItem(R.id.nav_notifications);
-                if (notificationCount == 0) {
-                    m.setTitle("Notifications");
-                } else {
-                    m.setTitle("Notifications ( " + notificationCount + " )");
-                }
-            }
+        notificationCount = 0;
+        //
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        m = menu.findItem(R.id.nav_notifications);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        FirebaseDatabase.getInstance().getReference().child(customer_id).child("Notifications")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            if (snapshot.child("isRead").getValue().toString().contains("false")) {
+                                notificationCount = notificationCount +  1;
+                                Log.d(TAG, "onDataChange: 0000 " + snapshot.child("isRead").getValue().toString() + " " + notificationCount);
+                                if (notificationCount == 0) {
+                                    m.setTitle("Notifications");
+                                } else {
+                                    m.setTitle("Notifications ( " + notificationCount + " )");
+                                }
+                            }
+                        }
+                    }
 
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
 
 
         toolbarSearch.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +149,6 @@ public class DashboardActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View mview = navigationView.getHeaderView(0);
         nameDrawer = (TextView) mview.findViewById((R.id.name_drawer));
         userdp = (ImageView) mview.findViewById(R.id.user_dp);

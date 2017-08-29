@@ -1,18 +1,15 @@
 package com.sid.marwadishaadi;
 
 import android.content.SharedPreferences;
-import android.os.PersistableBundle;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
-import com.sid.marwadishaadi.R;
 
 public class SortBy extends AppCompatActivity {
 
@@ -43,7 +40,7 @@ public class SortBy extends AppCompatActivity {
         if (preferences.getString("sortBy", "").contains("Recently")) {
             sortBy = "Recently";
             radioGroupSortBy.check(R.id.radioRecentlyRegistered);
-        } else if (preferences.getString("sortBy", "").contains("Last")){
+        } else if (preferences.getString("sortBy", "").contains("Last")) {
             sortBy = "Last";
             radioGroupSortBy.check(R.id.radioLastActive);
         }
@@ -51,7 +48,7 @@ public class SortBy extends AppCompatActivity {
         if (preferences.getString("showPhotos", "").contains("yes")) {
             showPhotos = "yes";
             checkBoxOnlyWithPhotos.setChecked(true);
-        } else if (preferences.getString("showPhotos", "").contains("no")){
+        } else if (preferences.getString("showPhotos", "").contains("no")) {
             showPhotos = "no";
             checkBoxOnlyWithPhotos.setChecked(false);
         }
@@ -107,10 +104,18 @@ public class SortBy extends AppCompatActivity {
                 editor.putString("sortBy", sortBy);
                 editor.putString("showPhotos", showPhotos);
                 editor.apply();
+                setResult(1);
                 finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.out.println("on back pressed");
+        setResult(2);
+        finish();
 
     }
 }

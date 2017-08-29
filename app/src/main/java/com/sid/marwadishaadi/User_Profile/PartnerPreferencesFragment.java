@@ -284,7 +284,7 @@ public class PartnerPreferencesFragment extends Fragment {
                         public void onResponse(final JSONArray response) {
 
 
-                            // Log.d("profile",response.toString());
+                            //
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -292,9 +292,9 @@ public class PartnerPreferencesFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"partnerprofile");
 
-                                // Log.d("latest",latestResponseHash);
-                                // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                                //
+                                //
+                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
                                     // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();

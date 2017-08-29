@@ -44,8 +44,10 @@ import com.varunest.sparkbutton.SparkEventListener;
 
 import org.json.JSONArray;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
@@ -78,7 +80,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
         this.context = context;
         this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         this.rv = recyclerView;
-        Log.d(TAG, "SuggestionDataAdapter: context of app " +  context.toString());
+
         if (context.toString().contains("Dashboard")) {
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -239,7 +241,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                 ((SuggestionViewHolder) holder).sparkButtonInterest.setChecked(true);
 
             }
-            Log.d(TAG, "onBindViewHolder: button state before evenet ------------------------------- "  + ((SuggestionViewHolder) holder).sparkButtonInterest.isChecked()) ;
+
 
             ((SuggestionViewHolder) holder).sparkButtonFav.setEventListener(new SparkEventListener() {
                 @Override
@@ -291,7 +293,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onEvent(ImageView button, boolean buttonState) {
 
-                    Log.d(TAG, "onEvent: button state true is " + ((SuggestionViewHolder) holder).sparkButtonInterest.isChecked());
+
 
                     if (buttonState) {
 
@@ -303,8 +305,11 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                         // adding it to her notifications list
                         String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                         mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
-                        final NotificationsModel notification = new NotificationsModel(customer_name, date, 3, false, true, false, false, false, false, false, false, false);
-                        String hash = String.valueOf(notification.hashCode());
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+                        Date currentDate = calendar.getTime();
+                        String hash = String.valueOf(currentDate.hashCode());
+                        final NotificationsModel notification = new NotificationsModel(hash, customer_name, date, 3, false, true, false, false, false, false, false, false, false, false);
+
                         mDatabase.child(hash).setValue(notification);
 
                         // sending push notification to her

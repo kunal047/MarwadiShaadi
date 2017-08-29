@@ -521,7 +521,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                            // Log.d("profile",response.toString());
+                            //
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache){
@@ -529,9 +529,9 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"additionalprofile");
 
-                                // Log.d("latest",latestResponseHash);
-                                // Log.d("cached",cacheResponseHash);
-                                // Log.d("isSame",latestResponseHash.equals(cacheResponseHash) + "");
+                                //
+                                //
+                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
                                     // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();

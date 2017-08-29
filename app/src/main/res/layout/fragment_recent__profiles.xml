@@ -22,6 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
             android:text="Oops! No new profiles found !"
             android:textAlignment="center"
@@ -35,13 +36,15 @@
 
         <ProgressBar
             android:id="@+id/loading"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
+
 
     </RelativeLayout>
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,10 +55,107 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/swipe_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
+
         </android.support.v7.widget.RecyclerView>
 
+
+        <FrameLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <TextView
+                    android:id="@+id/preference"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#b9b9b9"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_user_edit"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="Preference"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:id="@+id/sortby"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#b9b9b9"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_filter"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="Sort By"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="15dp"
+                    />
+
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <TextView
+            android:id="@+id/preferenceOfRecent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#b9b9b9"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_user_edit"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Preference"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="15dp"
+            />
+
+        <TextView
+            android:id="@+id/sortbyOfRecent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#b9b9b9"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_action_filter"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Sort By"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="15dp"
+            />
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>
 

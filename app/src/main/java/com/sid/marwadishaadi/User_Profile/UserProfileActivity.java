@@ -40,16 +40,9 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.sid.marwadishaadi.Analytics_Util;
-import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
-import com.sid.marwadishaadi.DeviceRegistration;
-import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
-import com.sid.marwadishaadi.Notifications.NotificationsModel;
-import com.sid.marwadishaadi.Notifications_Util;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.github.florent37.viewtooltip.ViewTooltip;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -70,6 +63,14 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.sid.marwadishaadi.DeviceRegistration;
+import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
+import com.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.sid.marwadishaadi.Notifications_Util;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -82,6 +83,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -124,8 +126,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private ArrayList<String> images;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
+    private ImageView imageViewInformation;
+    private String createdOn, lastActiveOn;
 
-
+    public static void shareApp(Context context) {
+        final String appPackageName = context.getPackageName();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -140,6 +151,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         imageView = (ImageView) findViewById(R.id.imageView);
+        imageViewInformation = (ImageView) findViewById(R.id.imageViewInformation);
 
         progressDialog = new ProgressDialog(UserProfileActivity.this);
         progressDialog.setMessage("Loading profile...");
@@ -157,7 +169,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        customer_name = sharedpref.getString("firstname",null);
+        customer_name = sharedpref.getString("firstname", null);
         clickedID = customer_id;
 
         String[] array = getResources().getStringArray(R.array.communities);
@@ -178,7 +190,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             //Toast.makeText(UserProfileActivity.this, clickedID, Toast.LENGTH_SHORT).show();
         }
 
-
+        new FetchInformation().execute();
 
         // ============================ DEEPLINK ========================================
 
@@ -237,7 +249,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Edit photos", "button");
 
                 Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
-                i.putExtra("from","userprofile");
+                i.putExtra("from", "userprofile");
                 startActivity(i);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
@@ -323,8 +335,11 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     // adding it to her notifications list
                     String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                     mDatabase = FirebaseDatabase.getInstance().getReference(clickedID).child("Notifications");
-                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
-                    String hash = String.valueOf(notification.hashCode());
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+                    Date currentDate = calendar.getTime();
+                    String hash = String.valueOf(currentDate.hashCode());
+                    final NotificationsModel notification = new NotificationsModel(hash, customer_name, date, 3, false, true, false, false, false, false, false, false, false, false);
+
                     mDatabase.child(hash).setValue(notification);
 
                     // sending push notification to her
@@ -361,7 +376,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
 
                     //======================================================================
-
 
 
                     Snackbar snackbar = Snackbar.make(coordinatorLayout, "Interest Sent", Snackbar.LENGTH_LONG);
@@ -447,86 +461,100 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                     // add permission here
                     int read_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
-                    int write_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    int write_permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                    if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED){
+                    if (read_permissionCheck == PackageManager.PERMISSION_DENIED || write_permissionCheck == PackageManager.PERMISSION_DENIED) {
 
                         // first time asks for both permission
-                        if(!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus() ){
+                        if (!getReadStoragePermissionStatus() && !getWriteStoragePermissionStatus()) {
 
                             Dexter.withActivity(UserProfileActivity.this)
                                     .withPermissions(
                                             Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE
                                     ).withListener(new MultiplePermissionsListener() {
-                                @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                @Override
+                                public void onPermissionsChecked(MultiplePermissionsReport report) {
 
                                     // if both are accepted
-                                    if(report.areAllPermissionsGranted()){
+                                    if (report.areAllPermissionsGranted()) {
                                         SaveAsPdf();
 
                                         // if both are rejected
-                                    }else if (report.getDeniedPermissionResponses().size() == 2){
+                                    } else if (report.getDeniedPermissionResponses().size() == 2) {
                                         showStorageSettings();
 
                                         // one of them is accepted
-                                    }else{
+                                    } else {
                                         List<PermissionGrantedResponse> grantedPermissions = report.getGrantedPermissionResponses();
                                         for (PermissionGrantedResponse grantedPermission : grantedPermissions) {
-                                            if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE){
+                                            if (grantedPermission.getPermissionName() == Manifest.permission.READ_EXTERNAL_STORAGE) {
                                                 setReadStoragePermissionStatus();
                                                 showStorageSettings();
-                                            }else{
+                                            } else {
                                                 setWriteStoragePermissionStatus();
                                                 showStorageSettings();
                                             }
                                         }
                                     }
                                 }
-                                @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {}
+
+                                @Override
+                                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                }
                             }).check();
 
                         }
                         // other times
                         // write allowed, read rejected
-                        else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()){
+                        else if (!getReadStoragePermissionStatus() && getWriteStoragePermissionStatus()) {
 
                             Dexter.withActivity(UserProfileActivity.this)
                                     .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                     .withListener(new PermissionListener() {
-                                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                        @Override
+                                        public void onPermissionGranted(PermissionGrantedResponse response) {
                                             SaveAsPdf();
                                         }
-                                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                                        @Override
+                                        public void onPermissionDenied(PermissionDeniedResponse response) {
                                             showStorageSettings();
                                         }
-                                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                        @Override
+                                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
 
                                         }
                                     }).check();
 
                         }
                         // read allowed, write rejected
-                        else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()){
+                        else if (!getWriteStoragePermissionStatus() && getReadStoragePermissionStatus()) {
 
                             Dexter.withActivity(UserProfileActivity.this)
                                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                     .withListener(new PermissionListener() {
-                                        @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                                        @Override
+                                        public void onPermissionGranted(PermissionGrantedResponse response) {
                                             SaveAsPdf();
                                         }
-                                        @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                                        @Override
+                                        public void onPermissionDenied(PermissionDeniedResponse response) {
                                             showStorageSettings();
                                         }
-                                        @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                        @Override
+                                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
 
                                         }
                                     }).check();
 
-                        }else{
+                        } else {
                             showStorageSettings();
                         }
-                    }else{
+                    } else {
                         SaveAsPdf();
                     }
 
@@ -539,7 +567,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
             }
         });
-
 
 
         if (called) {
@@ -561,7 +588,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         new FetchPdfDetails().execute();
     }
 
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -577,7 +603,90 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        overridePendingTransition(R.anim.exit, 0);
+        return true;
+    }
 
+    private void showStorageSettings() {
+        Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    private void showSettings() {
+        Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    private Boolean getCameraPermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isCameraPermissionDenied", false);
+    }
+
+    private void setCameraPermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isCameraPermissionDenied", true);
+        edit.apply();
+    }
+
+    private Boolean getReadStoragePermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isReadPermissionDenied", false);
+    }
+
+    private void setReadStoragePermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isReadPermissionDenied", true);
+        edit.apply();
+    }
+
+    private Boolean getWriteStoragePermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isWritePermissionDenied", false);
+    }
+
+    private void setWriteStoragePermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isWritePermissionDenied", true);
+        edit.apply();
+    }
+
+    public void setData(DataSnapshot dataSnapshot) {
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
+    }
 
     public static class ProfilePageAdapter extends FragmentPagerAdapter {
 
@@ -651,8 +760,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                             try {
 
-                                 name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
-                                 images = new ArrayList<>();
+                                name = response.getString(0) + " " + response.getString(1) + " (" + cus + ")";
+                                images = new ArrayList<>();
 
                                 if (response.length() > 2) {
 
@@ -671,12 +780,10 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                     Picasso.with(getApplicationContext()).load(images.get(0)).fit().into(imageView);
 
-                                }else{
+                                } else {
                                     Glide.with(getApplicationContext()).load(R.drawable.default_drawer).into(imageView);
 
                                 }
-
-
 
 
                             } catch (JSONException e) {
@@ -702,6 +809,64 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
+    class FetchInformation extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            AndroidNetworking.post("http://208.91.199.50:5000/fetchInformation")
+                    .addBodyParameter("customerNo", clickedID)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONArray array = response.getJSONArray(0);
+                                createdOn = array.getString(0);
+                                lastActiveOn = array.getString(1);
+                                if (createdOn.contains("null"))
+                                    createdOn = "This is a ghost";
+                                else
+                                    createdOn = createdOn.substring(0, 17);
+                                if (lastActiveOn.contains("null"))
+                                    lastActiveOn = "Not logged in yet";
+                                else
+                                    lastActiveOn = lastActiveOn.substring(0, 17);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            // ============================ INFORMATION ========================================
+
+            imageViewInformation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ViewTooltip.on(imageViewInformation)
+                            .align(ViewTooltip.ALIGN.START)
+                            .clickToHide(true)
+                            .autoHide(false, 3000)
+                            .position(ViewTooltip.Position.LEFT)
+                            .text("Profile Created On: " + createdOn + " Last Active On: " + lastActiveOn)
+
+                            .textColor(Color.WHITE)
+                            .color(Color.parseColor("#FB6542"))
+                            .show();
+                }
+            });
+
+        }
+    }
 
     class FetchPdfDetails extends AsyncTask<String, Void, Void> {
 
@@ -734,9 +899,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(final JSONArray response) {
-
-
-
 
 
                             AbstractViewRenderer page1 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.activity_pdf) {
@@ -823,7 +985,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                             };
 
 
-                            AbstractViewRenderer page2 = new AbstractViewRenderer(UserProfileActivity.this,R.layout.pdf2) {
+                            AbstractViewRenderer page2 = new AbstractViewRenderer(UserProfileActivity.this, R.layout.pdf2) {
                                 @Override
                                 protected void initView(View view) {
 
@@ -1021,7 +1183,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
-
     public class CheckStatus extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -1069,99 +1230,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     });
             return null;
         }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        overridePendingTransition(R.anim.exit,0);
-        return true;
-    }
-
-    private void showStorageSettings(){
-        Snackbar snackbar = Snackbar
-            .make(view.getRootView(), "Read & Write permission needed.Go to Settings to change", Snackbar.LENGTH_LONG)
-            .setAction("Settings", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                }
-            });
-
-        snackbar.show();
-    }
-
-    private void showSettings(){
-        Snackbar snackbar = Snackbar
-            .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
-            .setAction("Settings", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                }
-            });
-
-        snackbar.show();
-    }
-    private Boolean getCameraPermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isCameraPermissionDenied", false);
-    }
-
-    private void setCameraPermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isCameraPermissionDenied",true);
-        edit.apply();
-    }
-
-    private Boolean getReadStoragePermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isReadPermissionDenied", false);
-    }
-
-    private void setReadStoragePermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isReadPermissionDenied",true);
-        edit.apply();
-    }
-
-    private Boolean getWriteStoragePermissionStatus(){
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isWritePermissionDenied", false);
-    }
-
-    private void setWriteStoragePermissionStatus(){
-
-        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit =  sharedpref.edit();
-        edit.putBoolean("isWritePermissionDenied",true);
-        edit.apply();
-    }
-
-    public void setData(DataSnapshot dataSnapshot){
-
-        // looping through all the devices and sending push notification to each of 'em
-        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
-    }
-
-    public static void shareApp(Context context) {
-        final String appPackageName = context.getPackageName();
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out MarwadiShaadi App at: https://play.google.com/store/apps/details?id=" + appPackageName);
-        sendIntent.setType("text/plain");
-        context.startActivity(sendIntent);
     }
 }
 

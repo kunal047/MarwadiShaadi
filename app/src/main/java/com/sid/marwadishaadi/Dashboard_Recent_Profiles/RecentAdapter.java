@@ -34,9 +34,10 @@ import com.varunest.sparkbutton.SparkEventListener;
 
 import org.json.JSONArray;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import java.util.TimeZone;
 
 
 /**
@@ -181,8 +182,10 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
                     // adding it to her notifications list
                     String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                     mDatabase = FirebaseDatabase.getInstance().getReference(touserid).child("Notifications");
-                    final NotificationsModel notification= new NotificationsModel(customer_name,date,3,false,true,false,false,false,false,false,false,false);
-                    String hash = String.valueOf(notification.hashCode());
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+                    Date currentDate = calendar.getTime();
+                    String hash = String.valueOf(currentDate.hashCode());
+                    final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,true,false,false,false,false,false,false,false, false);
                     mDatabase.child(hash).setValue(notification);
 
                     // sending push notification to her

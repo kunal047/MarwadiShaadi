@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -46,7 +47,7 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class SuggestionsFragment extends Fragment {
 
-    public static int page_no = 0;
+    private static int page_no = 0;
     protected Handler handler;
     private List<SuggestionModel> suggestionModelList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -54,19 +55,32 @@ public class SuggestionsFragment extends Fragment {
     private TextView editprefs;
     private TextView filters;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private String customer_id, customer_gender;
+    private String customer_id,customer_gender;
     private LinearLayout empty_view_suggestions;
     private String res = "";
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
-    private String suggestionShowPhotos, suggestionSort;
+    private String suggestionShowPhotos,suggestionSort;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ProgressBar progressBar;
+
 //    private OnLoadMoreListener mOnLoadMoreListener;
 
-
     @Override
-    public void onResume() {
-        super.onResume();
-        new PrepareSuggestions().execute();
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            recyclerView.setAdapter(null);
+            recyclerView.setLayoutManager(null);
+            recyclerView.setAdapter(suggestionAdapter);
+            recyclerView.setLayoutManager(mLayoutManager);
+            suggestionAdapter.notifyDataSetChanged();
+            suggestionModelList.clear();
+            page_no = 0;
+            new PrepareSuggestions().execute();
+        }
+
     }
 
     @Override
@@ -78,6 +92,9 @@ public class SuggestionsFragment extends Fragment {
         View mview = inflater.inflate(R.layout.fragment_suggestions, container, false);
         empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
         empty_view_suggestions.setVisibility(View.GONE);
+
+        progressBar = (ProgressBar) mview.findViewById(R.id.favourite_progress_bar);
+
 
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -119,7 +136,7 @@ public class SuggestionsFragment extends Fragment {
 
 
                 Intent i = new Intent(getContext(), SortBy.class);
-                startActivity(i);
+                startActivityForResult(i, 2);
                 getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
 
             }
@@ -133,7 +150,7 @@ public class SuggestionsFragment extends Fragment {
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getContext());
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(suggestionAdapter);
@@ -147,7 +164,6 @@ public class SuggestionsFragment extends Fragment {
 
             }
         });
-
 
 
         // loading cached copy
@@ -169,15 +185,13 @@ public class SuggestionsFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        new PrepareSuggestions().execute();
 
+        new PrepareSuggestions().execute();
 
 
         suggestionAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() throws InterruptedException {
-
-                System.out.println("calling on load more listener");
 
                 suggestionModelList.add(null);
                 suggestionAdapter.notifyDataSetChanged();
@@ -192,14 +206,8 @@ public class SuggestionsFragment extends Fragment {
         });
 
 
-
-
         return mview;
     }
-
-
-
-
 
 
     private void refreshContent() {
@@ -359,6 +367,7 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
 
         }
 
@@ -367,7 +376,7 @@ public class SuggestionsFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
             SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by", MODE_PRIVATE);
-            //TODO - CHANGE HERE
+
             suggestionShowPhotos = sortBy.getString("showPhotos", "yes");
             suggestionSort = sortBy.getString("sortBy", "Recently");
 
@@ -393,12 +402,8 @@ public class SuggestionsFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "suggestions");
 
-                                //
-                                //
-                                //
-
                                 if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
-                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+
                                     return;
                                 } else {
 
@@ -406,11 +411,10 @@ public class SuggestionsFragment extends Fragment {
                                     loadedFromNetwork(response);
                                 }
                             } else {
+
                                 // first time load
                                 loadedFromNetwork(response);
                             }
-
-
                         }
 
                         @Override
@@ -438,8 +442,10 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             suggestionAdapter.setLoaded();
             swipeRefreshLayout.setRefreshing(false);
+            progressBar.setVisibility(View.GONE);
 
             // dismiss progress bar here
 

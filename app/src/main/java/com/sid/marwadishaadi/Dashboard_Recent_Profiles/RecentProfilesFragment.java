@@ -1,5 +1,6 @@
 package com.sid.marwadishaadi.Dashboard_Recent_Profiles;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,15 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
 import com.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +47,7 @@ public class RecentProfilesFragment extends Fragment {
 
 
     private static final String TAG = "RecentProfilesFragment";
+    private static int recent_page_no;
     private List<RecentModel> recentList;
     private List<RecentModel> recentListWithoutPic;
     private RecyclerView recentRecyclerView;
@@ -56,6 +60,23 @@ public class RecentProfilesFragment extends Fragment {
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
     private ProgressBar loading;
+    private TextView textViewPreference, textViewSortBy;
+    private RecyclerView.LayoutManager layoutManager;
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            recentRecyclerView.setAdapter(null);
+            recentRecyclerView.setLayoutManager(null);
+            recentRecyclerView.setAdapter(recentAdapter);
+            recentRecyclerView.setLayoutManager(layoutManager);
+            recentAdapter.notifyDataSetChanged();
+            recentList.clear();
+            recent_page_no = 0;
+            new PrepareRecent().execute();
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +85,7 @@ public class RecentProfilesFragment extends Fragment {
         empty_view_recent = (LinearLayout) mview.findViewById(R.id.empty_view_recent);
         empty_view_recent.setVisibility(View.GONE);
 
-        loading = (ProgressBar)mview.findViewById(R.id.loading);
+        loading = (ProgressBar) mview.findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
 
 
@@ -72,13 +93,13 @@ public class RecentProfilesFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        cache = new File(getCacheDir() + "/" + "recentprofiles" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "recentprofiles" + customer_id + ".srl");
 
         String[] array = getResources().getStringArray(R.array.communities);
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        if (communityChecker!=null) {
+        if (communityChecker != null) {
             for (int i = 0; i < 5; i++) {
 
                 if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
@@ -93,13 +114,17 @@ public class RecentProfilesFragment extends Fragment {
 
         recentRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+
+        textViewPreference = (TextView) mview.findViewById(R.id.preferenceOfRecent);
+        textViewSortBy = (TextView) mview.findViewById(R.id.sortbyOfRecent);
+
         recentList = new ArrayList<>();
         recentListWithoutPic = new ArrayList<>();
         recentAdapter = new RecentAdapter(getContext(), recentList, recentRecyclerView);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recentRecyclerView.setItemAnimator(fadeInLeftAnimator);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
         recentRecyclerView.setLayoutManager(layoutManager);
         recentRecyclerView.setAdapter(recentAdapter);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -109,20 +134,38 @@ public class RecentProfilesFragment extends Fragment {
             }
         });
 
+        textViewPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), EditPreferencesActivity.class);
+                startActivity(i);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
+
+        textViewSortBy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), SortByRecent.class);
+                startActivityForResult(i, 2);
+                getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            }
+        });
+
 
         // loading cached copy
-        String res = CacheHelper.retrieve("recent_profiles",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("recent_profiles", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"recent_profiles");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "recent_profiles");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-               // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
+                // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseRecentProfiles(response);
 
             } catch (JSONException e) {
@@ -158,8 +201,10 @@ public class RecentProfilesFragment extends Fragment {
 
                     JSONArray array = response.getJSONArray(i);
 
-                    String name = array.getString(0);
-                    String dateOfBirth = array.getString(1);
+                    String lastActiveOn = array.getString(0);
+
+                    String name = array.getString(1);
+                    String dateOfBirth = array.getString(2);
 
                     // Thu, 18 Jan 1990 00:00:00 GMT - Date Format
                     DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
@@ -178,66 +223,63 @@ public class RecentProfilesFragment extends Fragment {
                     int a = getAge(year, month, day);
                     String age = Integer.toString(a);
 
-                    String education = array.getString(2);
-                    String location = array.getString(3);
-                    String customerNo = array.getString(4);
-                    String createdOn = array.getString(5);
-                    String surname = array.getString(6);
-                    String imageUrl = array.getString(7);
-                    String favouriteStatus = array.getString(8);
-                    String recentStatus = array.getString(9);
+                    String education = array.getString(3);
+                    String location = array.getString(4);
+                    String customerNo = array.getString(5);
+                    String createdOn = array.getString(6);
+                    String surname = array.getString(7);
+                    String imageUrl = array.getString(8);
+                    String favouriteStatus = array.getString(9);
+                    String recentStatus = array.getString(10);
                     name = name + " " + surname;
 
-                    date = formatter.parse(createdOn);
-                    long diff =  now.getTime() - date.getTime();
+                    SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by_recent", MODE_PRIVATE);
+                    String recentSort = sortBy.getString("sortBy", "Registered");
+                    if (recentSort.contains("Active")) {
+                        date = formatter.parse(lastActiveOn);
+                        createdOn = "Last Active ";
+                    } else {
+                        date = formatter.parse(createdOn);
+                        createdOn = "";
+                    }
+
+
+                    long diff = now.getTime() - date.getTime();
                     int diffSeconds = (int) diff / 1000 % 60;
                     int diffMinutes = (int) diff / (60 * 1000) % 60;
                     int diffHours = (int) diff / (60 * 60 * 1000);
                     int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
                     if (diffInDays >= 365) {
-                        createdOn = "More than a year ago";
+                        createdOn += "More than a year ago";
                     } else if (diffInDays > 1) {
 //                                        System.err.println("Difference in number of days (2) : " + diffInDays);
-                        createdOn = diffInDays + " days ago";
-                    }else if (diffInDays == 1) {
+                        createdOn += diffInDays + " days ago";
+                    } else if (diffInDays == 1) {
 //                                        System.err.println("Difference in number of days (2) : " + diffInDays);
-                        createdOn = diffInDays + " day ago";
-                    }
-                    else if (diffHours >= 1) {
+                        createdOn += diffInDays + " day ago";
+                    } else if (diffHours >= 1) {
                         if (diffHours == 1) {
-                            createdOn = diffHours + " hour ago";
+                            createdOn += diffHours + " hour ago";
                         } else {
-                            createdOn = diffHours + " hours ago";
+                            createdOn += diffHours + " hours ago";
                         }
                     } else if ((diffHours < 1) && (diffMinutes >= 1)) {
-                        createdOn = diffMinutes + " minutes ago";
+                        createdOn += diffMinutes + " minutes ago";
                     } else if (diffSeconds > 0 && diffSeconds < 60) {
-                        createdOn = diffSeconds + " seconds ago";
+                        createdOn += diffSeconds + " seconds ago";
                     } else if (diffSeconds < 0) {
-                        createdOn = "A few seconds ago";
+                        createdOn += "A few seconds ago";
                     }
 
 
                     RecentModel recentModel = new RecentModel(customerNo, name, age, education, location, createdOn, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, favouriteStatus, recentStatus);
 
-                    if (!recentList.contains(recentModel) && imageUrl.contains("null")) {
-
-                        recentListWithoutPic.add(recentModel);
-
-                    } else if (!recentList.contains(recentModel)) {
-                        recentList.add(recentModel);
-                        recentAdapter.notifyDataSetChanged();
-                    }
+                    recentList.add(recentModel);
+                    recentAdapter.notifyDataSetChanged();
 
                 }
-
-                recentList.addAll(recentListWithoutPic);
-                recentAdapter.notifyDataSetChanged();
-
             }
-
-//
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -272,6 +314,23 @@ public class RecentProfilesFragment extends Fragment {
 
     }
 
+    public void loadedFromNetwork(JSONArray response) {
+
+
+        //saving fresh in cache
+        CacheHelper.save("recent_profiles", response.toString(), cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "recent_profiles");
+
+        // displaying it
+        parseRecentProfiles(response);
+
+    }
+
     private class PrepareRecent extends AsyncTask<Void, Void, Void> {
 
 
@@ -283,10 +342,17 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
+            SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by_recent", MODE_PRIVATE);
+
+            String recentShowPhotos = sortBy.getString("showPhotos", "yes");
+            String recentSort = sortBy.getString("sortBy", "Registered");
+
             AndroidNetworking.post("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .addBodyParameter("membership", res)
+                    .addBodyParameter("showPhotos", recentShowPhotos)
+                    .addBodyParameter("recentSort", recentSort)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -298,24 +364,24 @@ public class RecentProfilesFragment extends Fragment {
                             //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"recent_profiles");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "recent_profiles");
 
                                 //
                                 //
                                 //
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                  //  .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
+                                    //  .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -346,22 +412,5 @@ public class RecentProfilesFragment extends Fragment {
             loading.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-    public void loadedFromNetwork(JSONArray response){
-
-
-        //saving fresh in cache
-        CacheHelper.save("recent_profiles",response.toString(),cache);
-
-        // marking cache
-        isAlreadyLoadedFromCache = true;
-
-        // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"recent_profiles");
-
-        // displaying it
-        parseRecentProfiles(response);
-
     }
 }

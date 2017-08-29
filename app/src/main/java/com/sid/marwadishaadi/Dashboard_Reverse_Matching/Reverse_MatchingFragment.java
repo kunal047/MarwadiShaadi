@@ -1,5 +1,6 @@
 package com.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -56,8 +58,24 @@ public class Reverse_MatchingFragment extends Fragment {
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
     private ProgressBar mProgressBar;
+    private TextView showPhotosOfReverse;
+    private static int reverse_page_no;
 
-    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            reverseRecyclerView.setAdapter(null);
+            reverseRecyclerView.setLayoutManager(null);
+            reverseRecyclerView.setAdapter(reverseAdapter);
+            reverseRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+            reverseAdapter.notifyDataSetChanged();
+            reverseModelList.clear();
+            reverse_page_no = 0;
+            new PrepareReverse().execute();
+        }
+
+    }
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -110,7 +128,16 @@ public class Reverse_MatchingFragment extends Fragment {
                 refreshContent();
             }
         });
+        showPhotosOfReverse = (TextView) mview.findViewById(R.id.showPhotosOfReverse);
 
+        showPhotosOfReverse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), SortByReverse.class);
+                startActivityForResult(i, 2);
+                getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            }
+        });
 
         // loading cached copy
         String res = CacheHelper.retrieve("reverse_matching",cache);
@@ -186,13 +213,8 @@ public class Reverse_MatchingFragment extends Fragment {
 
                     ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
 
-                    if (!reverseModelList.contains(reverseModel) && imageUrl.contains("null")){
                         reverseModelList.add(reverseModel);
                         reverseAdapter.notifyDataSetChanged();
-                    } else if (!reverseModelList.contains(reverseModel)) {
-                        reverseModelList.add(0, reverseModel);
-                        reverseAdapter.notifyDataSetChanged();
-                    }
 
                 }
             }
@@ -241,30 +263,28 @@ public class Reverse_MatchingFragment extends Fragment {
 
         }
 
+        SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by_reverse", MODE_PRIVATE);
+
+        String reverseShowPhotos = sortBy.getString("showPhotos", "yes");
+
         @Override
         protected Void doInBackground(Void... params) {
             AndroidNetworking.post("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .addBodyParameter("membership", res)
+                    .addBodyParameter("showPhotos", reverseShowPhotos)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            // do anything with response
-
-                            //
-
-                            // if no change in data
+                            // do anything with response0
                             if (isAlreadyLoadedFromCache){
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"reverse_matching");
 
-                                //
-                                //
-                                //
 
                                 if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();

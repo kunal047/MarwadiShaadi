@@ -22,6 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
             android:text="Oops! No new suggestions found !"
             android:textAlignment="center"
@@ -33,14 +34,14 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent">-->
 
-    <!--<ProgressBar-->
-    <!--android:id="@+id/favourite_progress_bar"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:indeterminate="true"-->
-    <!--/>-->
+    <ProgressBar
+        android:id="@+id/favourite_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true"
+        />
     <!--</RelativeLayout>-->
 
     <FrameLayout

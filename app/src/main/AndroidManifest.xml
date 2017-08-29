@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name="com.sid.marwadishaadi.App"
+        android:name=".App"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sid.marwadishaadi.SplashScreen"
+            android:name=".SplashScreen"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -43,17 +43,20 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <service android:name="com.sid.marwadishaadi.MSFirebaseMessagingService">
+        <service android:name=".MSFirebaseMessagingService">
             <intent-filter>
+
+
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="com.sid.marwadishaadi.MyService">
+        <service android:name=".MyService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="com.sid.marwadishaadi.Services.ChatNotifyService"/>
+
+        <service android:name=".Services.ChatNotifyService"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -72,136 +75,144 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity"
+            android:name=".Forgot_Password.ForgotPasswordActivity"
             android:label="Forgot Password ? "
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.MainActivity"
+            android:name=".MainActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Signup.SignupActivity"
+            android:name=".Signup.SignupActivity"
             android:hardwareAccelerated="false"
             android:label="Signup"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Login.LoginActivity"
+            android:name=".Login.LoginActivity"
             android:hardwareAccelerated="false"
             android:label="Login"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Otp_Verification.Otp_VerificationActivity"
+            android:name=".Otp_Verification.Otp_VerificationActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Signup.SignupDetailsActivity"
+            android:name=".Signup.SignupDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Signup.AdvancedSignupDetailsActivity"
+            android:name=".Signup.AdvancedSignupDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name="com.sid.marwadishaadi.Membership.MembershipActivity"
+            android:name=".Membership.MembershipActivity"
             android:label="Membership"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Dashboard.DashboardActivity"
+            android:name=".Dashboard.DashboardActivity"
             android:label="Dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name="com.sid.marwadishaadi.Feedback.FeedbackActivity"
+            android:name=".Feedback.FeedbackActivity"
             android:label="Feedback"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Settings.SettingsActivity"
+            android:name=".Settings.SettingsActivity"
             android:label="Settings"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Blocked_Members.BlockedActivity"
+            android:name=".Blocked_Members.BlockedActivity"
             android:label="Blocked"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity"
+            android:name=".Privacy_Policy.PrivacyPolicyActivity"
             android:label="Privacy Policy"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.User_Profile.UserProfileActivity"
+            android:name=".User_Profile.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name="com.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity"
+            android:name=".Payment_Policy.PaymentPolicyActivity"
             android:label="Payment Policy"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Notifications.NotificationsActivity"
+            android:name=".Notifications.NotificationsActivity"
             android:label="Notifications"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Search.Search"
+            android:name=".Search.Search"
             android:label="Search"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Dashboard_Interest.InterestActivity"
+            android:name=".Dashboard_Interest.InterestActivity"
             android:label="Interest"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.About_Us.AboutUsActivity"
+            android:name=".About_Us.AboutUsActivity"
             android:label="About Us"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Contact_Us.ContactUsActivity"
+            android:name=".Contact_Us.ContactUsActivity"
             android:label="Contact Us"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Faq.FaqActivity"
+            android:name=".Faq.FaqActivity"
             android:label="Faq"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Membership.UpgradeMembershipActivity"
+            android:name=".Membership.UpgradeMembershipActivity"
             android:label="Membership"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity"
+            android:name=".User_Profile.Edit_User_Profile.EditPreferencesActivity"
             android:label="Edit Partner Preferences"
             android:screenOrientation="portrait"/>
 
         <!-- Chat Activities -->
         <activity
-            android:name="com.sid.marwadishaadi.Chat.DefaultDialogsActivity"
+            android:name=".Chat.DefaultDialogsActivity"
             android:label="Inbox"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Chat.DefaultMessagesActivity"
+            android:name=".Chat.DefaultMessagesActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Search.SearchResultsActivity"
+            android:name=".Search.SearchResultsActivity"
             android:label="Search Results"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPersonalDetailsActivity"
+            android:name=".User_Profile.Edit_User_Profile.EditPersonalDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditFamilyDetailsActivity"
+            android:name=".User_Profile.Edit_User_Profile.EditFamilyDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Similar_Profiles.SimilarActivity"
+            android:name=".Similar_Profiles.SimilarActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Filter"
+            android:name=".Filter"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity"
+            android:name=".Upload_User_Photos.UploadPhotoActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.sid.marwadishaadi.Payment.activity.WebViewActivity"/>
-        <activity android:name="com.sid.marwadishaadi.Payment.activity.StatusActivity"/>
-        <activity android:name="com.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity"/>
+        <activity android:name=".Payment.activity.WebViewActivity"/>
+        <activity android:name=".Payment.activity.StatusActivity"/>
+        <activity android:name=".FB_Gallery_Photo_Upload.FbGalleryActivity"/>
         <activity
-            android:name="com.sid.marwadishaadi.User_Profile.FullscreenImageActivity"
+            android:name=".User_Profile.FullscreenImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_image"
             android:theme="@style/FullscreenTheme"/>
-        <activity android:name="com.sid.marwadishaadi.SortBy">
+        <activity
+            android:name=".SortBy"
+            android:theme="@style/MyTransparentTheme">
+        </activity>
+        <activity android:name=".Dashboard_Recent_Profiles.SortByRecent"
+                  android:theme="@style/MyTransparentTheme">
+        </activity>
+        <activity android:name=".Dashboard_Reverse_Matching.SortByReverse"
+                  android:theme="@style/MyTransparentTheme">
         </activity>
     </application>
 

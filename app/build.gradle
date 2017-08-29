@@ -9,8 +9,8 @@ android {
         applicationId 'com.sid.marwadishaadi'
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 4
-        versionName "3.1"
+        versionCode 5
+        versionName "3.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -73,6 +73,8 @@ dependencies {
     compile 'com.crystal:crystalrangeseekbar:1.1.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+    // for tooltip
+    compile 'com.github.florent37:viewtooltip:1.0.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

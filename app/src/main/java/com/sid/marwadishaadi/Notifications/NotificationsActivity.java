@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -179,38 +180,56 @@ public class NotificationsActivity extends AppCompatActivity {
                 if(ChildView != null && gesturedetector.onTouchEvent(motionEvent)) {
                     int position  = recyclerView.getChildAdapterPosition(ChildView);
                     NotificationsModel notificationsModel = notificationsModelList.get(position);
+
+                    mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
+                    mDatabase.child(notificationsModel.getId()).child("isRead").setValue(true);
+
+
                     if (notificationsModel.isSuggested()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this, DashboardActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isPremMem()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this,MembershipActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isMemExp()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this, UpgradeMembershipActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isMsgRec()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this,DefaultDialogsActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isInterestAcc()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this,UserProfileActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isInterestRec()){
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this,InterestActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }else if(notificationsModel.isOffers()){
+
+                        notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this,UpgradeMembershipActivity.class);
                         startActivity(i);
                         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     }
                     else if(notificationsModel.isBday())
                     {
-
+                        notificationsModel.setRead(true);
                         View bday_view = getLayoutInflater().inflate(R.layout.birthday_dialog, null);
                         AlertDialog.Builder bday = new AlertDialog.Builder(NotificationsActivity.this);
                         bday.setView(bday_view);
@@ -251,6 +270,10 @@ public class NotificationsActivity extends AppCompatActivity {
 
 
                 if (direction == ItemTouchHelper.RIGHT | direction == ItemTouchHelper.LEFT) {
+                    Log.d("", "onSwiped: value is " + notificationsModelList.get(position).getName());
+                    System.out.println("onSwiped: value is " + notificationsModelList.get(position).getName());
+                    mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
+                    mDatabase.child(notificationsModelList.get(position).getId()).removeValue();
                     notificationsModelList.remove(position);
                     notificationsAdapter.notifyDataSetChanged();
                 }

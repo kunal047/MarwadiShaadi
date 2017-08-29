@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/notify_toolbar"
         android:layout_width="match_parent"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/MyToolbartheme"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
 
 
@@ -32,10 +33,10 @@
             android:src="@drawable/no_fav"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="Oops! No new notifications for you !"
+            android:text="You have no new notifications !"
             android:textAlignment="center"
             android:textSize="20dp"
             />

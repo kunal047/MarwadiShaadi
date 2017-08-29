@@ -53,11 +53,19 @@
                 app:strokeColor="#FF777777"
                 app:strokeWidth="0.5dp"/>
 
+            <ImageView
+                android:id="@+id/imageViewInformation"
+                android:layout_gravity="end|bottom"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@mipmap/information"/>
+
         </android.support.design.widget.CollapsingToolbarLayout>
 <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:background="@color/colorPrimary"></View>
+    android:background="@color/colorPrimary"/>
         <android.support.design.widget.TabLayout
             android:id="@+id/profile_tabs"
             android:layout_width="match_parent"
@@ -72,7 +80,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorPrimary"></View>
+            android:background="@color/colorPrimary"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -185,6 +193,8 @@
                 style="@style/MenuButtonsStyle" />
 
         </com.github.clans.fab.FloatingActionMenu>
+
+
 
 
     </FrameLayout>

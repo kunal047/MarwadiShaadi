@@ -115,9 +115,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        new SendSignUpDetails().execute();
 
-//                        new SendingSMS().execute(sd.getMobile_number());
+                        new SendingSMS().execute(sd.getMobile_number());
                     }
                 });
 
@@ -234,7 +233,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
                 String user_otp = otp.getText().toString();
 //                Toast.makeText(getApplicationContext(), "OTP created is" + Integer.toString(OTP), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "doInBackground: values are " + sd.getFirst_name() + ' ' + sd.getLast_name() + ' ' + sd.getDate_of_birth() + ' ' + sd.getGender() + ' ' + sd.getMobile_number() + ' ' + sd.getUser_location() + ' ' + sd.getUser_caste());
+
 //                new SendSignUpDetails().execute();
                 if (user_otp.equals(Integer.toString(OTP))) {
                     new SendSignUpDetails().execute();
@@ -383,7 +382,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://10.0.0.11:5000/signUpDetails")
+            AndroidNetworking.post("http://208.91.199.50:5000/signUpDetails")
                     .addBodyParameter("firstName", sd.getFirst_name())
                     .addBodyParameter("lastName", sd.getLast_name())
                     .addBodyParameter("dateOfBirth", sd.getDate_of_birth())
@@ -400,7 +399,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(ANError anError) {
-                            Log.d(TAG, "onError: error " + anError.toString());
+
                         }
                     });
             return null;
@@ -419,8 +418,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            Log.d(TAG, "doInBackground: values are " + bi.getHeight() + " " + bi.getBuilt() + " " + bi.getMaritalStatus() + " " + bi.getEducation() + " " + bi.getOccupation() + " " + bi.getDesignation() + " " + bi.getAnnualIncome() + " " + bi.getFamilyStatus() + " " + bi.getWeight() + " " + bi.getHighestDegree() + " " + bi.getCompanyName() + " " + bi.getFatherName() + " " + bi.getFatherOccupationDetails());
-            AndroidNetworking.post("http://10.0.0.11:5000/basicInfo")
+
+            AndroidNetworking.post("http://208.91.199.50:5000/basicInfo")
                     .addBodyParameter("height", bi.getHeight())
                     .addBodyParameter("built", bi.getBuilt())
                     .addBodyParameter("maritalStatus", bi.getMaritalStatus())
@@ -465,9 +464,9 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            Log.d(TAG, "doInBackground: in this thing");
+
             System.out.println("in this shit");
-            AndroidNetworking.post("http://10.0.0.11:5000/additionalInfo")
+            AndroidNetworking.post("http://208.91.199.50:5000/additionalInfo")
                     .addBodyParameter("aboutMe", ai.getAboutMe())
                     .addBodyParameter("hobbies", ai.getHobbies())
                     .addBodyParameter("grandfatherName", ai.getGrandfatherName())
@@ -517,7 +516,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(ANError anError) {
-                            Log.d(TAG, "onError: in additional pref " + anError.toString());
+
                         }
                     });
             return null;
@@ -527,7 +526,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             System.out.println("customer no is " + newCustomerNo);
-//            Log.d(TAG, "onPostExecute: customerno is " + newCustomerNo);
+//
                 new SendPartnerPreference().execute();
 
         }
@@ -542,11 +541,10 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            Log.d(TAG, "doInBackground: " + newCustomerNo + " " + pf.getPrefMinAge() + " " + pf.getPrefMaxAge() + " " +  pf.getPrefHeightTo() + " " +  pf.getPrefHeightFrom() + " " + pf.getPreferenceEducation().toString() + " " + pf.getPrefMaritalStatus() + " " +  pf.getPrefAnnualIncome() + " " +  pf.getPreferenceComplexion().toString() + " " +  pf.getPreferenceBodyType().toString() + " " +  pf.getPrefPhysicalStatus() + " " +  pf.getPrefWorkLocation());
             if (pf.getPrefPhysicalStatus().contains("Matter")) {
                 pf.setPrefPhysicalStatus("");
             }
-            AndroidNetworking.post("http://10.0.0.11:5000/uploadPreferences")
+            AndroidNetworking.post("http://208.91.199.50:5000/uploadPreferences")
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("minAge", pf.getPrefMinAge())
                     .addBodyParameter("maxAge", pf.getPrefMaxAge())
@@ -569,7 +567,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
 
-                            Log.d(TAG, "onError: error in partner preference " + anError.toString());
+
 
                         }
                     });
@@ -593,8 +591,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//AndroidNetworking.post("http://10.0.0.11:5000/uploadPreferences")
-            AndroidNetworking.post("http://10.0.0.11:5000/signUp")
+            AndroidNetworking.post("http://208.91.199.50:5000/signUp")
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("email", su.getUemail())
                     .addBodyParameter("password", su.getUpass())
@@ -653,7 +650,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 //                    OTP += (Math.pow(10, i / 2)) * (var);
 //                }
 
-                Log.d(TAG, "doInBackground: OTP IS " + OTP);
                 message = "Welcome to Marwadishaadi.com \n Please enter the OTP " + Integer.toString(OTP) + " to complete the verification of your number.";
 
                 //Prepare Url
