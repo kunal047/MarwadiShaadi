@@ -30,6 +30,7 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.sid.marwadishaadi.App;
+import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.PlacesAdapter;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
@@ -885,7 +886,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            Intent i = new Intent(getApplicationContext(), UserProfileActivity.class);
+            Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
             startActivity(i);
         }
 

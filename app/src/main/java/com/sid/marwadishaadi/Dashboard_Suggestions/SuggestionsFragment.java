@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,8 @@ public class SuggestionsFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
 
+    private static final String TAG = "SuggestionsFragment";
+
 //    private OnLoadMoreListener mOnLoadMoreListener;
 
     @Override
@@ -104,12 +107,15 @@ public class SuggestionsFragment extends Fragment {
         cache = new File(getCacheDir() + "/" + "suggestions" + customer_id + ".srl");
 
         String[] array = getResources().getStringArray(R.array.communities);
-
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
-        if (communityChecker != null) {
+
+        Log.d(TAG, "onCreateView: customer id is --------------------------------------------------- " + customer_id);
+        if (customer_id != null && communityChecker != null && array.length > 0) {
             for (int i = 0; i < 5; i++) {
 
-                if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                Log.d("", "onCreateView: array value si " + array[i]);
+
+                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
                 }
             }
@@ -257,10 +263,6 @@ public class SuggestionsFragment extends Fragment {
 
         try {
 
-            if (page_no == 0) {
-                suggestionModelList.clear();
-                suggestionAdapter.notifyDataSetChanged();
-            }
 
 
             if (response.length() == 0) {
@@ -375,6 +377,8 @@ public class SuggestionsFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
+
+
             SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by", MODE_PRIVATE);
 
             suggestionShowPhotos = sortBy.getString("showPhotos", "yes");
@@ -383,7 +387,7 @@ public class SuggestionsFragment extends Fragment {
             AndroidNetworking.post("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
-                    .addPathParameter("page", Integer.toString(page_no))
+                    .addPathParameter("page", String.valueOf(page_no))
                     .addBodyParameter("membership", res)
                     .addBodyParameter("sortBy", suggestionSort)
                     .addBodyParameter("showPhotos", suggestionShowPhotos)
@@ -407,6 +411,12 @@ public class SuggestionsFragment extends Fragment {
                                     return;
                                 } else {
 
+                                    if (page_no == 0) {
+                                        suggestionModelList.clear();
+                                        suggestionAdapter.notifyDataSetChanged();
+                                    }
+
+
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
@@ -415,6 +425,7 @@ public class SuggestionsFragment extends Fragment {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
+                            page_no++;
                         }
 
                         @Override
@@ -434,7 +445,7 @@ public class SuggestionsFragment extends Fragment {
                         }
                     });
 
-            page_no++;
+
 
             return null;
         }

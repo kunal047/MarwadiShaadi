@@ -116,7 +116,6 @@ public class DashboardActivity extends AppCompatActivity
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             if (snapshot.child("isRead").getValue().toString().contains("false")) {
                                 notificationCount = notificationCount +  1;
-                                Log.d(TAG, "onDataChange: 0000 " + snapshot.child("isRead").getValue().toString() + " " + notificationCount);
                                 if (notificationCount == 0) {
                                     m.setTitle("Notifications");
                                 } else {
@@ -202,7 +201,7 @@ public class DashboardActivity extends AppCompatActivity
 
                 for (int i = 0; i < 5; i++) {
 
-                    if (communityChecker.getString(array[i], null).contains("Yes")) {
+                    if (communityChecker.getString(array[i], "No").contains("Yes")) {
                         counter++;
                     }
                 }

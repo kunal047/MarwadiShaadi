@@ -270,8 +270,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
 
                 if (direction == ItemTouchHelper.RIGHT | direction == ItemTouchHelper.LEFT) {
-                    Log.d("", "onSwiped: value is " + notificationsModelList.get(position).getName());
-                    System.out.println("onSwiped: value is " + notificationsModelList.get(position).getName());
+
                     mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
                     mDatabase.child(notificationsModelList.get(position).getId()).removeValue();
                     notificationsModelList.remove(position);

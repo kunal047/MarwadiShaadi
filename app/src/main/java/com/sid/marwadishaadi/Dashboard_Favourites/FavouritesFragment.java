@@ -41,7 +41,6 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class FavouritesFragment extends Fragment {
 
-    private static final String TAG = "FavouritesFragment";
     private static final int MODE_PRIVATE = 0;
     private List<FavouriteModel> favouritesList = new ArrayList<>();
     private RecyclerView recyclerView;

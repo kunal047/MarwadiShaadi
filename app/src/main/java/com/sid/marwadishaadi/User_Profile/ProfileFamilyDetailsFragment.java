@@ -112,14 +112,14 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
-        customer_id = sharedpref.getString("customer_id", null);
+        customer_id = sharedpref.getString("customer_id", "");
         clickedID = customer_id;
 
         String[] array = getResources().getStringArray(R.array.communities);
 
         for (int i = 0; i < 5; i++) {
 
-            if (sharedpref.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+            if (sharedpref.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                 isPaidMember = true;
             }
         }

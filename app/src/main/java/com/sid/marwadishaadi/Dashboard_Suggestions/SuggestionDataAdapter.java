@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,12 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
@@ -33,12 +38,6 @@ import com.sid.marwadishaadi.Notifications_Util;
 import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
@@ -90,7 +89,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
 
 
                     final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    visibleItemCount = rv.getChildCount();
+                    visibleItemCount = linearLayoutManager.getChildCount();
                     totalItemCount = linearLayoutManager.getItemCount();
                     firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
@@ -122,7 +121,6 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
         }
 
 
-
     }
 
     public void setLoaded() {
@@ -141,10 +139,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
 
-//        System.out.println("value is " + position + " size is " + getItemCount());
-
-
-        return suggestionModelList.get(position) != null ? VIEW_ITEM : 0;
+        return suggestionModelList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
@@ -261,8 +256,6 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                         snackbar.show();
 
 
-
-
                     } else {
 
 
@@ -292,7 +285,6 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
             ((SuggestionViewHolder) holder).sparkButtonInterest.setEventListener(new SparkEventListener() {
                 @Override
                 public void onEvent(ImageView button, boolean buttonState) {
-
 
 
                     if (buttonState) {
@@ -352,7 +344,6 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                         snackbar.show();
                         ((SuggestionViewHolder) holder).sparkButtonInterest.setChecked(true);
                         ((SuggestionViewHolder) holder).sparkButtonInterest.setActiveImage(R.mipmap.ic_heart);
-
 
 
                     } else {

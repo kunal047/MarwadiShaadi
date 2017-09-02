@@ -1,217 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
     >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
-        android:theme="@style/MyToolbartheme"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
     </android.support.v7.widget.Toolbar>
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="10dp"
-    android:fadeScrollbars="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:animateLayoutChanges="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textStart"
-            android:id="@+id/switchNotifications"
-            app:switchPadding="100dp"
-            android:text="Notifications"
-            android:drawableLeft="@drawable/setting_notif"
-            android:drawablePadding="10dp"
-            android:textSize="14dp"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542"
-            >
-
-        </View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/reset_password"
-            android:text="Reset password"
-            android:clickable="true"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/setting_reset"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542">
-        </View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/deactivate_acc"
-            android:clickable="true"
-            android:text="Deactivate account"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/setting_deactivate"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542">
-        </View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/delete_acc"
-            android:text="Delete account"
-            android:clickable="true"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/setting_delete"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542">
-        </View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/blocked"
-            android:text="Blocked"
-            android:clickable="true"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/setting_blocked"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542">
-        </View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/more"
-            android:text="More"
-            android:clickable="true"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/settings_more"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542">
-        </View>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="true"
+                android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/morelayout"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <TextView
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/faq"
-                android:text="Faq"
-                android:clickable="true"
-                android:textSize="14dp"
-                android:textColor="#000"
-                android:drawableLeft="@drawable/ic_action_faq"
+                android:drawableLeft="@drawable/setting_notif"
                 android:drawablePadding="10dp"
-                android:gravity="center_vertical"
+                android:text="Notifications"
+                android:textAlignment="textStart"
+                android:textSize="14dp"
+                app:switchPadding="100dp"
                 />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_margin="10dp"
-                android:background="#59fb6542">
-            </View>
+                android:background="#59fb6542"
+                >
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/aboutus"
-                android:text="About Us"
-                android:clickable="true"
-                android:textSize="14dp"
-                android:textColor="#000"
-                android:drawableLeft="@drawable/ic_action_about_us"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_margin="10dp"
-                android:background="#59fb6542">
             </View>
 
             <TextView
+                android:id="@+id/reset_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/privacypolicy"
-                android:text="Privacy Policy"
                 android:clickable="true"
-                android:textSize="14dp"
-                android:textColor="#000"
-                android:drawableLeft="@drawable/ic_action_privacy"
+                android:drawableLeft="@drawable/setting_reset"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
+                android:text="Reset password"
+                android:textColor="#000"
+                android:textSize="14dp"
                 />
 
             <View
@@ -222,16 +73,16 @@
             </View>
 
             <TextView
+                android:id="@+id/deactivate_acc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/contactus"
-                android:text="Contact Us"
                 android:clickable="true"
-                android:textSize="14dp"
-                android:textColor="#000"
-                android:drawableLeft="@drawable/ic_action_contact"
+                android:drawableLeft="@drawable/setting_deactivate"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
+                android:text="Deactivate account"
+                android:textColor="#000"
+                android:textSize="14dp"
                 />
 
             <View
@@ -240,19 +91,18 @@
                 android:layout_margin="10dp"
                 android:background="#59fb6542">
             </View>
-
 
             <TextView
+                android:id="@+id/delete_acc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/paymentpolicy"
-                android:text="Payment Policy"
                 android:clickable="true"
-                android:textSize="14dp"
-                android:textColor="#000"
-                android:drawableLeft="@drawable/ic_action_payment"
+                android:drawableLeft="@drawable/setting_delete"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
+                android:text="Delete account"
+                android:textColor="#000"
+                android:textSize="14dp"
                 />
 
             <View
@@ -262,19 +112,170 @@
                 android:background="#59fb6542">
             </View>
 
+            <TextView
+                android:id="@+id/blocked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableLeft="@drawable/setting_blocked"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Blocked"
+                android:textColor="#000"
+                android:textSize="14dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="10dp"
+                android:background="#59fb6542">
+            </View>
+
+            <TextView
+                android:id="@+id/more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableLeft="@drawable/settings_more"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="More"
+                android:textColor="#000"
+                android:textSize="14dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="10dp"
+                android:background="#59fb6542">
+            </View>
+
+            <LinearLayout
+                android:id="@+id/morelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/faq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_faq"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Faq"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542">
+                </View>
+
+
+                <TextView
+                    android:id="@+id/aboutus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_about_us"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="About Us"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542">
+                </View>
+
+                <TextView
+                    android:id="@+id/privacypolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_privacy"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Privacy Policy"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542">
+                </View>
+
+                <TextView
+                    android:id="@+id/contactus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_contact"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Contact Us"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542">
+                </View>
+
+
+                <TextView
+                    android:id="@+id/paymentpolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_action_payment"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Payment Policy"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542">
+                </View>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/Logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableLeft="@drawable/setting_logout"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Logout"
+                android:textColor="#000"
+                android:textSize="14dp"
+                />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/Logout"
-            android:text="Logout"
-            android:clickable="true"
-            android:textSize="14dp"
-            android:textColor="#000"
-            android:drawableLeft="@drawable/setting_logout"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            />
-    </LinearLayout>
-</ScrollView>
-    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

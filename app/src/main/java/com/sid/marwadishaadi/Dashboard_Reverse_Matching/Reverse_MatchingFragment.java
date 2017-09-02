@@ -19,10 +19,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,14 +39,13 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-
 import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class Reverse_MatchingFragment extends Fragment {
 
-    private static final String TAG = "Reverse_MatchingFragmen";
+    private static int reverse_page_no;
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<ReverseModel> reverseModelList = new ArrayList<>();
     private RecyclerView reverseRecyclerView;
@@ -59,7 +59,6 @@ public class Reverse_MatchingFragment extends Fragment {
     private boolean isAlreadyLoadedFromCache = false;
     private ProgressBar mProgressBar;
     private TextView showPhotosOfReverse;
-    private static int reverse_page_no;
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -75,7 +74,8 @@ public class Reverse_MatchingFragment extends Fragment {
         }
 
     }
-        @Override
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -87,15 +87,15 @@ public class Reverse_MatchingFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        cache = new File(getCacheDir() + "/" + "reversematching" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "reversematching" + customer_id + ".srl");
 
         String[] array = getResources().getStringArray(R.array.communities);
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
-        if (communityChecker!=null) {
+        if (customer_id != null && communityChecker != null) {
             for (int i = 0; i < 5; i++) {
 
-                if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
                 }
             }
@@ -118,7 +118,7 @@ public class Reverse_MatchingFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         reverseRecyclerView.setItemAnimator(fadeInLeftAnimator);
-        reverseAdapter = new ReverseAdapter(reverseModelList, getContext());
+        reverseAdapter = new ReverseAdapter(reverseModelList, getContext(), reverseRecyclerView);
         reverseRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         reverseRecyclerView.setAdapter(reverseAdapter);
 
@@ -140,18 +140,17 @@ public class Reverse_MatchingFragment extends Fragment {
         });
 
         // loading cached copy
-        String res = CacheHelper.retrieve("reverse_matching",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("reverse_matching", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"reverse_matching");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "reverse_matching");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-               // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseReverseMatches(response);
 
             } catch (JSONException e) {
@@ -162,27 +161,40 @@ public class Reverse_MatchingFragment extends Fragment {
 
         new PrepareReverse().execute();
 
+        reverseAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() throws InterruptedException {
+                reverseModelList.add(null);
+                reverseAdapter.notifyDataSetChanged();
+
+                Thread.sleep(1000);
+
+                reverseModelList.remove(reverseModelList.size() - 1);
+                reverseAdapter.notifyDataSetChanged();
+
+                new PrepareReverse().execute();
+
+            }
+        });
+
         return mview;
     }
 
     private void parseReverseMatches(JSONArray response) {
 
         try {
-                                mProgressBar.setVisibility(View.GONE);
 
-            reverseModelList.clear();
-            reverseAdapter.notifyDataSetChanged();
+            mProgressBar.setVisibility(View.GONE);
 
 
-
-            if(response.toString().contains("zero")){
+            if (response.toString().contains("zero")) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         empty_view_reverse.setVisibility(View.VISIBLE);
                     }
                 });
-            }else {
+            } else {
                 empty_view_reverse.setVisibility(View.GONE);
 
 
@@ -211,10 +223,10 @@ public class Reverse_MatchingFragment extends Fragment {
 
                     String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
 
-                    ReverseModel reverseModel = new ReverseModel(imageUrl, name, age , education, occupationLocation, customerNo);
+                    ReverseModel reverseModel = new ReverseModel(imageUrl, name, age, education, occupationLocation, customerNo);
 
-                        reverseModelList.add(reverseModel);
-                        reverseAdapter.notifyDataSetChanged();
+                    reverseModelList.add(reverseModel);
+                    reverseAdapter.notifyDataSetChanged();
 
                 }
             }
@@ -252,26 +264,42 @@ public class Reverse_MatchingFragment extends Fragment {
         return age;
     }
 
+    public void loadedFromNetwork(JSONArray response) {
+
+
+        //saving fresh in cache
+        CacheHelper.save("reverse_matching", response.toString(), cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "reverse_matching");
+
+        // displaying it
+        parseReverseMatches(response);
+
+    }
 
     private class PrepareReverse extends AsyncTask<Void, Void, Void> {
 
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-           mProgressBar.setVisibility(View.VISIBLE);
-
-        }
-
         SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by_reverse", MODE_PRIVATE);
-
         String reverseShowPhotos = sortBy.getString("showPhotos", "yes");
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
+                    .addPathParameter("page", String.valueOf(reverse_page_no))
                     .addBodyParameter("membership", res)
                     .addBodyParameter("showPhotos", reverseShowPhotos)
                     .setPriority(Priority.HIGH)
@@ -280,21 +308,23 @@ public class Reverse_MatchingFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response0
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
+
+                                reverse_page_no++;
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"reverse_matching");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "reverse_matching");
 
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                   // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
+                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -308,7 +338,7 @@ public class Reverse_MatchingFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                   mProgressBar.setVisibility(View.GONE);
+                                    mProgressBar.setVisibility(View.GONE);
 
                                 }
                             });
@@ -321,26 +351,10 @@ public class Reverse_MatchingFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-           mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
+            reverseAdapter.setLoaded();
             swipeRefreshLayout.setRefreshing(false);
         }
-
-    }
-
-    public void loadedFromNetwork(JSONArray response){
-
-
-        //saving fresh in cache
-        CacheHelper.save("reverse_matching",response.toString(),cache);
-
-        // marking cache
-        isAlreadyLoadedFromCache = true;
-
-        // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"reverse_matching");
-
-        // displaying it
-        parseReverseMatches(response);
 
     }
 }

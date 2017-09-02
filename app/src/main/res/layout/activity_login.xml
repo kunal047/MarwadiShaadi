@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,53 +25,53 @@
 
             <!--<com.facebook.login.widget.LoginButton-->
 
-                <!--android:id="@+id/fb_login_button"-->
-                <!--android:layout_width="240dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:paddingBottom="10dp"-->
-                <!--android:paddingTop="10dp"-->
-                <!--facebook:com_facebook_login_text="Login with Facebook"-->
-                <!--/>-->
+            <!--android:id="@+id/fb_login_button"-->
+            <!--android:layout_width="240dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:paddingBottom="10dp"-->
+            <!--android:paddingTop="10dp"-->
+            <!--facebook:com_facebook_login_text="Login with Facebook"-->
+            <!--/>-->
 
 
             <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:layout_marginTop="10dp">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp">-->
 
-                <!--<View-->
-                    <!--android:layout_width="100dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:background="#fff"-->
-                    <!--&gt;-->
+            <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="#fff"-->
+            <!--&gt;-->
 
-                <!--</View>-->
+            <!--</View>-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Or"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:textColor="#fff"-->
-                    <!--android:textSize="16dp"-->
-                    <!--android:textStyle="bold"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Or"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="#fff"-->
+            <!--android:textSize="16dp"-->
+            <!--android:textStyle="bold"/>-->
 
-                <!--<View-->
-                    <!--android:layout_width="100dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:background="#fff"-->
-                    <!--&gt;-->
+            <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:background="#fff"-->
+            <!--&gt;-->
 
-                <!--</View>-->
+            <!--</View>-->
             <!--</LinearLayout>-->
 
             <EditText
@@ -82,7 +81,6 @@
                 android:layout_marginTop="10dp"
                 android:background="#33000000"
                 android:drawableLeft="@mipmap/user_face"
-                android:drawablePadding="10dp"
                 android:ems="10"
                 android:hint="User Id / Email"
                 android:inputType="text"
@@ -96,7 +94,7 @@
                 android:layout_height="0.5dp"
                 android:layout_gravity="center_horizontal"
                 android:background="#fff"
-                ></View>
+                />
 
             <RelativeLayout
                 android:layout_width="match_parent"

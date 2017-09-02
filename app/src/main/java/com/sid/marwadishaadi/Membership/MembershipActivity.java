@@ -260,7 +260,7 @@ public class MembershipActivity extends AppCompatActivity {
                         ad = "Rs.";
                     }
                     //                                            +"coupon type : "+pair_c_type+"\n"
-                    ald.setMessage("coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "Discount will added when go for payment");
+                    ald.setMessage("Coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "Discount will added when go for payment");
                     AlertDialog resetbox = ald.create();
                     resetbox.show();
                 }

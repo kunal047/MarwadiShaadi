@@ -104,6 +104,8 @@ public class SettingsActivity extends AppCompatActivity {
         contactus = (TextView) findViewById(R.id.contactus);
         notificationOnOff = (SwitchCompat) findViewById(R.id.switchNotifications);
 
+        notificationOnOff.setChecked(true);
+
 
         notificationOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

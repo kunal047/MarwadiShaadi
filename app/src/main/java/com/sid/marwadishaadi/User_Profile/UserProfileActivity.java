@@ -176,7 +176,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         for (int i = 0; i < 5; i++) {
 
-            if (sharedpref.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+            if (sharedpref.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                 isPaidMember = true;
             }
         }
@@ -297,7 +297,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     String[] array = getApplicationContext().getResources().getStringArray(R.array.communities);
                     SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     for (int i = 0; i < 5; i++) {
-                        if (communityChecker.getString(array[i], null).contains("Yes")) {
+                        if (communityChecker.getString(array[i], "No").contains("Yes")) {
                             counter++;
                         }
                     }
@@ -855,10 +855,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     ViewTooltip.on(imageViewInformation)
                             .align(ViewTooltip.ALIGN.START)
                             .clickToHide(true)
-                            .autoHide(false, 3000)
+                            .autoHide(true, 2000)
                             .position(ViewTooltip.Position.LEFT)
-                            .text("Profile Created On: " + createdOn + " Last Active On: " + lastActiveOn)
-
+                            .text("Profile Created On: " + createdOn + "\r\nLast Active On: " + lastActiveOn)
                             .textColor(Color.WHITE)
                             .color(Color.parseColor("#FB6542"))
                             .show();

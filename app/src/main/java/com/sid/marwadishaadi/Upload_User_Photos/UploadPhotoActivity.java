@@ -22,6 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -89,7 +90,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private byte[] bitmapdata;
     private String nameOfPhoto, timeStamp, file_type;
     private List<String> userImages;
-
+    private static final String TAG = "UploadPhotoActivity";
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -104,10 +105,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload_photo);
 
         view = getWindow().getDecorView().getRootView();
-
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-
+        Log.d(TAG, "onCreate: from upa ----------------- " + customer_id);
         callbackManager = CallbackManager.Factory.create();
 
 
@@ -198,6 +198,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 if (photo1.getTag() == "changed") {
                     Bitmap bitmap = ((BitmapDrawable) photo1.getDrawable()).getBitmap();
                     String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+                    if (customer_id == null || customer_id.isEmpty()) {
+                        customer_id = "ddefault";
+                    }
                     String nameOfPhoto = customer_id.substring(1) + "_" + timeStamp + ".jpg";
                     file_one = new File(getApplicationContext().getCacheDir(), nameOfPhoto);
                     file_type = "profile_image";

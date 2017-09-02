@@ -113,7 +113,7 @@ public class SortBy extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        System.out.println("on back pressed");
+
         setResult(2);
         finish();
 

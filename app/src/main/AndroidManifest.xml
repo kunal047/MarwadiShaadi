@@ -107,7 +107,7 @@
             android:label="Membership"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Dashboard.DashboardActivity"
+                android:name=".Dashboard.DashboardActivity"
             android:label="Dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
@@ -208,11 +208,13 @@
             android:name=".SortBy"
             android:theme="@style/MyTransparentTheme">
         </activity>
-        <activity android:name=".Dashboard_Recent_Profiles.SortByRecent"
-                  android:theme="@style/MyTransparentTheme">
+        <activity
+            android:name=".Dashboard_Recent_Profiles.SortByRecent"
+            android:theme="@style/MyTransparentTheme">
         </activity>
-        <activity android:name=".Dashboard_Reverse_Matching.SortByReverse"
-                  android:theme="@style/MyTransparentTheme">
+        <activity
+            android:name=".Dashboard_Reverse_Matching.SortByReverse"
+            android:theme="@style/MyTransparentTheme">
         </activity>
     </application>
 

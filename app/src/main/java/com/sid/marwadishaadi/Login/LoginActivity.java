@@ -25,6 +25,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.facebook.CallbackManager;
+import com.facebook.login.widget.LoginButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
@@ -32,10 +36,6 @@ import com.sid.marwadishaadi.Notifications_Util;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Signup.SignupActivity;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.facebook.CallbackManager;
-import com.facebook.login.widget.LoginButton;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -229,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                                          email = login_email.getText().toString();
                                          pass = login_pass.getText().toString();
 
-                                         if (!email.trim().matches("^[M|A|J|K|O][0-9]{4,6}")  | EmailChecker(email) & !pass.trim().isEmpty()) {
+                                         if (!email.trim().matches("^[M|A|J|K|O][0-9]{4,6}") | EmailChecker(email) & !pass.trim().isEmpty()) {
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();

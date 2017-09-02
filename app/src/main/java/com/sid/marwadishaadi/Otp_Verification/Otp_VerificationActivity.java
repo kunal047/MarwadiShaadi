@@ -32,9 +32,7 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.sid.marwadishaadi.Analytics_Util;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -42,6 +40,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +68,7 @@ import static com.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.p
 public class Otp_VerificationActivity extends AppCompatActivity {
     public static final int REQUEST_PERMISSION_SETTING = 105;
     public static final int CALL_PHONE_PERMISSION = 102;
-    private static final String TAG = "";
+    private static final String TAG = "Otp_VerificationActivit";
     static int OTP = 0;
     protected EditText otp;
     protected Button submit;
@@ -191,7 +192,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (taskEditText.getText().toString().length() != 10 ||  !TextUtils.isDigitsOnly(taskEditText.getText())) {
+                                if (taskEditText.getText().toString().length() != 10 || !TextUtils.isDigitsOnly(taskEditText.getText())) {
                                     Toast.makeText(Otp_VerificationActivity.this, "Invalid Mobile Number", Toast.LENGTH_SHORT).show();
                                 } else {
                                     sd.setMobile_number(taskEditText.getText().toString());
@@ -239,7 +240,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                     new SendSignUpDetails().execute();
                 } else if (user_otp.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your OTP", Toast.LENGTH_LONG).show();
-                } else if (!TextUtils.isDigitsOnly(user_otp) || user_otp.length() < 6){
+                } else if (!TextUtils.isDigitsOnly(user_otp) || user_otp.length() < 6) {
                     Toast.makeText(getApplicationContext(), "Incorrect OTP", Toast.LENGTH_LONG).show();
                 }
 
@@ -418,6 +419,11 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             AndroidNetworking.post("http://208.91.199.50:5000/basicInfo")
                     .addBodyParameter("height", bi.getHeight())
@@ -464,8 +470,13 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            System.out.println("in this shit");
+
             AndroidNetworking.post("http://208.91.199.50:5000/additionalInfo")
                     .addBodyParameter("aboutMe", ai.getAboutMe())
                     .addBodyParameter("hobbies", ai.getHobbies())
@@ -498,16 +509,17 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                         public void onResponse(JSONArray response) {
                             try {
 
-
                                 newCustomerNo = response.getString(0);
-                                System.out.println(response.toString());
-                                System.out.println("response from string is " + newCustomerNo);
+
+                                Log.d(TAG, "onResponse: From OTP Verfication -------------- " + newCustomerNo);
+                                Log.d(TAG, "onResponse: From OTP Verification ----------------- " + sd.getGender());
                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedpref.edit();
                                 editor.putBoolean("isLoggedIn", true);
                                 editor.putString("customer_id", newCustomerNo);
                                 editor.putString("gender", sd.getGender());
                                 editor.apply();
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -517,6 +529,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
 
+                            Log.d(TAG, "onError: anError is ---------------------------------------- " + anError.toString());
+
                         }
                     });
             return null;
@@ -525,9 +539,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            System.out.println("customer no is " + newCustomerNo);
-//
-                new SendPartnerPreference().execute();
+
+            new SendPartnerPreference().execute();
 
         }
     }
@@ -548,8 +561,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("minAge", pf.getPrefMinAge())
                     .addBodyParameter("maxAge", pf.getPrefMaxAge())
-                    .addBodyParameter("heightFrom", pf.getPrefHeightFrom())
-                    .addBodyParameter("heightTo", pf.getPrefHeightTo())
+                    .addBodyParameter("heightFrom", pf.getPrefHeightFrom().split("-")[1].replace("cm", ""))
+                    .addBodyParameter("heightTo", pf.getPrefHeightTo().split("-")[1].replace("cm", ""))
                     .addBodyParameter("education", pf.getPreferenceEducation().toString().replace("[", "").replace("]", ""))
                     .addBodyParameter("maritalStatus", pf.getPrefMaritalStatus())
                     .addBodyParameter("annualIncome", pf.getPrefAnnualIncome())
@@ -566,7 +579,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(ANError anError) {
-
 
 
                         }

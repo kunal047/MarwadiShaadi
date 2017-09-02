@@ -241,7 +241,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
                         Date currentDate = calendar.getTime();
                         String hash = String.valueOf(currentDate.hashCode());
-                        Log.d(TAG, "onResponse: names are ------------------------------------------ " + customer_name + " " + customerName );
+
                         final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,false,false,true,false,false,false,false,false, false);
                         mDatabase.child(hash).setValue(notification);
 

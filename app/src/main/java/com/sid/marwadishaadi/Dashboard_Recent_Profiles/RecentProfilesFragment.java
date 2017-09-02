@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
 
@@ -45,9 +47,7 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class RecentProfilesFragment extends Fragment {
 
-
-    private static final String TAG = "RecentProfilesFragment";
-    private static int recent_page_no;
+    private static int recent_page_no = 0;
     private List<RecentModel> recentList;
     private List<RecentModel> recentListWithoutPic;
     private RecyclerView recentRecyclerView;
@@ -99,10 +99,10 @@ public class RecentProfilesFragment extends Fragment {
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        if (communityChecker != null) {
+        if (customer_id != null && communityChecker != null) {
             for (int i = 0; i < 5; i++) {
 
-                if (communityChecker.getString(array[i], null).contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
                 }
             }
@@ -173,6 +173,24 @@ public class RecentProfilesFragment extends Fragment {
             }
         }
         new PrepareRecent().execute();
+
+        recentAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() throws InterruptedException {
+
+                recentList.add(null);
+                recentAdapter.notifyDataSetChanged();
+
+                Thread.sleep(1000);
+
+                recentList.remove(recentList.size() - 1);
+                recentAdapter.notifyDataSetChanged();
+
+                new PrepareRecent().execute();
+            }
+        });
+
+
         return mview;
     }
 
@@ -181,9 +199,6 @@ public class RecentProfilesFragment extends Fragment {
         loading.setVisibility(View.GONE);
 
         try {
-
-            recentList.clear();
-            recentAdapter.notifyDataSetChanged();
 
             if (response.length() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -310,11 +325,15 @@ public class RecentProfilesFragment extends Fragment {
     }
 
     private void refreshData() {
+
+        recent_page_no = 0;
         new PrepareRecent().execute();
 
     }
 
     public void loadedFromNetwork(JSONArray response) {
+
+
 
 
         //saving fresh in cache
@@ -333,7 +352,6 @@ public class RecentProfilesFragment extends Fragment {
 
     private class PrepareRecent extends AsyncTask<Void, Void, Void> {
 
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -342,14 +360,20 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
+//            if (recent_page_no == 0) {
+//                recentList.clear();
+//                recentAdapter.notifyDataSetChanged();
+//            }
+
             SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by_recent", MODE_PRIVATE);
 
             String recentShowPhotos = sortBy.getString("showPhotos", "yes");
             String recentSort = sortBy.getString("sortBy", "Registered");
 
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}")
+            AndroidNetworking.post("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
+                    .addPathParameter("page", String.valueOf(recent_page_no))
                     .addBodyParameter("membership", res)
                     .addBodyParameter("showPhotos", recentShowPhotos)
                     .addBodyParameter("recentSort", recentSort)
@@ -360,8 +384,7 @@ public class RecentProfilesFragment extends Fragment {
                         public void onResponse(JSONArray response) {
                             // do anything with response
 
-
-                            //
+                            recent_page_no++;
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache) {
@@ -378,13 +401,20 @@ public class RecentProfilesFragment extends Fragment {
                                     return;
                                 } else {
 
+                                    if (recent_page_no == 0) {
+                                        recentList.clear();
+                                        recentAdapter.notifyDataSetChanged();
+                                    }
+
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
                             } else {
+
                                 // first time load
                                 loadedFromNetwork(response);
                             }
+
 
                         }
 
@@ -409,7 +439,7 @@ public class RecentProfilesFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            loading.setVisibility(View.GONE);
+            recentAdapter.setLoaded();
             swipeRefreshLayout.setRefreshing(false);
         }
     }
