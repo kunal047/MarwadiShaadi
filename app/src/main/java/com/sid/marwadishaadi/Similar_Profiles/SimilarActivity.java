@@ -41,7 +41,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SimilarActivity extends AppCompatActivity {
 
-    private static final String TAG = "SimilarActivity";
     private FirebaseAnalytics mFirebaseAnalytics;
     private SimilarAdapter similarAdapter;
     private List<SimilarModel> similarModelList = new ArrayList<>();

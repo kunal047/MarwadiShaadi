@@ -91,7 +91,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     public static final int REQUEST_PERMISSION_SETTING = 105;
-    private static final String TAG = "UserProfileActivity";
     protected ImageView pref;
     private CollapsingToolbarLayout toolbarLayout;
     private NotificationCompat.Builder notification;
@@ -893,7 +892,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             AndroidNetworking.post("http://208.91.199.50:5000/fetchPDFDetails")
                     .addBodyParameter("customerNo", clickedID)
                     .setPriority(Priority.HIGH)
-                    .setTag(TAG)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override

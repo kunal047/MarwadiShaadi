@@ -90,7 +90,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private byte[] bitmapdata;
     private String nameOfPhoto, timeStamp, file_type;
     private List<String> userImages;
-    private static final String TAG = "UploadPhotoActivity";
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -107,7 +107,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
         view = getWindow().getDecorView().getRootView();
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        Log.d(TAG, "onCreate: from upa ----------------- " + customer_id);
         callbackManager = CallbackManager.Factory.create();
 
 

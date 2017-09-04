@@ -64,7 +64,6 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ViewPager.OnPageChangeListener {
 
-    private static final String TAG = "DashboardActivity";
     TextView nameDrawer;
     private DashboardSectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;

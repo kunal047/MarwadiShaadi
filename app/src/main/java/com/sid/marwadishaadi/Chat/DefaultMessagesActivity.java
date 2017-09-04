@@ -52,7 +52,6 @@ import java.util.TimeZone;
 
 public class DefaultMessagesActivity extends DemoMessagesActivity
         implements MessageInput.InputListener {
-    private static final String TAG = "DefaultMessagesActivity";
     public static MessagesListAdapter<Message> adapter;
     public List<Message> ml;
     Toolbar toolbar;

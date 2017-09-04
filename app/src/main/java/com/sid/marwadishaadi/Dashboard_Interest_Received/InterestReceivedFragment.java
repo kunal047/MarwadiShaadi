@@ -44,7 +44,6 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class InterestReceivedFragment extends Fragment {
 
-    private static final String TAG = "InterestActivity";
     private List<InterestReceivedModel> interestReceivedModelList;
     private RecyclerView recyclerView;
     private InterestReceivedAdapter interestReceivedAdapter;

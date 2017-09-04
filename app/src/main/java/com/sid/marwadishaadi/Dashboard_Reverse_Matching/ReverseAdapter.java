@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class ReverseAdapter extends RecyclerView.Adapter {
-    private static final String TAG = "ReverseAdapter";
+
     private final int VIEW_PROG = 0;
     private final int VIEW_ITEM = 1;
     private boolean reverseIsLoading = false;
@@ -54,8 +54,6 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                 totalItemCount = linearLayoutManager.getItemCount();
                 firstVisibleItem = linearLayoutManager.findFirstVisibleItemPositions(null)[0];
 
-                Log.d(TAG, "onScrolled: (totalItemCount - visibleItemCount) " + (totalItemCount - visibleItemCount));
-                Log.d(TAG, "onScrolled: (firstVisibleItem + visibleThreshold) " + (firstVisibleItem + visibleThreshold));
 
                 if (reverseIsLoading) {
                     if (totalItemCount > previousTotal + 1) {

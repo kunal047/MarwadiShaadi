@@ -20,7 +20,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AdvancedSignupDetailsActivity extends AppCompatActivity implements StepperLayout.StepperListener {
 
-    private static final String TAG = "AdvancedSignupDetailsAc";
     private FirebaseAnalytics mFirebaseAnalytics;
     private StepperLayout mStepperLayout;
 

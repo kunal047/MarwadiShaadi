@@ -33,7 +33,6 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
     private FbGalleryAdapter fbGalleryAdapter;
     private String userid;
     private ArrayList<String> selected_photos_url = new ArrayList<>();
-    private static final String TAG = "FbGalleryActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

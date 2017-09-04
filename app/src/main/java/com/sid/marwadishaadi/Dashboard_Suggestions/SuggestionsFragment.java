@@ -65,7 +65,6 @@ public class SuggestionsFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
 
-    private static final String TAG = "SuggestionsFragment";
 
 //    private OnLoadMoreListener mOnLoadMoreListener;
 
@@ -109,11 +108,9 @@ public class SuggestionsFragment extends Fragment {
         String[] array = getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        Log.d(TAG, "onCreateView: customer id is --------------------------------------------------- " + customer_id);
         if (customer_id != null && communityChecker != null && array.length > 0) {
             for (int i = 0; i < 5; i++) {
 
-                Log.d("", "onCreateView: array value si " + array[i]);
 
                 if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";

@@ -44,7 +44,7 @@ import java.util.TimeZone;
  */
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.MyViewHolder> {
-    private static final String TAG = "FavouritesAdapter";
+
     Context context;
     private List<FavouriteModel> fav;
     private String customer_id,customer_name;

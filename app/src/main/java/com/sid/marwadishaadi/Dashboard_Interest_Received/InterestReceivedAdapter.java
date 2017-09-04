@@ -47,7 +47,6 @@ import java.util.TimeZone;
 
 public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceivedAdapter.MyViewHolder> {
 
-    private static final String TAG = "InterestReceivedAdapter";
     private RecyclerView rv;
     private Context context;
     private FirebaseAnalytics mFirebaseAnalytics;

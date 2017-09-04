@@ -45,7 +45,7 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class Reverse_MatchingFragment extends Fragment {
 
-    private static int reverse_page_no;
+    private static int reverse_page_no = 0;
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<ReverseModel> reverseModelList = new ArrayList<>();
     private RecyclerView reverseRecyclerView;
@@ -308,9 +308,10 @@ public class Reverse_MatchingFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             // do anything with response0
+                            reverse_page_no++;
+
                             if (isAlreadyLoadedFromCache) {
 
-                                reverse_page_no++;
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "reverse_matching");

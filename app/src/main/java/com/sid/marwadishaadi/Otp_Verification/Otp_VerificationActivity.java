@@ -66,9 +66,10 @@ import static com.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.p
 
 // TO DO Please change mobile number , Use an internet connection try catch, Show the mobile number to user where OTP will be send and also give option to change mobile number
 public class Otp_VerificationActivity extends AppCompatActivity {
+
     public static final int REQUEST_PERMISSION_SETTING = 105;
     public static final int CALL_PHONE_PERMISSION = 102;
-    private static final String TAG = "Otp_VerificationActivit";
+
     static int OTP = 0;
     protected EditText otp;
     protected Button submit;
@@ -511,8 +512,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
                                 newCustomerNo = response.getString(0);
 
-                                Log.d(TAG, "onResponse: From OTP Verfication -------------- " + newCustomerNo);
-                                Log.d(TAG, "onResponse: From OTP Verification ----------------- " + sd.getGender());
                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedpref.edit();
                                 editor.putBoolean("isLoggedIn", true);
@@ -529,7 +528,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
 
-                            Log.d(TAG, "onError: anError is ---------------------------------------- " + anError.toString());
 
                         }
                     });
