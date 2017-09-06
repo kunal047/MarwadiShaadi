@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,17 +55,17 @@ public class SuggestionsFragment extends Fragment {
     private TextView editprefs;
     private TextView filters;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private String customer_id,customer_gender;
+    private String customer_id, customer_gender;
     private LinearLayout empty_view_suggestions;
     private String res = "";
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
-    private String suggestionShowPhotos,suggestionSort;
+    private String suggestionShowPhotos, suggestionSort;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
+    public static boolean isMemberPaid = false;
 
-
-//    private OnLoadMoreListener mOnLoadMoreListener;
+    //    private OnLoadMoreListener mOnLoadMoreListener;
 
     @Override
 
@@ -98,7 +97,6 @@ public class SuggestionsFragment extends Fragment {
         progressBar = (ProgressBar) mview.findViewById(R.id.favourite_progress_bar);
 
 
-
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
@@ -114,6 +112,7 @@ public class SuggestionsFragment extends Fragment {
 
                 if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+                    isMemberPaid = true;
                 }
             }
         }
@@ -196,13 +195,19 @@ public class SuggestionsFragment extends Fragment {
             @Override
             public void onLoadMore() throws InterruptedException {
 
-                suggestionModelList.add(null);
-                suggestionAdapter.notifyDataSetChanged();
+//                progressBar.setVisibility(View.VISIBLE);
 
-                Thread.sleep(1000);
 
-                suggestionModelList.remove(suggestionModelList.size() - 1);
-                suggestionAdapter.notifyDataSetChanged();
+
+                recyclerView.post(new Runnable() {
+                    public void run() {
+                        suggestionModelList.add(null);
+                        suggestionAdapter.notifyDataSetChanged();
+
+                        suggestionModelList.remove(suggestionModelList.size() - 1);
+                        suggestionAdapter.notifyDataSetChanged();
+                    }
+                });
 
                 new PrepareSuggestions().execute();
             }
@@ -259,7 +264,6 @@ public class SuggestionsFragment extends Fragment {
 
 
         try {
-
 
 
             if (response.length() == 0) {
@@ -363,18 +367,18 @@ public class SuggestionsFragment extends Fragment {
 
     private class PrepareSuggestions extends AsyncTask<Void, Void, Void> {
 
+
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
+//            progressBar.setVisibility(View.VISIBLE);
 
         }
 
 
         @Override
         protected Void doInBackground(Void... params) {
-
-
 
             SharedPreferences sortBy = getActivity().getSharedPreferences("sort_by", MODE_PRIVATE);
 
@@ -395,7 +399,8 @@ public class SuggestionsFragment extends Fragment {
                         public void onResponse(JSONArray response) {
 
 
-                            //
+                            page_no++;
+
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache) {
@@ -422,7 +427,6 @@ public class SuggestionsFragment extends Fragment {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
-                            page_no++;
                         }
 
                         @Override
@@ -443,7 +447,6 @@ public class SuggestionsFragment extends Fragment {
                     });
 
 
-
             return null;
         }
 
@@ -451,11 +454,10 @@ public class SuggestionsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            suggestionAdapter.setLoaded();
             swipeRefreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.GONE);
 
-            // dismiss progress bar here
+            suggestionAdapter.setLoaded();
 
 
         }

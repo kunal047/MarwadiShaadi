@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BlurMaskFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -13,17 +14,20 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
 import com.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
@@ -53,6 +57,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
 
     TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
+    private boolean isPaidMember = false;
 
     public ProfileAdditionalDetailsFragment() {
         // Required empty public constructor
@@ -127,7 +132,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_profile__additional__details, container, false);
 
@@ -154,6 +158,19 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         gotra = (TextView) mview.findViewById(R.id.gotra);
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
+
+
+        String[] array = getResources().getStringArray(R.array.communities);
+        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        if (communityChecker!=null) {
+            for (int i = 0; i < 5; i++) {
+
+                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                    isPaidMember = true;
+                }
+            }
+        }
 
 
         Intent data = getActivity().getIntent();
@@ -212,14 +229,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("Diet"))) {
                     eatingHabits.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("Diet"))) {
                     eatingHabits.setVisibility(View.GONE);
                 }
 
@@ -233,14 +250,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Drinking habit)")) ) {
                     drinkingHabits.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Drinking habit)"))) {
                     drinkingHabits.setVisibility(View.GONE);
                 }
 
@@ -255,14 +272,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Smoking habit)"))) {
                     smokingHabits.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Smoking habit)"))) {
                     smokingHabits.setVisibility(View.GONE);
                 }
 
@@ -280,6 +297,12 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
+                } else if (!isPaidMember) {
+                    float radius = matchHoroscope.getTextSize() / 3;
+                    BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    matchHoroscope.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    matchHoroscope.getPaint().setMaskFilter(filter);
+
                 }
             }
 
@@ -287,10 +310,29 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
+                } else if (!isPaidMember) {
+                    float radius = matchHoroscope.getTextSize() / 3;
+                    BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                    matchHoroscope.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    matchHoroscope.getPaint().setMaskFilter(filter);
+
                 }
 
             }
         });
+
+        birthtime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isPaidMember) {
+
+                    Toast.makeText(getContext(), "This feature is only available for paid members", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), UpgradeMembershipActivity.class);
+                    getContext().startActivity(intent);
+                }
+            }
+        });
+
         gotra.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,7 +341,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)")) ) {
                     gotra.setVisibility(View.GONE);
                 }
             }
@@ -307,7 +350,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)")) ) {
                     gotra.setVisibility(View.GONE);
                 }
 
@@ -321,14 +364,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if (customer_id != clickedID && (s.length() == 0 ||  s.toString().trim().equals("(Manglik)"))) {
                     manglik.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Manglik)")) ) {
                     manglik.setVisibility(View.GONE);
                 }
 
@@ -342,19 +385,20 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)")) ) {
                     matchHoroscope.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0 && customer_id != clickedID) {
+                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)")) ) {
                     matchHoroscope.setVisibility(View.GONE);
                 }
 
             }
         });
+
 
         if (data.getStringExtra("customerNo") != null) {
 
@@ -480,7 +524,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             gotra.setText(g);
             String m = result.getString(8) + " (Manglik)";
             manglik.setText(m);
-            String mh = result.getString(9) + " (Match horoscope?)";
+            String mh = result.getString(9) + " (Should match horoscope ?)";
             matchHoroscope.setText(mh);
 
 

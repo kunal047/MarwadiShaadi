@@ -23,7 +23,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +47,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
  */
@@ -71,6 +72,8 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
     private boolean isLoading = true;
     private int visibleThreshold = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
+    private String[] array;
+    private boolean isPaidMember;
 
     public SuggestionDataAdapter(Context context, final List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
@@ -106,11 +109,12 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
                         // Do something
 
                         try {
+                            isLoading = true;
                             mOnLoadMoreListener.onLoadMore();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        isLoading = true;
+
                     }
 
 
@@ -144,7 +148,6 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
         if (viewType == VIEW_ITEM) {
 
             if (progressBar != null) {
@@ -158,11 +161,17 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
             customer_id = sharedpref.getString("customer_id", null);
             customer_name = sharedpref.getString("firstname", null);
 
+            array = context.getResources().getStringArray(R.array.communities);
+            SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+            for (int i = 0; i < 5; i++) {
+                if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                    isPaidMember = true;
+                }
+            }
             return new SuggestionViewHolder(iView);
         } else {
             iView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_loading_item, parent, false);
-
             SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
             customer_id = sharedpref.getString("customer_id", null);
             customer_name = sharedpref.getString("firstname", null);
@@ -197,16 +206,22 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
             ((SuggestionViewHolder) holder).name.setText(ag);
             ((SuggestionViewHolder) holder).cusId.setText(suggest.getCusId());
 
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.default_drawer)
-                    .error(R.drawable.default_drawer);
+            if (!isPaidMember) {
+                Glide.with(context)
+                        .load(suggest.getImgAdd())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .bitmapTransform(new BlurTransformation(context))
+                        .into(((SuggestionViewHolder) holder).imgAdd);
+            } else {
+                Glide.with(context)
+                        .load(suggest.getImgAdd())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .into(((SuggestionViewHolder) holder).imgAdd);
 
+            }
 
-            Glide.with(context)
-                    .load(suggest.getImgAdd())
-                    .apply(options)
-                    .into(((SuggestionViewHolder) holder).imgAdd);
 
             ((SuggestionViewHolder) holder).height.setText(suggest.getHeight());
             ((SuggestionViewHolder) holder).workLoc.setText(suggest.getWorkLoc());
@@ -424,6 +439,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
             sparkButtonFav = (SparkButton) view.findViewById(R.id.fav);
             sparkButtonInterest = (SparkButton) view.findViewById(R.id.interest);
 
+
             imgAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -452,7 +468,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
 
 
                     int counter = 0;
-                    String[] array = context.getResources().getStringArray(R.array.communities);
+
                     SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
                     for (int i = 0; i < 5; i++) {
                         if (communityChecker.getString(array[i], "null").contains("Yes")) {

@@ -2,10 +2,10 @@ package com.sid.marwadishaadi.Dashboard_Reverse_Matching;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Created by Sid on 31-May-17.
@@ -35,6 +36,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
     private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
     private ProgressBar progressBar;
     private RecyclerView reverseRecyclerView;
+    private boolean isPaidMember;
 
     private List<ReverseModel> reverseModelList;
     private Context context;
@@ -112,6 +114,15 @@ public class ReverseAdapter extends RecyclerView.Adapter {
 
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.reverse_row, parent, false);
+            String[] array = context.getResources().getStringArray(R.array.communities);
+
+            SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+            for (int i = 0; i < 5; i++) {
+                if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                    isPaidMember = true;
+                }
+            }
+
             return new ReverseViewHolder(itemView);
 
         } else {
@@ -130,14 +141,26 @@ public class ReverseAdapter extends RecyclerView.Adapter {
 
 
             final ReverseModel rev = reverseModelList.get(position);
-            RequestOptions options = new RequestOptions()
-                    .centerInside()
-                    .placeholder(R.drawable.default_drawer)
-                    .error(R.drawable.default_drawer);
-            Glide.with(context)
-                    .load(rev.getImg_url())
-                    .apply(options)
-                    .into(((ReverseViewHolder) holder).dp);
+
+            if (!isPaidMember) {
+                Glide.with(context)
+                        .load(rev.getImg_url())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .bitmapTransform(new BlurTransformation(context))
+                        .fitCenter()
+                        .into(((ReverseViewHolder) holder).dp);
+            } else {
+                Glide.with(context)
+                        .load(rev.getImg_url())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .fitCenter()
+                        .into(((ReverseViewHolder) holder).dp);
+            }
+
+
+
             ((ReverseViewHolder) holder).name.setText(rev.getName());
             ((ReverseViewHolder) holder).age.setText(String.valueOf(rev.getAge()) + " yrs");
             ((ReverseViewHolder) holder).education.setText(rev.getEducationDegree());
@@ -146,8 +169,8 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
-                    i.putExtra("from","reverseMatching");
-                    i.putExtra("customerNo",rev.getCustomerNo());
+                    i.putExtra("from", "reverseMatching");
+                    i.putExtra("customerNo", rev.getCustomerNo());
                     context.startActivity(i);
                 }
             });
@@ -157,8 +180,8 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, UserProfileActivity.class);
-                    i.putExtra("from","reverseMatching");
-                    i.putExtra("customerNo",rev.getCustomerNo());
+                    i.putExtra("from", "reverseMatching");
+                    i.putExtra("customerNo", rev.getCustomerNo());
                     context.startActivity(i);
                 }
             });
@@ -181,11 +204,11 @@ public class ReverseAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class ReverseViewHolder extends RecyclerView.ViewHolder{
+    public class ReverseViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView dp;
         public TextView name;
-        public TextView age,education,city;
+        public TextView age, education, city;
 
         public ReverseViewHolder(View itemView) {
             super(itemView);

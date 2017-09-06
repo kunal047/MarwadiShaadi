@@ -66,12 +66,12 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
 import com.sid.marwadishaadi.DeviceRegistration;
+import com.sid.marwadishaadi.Membership.MembershipActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,6 +85,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -171,6 +172,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         customer_name = sharedpref.getString("firstname", null);
         clickedID = customer_id;
 
+
         String[] array = getResources().getStringArray(R.array.communities);
 
         for (int i = 0; i < 5; i++) {
@@ -233,11 +235,25 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(UserProfileActivity.this, FullscreenImageActivity.class);
-                i.putExtra("customerNo", clickedID);
-                i.putExtra("from", "userprofile");
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+
+                if (!isPaidMember) {
+
+                    Toast.makeText(getApplicationContext(), "To view photos get membership !", Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(UserProfileActivity.this, MembershipActivity.class);
+                    startActivity(i);
+
+                } else {
+
+                    Intent i = new Intent(UserProfileActivity.this, FullscreenImageActivity.class);
+                    i.putExtra("customerNo", clickedID);
+                    i.putExtra("from", "userprofile");
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }
+
+
+
             }
         });
 
@@ -777,7 +793,20 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 if (images.size() > 0) {
 
-                                    Picasso.with(getApplicationContext()).load(images.get(0)).fit().into(imageView);
+                                    if (isPaidMember) {
+                                        Glide.with(getApplicationContext()).load(images.get(0)).into(imageView);
+
+                                    } else {
+                                        Glide.with(getApplicationContext())
+                                                .load(images.get(0))
+                                                .placeholder(R.drawable.default_drawer)
+                                                .error(R.drawable.default_drawer)
+                                                .bitmapTransform(new BlurTransformation(getApplicationContext()))
+                                                .into(imageView);
+                                    }
+
+
+//                                    Picasso.with(getApplicationContext()).load(images.get(0)).fit().into(imageView);
 
                                 } else {
                                     Glide.with(getApplicationContext()).load(R.drawable.default_drawer).into(imageView);

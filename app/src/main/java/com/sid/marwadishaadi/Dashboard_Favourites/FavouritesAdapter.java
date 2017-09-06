@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -19,7 +20,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * Created by pranay on 02-06-2017.
  */
@@ -51,6 +53,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
     private LinearLayout empty_view_favourites;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
+    private boolean isPaidMember;
 
     public FavouritesAdapter(Context context, List<FavouriteModel> fav,LinearLayout empty_view_favourites) {
         this.context = context;
@@ -67,6 +70,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_name = sharedpref.getString("firstname",null);
+
+        String[] array = context.getResources().getStringArray(R.array.communities);
+        SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+        for (int i = 0; i < 5; i++) {
+            if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                isPaidMember = true;
+            }
+        }
 
         return new MyViewHolder(itemView);
 
@@ -93,16 +104,24 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 //                .placeholder(R.drawable.default_drawer)
 //                .error(R.drawable.default_drawer);
 
-        RequestOptions options = new RequestOptions()
-                .fitCenter()
-                .placeholder(R.drawable.default_drawer)
-                .error(R.drawable.default_drawer);
 
+        if (isPaidMember) {
+            Glide.with(context)
+                    .load(favouriteModel.getImageurl())
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .fitCenter()
+                    .into(holder.fav_profile_image);
+        } else {
+            Glide.with(context)
+                    .load(favouriteModel.getImageurl())
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .fitCenter()
+                    .bitmapTransform(new BlurTransformation(context))
+                    .into(holder.fav_profile_image);
+        }
 
-        Glide.with(context)
-                .load(favouriteModel.getImageurl())
-                .apply(options)
-                .into(holder.fav_profile_image);
 
 
 //        Picasso.with(context).load(favouriteModel.getImageurl()).fit().into(holder.fav_profile_image);

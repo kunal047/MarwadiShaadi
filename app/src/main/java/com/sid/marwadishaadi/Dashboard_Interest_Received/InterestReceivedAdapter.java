@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -19,19 +20,18 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.sid.marwadishaadi.Analytics_Util;
-import com.sid.marwadishaadi.DeviceRegistration;
-import com.sid.marwadishaadi.Notifications.NotificationsModel;
-import com.sid.marwadishaadi.Notifications_Util;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.DeviceRegistration;
+import com.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.sid.marwadishaadi.Notifications_Util;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import org.json.JSONArray;
 
@@ -39,6 +39,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
 /**
@@ -52,9 +54,10 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<InterestReceivedModel> interestReceivedModelList;
     private List<InterestReceivedModel> mInterestReceivedModelList;
-    private String customer_id,customer_name;
+    private String customer_id, customer_name;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
+    private boolean isPaidMember;
 
     public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
         this.context = context;
@@ -72,7 +75,15 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
         SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        customer_name = sharedpref.getString("firstname",null);
+        customer_name = sharedpref.getString("firstname", null);
+
+        String[] array = context.getResources().getStringArray(R.array.communities);
+        SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+        for (int i = 0; i < 5; i++) {
+            if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                isPaidMember = true;
+            }
+        }
 
         return new MyViewHolder(itemView);
     }
@@ -85,12 +96,26 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         String ag = interestReceivedModel.getName() + ", " + interestReceivedModel.getAge();
 
         holder.customerNo.setText(interestReceivedModel.getCustomerId());
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.default_drawer)
-                .error(R.drawable.default_drawer);
 
-        Glide.with(context).load(interestReceivedModel.getUserImage()).apply(options).into(holder.userImage);
+
+        if (!isPaidMember) {
+            Glide.with(context)
+                    .load(interestReceivedModel.getUserImage())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .bitmapTransform(new BlurTransformation(context))
+                    .error(R.drawable.default_drawer)
+                    .into(holder.userImage);
+        } else {
+            Glide.with(context)
+                    .load(interestReceivedModel.getUserImage())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .into(holder.userImage);
+        }
+
+
         holder.name.setText(ag);
         holder.highestDegree.setText(interestReceivedModel.getHighestDegree());
         holder.location.setText(interestReceivedModel.getLocation());
@@ -98,9 +123,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         holder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context,UserProfileActivity.class);
-                i.putExtra("from","interestReceived");
-                i.putExtra("customerNo",interestReceivedModel.getCustomerId());
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from", "interestReceived");
+                i.putExtra("customerNo", interestReceivedModel.getCustomerId());
                 context.startActivity(i);
 
             }
@@ -109,9 +134,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context,UserProfileActivity.class);
-                i.putExtra("from","interestReceived");
-                i.putExtra("customerNo",interestReceivedModel.getCustomerId());
+                Intent i = new Intent(context, UserProfileActivity.class);
+                i.putExtra("from", "interestReceived");
+                i.putExtra("customerNo", interestReceivedModel.getCustomerId());
                 context.startActivity(i);
 
             }
@@ -139,6 +164,13 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         return mInterestReceivedModelList.size();
     }
 
+    public void setData(DataSnapshot dataSnapshot) {
+
+        // looping through all the devices and sending push notification to each of 'em
+        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " accepted your Interest", "Interest Accepted", "Interest Accept");
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView userImage;
@@ -162,7 +194,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                 public void onClick(View v) {
 
                     // analytics
-                    Analytics_Util.logAnalytic(mFirebaseAnalytics,"Interest Accepted","button");
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Interest Accepted", "button");
 
                     final int position = getAdapterPosition();
                     final InterestReceivedModel interestmodel = mInterestReceivedModelList.get(position);
@@ -181,7 +213,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
                     Date currentDate = calendar.getTime();
                     String hash = String.valueOf(currentDate.hashCode());
-                    final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,false,true,false,false,false,false,false,false, false);
+                    final NotificationsModel notification = new NotificationsModel(hash, customer_name, date, 3, false, false, true, false, false, false, false, false, false, false);
                     mDatabase.child(hash).setValue(notification);
 
                     // sending push notification to her
@@ -242,7 +274,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                 public void onClick(View v) {
 
                     // analytics
-                    Analytics_Util.logAnalytic(mFirebaseAnalytics,"Interest Rejected","button");
+                    Analytics_Util.logAnalytic(mFirebaseAnalytics, "Interest Rejected", "button");
 
                     final int position = getAdapterPosition();
                     final InterestReceivedModel interestmodel = mInterestReceivedModelList.get(position);
@@ -266,13 +298,6 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                 }
             });
         }
-    }
-
-    public void setData(DataSnapshot dataSnapshot){
-
-        // looping through all the devices and sending push notification to each of 'em
-        DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " accepted your Interest", "Interest Accepted", "Interest Accept");
     }
 
     private class PrepareInterest extends AsyncTask<String, Void, Void> {

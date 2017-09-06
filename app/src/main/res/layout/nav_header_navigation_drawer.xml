@@ -1,113 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/colorPrimary"
+              android:orientation="vertical"
+              android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <TextView
+        android:id="@+id/title_of_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="Marwadi Shaadi"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_dp"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/default_drawer"
         app:civ_border_color="@android:color/white"
-        app:civ_border_width="0.5dp" />
+        app:civ_border_width="0.5dp"/>
 
     <TextView
         android:id="@+id/name_drawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20dp"
         android:gravity="center"
-        android:textStyle="italic"
         android:padding="15dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#fff"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textSize="20dp"
+        android:textStyle="italic"/>
 
     <LinearLayout
-        android:weightSum="3"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        android:padding="8dp"
         android:orientation="horizontal"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout
-        android:id="@+id/nav_interest"
-        android:clickable="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_drawer_interest"
-            />
+        android:padding="8dp"
+        android:weightSum="3">
 
-        <TextView
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:text="Interest"/>
-        </LinearLayout>
         <LinearLayout
+            android:id="@+id/nav_interest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/nav_inbox"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_action_inbox"
-            />
-            <TextView
-                android:layout_gravity="center"
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_action_drawer_interest"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Interest"
                 android:textAlignment="center"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/nav_inbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_inbox"
+                />
+
+            <TextView
                 android:id="@+id/inboxText"
-                android:text="Inbox"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Inbox"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nav_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:clickable="true"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
 
-            android:src="@drawable/ic_action_drawer_search"
-            />
-
-            <TextView
-                android:layout_gravity="center"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textAlignment="center"
+
+                android:src="@drawable/ic_action_drawer_search"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:textColor="@android:color/black"
-                android:text="Search"/>
+                android:layout_weight="1"
+                android:text="Search"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -115,8 +134,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5sp"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         ></View>
 </LinearLayout>
 

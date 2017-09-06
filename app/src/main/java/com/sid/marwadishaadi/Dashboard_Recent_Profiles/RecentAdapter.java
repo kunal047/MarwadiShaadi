@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +41,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 
 /**
@@ -64,6 +66,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
     private int visibleThreshold = 0;
     private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
     private ProgressBar progressBar;
+    private boolean isPaidMember = false;
 
 
     public RecentAdapter(Context context, List<RecentModel> recentModelList, RecyclerView recyclerView) {
@@ -137,13 +140,21 @@ public class RecentAdapter extends RecyclerView.Adapter {
             iView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_recent, parent, false);
 
+
             SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
             customer_id = sharedpref.getString("customer_id", null);
             customer_gender = sharedpref.getString("gender", null);
             customer_name = sharedpref.getString("firstname", null);
+            String[] array = context.getResources().getStringArray(R.array.communities);
+            SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+            for (int i = 0; i < 5; i++) {
+                if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                    isPaidMember = true;
+                }
+            }
+
             return new RecentViewHolder(iView);
-        }
-        else {
+        } else {
             iView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_loading_item, parent, false);
 
@@ -187,11 +198,25 @@ public class RecentAdapter extends RecyclerView.Adapter {
                     context.startActivity(i);
                 }
             });
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.drawable.default_drawer)
-                    .error(R.drawable.default_drawer);
 
-            Glide.with(context).load(recentModel.getRecentUserImage()).apply(options).into(((RecentViewHolder) holder).recentUserImage);
+            if (!isPaidMember) {
+                Glide.with(context)
+                        .load(recentModel.getRecentUserImage())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .bitmapTransform(new BlurTransformation(context))
+                        .into(((RecentViewHolder) holder).recentUserImage);
+            } else {
+                Glide.with(context)
+                        .load(recentModel.getRecentUserImage())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .into(((RecentViewHolder) holder).recentUserImage);
+
+            }
+
+
+
             ((RecentViewHolder) holder).recentName.setText(recentModel.getRecentName() + ", ");
             ((RecentViewHolder) holder).recentAge.setText(recentModel.getRecentAge());
             ((RecentViewHolder) holder).recentOnline.setText(recentModel.getRecentOnline());
@@ -355,6 +380,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return recentModelList.size();
     }
+
     class ProgressViewHolder extends RecyclerView.ViewHolder {
 
 

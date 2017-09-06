@@ -2,6 +2,8 @@ package com.sid.marwadishaadi.Dashboard_Interest_Sent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -18,6 +19,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Created by Lawrence Dalmet on 07-06-2017.
@@ -30,6 +33,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
     private FirebaseAnalytics mFirebaseAnalytics;
     private Context context;
     private List<InterestSentModel> interestSentModelList;
+    private boolean isPaidMember;
 
 
 
@@ -48,6 +52,14 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_interestsent, parent, false);
 
+        String[] array = context.getResources().getStringArray(R.array.communities);
+        SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+        for (int i = 0; i < 5; i++) {
+            if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                isPaidMember = true;
+            }
+        }
+
         return new MyViewHolder(itemView);
     }
 
@@ -57,11 +69,26 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
         final InterestSentModel interestSentModel = interestSentModelList.get(position);
 
         String ag = interestSentModel.getName() + ", " + interestSentModel.getAge() + " years";
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.default_drawer)
-                .error(R.drawable.default_drawer);
-        Glide.with(context).load(interestSentModel.getImgAdd()).apply(options).into(holder.profilepic);
+
+        if (!isPaidMember) {
+            Glide.with(context)
+                    .load(interestSentModel.getImgAdd())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .bitmapTransform(new BlurTransformation(context))
+                    .into(holder.profilepic);
+
+        } else {
+            Glide.with(context)
+                    .load(interestSentModel.getImgAdd())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .into(holder.profilepic);
+
+        }
+
         holder.name_age.setText(ag);
         holder.degree.setText(interestSentModel.getDegree());
         holder.location.setText(interestSentModel.getCity());

@@ -19,7 +19,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +45,6 @@ import com.sid.marwadishaadi.Dashboard_Suggestions.SuggestionsFragment;
 import com.sid.marwadishaadi.Feedback.FeedbackActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsActivity;
-import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.Search;
 import com.sid.marwadishaadi.Services.ChatNotifyService;
@@ -64,7 +62,9 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ViewPager.OnPageChangeListener {
 
+
     TextView nameDrawer;
+
     private DashboardSectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ImageView userdp;
@@ -92,6 +92,27 @@ public class DashboardActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
+//        Intent intent = getIntent();
+//        mChosenContinueMethod = intent.getIntExtra(CONTINUE_METHOD, OVERLAY_METHOD);
+//
+//        mEnterAnimation = new AlphaAnimation(0f, 1f);
+//        mEnterAnimation.setDuration(600);
+//        mEnterAnimation.setFillAfter(true);
+//
+//        mExitAnimation = new AlphaAnimation(1f, 0f);
+//        mExitAnimation.setDuration(600);
+//        mExitAnimation.setFillAfter(true);
+//
+//        mChainTourGuide = ChainTourGuide.init(this).with(TourGuide.Technique.Click)
+//                .setPointer(new Pointer())
+//                .setToolTip(new ToolTip()
+//                        .setTitle("Suggestion")
+//                        .setDescription("Get your suggestion")
+//                        .setGravity(Gravity.RIGHT))
+//                .setOverlay(new Overlay()
+//                        .setEnterAnimation(mEnterAnimation)
+//                        .setExitAnimation(mExitAnimation));
+
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -113,8 +134,8 @@ public class DashboardActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            if (snapshot.child("isRead").getValue().toString().contains("false")) {
-                                notificationCount = notificationCount +  1;
+                            if ( snapshot.child("isRead").getValue() != null && snapshot.child("isRead").getValue().toString().contains("false")) {
+                                notificationCount = notificationCount + 1;
                                 if (notificationCount == 0) {
                                     m.setTitle("Notifications");
                                 } else {
@@ -128,8 +149,6 @@ public class DashboardActivity extends AppCompatActivity
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-
 
 
         toolbarSearch.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +259,7 @@ public class DashboardActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.dash_tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
+
 
     @Override
     public void onBackPressed() {
