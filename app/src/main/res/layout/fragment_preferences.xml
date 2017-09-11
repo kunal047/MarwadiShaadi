@@ -474,7 +474,7 @@
                         android:id="@+id/checkOccupationDoNotFP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doesn't Matter"/>
+                        android:text="Does not Matter"/>
                 </LinearLayout>
 
                 <!--AI-->
@@ -638,7 +638,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Doesn't Matter"/>
+                        android:text="Does not Matter"/>
                 </LinearLayout>
 
                 <!--Body Type-->
@@ -708,7 +708,7 @@
                         android:id="@+id/checkBodyTypeDoNotFP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Doesn't Matter"/>
+                        android:text="Does not Matter"/>
                 </LinearLayout>
 
                 <!--Physical Status-->

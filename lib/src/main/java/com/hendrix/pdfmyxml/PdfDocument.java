@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 
 import com.hendrix.pdfmyxml.interfaces.IDisposable;
 import com.hendrix.pdfmyxml.utils.BitmapUtils;
@@ -264,18 +263,15 @@ public class PdfDocument implements IDisposable{
 
                 if(!_inflateOnMainThread) {
                     for (AbstractViewRenderer view : _pages) {
-                        Log.i(TAG_PDF_MY_XML, "render page");
                         renderView(view);
                     }
                 }
 
                 internal_generatePdf();
 
-                Log.i(TAG_PDF_MY_XML, "pdf 1");
 
                 clearPages();
 
-                Log.i(TAG_PDF_MY_XML, "pdf 2");
 
                 // go back to the main thread
                 _handler.post(new Runnable() {
@@ -289,7 +285,6 @@ public class PdfDocument implements IDisposable{
                                 _listener.onComplete(file);
                         }
 
-                        Log.i(TAG_PDF_MY_XML, "pdf 3");
 
                         release();
                     }
@@ -337,7 +332,6 @@ public class PdfDocument implements IDisposable{
                 page                = new Page(pdf, _orientation.A4());
                 image               = new Image(pdf, inputStream, ImageType.PNG);
 
-                Log.i(TAG_PDF_MY_XML, "add page");
 
                 inputStream.close(); //doesn't do anything in byte array
 

@@ -59,58 +59,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-
-        <FrameLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-
-                <TextView
-                    android:id="@+id/preference"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#b9b9b9"
-                    android:clickable="true"
-                    android:drawableStart="@drawable/ic_user_edit"
-                    android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="Preference"
-                    android:textAlignment="center"
-                    android:textColor="#000"
-                    android:textSize="15dp"
-                    />
-
-                <TextView
-                    android:id="@+id/sortby"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#b9b9b9"
-                    android:clickable="true"
-                    android:drawableLeft="@drawable/ic_action_filter"
-                    android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="Sort By"
-                    android:textAlignment="center"
-                    android:textColor="#000"
-                    android:textSize="15dp"
-                    />
-
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout

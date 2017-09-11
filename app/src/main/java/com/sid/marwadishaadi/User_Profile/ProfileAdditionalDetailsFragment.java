@@ -14,7 +14,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -298,10 +297,10 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
                 } else if (!isPaidMember) {
-                    float radius = matchHoroscope.getTextSize() / 3;
+                    float radius = birthtime.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
-                    matchHoroscope.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    matchHoroscope.getPaint().setMaskFilter(filter);
+                    birthtime.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    birthtime.getPaint().setMaskFilter(filter);
 
                 }
             }
@@ -311,10 +310,10 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
                 } else if (!isPaidMember) {
-                    float radius = matchHoroscope.getTextSize() / 3;
+                    float radius = birthtime.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
-                    matchHoroscope.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    matchHoroscope.getPaint().setMaskFilter(filter);
+                    birthtime.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    birthtime.getPaint().setMaskFilter(filter);
 
                 }
 

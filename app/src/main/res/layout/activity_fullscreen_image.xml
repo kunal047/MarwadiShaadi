@@ -19,6 +19,7 @@
             android:layout_width="275dp"
             android:layout_height="375dp"
             android:layout_gravity="center"
+            
             app:fillColor="#FFFFFFFF"
             app:pageColor="#00000000"
             app:radius="4dp"

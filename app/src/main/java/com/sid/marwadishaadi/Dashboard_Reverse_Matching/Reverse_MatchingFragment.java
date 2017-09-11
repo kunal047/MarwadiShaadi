@@ -201,32 +201,39 @@ public class Reverse_MatchingFragment extends Fragment {
                 for (int i = 0; i < response.length(); i++) {
 
                     JSONArray array = response.getJSONArray(i);
-                    String customerNo = array.getString(0);
-                    String name = array.getString(1);
-                    String dateOfBirth = array.getString(2);
+                    if (array.getString(0).contains("no new result")) {
+                        break;
+                    } else {
+                        String customerNo = array.getString(0);
+                        String name = array.getString(1);
+                        String dateOfBirth = array.getString(2);
 //                                Thu, 18 Jan 1990 00:00:00 GMT
-                    DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-                    Date date = formatter.parse(dateOfBirth);
+                        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                        Date date = formatter.parse(dateOfBirth);
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date);
-                    String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(date);
+                        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
 
-                    String[] partsOfDate = formatedDate.split("-");
-                    int day = Integer.parseInt(partsOfDate[0]);
-                    int month = Integer.parseInt(partsOfDate[1]);
-                    int year = Integer.parseInt(partsOfDate[2]);
-                    int age = getAge(year, month, day);
-                    String education = array.getString(3);
-                    String occupationLocation = array.getString(4);
-                    name = name + " " + array.getString(5);
+                        String[] partsOfDate = formatedDate.split("-");
+                        int day = Integer.parseInt(partsOfDate[0]);
+                        int month = Integer.parseInt(partsOfDate[1]);
+                        int year = Integer.parseInt(partsOfDate[2]);
+                        int age = getAge(year, month, day);
+                        String education = array.getString(3);
+                        String occupationLocation = array.getString(4);
+                        name = name + " " + array.getString(5);
 
-                    String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
+                        String imageUrl = "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + array.getString(6);
 
-                    ReverseModel reverseModel = new ReverseModel(imageUrl, name, age, education, occupationLocation, customerNo);
+                        ReverseModel reverseModel = new ReverseModel(imageUrl, name, age, education, occupationLocation, customerNo);
 
-                    reverseModelList.add(reverseModel);
-                    reverseAdapter.notifyDataSetChanged();
+                        reverseModelList.add(reverseModel);
+                        reverseAdapter.notifyDataSetChanged();
+                        empty_view_reverse.setVisibility(View.GONE);
+
+
+                    }
 
                 }
             }

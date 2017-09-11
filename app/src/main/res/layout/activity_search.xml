@@ -818,7 +818,7 @@
                         android:padding="10dp">
                         <CheckBox
                             android:id="@+id/occupation_doesnt_matter"
-                            android:text="Doesn't Matter"
+                            android:text="Does not Matter"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -933,7 +933,7 @@
 
                         <CheckBox
                             android:id="@+id/complexion_doesnt_matter"
-                            android:text="Doesn't Matter"
+                            android:text="Does not Matter"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -1011,7 +1011,7 @@
                         android:padding="10dp">
                         <CheckBox
                             android:id="@+id/bodytype_doesnt_matter"
-                            android:text="Doesn't Matter"
+                            android:text="Does not Matter"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

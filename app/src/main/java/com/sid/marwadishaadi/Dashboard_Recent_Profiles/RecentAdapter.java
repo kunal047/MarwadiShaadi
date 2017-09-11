@@ -199,6 +199,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
                 }
             });
 
+
             if (!isPaidMember) {
                 Glide.with(context)
                         .load(recentModel.getRecentUserImage())
@@ -214,7 +215,6 @@ public class RecentAdapter extends RecyclerView.Adapter {
                         .into(((RecentViewHolder) holder).recentUserImage);
 
             }
-
 
 
             ((RecentViewHolder) holder).recentName.setText(recentModel.getRecentName() + ", ");

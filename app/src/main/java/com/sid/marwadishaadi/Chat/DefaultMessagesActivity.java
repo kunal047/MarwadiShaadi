@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -228,12 +227,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        // do anything with response TODO
-
-
-
-
-
+                        // do anything with response
                         // adding it to her notifications list
                         String date = String.valueOf(DateFormat.format("dd-MM-yyyy", new Date()));
                         mDatabase = FirebaseDatabase.getInstance().getReference(messageToId).child("Notifications");

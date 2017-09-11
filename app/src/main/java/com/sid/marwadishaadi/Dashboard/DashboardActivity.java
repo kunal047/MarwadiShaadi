@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -92,6 +94,19 @@ public class DashboardActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // not connected to the internet
+        }
 //        Intent intent = getIntent();
 //        mChosenContinueMethod = intent.getIntExtra(CONTINUE_METHOD, OVERLAY_METHOD);
 //
@@ -134,7 +149,7 @@ public class DashboardActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            if ( snapshot.child("isRead").getValue() != null && snapshot.child("isRead").getValue().toString().contains("false")) {
+                            if (snapshot.child("isRead").getValue() != null && snapshot.child("isRead").getValue().toString().contains("false")) {
                                 notificationCount = notificationCount + 1;
                                 if (notificationCount == 0) {
                                     m.setTitle("Notifications");

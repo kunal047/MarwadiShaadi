@@ -29,7 +29,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -236,7 +235,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             @Override
             public void onClick(View v) {
 
-                if (!isPaidMember) {
+                if (customer_id != clickedID && !isPaidMember) {
 
                     Toast.makeText(getApplicationContext(), "To view photos get membership !", Toast.LENGTH_LONG).show();
 
@@ -799,6 +798,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                     } else {
                                         Glide.with(getApplicationContext())
                                                 .load(images.get(0))
+                                                .dontAnimate()
                                                 .placeholder(R.drawable.default_drawer)
                                                 .error(R.drawable.default_drawer)
                                                 .bitmapTransform(new BlurTransformation(getApplicationContext()))
@@ -1105,7 +1105,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                             doc.setListener(new PdfDocument.Callback() {
                                 @Override
                                 public void onComplete(File file) {
-                                    Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
 
                                     Toast.makeText(UserProfileActivity.this, "Profile saved in Downloads Folder", Toast.LENGTH_SHORT).show();
 
@@ -1125,7 +1124,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 @Override
                                 public void onError(Exception e) {
-                                    Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
                                 }
                             });
 

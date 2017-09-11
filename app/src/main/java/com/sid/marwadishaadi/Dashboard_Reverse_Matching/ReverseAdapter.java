@@ -143,11 +143,12 @@ public class ReverseAdapter extends RecyclerView.Adapter {
             final ReverseModel rev = reverseModelList.get(position);
 
             if (!isPaidMember) {
+
                 Glide.with(context)
-                        .load(rev.getImg_url())
+                        .load(R.drawable.default_drawer)
+                        .bitmapTransform(new BlurTransformation(context))
                         .placeholder(R.drawable.default_drawer)
                         .error(R.drawable.default_drawer)
-                        .bitmapTransform(new BlurTransformation(context))
                         .fitCenter()
                         .into(((ReverseViewHolder) holder).dp);
             } else {
@@ -206,9 +207,9 @@ public class ReverseAdapter extends RecyclerView.Adapter {
 
     public class ReverseViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView dp;
-        public TextView name;
-        public TextView age, education, city;
+        private ImageView dp;
+        private TextView name;
+        private TextView age, education, city;
 
         public ReverseViewHolder(View itemView) {
             super(itemView);

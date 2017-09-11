@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -265,8 +264,8 @@ public class RecentProfilesFragment extends Fragment {
                     int diffHours = (int) diff / (60 * 60 * 1000);
                     int diffInDays = (int) ((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-                    if (diffInDays >= 365) {
-                        createdOn += "More than a year ago";
+                    if (diffInDays >= 15) {
+                        createdOn += "A few days ago";
                     } else if (diffInDays > 1) {
 //                                        System.err.println("Difference in number of days (2) : " + diffInDays);
                         createdOn += diffInDays + " days ago";

@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -559,8 +558,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("minAge", pf.getPrefMinAge())
                     .addBodyParameter("maxAge", pf.getPrefMaxAge())
-                    .addBodyParameter("heightFrom", pf.getPrefHeightFrom().split("-")[1].replace("cm", ""))
-                    .addBodyParameter("heightTo", pf.getPrefHeightTo().split("-")[1].replace("cm", ""))
+                    .addBodyParameter("heightFrom", pf.getPrefHeightFrom())
+                    .addBodyParameter("heightTo", pf.getPrefHeightTo())
                     .addBodyParameter("education", pf.getPreferenceEducation().toString().replace("[", "").replace("]", ""))
                     .addBodyParameter("maritalStatus", pf.getPrefMaritalStatus())
                     .addBodyParameter("annualIncome", pf.getPrefAnnualIncome())

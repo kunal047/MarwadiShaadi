@@ -8,18 +8,16 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.sid.marwadishaadi.Dashboard.DashboardActivity;
-import com.sid.marwadishaadi.Login.LoginActivity;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.sid.marwadishaadi.Login.LoginActivity;
+import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -33,36 +31,35 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         FirebaseDynamicLinks.getInstance()
-            .getDynamicLink(getIntent())
-            .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                @Override
-                public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                    Uri deepLink = null;
-                    if (pendingDynamicLinkData != null) {
-                        deepLink = pendingDynamicLinkData.getLink();
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+                        if (deepLink != null) {
+
+                            // sending deeplink
+                            setUpIntent(0, deepLink.toString());
+
+                        } else {
+
+                            setUpIntent(1, null);
+                        }
                     }
-                    if (deepLink != null) {
-
-                        // sending deeplink
-                        setUpIntent(0, deepLink.toString());
-
-                    } else {
-
-                        setUpIntent(1, null);
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
                     }
-                }
-            })
-            .addOnFailureListener(this, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("Error", "getDynamicLink:onFailure", e);
-                }
-            });
+                });
 
 
     }
-    
-    public void setUpIntent(final int activitycode, final String deeplink){
+
+    public void setUpIntent(final int activitycode, final String deeplink) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -70,24 +67,24 @@ public class SplashScreen extends AppCompatActivity {
 
                 // from deeplink -> go to profile
                 if (activitycode == 0) {
-                    if (isUserLoggedIn()){
-                        i = new Intent(SplashScreen.this,UserProfileActivity.class);
-                        if(deeplink!=null){
-                            i.putExtra("deeplink",deeplink);
+                    if (isUserLoggedIn()) {
+                        i = new Intent(SplashScreen.this, UserProfileActivity.class);
+                        if (deeplink != null) {
+                            i.putExtra("deeplink", deeplink);
                         }
-                    }else{
-                        i = new Intent(SplashScreen.this,LoginActivity.class);
-                        i.putExtra("deeplink",deeplink);
+                    } else {
+                        i = new Intent(SplashScreen.this, LoginActivity.class);
+                        i.putExtra("deeplink", deeplink);
                     }
 
-                }else{
-                    if (isUserLoggedIn()){
+                } else {
+                    if (isUserLoggedIn()) {
                         i = new Intent(SplashScreen.this, DashboardActivity.class);
-                    }else{
-                        if (isFirstLaunch()){
-                            i = new Intent(SplashScreen.this,MainActivity.class);
-                        }else{
-                            i = new Intent(SplashScreen.this,LoginActivity.class);
+                    } else {
+                        if (isFirstLaunch()) {
+                            i = new Intent(SplashScreen.this, MainActivity.class);
+                        } else {
+                            i = new Intent(SplashScreen.this, LoginActivity.class);
 
                         }
                     }
@@ -95,17 +92,17 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        },duration);
+        }, duration);
     }
 
-    private boolean isUserLoggedIn(){
+    private boolean isUserLoggedIn() {
         SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedpref.getBoolean("isLoggedIn", false);
     }
 
-    private boolean isFirstLaunch(){
+    private boolean isFirstLaunch() {
         SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return sharedpref.getBoolean("isFirstTime",false);
+        return sharedpref.getBoolean("isFirstTime", false);
     }
 }
 

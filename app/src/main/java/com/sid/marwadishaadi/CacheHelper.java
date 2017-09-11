@@ -53,8 +53,17 @@ public class CacheHelper {
     }
 
     public static String retrieveHash(Context context, String type) {
-        SharedPreferences cacheinfo = context.getSharedPreferences("cacheinfo", MODE_PRIVATE);
-        String hash = cacheinfo.getString(type, "");
+        String hash = "";
+        try {
+
+            SharedPreferences cacheinfo = context.getSharedPreferences("cacheinfo", MODE_PRIVATE);
+            hash = cacheinfo.getString(type, "");
+
+
+        } catch (Exception e) {
+
+        }
+
         return hash;
     }
 

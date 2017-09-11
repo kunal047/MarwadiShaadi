@@ -96,6 +96,8 @@ public class SuggestionsFragment extends Fragment {
 
         progressBar = (ProgressBar) mview.findViewById(R.id.favourite_progress_bar);
 
+        progressBar.setVisibility(View.VISIBLE);
+
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);

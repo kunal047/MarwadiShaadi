@@ -38,13 +38,13 @@
     <string-array name="children_array">
         <item>No</item>
         <item>Yes</item>
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
     </string-array>
 
     <string-array name="sort_by_array">
         <item>Recently Registered</item>
         <item>Recent Active</item>
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
     </string-array>
 
     <string-array name="caste_array">
@@ -57,7 +57,7 @@
     </string-array>
 
     <string-array name="caste_array_search">
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
         <item>Maheshwari</item>
         <item>Agarwal</item>
         <item>Jain</item>
@@ -147,7 +147,7 @@
     </string-array>
 
     <string-array name="fstatus_search_array">
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
         <item>Affluent Class</item>
         <item>Upper Middle Class</item>
         <item>Middle Class</item>
@@ -207,7 +207,7 @@
     </string-array>
 
     <string-array name="physicalstatus_search_array">
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
         <item>Normal</item>
         <item>Physically Challenged</item>
     </string-array>
@@ -216,18 +216,18 @@
         <item>Gotra ?</item>
         <item>Yes</item>
         <item>No</item>
-        <item>Don\'t Know</item>
+        <item>Do not Know</item>
     </string-array>
 
     <string-array name="manglik_array">
         <item>Manglik ?</item>
         <item>Yes</item>
         <item>No</item>
-        <item>Don\'t Know</item>
+        <item>Do not Know</item>
     </string-array>
 
     <string-array name="manglik_search_array">
-        <item>Doesn\'t matter</item>
+        <item>Does not matter</item>
         <item>Yes</item>
         <item>No</item>
     </string-array>
@@ -319,7 +319,7 @@
     </string-array>
 
     <string-array name="height_search_array">
-        <item>Doesn\'t matter</item>
+        <item>Does not matter</item>
         <item>4ft - 121cm</item>
         <item>4ft 1in - 124cm</item>
         <item>4ft 2in - 127cm</item>
@@ -385,7 +385,7 @@
 
 
     <string-array name="aincome_search_array">
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
         <item>Upto 3L</item>
         <item>3L - 6L</item>
         <item>6L - 10L</item>
@@ -447,7 +447,7 @@
     </string-array>
 
     <string-array name="status_search_array">
-        <item>Doesn\'t Matter</item>
+        <item>Does not matter</item>
         <item>Unmarried</item>
         <item>Widow</item>
         <item>Divorced</item>

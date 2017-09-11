@@ -201,10 +201,10 @@ public class Search extends AppCompatActivity {
         lpg = (LinearLayout) findViewById(R.id.list_pg);
         lg = (LinearLayout) findViewById(R.id.list_g);
         lug = (LinearLayout) findViewById(R.id.list_ug);
-        occupation.add("Doesn't Matter");
-        bodyType.add("Doesn't Matter");
-        complexion.add("Doesn't Matter");
-        education.add("Doesn't Matter");
+        occupation.add("Does not matter");
+        bodyType.add("Does not matter");
+        complexion.add("Does not matter");
+        education.add("Does not matter");
 
         maritalstatus = (EditText) findViewById(R.id.search_Marital_status);
         maritalstatus.setOnClickListener(new View.OnClickListener() {
@@ -805,23 +805,23 @@ public class Search extends AppCompatActivity {
                     gender = "Male";
                 }
                 String query = "";
-                query = "select tbl_user.birthdate,tbl_user_files.file_name,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER JOIN tbl_user_files ON tbl_user.customer_no=tbl_user_files.customer_no INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes' and tbl_login.user_deleted='0' ) and  (tbl_user_files.file_type='profile_image') and ( tbl_user.gender='"+gender+"' ) ";
+                query = "select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes') and (tbl_login.user_deleted='0') and ( tbl_user.gender='"+gender+"' ) ";
 //                ON tbl_user.customer_no=tbl_user_files.customer_no
                 int year = Calendar.getInstance().get(Calendar.YEAR);
-                query += "and ( tbl_user.birthdate>=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
+                query += "and (YEAR(tbl_user.birthdate) >=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
                 String s1, s2;
                 s1 = height_from.getSelectedItem().toString();
                 s2 = height_to.getSelectedItem().toString();
 
 
-                if (s1.equals("Doesn't matter") && s2.equals("Doesn't matter")) {
+                if (s1.contains("matter") && s2.contains("matter")) {
                     //no code is here *********** remove space from cm in first entry
 
                 } else {
-                    if (s1.equals("Doesn't matter") & !s2.equals("Doesn't matter")) {
+                    if (s1.contains("matter") & !s2.contains("matter")) {
                         query += "and  tbl_user.height<=" + s2.substring(s2.length() - 5, s2.length() - 2);
 
-                    } else if (!s1.equals("Doesn't matter") & s2.equals("Doesn't matter")) {
+                    } else if (!s1.contains("matter") & s2.contains("matter")) {
                         query += "and tbl_user.height>=" + s1.substring(s1.length() - 5, s1.length() - 2);
                     } else {
                         query += "and ( tbl_user.height<=" + s2.substring(s2.length() - 5, s2.length() - 2) + " and tbl_user.height>=" + s1.substring(s1.length() - 5, s1.length() - 2) + ")";
@@ -848,10 +848,11 @@ public class Search extends AppCompatActivity {
                         query+="tbl_user.customer_no like '"+communityPackage.getString(community[4],null).toCharArray()[0]+"%' ) ";
                     }*/
 
-                } else if (str.contains("Doesn't Matter")) {
+                } else if (str.contains("matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.caste_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
+                        System.out.println("int his thing printing --- " + arrayString[i]);
                         query += "tbl_user.customer_no like \"" + arrayString[i].toCharArray()[0] + "%\" or ";
                     }
                     query += "tbl_user.customer_no like \"" + arrayString[arrayString.length - 1].toCharArray()[0] + "%\" )  ";
@@ -867,7 +868,7 @@ public class Search extends AppCompatActivity {
 
                 if (str.equals("[]") || str.equals("")) {
                     //no code is here
-                } else if (str.contains("Doesn't Matter")) {
+                } else if (str.contains("matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.status_search_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
@@ -885,7 +886,7 @@ public class Search extends AppCompatActivity {
 
                 if (str.equals("[]") || str.equals("")) {
                     //no code is here
-                } else if (str.contains("Doesn't Matter")) {
+                } else if (str.contains("matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.fstatus_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
@@ -904,7 +905,7 @@ public class Search extends AppCompatActivity {
 
                 if (str.equals("[]") || str.equals("")) {
                     //no code is here
-                } else if (str.contains("Doesn't Matter")) {
+                } else if (str.contains("matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.aincome_search_array);
                     for (int i = 0; i < arrayString.length; i++) {
@@ -934,7 +935,7 @@ public class Search extends AppCompatActivity {
 
                 if (str.equals("[]") || str.equals("")) {
                     //no code is here
-                } else if (str.contains("Doesn't Matter")) {
+                } else if (str.contains("Does not matter")) {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.physicalstatus_search_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
@@ -949,7 +950,7 @@ public class Search extends AppCompatActivity {
                     }
                     query += "tbl_user.special_cases = \"" + physicalstatusList.get(countphysicalstatus - 1) + "\") ";
                 }
-                if (education.indexOf("Doesn't Matter") != -1 && education.size() != 1) {
+                if (education.indexOf("matter") != -1 && education.size() != 1) {
                     query += (" and  ( tbl_user.education=\"" + education.get(1).toString() + "\"");
                     for (int i = 2; i < education.size(); i++) {
                         query += (" or tbl_user.education =\"" + education.get(i).toString() + "\"");
@@ -965,7 +966,7 @@ public class Search extends AppCompatActivity {
                 }
                 query += ")";
 
-                if (complexion.indexOf("Doesn't Matter") == -1) {
+                if (complexion.contains("matter")) {
                     query += (" and ( tbl_user.complexion=\"" + complexion.get(0).toString() + "\"");
 
                     for (int i = 1; i < complexion.size(); i++) {
@@ -982,7 +983,7 @@ public class Search extends AppCompatActivity {
                 }
                 query += ")";
 
-                if (bodyType.indexOf("Doesn't Matter") == -1) {
+                if (bodyType.contains("matter") ) {
                     query += (" and (  tbl_user.body_structure=\"" + complexion.get(0).toString() + "\"");
 
                     for (int i = 1; i < bodyType.size(); i++) {
@@ -999,7 +1000,7 @@ public class Search extends AppCompatActivity {
                 }
                 query += ")";
 
-                if (occupation.indexOf("Doesn't Matter") == -1) {
+                if (occupation.contains("matter") ) {
                     query += (" and ( tbl_user.current_occup=\"" + occupation.get(0).toString() + "\"");
                     for (int i = 1; i < occupation.size(); i++) {
                         query += (" or tbl_user.current_occup= \"" + occupation.get(i).toString() + "\"");
@@ -1037,13 +1038,13 @@ public class Search extends AppCompatActivity {
                     query += " tbl_user.city=" + "(select tbl_city.City_id from tbl_city where tbl_city.City_name=\"" + cityList.get(cityList.size() - 1) + "\" ) ) ";
                 }
                 String mangli = manglik.getSelectedItem().toString();
-                if (mangli.equals("Doesn't matter")) {
+                if (mangli.contains("matter")) {
                     //nothig is here for you
                 } else {
                     query += " and ( tbl_user.manglik=\"" + mangli + "\" ) ";
                 }
                 String childs = children.getSelectedItem().toString();
-                if (childs.equals("Doesn't Matter")) {
+                if (childs.contains("matter")) {
                     //nthg is here for you
                 } else {
                     query += " and ( tbl_user.children=\"" + childs + "\")";
@@ -1051,9 +1052,9 @@ public class Search extends AppCompatActivity {
 
                 String itm = sort_by.getSelectedItem().toString();
 
-                if (itm.equals("Doesn't Matter")) {
+                if (itm.contains("matter")) {
                     //nothing is here for you
-                } else if (itm.equals("Recent Profiles")) {
+                } else if (itm.equalsIgnoreCase("Recent Profiles")) {
                     query += " order by tbl_user.created_on asc ";
                 } else {
                     query += " order by tbl_login.last_activity_on asc ";
@@ -1308,7 +1309,7 @@ public class Search extends AppCompatActivity {
                 if (sharedPreferences.getString("occupationArray",null).contains("Studying-Not Employed") ) {
                     studying.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Doesn't Matter") ) {
+                if (sharedPreferences.getString("occupationArray",null).contains("Does not matter") ) {
                     dont_matter.setChecked(true);
                 }
             }
@@ -1336,7 +1337,7 @@ public class Search extends AppCompatActivity {
                 if (sharedPreferences.getString("complexionArray",null).contains("Dark") ) {
                     dark.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Doesn't Matter") ) {
+                if (sharedPreferences.getString("complexionArray",null).contains("Does not matter") ) {
                     doesnt_matter.setChecked(true);
                 }
 
@@ -1354,7 +1355,7 @@ public class Search extends AppCompatActivity {
                 if (sharedPreferences.getString("bodyTypeArray",null).contains("Heavy") ) {
                     heavy.setChecked(true);
                 }
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Doesn't Matter") ) {
+                if (sharedPreferences.getString("bodyTypeArray",null).contains("Does not matter") ) {
                     doesntMatter.setChecked(true);
                 }
 
@@ -1955,7 +1956,7 @@ public class Search extends AppCompatActivity {
                                         Date now = new Date();
                                         Date date = null;
                                         try {
-                                            date = formatter.parse(user.get(0).toString());
+                                            date = formatter.parse(user.get(1).toString());
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -1973,7 +1974,7 @@ public class Search extends AppCompatActivity {
                                         String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
                                         if(user.get(8).equals("")){
-                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }else{
                                             suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }

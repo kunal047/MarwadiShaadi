@@ -32,6 +32,9 @@ public class SortBy extends AppCompatActivity {
 
         CheckBox checkBoxOnlyWithPhotos = (CheckBox) findViewById(R.id.checkBoxOnlyWithPhotos);
         Button buttonUpdate = (Button) findViewById(R.id.sortby_update);
+        Button sortByCancel = (Button) findViewById(R.id.sortby_cancel);
+
+
 
         int selectedId = radioGroupSortBy.getCheckedRadioButtonId();
         // find the radiobutton by returned id
@@ -71,6 +74,8 @@ public class SortBy extends AppCompatActivity {
 //        }
 
 
+
+
         radioGroupSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -93,6 +98,14 @@ public class SortBy extends AppCompatActivity {
                 } else {
                     showPhotos = "no";
                 }
+            }
+        });
+
+        sortByCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(2);
+                finish();
             }
         });
 
