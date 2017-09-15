@@ -1,5 +1,7 @@
 package com.sid.marwadishaadi.Dashboard;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -50,12 +52,15 @@ import com.sid.marwadishaadi.Notifications.NotificationsActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.Search;
 import com.sid.marwadishaadi.Services.ChatNotifyService;
+import com.sid.marwadishaadi.Services.PhotoUploadNotifyService;
 import com.sid.marwadishaadi.Settings.SettingsActivity;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -87,7 +92,19 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(DashboardActivity.this, ChatNotifyService.class));
+
+        startService(new Intent(this, ChatNotifyService.class));
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(this, ChatNotifyService.class);
+        PendingIntent pintent = PendingIntent
+                .getService(this, 0, intent, 0);
+
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // Start service every three hour
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                10800 * 1000, pintent);
+
+
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
         ImageView toolbarSearch = (ImageView) findViewById(R.id.toolbar_search);
@@ -99,13 +116,14 @@ public class DashboardActivity extends AppCompatActivity
         if (activeNetwork != null) { // connected to the internet
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
                 // connected to wifi
-                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                 // connected to the mobile provider's data plan
-                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
             }
         } else {
             // not connected to the internet
+            Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
         }
 //        Intent intent = getIntent();
 //        mChosenContinueMethod = intent.getIntExtra(CONTINUE_METHOD, OVERLAY_METHOD);
@@ -480,7 +498,20 @@ public class DashboardActivity extends AppCompatActivity
                                     SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     SharedPreferences.Editor editors = userinfo.edit();
                                     editors.putString("imageURL", imageURL);
+                                    editors.putString("nameOfCustomer", name);
                                     editors.apply();
+
+                                    if (response.getString(2).contains("null")) {
+                                        Calendar sevendayalarm = Calendar.getInstance();
+
+                                        sevendayalarm.add(Calendar.DATE, 3);
+
+                                        Intent intent = new Intent(getApplicationContext(), PhotoUploadNotifyService.class);
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 001, intent, 0);
+
+                                        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                        am.set(AlarmManager.RTC_WAKEUP, sevendayalarm.getTimeInMillis(), pendingIntent);
+                                    }
 
                                     Picasso.with(getApplicationContext())
                                             .load(imageURL)

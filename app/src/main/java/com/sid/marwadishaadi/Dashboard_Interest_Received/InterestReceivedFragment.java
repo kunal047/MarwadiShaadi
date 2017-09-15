@@ -1,5 +1,9 @@
 package com.sid.marwadishaadi.Dashboard_Interest_Received;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +26,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
 import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.Services.InterestNotifyService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +43,8 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 import static com.facebook.FacebookSdk.getCacheDir;
+import static com.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 
 
 public class InterestReceivedFragment extends Fragment {
@@ -56,6 +61,7 @@ public class InterestReceivedFragment extends Fragment {
     private ProgressBar mProgressBar;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
+    private String interestSentOn;
 
     public InterestReceivedFragment() {
         // Required empty public constructor
@@ -177,10 +183,35 @@ public class InterestReceivedFragment extends Fragment {
                     } else {
                         resultReplyAction = 2;
                     }
-                    String interestSentOn = array.getString(6);
+
+                    interestSentOn = array.getString(6);
+
+                    date = formatter.parse(interestSentOn);
+                    cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+
+                    partsOfDate = formatedDate.split("-");
+                    day = Integer.parseInt(partsOfDate[0]);
+                    month = Integer.parseInt(partsOfDate[1]);
+                    year = Integer.parseInt(partsOfDate[2]);
+                    int diffFromNow = getAge(year, month, day);
+
+                    if (diffFromNow % 7 == 0 && resultReplyAction == 2) {
+
+                        Calendar sevendayalarm = Calendar.getInstance();
+
+
+                        sevendayalarm.add(Calendar.DATE, 7);
+
+                        Intent intent = new Intent(getContext(), InterestNotifyService.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 001, intent, 0);
+
+                        AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        am.set(AlarmManager.RTC_WAKEUP, sevendayalarm.getTimeInMillis(), pendingIntent);
+                    }
                     name = name + " " + array.getString(7);
                     String imageUrl = array.getString(8);
-
 
                     InterestReceivedModel interestReceivedModels = new InterestReceivedModel(customerNo, name, age, education, cityName, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, resultReplyAction);
 

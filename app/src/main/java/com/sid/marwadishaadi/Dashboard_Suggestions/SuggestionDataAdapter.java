@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  */
 
 
-public class SuggestionDataAdapter extends RecyclerView.Adapter {
+public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
@@ -68,12 +69,14 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
     private String customer_id, customer_name;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
-    private OnLoadMoreListener mOnLoadMoreListener;
-    private boolean isLoading = true;
+    private boolean isLoading;
     private int visibleThreshold = 1;
-    private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
+    private int lastVisibleItem, totalItemCount;
     private String[] array;
     private boolean isPaidMember;
+    private OnLoadMoreListener mOnLoadMoreListener;
+
+    private static final String TAG = "SuggestionDataAdapter";
 
     public SuggestionDataAdapter(Context context, final List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
@@ -91,30 +94,21 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
 
 
                     final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    visibleItemCount = linearLayoutManager.getChildCount();
+
                     totalItemCount = linearLayoutManager.getItemCount();
-                    firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
-                    if (isLoading) {
-                        if (totalItemCount > previousTotal + 1) {
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                            isLoading = false;
-                            previousTotal = totalItemCount;
 
+                    if (lastVisibleItem != -1 && !isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        if (mOnLoadMoreListener != null) {
+                            try {
+                                mOnLoadMoreListener.onLoadMore();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-
-                    if (!isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                        // End has been reached
-                        // Do something
-
-                        try {
-                            isLoading = true;
-                            mOnLoadMoreListener.onLoadMore();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
+                        isLoading = true;
                     }
 
 
@@ -127,11 +121,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
     }
 
     public void setLoaded() {
-        if (progressBar != null) {
-            progressBar.setVisibility(View.GONE);
-        }
         isLoading = false;
-
     }
 
     //
@@ -397,13 +387,13 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter {
         // looping through all the devices and sending push notification to each of 'em
 //        Notifications_Util
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "Marwadi Shaadi: New Interest", "Interest Request");
     }
 
     @Override
     public int getItemCount() {
 
-        return suggestionModelList.size();
+        return suggestionModelList == null ? 0 : suggestionModelList.size();
     }
 
     class ProgressViewHolder extends RecyclerView.ViewHolder {

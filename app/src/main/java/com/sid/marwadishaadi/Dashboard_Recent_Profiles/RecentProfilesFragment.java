@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +49,6 @@ public class RecentProfilesFragment extends Fragment {
 
     private static int recent_page_no = 0;
     private List<RecentModel> recentList;
-    private List<RecentModel> recentListWithoutPic;
     private RecyclerView recentRecyclerView;
     private RecentAdapter recentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -98,11 +98,14 @@ public class RecentProfilesFragment extends Fragment {
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        if (customer_id != null && communityChecker != null) {
-            for (int i = 0; i < 5; i++) {
+        String communityLength = communityChecker.getString("communityArrayLength", "0");
+
+        if (customer_id != null && communityChecker != null && array.length > 0) {
+            for (int i = 0; i < Integer.parseInt(communityLength); i++) {
 
                 if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+
                 }
             }
         }
@@ -118,7 +121,6 @@ public class RecentProfilesFragment extends Fragment {
         textViewSortBy = (TextView) mview.findViewById(R.id.sortbyOfRecent);
 
         recentList = new ArrayList<>();
-        recentListWithoutPic = new ArrayList<>();
         recentAdapter = new RecentAdapter(getContext(), recentList, recentRecyclerView);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
@@ -180,12 +182,16 @@ public class RecentProfilesFragment extends Fragment {
                 recentList.add(null);
                 recentAdapter.notifyDataSetChanged();
 
-                Thread.sleep(1000);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                recentList.remove(recentList.size() - 1);
-                recentAdapter.notifyDataSetChanged();
+                        recentList.remove(recentList.size() - 1);
+                        recentAdapter.notifyDataSetChanged();
+                        new PrepareRecent().execute();
+                    }
+                }, 1000);
 
-                new PrepareRecent().execute();
             }
         });
 
@@ -210,13 +216,11 @@ public class RecentProfilesFragment extends Fragment {
 
                 empty_view_recent.setVisibility(View.GONE);
 
-
                 for (int i = 0; i < response.length(); i++) {
 
                     JSONArray array = response.getJSONArray(i);
 
                     String lastActiveOn = array.getString(0);
-
                     String name = array.getString(1);
                     String dateOfBirth = array.getString(2);
 
@@ -332,9 +336,6 @@ public class RecentProfilesFragment extends Fragment {
 
     public void loadedFromNetwork(JSONArray response) {
 
-
-
-
         //saving fresh in cache
         CacheHelper.save("recent_profiles", response.toString(), cache);
 
@@ -391,10 +392,6 @@ public class RecentProfilesFragment extends Fragment {
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "recent_profiles");
 
-                                //
-                                //
-                                //
-
                                 if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
                                     //  .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
@@ -419,15 +416,17 @@ public class RecentProfilesFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-
                             // handle error
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //here
-                                    loading.setVisibility(View.GONE);
-                                }
-                            });
+                            if (getActivity() != null) {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //here
+                                        loading.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
                         }
                     });
 

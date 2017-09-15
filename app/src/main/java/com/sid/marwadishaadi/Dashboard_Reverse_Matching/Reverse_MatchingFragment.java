@@ -59,6 +59,7 @@ public class Reverse_MatchingFragment extends Fragment {
     private boolean isAlreadyLoadedFromCache = false;
     private ProgressBar mProgressBar;
     private TextView showPhotosOfReverse;
+    private boolean showMore = true;
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -158,24 +159,28 @@ public class Reverse_MatchingFragment extends Fragment {
             }
         }
 
-
         new PrepareReverse().execute();
+
 
         reverseAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() throws InterruptedException {
-                reverseModelList.add(null);
-                reverseAdapter.notifyDataSetChanged();
 
-                Thread.sleep(1000);
+                if (showMore) {
+                    reverseModelList.add(null);
+                    reverseAdapter.notifyDataSetChanged();
 
-                reverseModelList.remove(reverseModelList.size() - 1);
-                reverseAdapter.notifyDataSetChanged();
 
-                new PrepareReverse().execute();
 
+                    reverseModelList.remove(reverseModelList.size() - 1);
+                    reverseAdapter.notifyDataSetChanged();
+
+                    new PrepareReverse().execute();
+                }
             }
         });
+
+
 
         return mview;
     }
@@ -183,6 +188,11 @@ public class Reverse_MatchingFragment extends Fragment {
     private void parseReverseMatches(JSONArray response) {
 
         try {
+
+            if (response.length() < 25) {
+                showMore = false;
+            }
+
 
             mProgressBar.setVisibility(View.GONE);
 
@@ -232,7 +242,6 @@ public class Reverse_MatchingFragment extends Fragment {
                         reverseAdapter.notifyDataSetChanged();
                         empty_view_reverse.setVisibility(View.GONE);
 
-
                     }
 
                 }
@@ -244,6 +253,12 @@ public class Reverse_MatchingFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        if (response.length() == 25) {
+
+        }
+
+
     }
 
     private void refreshContent() {

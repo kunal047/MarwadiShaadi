@@ -229,12 +229,16 @@ public class SettingsActivity extends AppCompatActivity {
                                 editors.apply();
 
                                 SharedPreferences sharedPre = getSharedPreferences("userinfo", MODE_PRIVATE);
+
+                                new LogoutCustomer().execute(sharedPre.getString("customer_id", ""));
+
                                 SharedPreferences.Editor editor = sharedPre.edit();
                                 editor.putBoolean("isLoggedIn", false);
                                 editor.putString("email", "");
                                 editor.putString("password", "");
                                 editor.putString("customer_id", "");
                                 editor.commit();
+
 
                                 Notifications_Util.unRegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
 
@@ -258,6 +262,9 @@ public class SettingsActivity extends AppCompatActivity {
                 alertbox.show();
             }
         });
+
+
+
 
         reset_pass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -413,6 +420,16 @@ public class SettingsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.exit, 0);
 
         return true;
+    }
+
+    private class LogoutCustomer extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+
+            return null;
+        }
     }
 
 

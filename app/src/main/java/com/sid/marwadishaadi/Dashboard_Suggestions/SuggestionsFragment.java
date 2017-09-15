@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,8 @@ public class SuggestionsFragment extends Fragment {
     private String suggestionShowPhotos, suggestionSort;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
-    public static boolean isMemberPaid = false;
+
+    private static final String TAG = "SuggestionsFragment";
 
     //    private OnLoadMoreListener mOnLoadMoreListener;
 
@@ -87,9 +89,7 @@ public class SuggestionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        page_no = 0;
 
-        // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_suggestions, container, false);
         empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
         empty_view_suggestions.setVisibility(View.GONE);
@@ -108,13 +108,14 @@ public class SuggestionsFragment extends Fragment {
         String[] array = getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
+        String communityLength = communityChecker.getString("communityArrayLength", "0");
+
         if (customer_id != null && communityChecker != null && array.length > 0) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < Integer.parseInt(communityLength); i++) {
 
-
+                Log.d(TAG, "onCreateView: communityChecker values are ------------------------------ " + communityChecker.getString(array[i], "Np"));
                 if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
-                    isMemberPaid = true;
                 }
             }
         }
@@ -148,10 +149,15 @@ public class SuggestionsFragment extends Fragment {
 
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
+
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+
         suggestionAdapter = new SuggestionDataAdapter(getContext(), suggestionModelList, recyclerView);
+
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
+
         recyclerView.setItemAnimator(fadeInLeftAnimator);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -199,19 +205,18 @@ public class SuggestionsFragment extends Fragment {
 
 //                progressBar.setVisibility(View.VISIBLE);
 
+                suggestionModelList.add(null);
+                suggestionAdapter.notifyDataSetChanged();
 
-
-                recyclerView.post(new Runnable() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
-                        suggestionModelList.add(null);
-                        suggestionAdapter.notifyDataSetChanged();
-
                         suggestionModelList.remove(suggestionModelList.size() - 1);
                         suggestionAdapter.notifyDataSetChanged();
-                    }
-                });
+                        new PrepareSuggestions().execute();
 
-                new PrepareSuggestions().execute();
+                    }
+                }, 1000);
             }
         });
 
@@ -221,7 +226,11 @@ public class SuggestionsFragment extends Fragment {
 
 
     private void refreshContent() {
+        page_no = 0;
+        progressBar.setVisibility(View.VISIBLE);
         new PrepareSuggestions().execute();
+
+
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -247,7 +256,6 @@ public class SuggestionsFragment extends Fragment {
 
     public void loadedFromNetwork(JSONArray response) {
 
-
         //saving fresh in cache
         CacheHelper.save("suggestions", response.toString(), cache);
 
@@ -264,9 +272,9 @@ public class SuggestionsFragment extends Fragment {
 
     public void parseSuggestions(JSONArray response) {
 
+        progressBar.setVisibility(View.GONE);
 
         try {
-
 
             if (response.length() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -279,7 +287,6 @@ public class SuggestionsFragment extends Fragment {
 
 
                 empty_view_suggestions.setVisibility(View.GONE);
-
 
                 for (int i = 0; i < response.length(); i++) {
 
@@ -326,7 +333,7 @@ public class SuggestionsFragment extends Fragment {
                         double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                         annualIncome = (int) first + "L - " + (int) second + "L";
                     } else {
-                        annualIncome = "No Income mentioned.";
+                        annualIncome = "No Income mentioned";
                     }
 
 
@@ -346,17 +353,6 @@ public class SuggestionsFragment extends Fragment {
 
                     suggestionModelList.add(suggestionModel);
                     suggestionAdapter.notifyDataSetChanged();
-//                    if (!suggestionModelList.contains(suggestionModel) && imageUrl.contains("null")) {
-//                        suggestionModelList.add(suggestionModel);
-//                        suggestionAdapter.notifyDataSetChanged();
-//
-//                    } else {
-//                        suggestionModelList.add(0, suggestionModel);
-//                        suggestionAdapter.notifyDataSetChanged();
-//
-//                    }
-
-
                 }
             }
 
@@ -370,12 +366,9 @@ public class SuggestionsFragment extends Fragment {
     private class PrepareSuggestions extends AsyncTask<Void, Void, Void> {
 
 
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            progressBar.setVisibility(View.VISIBLE);
-
         }
 
 
@@ -400,9 +393,7 @@ public class SuggestionsFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
 
-
                             page_no++;
-
 
                             // if no change in data
                             if (isAlreadyLoadedFromCache) {
@@ -435,16 +426,6 @@ public class SuggestionsFragment extends Fragment {
                         public void onError(ANError error) {
 
                             // handle error
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-
-                                    // dismiss progress bar here
-
-
-                                }
-                            });
                         }
                     });
 
@@ -456,9 +437,8 @@ public class SuggestionsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            swipeRefreshLayout.setRefreshing(false);
             progressBar.setVisibility(View.GONE);
-
+            swipeRefreshLayout.setRefreshing(false);
             suggestionAdapter.setLoaded();
 
 

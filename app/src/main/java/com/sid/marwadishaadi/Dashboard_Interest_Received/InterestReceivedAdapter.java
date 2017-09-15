@@ -52,7 +52,6 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     private RecyclerView rv;
     private Context context;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private List<InterestReceivedModel> interestReceivedModelList;
     private List<InterestReceivedModel> mInterestReceivedModelList;
     private String customer_id, customer_name;
     private DatabaseReference mDatabase;
@@ -74,8 +73,8 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
 
         SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        customer_id = sharedpref.getString("customer_id", null);
-        customer_name = sharedpref.getString("firstname", null);
+        customer_id = sharedpref.getString("customer_id", "null");
+        customer_name = sharedpref.getString("firstname", "null");
 
         String[] array = context.getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
@@ -168,7 +167,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " accepted your Interest", "Interest Accepted", "Interest Accept");
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " accepted your Interest", "Marwadi Shaadi: Interest Accepted", "Interest Accept");
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -247,8 +246,6 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
                         }
                     });
-
-                    // =======================================================================
 
                     Snackbar snackbar = Snackbar
                             .make(rv, "Interest Accepted !", Snackbar.LENGTH_LONG)

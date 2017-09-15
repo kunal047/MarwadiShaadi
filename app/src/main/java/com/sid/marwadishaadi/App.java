@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -27,6 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class App extends Application{
 
+    private static final String TAG = "App";
     public static List<Place> placeslist = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

@@ -105,7 +105,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         else if(notificationsModel.isMsgRec())
         {
-            String notification = notificationsModel.getName()+" has sent you an message.";
+            String notification;
+            if (notificationsModel.getName() == null) {
+                notification = "You received a new message.";
+            } else {
+                notification = notificationsModel.getName() + " has sent you an message.";
+
+            }
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
                 holder.notiftext.setTypeface(null, Typeface.NORMAL);

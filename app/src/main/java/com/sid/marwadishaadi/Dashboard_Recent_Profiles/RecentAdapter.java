@@ -51,9 +51,10 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class RecentAdapter extends RecyclerView.Adapter {
 
+    private static final String TAG = "RecentAdapter";
     private final int VIEW_PROG = 0;
     private final int VIEW_ITEM = 1;
-    private boolean recentIsLoading = false;
+    private boolean recentIsLoading;
     private Context context;
     private List<RecentModel> recentModelList;
     private String favouriteState, interestState;
@@ -63,11 +64,10 @@ public class RecentAdapter extends RecyclerView.Adapter {
     private DatabaseReference mDatabases;
     private View iView;
     private OnLoadMoreListener mOnLoadMoreListener;
-    private int visibleThreshold = 0;
-    private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
+    private int visibleThreshold = 1;
+    private int lastVisibleItem, totalItemCount;
     private ProgressBar progressBar;
     private boolean isPaidMember = false;
-
 
     public RecentAdapter(Context context, List<RecentModel> recentModelList, RecyclerView recyclerView) {
         this.context = context;
@@ -81,31 +81,19 @@ public class RecentAdapter extends RecyclerView.Adapter {
                 super.onScrolled(recyclerView, dx, dy);
 
                 final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                visibleItemCount = linearLayoutManager.getChildCount();
                 totalItemCount = linearLayoutManager.getItemCount();
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
 
-                if (recentIsLoading) {
-                    if (totalItemCount > previousTotal + 1) {
-
-                        recentIsLoading = false;
-                        previousTotal = totalItemCount;
-
+                if (!recentIsLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (mOnLoadMoreListener != null) {
+                        try {
+                            mOnLoadMoreListener.onLoadMore();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-
-                if (!recentIsLoading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold))) {
-                    // End has been reached
-                    // Do something
-
                     recentIsLoading = true;
-                    try {
-                        mOnLoadMoreListener.onLoadMore();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                 }
 
             }
@@ -155,6 +143,8 @@ public class RecentAdapter extends RecyclerView.Adapter {
 
             return new RecentViewHolder(iView);
         } else {
+
+
             iView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_loading_item, parent, false);
 
@@ -373,7 +363,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "New Interest", "Interest Request");
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "Marwadi Shaadi: New Interest", "Interest Request");
     }
 
     @Override

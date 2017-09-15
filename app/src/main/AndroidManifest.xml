@@ -56,7 +56,19 @@
             </intent-filter>
         </service>
 
-        <service android:name=".Services.ChatNotifyService"/>
+        <service
+            android:name=".Services.ChatNotifyService"
+            android:enabled="true">
+            <intent-filter> <action android:name="NOTIFICATION_SERVICE" /></intent-filter>
+
+        </service>
+
+        <service
+            android:name=".Services.InterestNotifyService"
+            android:enabled="true">
+            <intent-filter> <action android:name="NOTIFICATION_SERVICE" /></intent-filter>
+
+        </service>
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -107,7 +119,7 @@
             android:label="Membership"
             android:screenOrientation="portrait"/>
         <activity
-                android:name=".Dashboard.DashboardActivity"
+            android:name=".Dashboard.DashboardActivity"
             android:label="Dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

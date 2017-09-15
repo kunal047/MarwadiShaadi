@@ -2,6 +2,7 @@ package com.sid.marwadishaadi.Login;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,8 +11,10 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -54,6 +57,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
+
     public static String customer_gender;
     public ProgressDialog dialog;
     public String str = "";
@@ -71,6 +76,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private ImageView showPassword;
     private ImageView hidePassword;
+
+    private AlertDialog.Builder builder;
+    private AlertDialog alert;
 
     //    anita.k@makindia.com
     public static String HashConverter(String pswrd) {
@@ -226,10 +234,10 @@ public class LoginActivity extends AppCompatActivity {
                                      @Override
                                      public void onClick(View v) {
 
-                                         email = login_email.getText().toString();
+                                         email = login_email.getText().toString().toLowerCase();
                                          pass = login_pass.getText().toString();
 
-                                         if (!email.trim().matches("^[M|A|J|K|O][0-9]{4,6}") | EmailChecker(email) & !pass.trim().isEmpty()) {
+                                         if (!email.trim().matches("^[m|a|j|k|o|M|A|J|K|O][0-9]{4,6}") | EmailChecker(email) & !pass.trim().isEmpty()) {
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
@@ -256,55 +264,82 @@ public class LoginActivity extends AppCompatActivity {
                                                              if (Looper.myLooper() == null) {
                                                                  Looper.prepare();
                                                              }
+                                                             if (str.equals("logged")) {
+                                                                 builder= new AlertDialog.Builder(LoginActivity.this);
+                                                                 builder.setMessage("You have already logged in from other device. Please logout from that to continue");
+                                                                 builder.setCancelable(false);
+
+                                                                 builder.setPositiveButton(
+                                                                         "Ok",
+                                                                         new DialogInterface.OnClickListener() {
+                                                                             public void onClick(DialogInterface dialog, int id) {
+                                                                                 dialog.cancel();
 
 
-                                                             if (str.equals("success")) {
+                                                                             }
+                                                                         });
 
-                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                                 SharedPreferences.Editor editors = userinfo.edit();
-                                                                 editors.putBoolean("isLoggedIn", true);
-                                                                 editors.putString("id", customer_id);
-                                                                 editors.apply();
+                                                                 alert = builder.create();
+                                                                 alert.show();
 
-                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                                                 SharedPreferences.Editor editor = sharedpref.edit();
-                                                                 editor.putBoolean("isLoggedIn", true);
-                                                                 editor.putString("email", email);
-                                                                 editor.putString("password", pass);
-                                                                 editor.putString("customer_id", customer_id);
-                                                                 editor.putString("gender", customer_gender);
-                                                                 editor.apply();
-                                                                 dialog.dismiss();
+//                                                                 builder.setNegativeButton(
+//                                                                         "Edit Number",
+//                                                                         new DialogInterface.OnClickListener() {
+//                                                                             public void onClick(DialogInterface dialog, int id) {
+//                                                                             }
+//                                                                         });
 
-                                                                 registerMe();
 
-                                                                 Intent deeplink_data = getIntent();
-                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
-                                                                 if (deeplink != null) {
-                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
-                                                                     i.putExtra("deeplink", deeplink);
-                                                                     startActivity(i);
-                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                                                                 }
-
-                                                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                                                 startActivity(i);
-                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-                                                             } else if (str.equals("failure")) {
-                                                                 Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
-                                                             } else if (str.equals("----")) {
-                                                                 //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
-                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
 
                                                              } else {
-                                                                 Toast.makeText(getApplicationContext(), "Please enter correct Email Address", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
+                                                                 if (str.equals("success")) {
+
+                                                                     SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                     SharedPreferences.Editor editors = userinfo.edit();
+                                                                     editors.putBoolean("isLoggedIn", true);
+                                                                     editors.putString("id", customer_id);
+                                                                     editors.apply();
+
+                                                                     SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                     SharedPreferences.Editor editor = sharedpref.edit();
+                                                                     editor.putBoolean("isLoggedIn", true);
+                                                                     editor.putString("email", email);
+                                                                     editor.putString("password", pass);
+                                                                     editor.putString("customer_id", customer_id);
+                                                                     editor.putString("gender", customer_gender);
+                                                                     editor.apply();
+                                                                     dialog.dismiss();
+
+                                                                     registerMe();
+
+                                                                     Intent deeplink_data = getIntent();
+                                                                     String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                     if (deeplink != null) {
+                                                                         Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                         i.putExtra("deeplink", deeplink);
+                                                                         startActivity(i);
+                                                                         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                                     }
+
+                                                                     Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                                                 } else if (str.equals("failure")) {
+                                                                     Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+                                                                 } else if (str.equals("----")) {
+                                                                     //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
+                                                                     Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+
+                                                                 } else {
+                                                                     Toast.makeText(getApplicationContext(), "Please enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+                                                                 }
                                                              }
                                                              Looper.loop();
                                                          }
@@ -476,7 +511,34 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     str = response.getString(0);
-                                    if (str.contains("success")) {
+                                    Log.d(TAG, "onResponse: value is =============================== " + str);
+
+                                    if (str.equals("logged")) {
+                                        builder= new AlertDialog.Builder(LoginActivity.this);
+                                        builder.setMessage("You have already logged in from other device. Please logout from that to continue");
+                                        builder.setCancelable(false);
+
+                                        builder.setPositiveButton(
+                                                "Ok",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
+
+                                        alert = builder.create();
+                                        alert.show();
+
+//                                                                 builder.setNegativeButton(
+//                                                                         "Edit Number",
+//                                                                         new DialogInterface.OnClickListener() {
+//                                                                             public void onClick(DialogInterface dialog, int id) {
+//                                                                             }
+//                                                                         });
+
+
+
+                                    } else if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
 
@@ -504,7 +566,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         communityArray = response.getJSONArray(5);
 
-                                        for (int i = 0; i < 5; i++) {
+                                        for (int i = 0; i < communityArray.length(); i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
@@ -566,7 +628,35 @@ public class LoginActivity extends AppCompatActivity {
                                     });
                                     str = response.getString(0);
                                     checker = true;
-                                    if (str.contains("success")) {
+
+                                    if (str.equals("logged")) {
+                                        builder= new AlertDialog.Builder(LoginActivity.this);
+                                        builder.setMessage("You have already logged in.\nPlease logout from your other devices to continue.");
+                                        builder.setCancelable(false);
+
+                                        builder.setPositiveButton(
+                                                "Ok",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        dialog.cancel();
+
+
+                                                    }
+                                                });
+
+                                        alert = builder.create();
+                                        alert.show();
+
+//                                                                 builder.setNegativeButton(
+//                                                                         "Edit Number",
+//                                                                         new DialogInterface.OnClickListener() {
+//                                                                             public void onClick(DialogInterface dialog, int id) {
+//                                                                             }
+//                                                                         });
+
+
+
+                                    } else if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
 
@@ -578,21 +668,9 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         JSONArray communityArray = response.getJSONArray(5);
+                                        editor.putString("communityArrayLength", String.valueOf(communityArray.length()));
 
-                                        for (int i = 0; i < 5; i++) {
-                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
-                                        }
-                                        editor.apply();
-
-                                        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                        editor = sharedpref.edit();
-                                        editor.putString("customer_id", customer_id);
-                                        editor.putString("gender", customer_gender);
-                                        editor.putString("firstname", response.getString(3));
-                                        editor.putString("surname", response.getString(4));
-                                        communityArray = response.getJSONArray(5);
-
-                                        for (int i = 0; i < 5; i++) {
+                                        for (int i = 0; i < communityArray.length(); i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();

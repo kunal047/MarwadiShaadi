@@ -286,7 +286,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
-        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Message", "New Message", "Message");
+        Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Message", "Marwadi Shaadi: New Message", "Message");
     }
 
     private class FetchingMessages extends AsyncTask<String, Void, Void> {

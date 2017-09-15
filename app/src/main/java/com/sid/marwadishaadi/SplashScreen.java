@@ -11,10 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.Login.LoginActivity;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -78,8 +81,40 @@ public class SplashScreen extends AppCompatActivity {
                     }
 
                 } else {
+                    SharedPreferences userinfos = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
                     if (isUserLoggedIn()) {
+
+//                        LoginManager.getInstance().logOut();
+//                        AccessToken.setCurrentAccessToken(null);
+//
+//                        SharedPreferences.Editor editorFor = userinfos.edit();
+//                        editorFor.putBoolean("firstTime", true);
+//                        editorFor.apply();
+//
+//                        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                        SharedPreferences.Editor editors = userinfo.edit();
+//
+//                        editors.putBoolean("isLoggedIn", false);
+//                        editors.putBoolean("firstTime", false);
+//                        editors.apply();
+//
+//                        SharedPreferences sharedPre = getSharedPreferences("userinfo", MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPre.edit();
+//                        editor.putBoolean("isLoggedIn", false);
+//                        editor.putString("email", "");
+//                        editor.putString("password", "");
+//                        editor.putString("customer_id", "");
+//                        editor.apply();
+
+//                        Notifications_Util.unRegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
+//
+//                        // analytics
+//                        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Logout", "textview");
+//
+//                        i = new Intent(SplashScreen.this, LoginActivity.class);
                         i = new Intent(SplashScreen.this, DashboardActivity.class);
+                        startActivity(i);
                     } else {
                         if (isFirstLaunch()) {
                             i = new Intent(SplashScreen.this, MainActivity.class);

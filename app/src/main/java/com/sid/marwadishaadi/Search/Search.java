@@ -852,7 +852,7 @@ public class Search extends AppCompatActivity {
                     query += " and (";
                     String[] arrayString = getResources().getStringArray(R.array.caste_array);
                     for (int i = 1; i < arrayString.length - 1; i++) {
-                        System.out.println("int his thing printing --- " + arrayString[i]);
+
                         query += "tbl_user.customer_no like \"" + arrayString[i].toCharArray()[0] + "%\" or ";
                     }
                     query += "tbl_user.customer_no like \"" + arrayString[arrayString.length - 1].toCharArray()[0] + "%\" )  ";

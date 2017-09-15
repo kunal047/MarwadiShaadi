@@ -194,56 +194,58 @@ public class PartnerPreferencesFragment extends Fragment {
 
             final String ai = response.getString(11);
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                    if (c != null && c.trim().length() == 0) {
-                        complexionLayout.setVisibility(View.GONE);
-                    } else {
-                        complexion.setText(c);
+                        if (c != null && c.trim().length() == 0) {
+                            complexionLayout.setVisibility(View.GONE);
+                        } else {
+                            complexion.setText(c);
+                        }
+
+                        if (b != null && b.trim().length() == 0) {
+                            build.setVisibility(View.GONE);
+                        } else {
+                            build.setText(b);
+                        }
+
+                        if ( ps != null && ps.trim().length() == 0) {
+                            physicalStatus.setVisibility(View.GONE);
+                        } else {
+                            physicalStatus.setText(ps);
+                        }
+
+                        if (o != null && o.trim().length() == 0) {
+                            occup.setVisibility(View.GONE);
+                        } else {
+                            occup.setText(o);
+                        }
+
+                        if (ms != null && ms.trim().length() == 0) {
+                            maritalStatus.setVisibility(View.GONE);
+
+                        } else {
+                            maritalStatus.setText(ms);
+                        }
+
+                        if (hd != null && hd.trim().length() == 0) {
+                            highestDegree.setVisibility(View.GONE);
+                        } else {
+                            highestDegree.setText(hd);
+                        }
+
+                        if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
+                            annualIncome.setVisibility(View.GONE);
+
+                        } else {
+                            String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
+                            annualIncome.setText(annualIn);
+                        }
                     }
-
-                    if (b != null && b.trim().length() == 0) {
-                        build.setVisibility(View.GONE);
-                    } else {
-                        build.setText(b);
-                    }
-
-                    if ( ps != null && ps.trim().length() == 0) {
-                        physicalStatus.setVisibility(View.GONE);
-                    } else {
-                        physicalStatus.setText(ps);
-                    }
-
-                    if (o != null && o.trim().length() == 0) {
-                        occup.setVisibility(View.GONE);
-                    } else {
-                        occup.setText(o);
-                    }
-
-                    if (ms != null && ms.trim().length() == 0) {
-                        maritalStatus.setVisibility(View.GONE);
-
-                    } else {
-                        maritalStatus.setText(ms);
-                    }
-
-                    if (hd != null && hd.trim().length() == 0) {
-                        highestDegree.setVisibility(View.GONE);
-                    } else {
-                        highestDegree.setText(hd);
-                    }
-
-                    if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
-                        annualIncome.setVisibility(View.GONE);
-
-                    } else {
-                        String annualIn = ai.replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L");
-                        annualIncome.setText(annualIn);
-                    }
-                }
-            });
+                });
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -339,7 +341,7 @@ public class PartnerPreferencesFragment extends Fragment {
                 double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                 annualI = (int) first + "L - " + (int) second + "L";
             } else {
-                annualI = "No Income mentioned.";
+                annualI = "No Income mentioned";
             }
             return annualI;
         }

@@ -296,6 +296,13 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
+                }
+
+                else
+                if (customer_id == clickedID ) {
+
+                    // show as it is
+
                 } else if (!isPaidMember) {
                     float radius = birthtime.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
@@ -309,6 +316,12 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
+                }
+                else
+                if (customer_id == clickedID ) {
+
+                    // show as it is
+
                 } else if (!isPaidMember) {
                     float radius = birthtime.getTextSize() / 3;
                     BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
@@ -323,6 +336,8 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         birthtime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (!isPaidMember) {
 
                     Toast.makeText(getContext(), "This feature is only available for paid members", Toast.LENGTH_LONG).show();

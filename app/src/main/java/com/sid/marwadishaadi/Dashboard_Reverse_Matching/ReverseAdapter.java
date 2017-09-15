@@ -33,7 +33,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
     private boolean reverseIsLoading = false;
     private OnLoadMoreListener mOnLoadMoreListener;
     private int visibleThreshold = 2;
-    private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
+    private int lastVisibleItem, totalItemCount, previousTotal = 0;
     private ProgressBar progressBar;
     private RecyclerView reverseRecyclerView;
     private boolean isPaidMember;
@@ -52,9 +52,8 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                 super.onScrolled(recyclerView, dx, dy);
                 final StaggeredGridLayoutManager linearLayoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
 
-                visibleItemCount = linearLayoutManager.getChildCount();
                 totalItemCount = linearLayoutManager.getItemCount();
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPositions(null)[0];
+                lastVisibleItem = linearLayoutManager.findFirstVisibleItemPositions(null)[0];
 
 
                 if (reverseIsLoading) {
@@ -66,7 +65,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                     }
                 }
 
-                if (!reverseIsLoading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold))) {
+                if (!reverseIsLoading && totalItemCount  <= (lastVisibleItem + visibleThreshold)) {
                     // End has been reached
                     // Do something
 

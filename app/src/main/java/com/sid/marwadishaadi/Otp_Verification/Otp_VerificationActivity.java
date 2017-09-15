@@ -106,6 +106,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
 
         ImageView imageViewEditNumber = (ImageView) findViewById(R.id.imageViewEditNumber);
         textViewEditNumber = (TextView) findViewById(R.id.textViewEditNumber);
+        textViewEditNumber.setText(sd.getMobile_number());
 
         builder1 = new AlertDialog.Builder(Otp_VerificationActivity.this);
         builder1.setMessage("Sending OTP on " + sd.getMobile_number());

@@ -1034,7 +1034,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                     double second = Integer.parseInt(incomeArray.get(2)) / 100000.0;
                                     annualI = (int) first + "L - " + (int) second + "L";
                                 } else {
-                                    annualI = "No Income mentioned.";
+                                    annualI = "No Income mentioned";
                                 }
 
 

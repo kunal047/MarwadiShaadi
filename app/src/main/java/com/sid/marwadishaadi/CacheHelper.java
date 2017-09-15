@@ -46,10 +46,16 @@ public class CacheHelper {
     }
 
     public static void saveHash(Context context, String cacheResponseHash, String type) {
-        SharedPreferences cacheinfo = context.getSharedPreferences("cacheinfo", MODE_PRIVATE);
-        SharedPreferences.Editor editors = cacheinfo.edit();
-        editors.putString(type, cacheResponseHash);
-        editors.apply();
+
+        try {
+            SharedPreferences cacheinfo = context.getSharedPreferences("cacheinfo", MODE_PRIVATE);
+            SharedPreferences.Editor editors = cacheinfo.edit();
+            editors.putString(type, cacheResponseHash);
+            editors.apply();
+        } catch (Exception e) {
+
+        }
+
     }
 
     public static String retrieveHash(Context context, String type) {

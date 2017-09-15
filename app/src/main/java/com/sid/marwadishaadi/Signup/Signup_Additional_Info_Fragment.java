@@ -34,7 +34,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
     public static Signup_Additional_Info_Fragment ai = new Signup_Additional_Info_Fragment();
     protected PlacesAdapter placesAdapter;
     private String aboutMe = "", hobbies = "", grandfatherName = "", mamaSurname = "", familyType = "", familyValues = "", nativePlace = "", subcaste = "", instituteName, workLocation, highestDegree, dietStatus, smokeStatus, drinkStatus, complexionStatus, physicalStatus, birthTime = "", birthPlace = "", gotra = "", manglikStatus = "", horoscopeStatus = "", relationNameStatus = "", relationFirstName = "", relationOccupation = "", relationLocation = "", relationMobile = "";
-    private EditText editTextBirthTime;
+    private EditText editTextBirthTime, editTextGotra;
     private int pHour;
     private int pMinute;
     private InputMethodManager imm;
@@ -321,7 +321,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        ;
+        editTextGotra = (EditText) view.findViewById(R.id.editTextGotra);
 
 
         EditText editTextAboutMe = (EditText) view.findViewById(R.id.editTextAboutMe);
@@ -578,8 +578,6 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
         });
 
 
-
-
         editTextRelationFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -637,6 +635,25 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
+        editTextGotra.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                gotra = s.toString();
+                ai.setGotra(gotra);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Spinner spinnerFamilyType = (Spinner) view.findViewById(R.id.spinnerFamilyType);
         Spinner spinnerFamilyValues = (Spinner) view.findViewById(R.id.spinnerFamilyValues);
@@ -645,7 +662,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
         Spinner spinnerDrinkStatus = (Spinner) view.findViewById(R.id.spinnerDrinkStatus);
         Spinner spinnerComplexionStatus = (Spinner) view.findViewById(R.id.spinnerComplexionStatus);
         Spinner spinnerPhysicalStatus = (Spinner) view.findViewById(R.id.spinnerPhysicalStatus);
-        Spinner spinnerGotraStatus = (Spinner) view.findViewById(R.id.spinnerGotraStatus);
+//        Spinner spinnerGotraStatus = (Spinner) view.findViewById(R.id.spinnerGotraStatus);
         Spinner spinnerManglikStatus = (Spinner) view.findViewById(R.id.spinnerManglikStatus);
         Spinner spinnerHoroscopeStatus = (Spinner) view.findViewById(R.id.spinnerHoroscopeStatus);
         Spinner spinnerRelationNameStatus = (Spinner) view.findViewById(R.id.spinner_relation_name_status);
@@ -756,28 +773,20 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        spinnerGotraStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                gotra = parent.getItemAtPosition(position).toString();
-                ai.setGotra(gotra);
+//        spinnerGotraStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                gotra = parent.getItemAtPosition(position).toString();
+//                ai.setGotra(gotra);
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinnerGotraStatus.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(BirthPlace.getWindowToken(), 0);
-                return false;
-            }
-        });
 
         spinnerManglikStatus.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -840,10 +849,12 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             return new VerificationError("lifestyle");
         } else if (complexionStatus.contains("Select") || physicalStatus.contains("Select")) {
             return new VerificationError("physical");
-        } else if ((birthTime == null || birthPlace == null) || (birthTime.trim().isEmpty() || birthPlace.trim().isEmpty() || gotra.trim().isEmpty() || gotra.contains("?") || manglikStatus.contains("?") || horoscopeStatus.trim().contains("?"))){
+        } else if ((horoscopeStatus.trim().contains("?") || horoscopeStatus.trim().contains("Yes")) &&((birthTime == null || birthPlace == null) || (birthTime.trim().isEmpty() || birthPlace.trim().isEmpty() || gotra.trim().isEmpty() || manglikStatus.contains("?") ))) {
             return new VerificationError("horoscope");
+        } else {
+            return null;
         }
-        return null;
+
     }
 
     @Override
@@ -863,7 +874,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
         } else if (error.getErrorMessage().contains("physical")) {
 
             Toast.makeText(getContext(), "Physical details are necessary", Toast.LENGTH_LONG).show();
-        }else if (error.getErrorMessage().contains("horoscope")) {
+        } else if (error.getErrorMessage().contains("horoscope")) {
 
             Toast.makeText(getContext(), "Horoscope details are necessary", Toast.LENGTH_LONG).show();
         }

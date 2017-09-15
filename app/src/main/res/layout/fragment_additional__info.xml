@@ -445,41 +445,42 @@
                     android:drawableLeft="@drawable/signup_location"
                     android:drawablePadding="10dp"
                     android:hint="Birth Place"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:textColorHint="#747474"
                     android:textSize="14dp"
                     />
 
-                <!--<EditText-->
-                    <!--android:id="@+id/editTextGotra"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:background="#fff"-->
-                    <!--android:drawableLeft="@drawable/signup_gotra"-->
-                    <!--android:drawablePadding="10dp"-->
-                    <!--android:hint="Gotra"-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:paddingBottom="10dp"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:textColorHint="#747474"-->
-                    <!--android:textSize="14dp"-->
-                    <!--/>-->
-
-                <Spinner
-                    android:id="@+id/spinnerGotraStatus"
+                <EditText
+                    android:id="@+id/editTextGotra"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:entries="@array/gotra_array"
+                    android:background="#fff"
+                    android:drawableLeft="@drawable/signup_gotra"
+                    android:drawablePadding="10dp"
+                    android:hint="Gotra"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:textSize="14dp"/>
+                    android:textColorHint="#747474"
+                    android:textSize="14dp"
+                    />
+
+                <!--<Spinner-->
+                <!--android:id="@+id/spinnerGotraStatus"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:entries="@array/gotra_array"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingTop="10dp"-->
+                <!--android:textSize="14dp"/>-->
 
 
                 <Spinner
