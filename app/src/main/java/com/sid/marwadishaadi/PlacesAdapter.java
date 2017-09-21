@@ -7,10 +7,9 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
 import android.widget.Filter;
-
-import com.sid.marwadishaadi.R;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,31 +22,30 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
 
     protected Context context;
     protected List<Place> placeList;
-    protected List<Place> tempItems;
-    protected List<Place> suggestions;
+    protected List<Place> placeListAll;
+    protected List<Place> placeListSuggestions;
     protected int resource, textviewresourceid;
 
     public PlacesAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<Place> objects) {
         super(context, resource, textViewResourceId, objects);
 
         this.context = context;
-        this.placeList = objects;
         this.resource = resource;
         this.textviewresourceid = textViewResourceId;
-        this.tempItems = new ArrayList<Place>(placeList);
-        this.suggestions = new ArrayList<Place>();
-    }
 
-
-
-    @Override
-    public Place getItem(int position) {
-        return placeList.get(position);
+        this.placeList = new ArrayList<>(objects);
+        this.placeListAll = new ArrayList<>(objects);
+        this.placeListSuggestions = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
         return placeList.size();
+    }
+
+    @Override
+    public Place getItem(int position) {
+        return placeList.get(position);
     }
 
     @Override
@@ -57,63 +55,59 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.places_row, parent, false);
         }
-        Place place = placeList.get(position);
-        if (place != null) {
-            TextView textView = (TextView) convertView.findViewById(R.id.place_name);
-            if (textView != null) {
-                textView.setText(place.getPlace());
-            }
-        }
+        Place place = getItem(position);
+        TextView textView = (TextView) convertView.findViewById(R.id.place_name);
+
+        textView.setText(place.getPlace());
         return convertView;
     }
 
     @Override
     public Filter getFilter() {
-        return placeFilter;
-    }
+        return new Filter() {
 
-    Filter placeFilter = new Filter() {
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                return ((Place) resultValue).getPlace();
+            }
 
-        @Override
-        public CharSequence convertResultToString(Object resultValue) {
-            String res = ((Place) resultValue).getPlace();
-            return res;
-        }
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
 
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
-            List<Place> filteredList = (List<Place>) results.values;
+                placeList.clear();
 
-            if (results != null && results.count > 0) {
-                clear();
-                for (Place place : filteredList) {
-                    add(place);
-                    notifyDataSetChanged();
+                if (results != null && results.count > 0) {
+
+                    List<Place> filteredList = (List<Place>) results.values;
+                    for (Place place : filteredList) {
+                        placeList.add(place);
+                        notifyDataSetChanged();
+                    }
+                } else if (constraint == null) {
+                    placeList.addAll(placeListAll);
                 }
-            } else {
-                clear();
                 notifyDataSetChanged();
             }
-        }
 
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults filterResults = new FilterResults();
-            if (constraint != null) {
-                suggestions.clear();
-                for (Place place : tempItems) {
-                    if (place.getCity().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
-                        suggestions.add(place);
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if (constraint != null) {
+                    placeListSuggestions.clear();
+                    notifyDataSetChanged();
+                    for (Place place : placeListAll) {
+                        if (place.getCity().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                            placeListSuggestions.add(place);
+                        }
                     }
+                    filterResults.values = placeListSuggestions;
+                    filterResults.count = placeListSuggestions.size();
                 }
-                filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
+                return filterResults;
             }
-            return filterResults;
-        }
-    };
+        };
 
-
+    }
 }

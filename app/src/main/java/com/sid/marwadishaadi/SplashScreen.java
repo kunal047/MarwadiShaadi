@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -25,6 +26,7 @@ import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 public class SplashScreen extends AppCompatActivity {
 
     public static final int duration = 1000;
+    private static final String TAG = "SplashScreen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,39 +83,43 @@ public class SplashScreen extends AppCompatActivity {
                     }
 
                 } else {
-                    SharedPreferences userinfos = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences userfor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editorFor = userfor.edit();
 
                     if (isUserLoggedIn()) {
+                        i = new Intent(SplashScreen.this, DashboardActivity.class);
+                        startActivity(i);
 
-//                        LoginManager.getInstance().logOut();
-//                        AccessToken.setCurrentAccessToken(null);
-//
-//                        SharedPreferences.Editor editorFor = userinfos.edit();
-//                        editorFor.putBoolean("firstTime", true);
-//                        editorFor.apply();
-//
-//                        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                        SharedPreferences.Editor editors = userinfo.edit();
-//
-//                        editors.putBoolean("isLoggedIn", false);
-//                        editors.putBoolean("firstTime", false);
-//                        editors.apply();
-//
-//                        SharedPreferences sharedPre = getSharedPreferences("userinfo", MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = sharedPre.edit();
-//                        editor.putBoolean("isLoggedIn", false);
-//                        editor.putString("email", "");
-//                        editor.putString("password", "");
-//                        editor.putString("customer_id", "");
-//                        editor.apply();
+
+                    } else if (!userfor.getBoolean("firstTime", false)) {
+
+                        editorFor.putBoolean("firstTime", true);
+                        editorFor.apply();
+
+                        LoginManager.getInstance().logOut();
+                        AccessToken.setCurrentAccessToken(null);
+
+                        SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editors = userinfo.edit();
+
+                        editors.putBoolean("isLoggedIn", false);
+                        editors.putBoolean("firstTime", false);
+                        editors.apply();
+
+                        SharedPreferences sharedPre = getSharedPreferences("userinfo", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPre.edit();
+                        editor.putBoolean("isLoggedIn", false);
+                        editor.putString("email", "");
+                        editor.putString("password", "");
+                        editor.putString("customer_id", "");
+                        editor.apply();
 
 //                        Notifications_Util.unRegisterDevice(customer_id, FirebaseInstanceId.getInstance().getToken());
 //
 //                        // analytics
 //                        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Logout", "textview");
-//
-//                        i = new Intent(SplashScreen.this, LoginActivity.class);
-                        i = new Intent(SplashScreen.this, DashboardActivity.class);
+
+                        i = new Intent(SplashScreen.this, LoginActivity.class);
                         startActivity(i);
                     } else {
                         if (isFirstLaunch()) {

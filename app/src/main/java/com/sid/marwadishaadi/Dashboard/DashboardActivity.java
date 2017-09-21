@@ -23,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -84,6 +86,8 @@ public class DashboardActivity extends AppCompatActivity
     private int notificationCount = 0;
     private MenuItem m;
 
+    private static final String TAG = "DashboardActivity";
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -98,6 +102,20 @@ public class DashboardActivity extends AppCompatActivity
         Intent intent = new Intent(this, ChatNotifyService.class);
         PendingIntent pintent = PendingIntent
                 .getService(this, 0, intent, 0);
+
+        // Getting current ConnectionQuality
+        ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
+        if(connectionQuality == ConnectionQuality.EXCELLENT) {
+            // do something
+        } else if (connectionQuality == ConnectionQuality.POOR) {
+            // do something
+        } else if (connectionQuality == ConnectionQuality.UNKNOWN) {
+            // do something
+        }
+        // Getting current bandwidth
+        int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
+        Log.d(TAG, "onCreate: bandwidth of internet is --------------------------------------------- " + currentBandwidth);
+        Log.d(TAG, "onCreate: connection quality is ------------------------------------------------ " + connectionQuality.toString());
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         // Start service every three hour

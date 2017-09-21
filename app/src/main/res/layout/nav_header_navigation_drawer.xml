@@ -11,12 +11,12 @@
         android:id="@+id/title_of_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="Marwadi Shaadi"
+        android:background="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="#fff"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp"
         android:textStyle="bold"/>
 

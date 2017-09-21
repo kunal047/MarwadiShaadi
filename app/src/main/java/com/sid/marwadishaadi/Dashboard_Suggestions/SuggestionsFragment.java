@@ -108,12 +108,11 @@ public class SuggestionsFragment extends Fragment {
         String[] array = getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        String communityLength = communityChecker.getString("communityArrayLength", "0");
+        int communityLength = communityChecker.getInt("cal", 0);
 
         if (customer_id != null && communityChecker != null && array.length > 0) {
-            for (int i = 0; i < Integer.parseInt(communityLength); i++) {
+            for (int i = 0; i < communityLength; i++) {
 
-                Log.d(TAG, "onCreateView: communityChecker values are ------------------------------ " + communityChecker.getString(array[i], "Np"));
                 if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
                     res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
                 }

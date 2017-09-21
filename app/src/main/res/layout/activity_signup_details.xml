@@ -156,7 +156,6 @@
                 />
 
 
-
             <AutoCompleteTextView
                 android:id="@+id/signup_location"
                 android:layout_width="match_parent"
@@ -173,6 +172,22 @@
                 android:padding="6dp"
                 android:textSize="12dp"
                 />
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@layout/signup_gradient">-->
+
+            <!--<Spinner-->
+            <!--android:id="@+id/signup_location"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:padding="12dp"-->
+            <!--android:textSize="12dp"-->
+            <!--/>-->
+            <!--</LinearLayout>-->
 
 
             <LinearLayout

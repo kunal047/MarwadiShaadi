@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,34 +30,24 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.App;
-import com.sid.marwadishaadi.Place;
 import com.sid.marwadishaadi.PlacesAdapter;
 import com.sid.marwadishaadi.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class SignupDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    private static final String TAG = "SignupDetailsActivity";
     public static SignupDetailsActivity sd = new SignupDetailsActivity();
-    public static List<Place> placeslist = new ArrayList<>();
-    private final String TAG = "SignupDetailsActivity";
+    public static String mobile_number;
     protected EditText name;
     protected EditText surname;
     protected EditText dob;
@@ -68,8 +58,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     protected AutoCompleteTextView location;
     protected PlacesAdapter placesAdapter;
     RadioGroup radioGroupGender;
-    private String first_name,last_name,date_of_birth,user_caste,user_location,gender;
-    public static String mobile_number;
+    private String first_name, last_name, date_of_birth, user_caste, user_location, gender;
 
     public String getFirst_name() {
         return first_name;
@@ -157,7 +146,6 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
         // autcomplete location
         location = (AutoCompleteTextView) findViewById(R.id.signup_location);
-        location.setThreshold(1);
         placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, App.placeslist);
         location.setAdapter(placesAdapter);
 
@@ -266,44 +254,6 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
             int month1 = calendar.get(Calendar.MONTH);
             int day1 = calendar.get(Calendar.DAY_OF_MONTH);
             return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year1, month1, day1);
-        }
-    }
-
-    public static class FetchLocation extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            AndroidNetworking.get("http://208.91.199.50:5000/fetchCityStateCountry")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Place place;
-                            try {
-                                for (int i = 0; i < response.length(); i++) {
-                                    JSONArray array = response.getJSONArray(i);
-                                    place = new Place(array.getString(0), array.getString(2), array.getString(4));
-                                    placeslist.add(place);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-
-                        }
-                    });
-
-            return null;
         }
     }
 }

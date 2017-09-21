@@ -21,14 +21,8 @@ import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-/**
- * Created by Sid on 14-Jun-17.
- */
-
-
 public class App extends Application{
 
-    private static final String TAG = "App";
     public static List<Place> placeslist = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -57,7 +51,7 @@ public class App extends Application{
         @Override
         protected Void doInBackground(Void... voids) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchCityStateCountry")
+                AndroidNetworking.post("http://208.91.199.50:5000/fetchCityStateCountry")
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {

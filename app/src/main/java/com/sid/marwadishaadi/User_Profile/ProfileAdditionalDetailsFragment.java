@@ -160,17 +160,17 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
 
         String[] array = getResources().getStringArray(R.array.communities);
-        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-        if (communityChecker!=null) {
-            for (int i = 0; i < 5; i++) {
+        int communityLength = sharedpref.getInt("cal", 0);
+        if (customer_id != null  && array.length > 0) {
 
-                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+            for (int i = 0; i < communityLength; i++) {
+
+                if (sharedpref.getString(array[i], "No").contains("Yes")) {
                     isPaidMember = true;
                 }
             }
         }
-
 
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");

@@ -29,12 +29,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -91,6 +93,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class UserProfileActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     public static final int REQUEST_PERMISSION_SETTING = 105;
+    private static final String TAG = "UserProfileActivity";
     protected ImageView pref;
     private CollapsingToolbarLayout toolbarLayout;
     private NotificationCompat.Builder notification;
@@ -148,6 +151,19 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // Getting current ConnectionQuality
+        ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
+        if (connectionQuality == ConnectionQuality.EXCELLENT) {
+            // do something
+        } else if (connectionQuality == ConnectionQuality.POOR) {
+            // do something
+        } else if (connectionQuality == ConnectionQuality.UNKNOWN) {
+            // do something
+        }
+        // Getting current bandwidth
+        int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
+        Log.d(TAG, "onCreate: bandwidth of internet is --------------------------------------------- " + currentBandwidth);
+        Log.d(TAG, "onCreate: connection quality is ------------------------------------------------ " + connectionQuality.toString());
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageViewInformation = (ImageView) findViewById(R.id.imageViewInformation);
@@ -171,13 +187,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         customer_name = sharedpref.getString("firstname", null);
         clickedID = customer_id;
 
-
+        int communityLength = sharedpref.getInt("cal", 0);
         String[] array = getResources().getStringArray(R.array.communities);
 
-        for (int i = 0; i < 5; i++) {
 
-            if (sharedpref.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                isPaidMember = true;
+        if (customer_id != null && array.length > 0) {
+
+            for (int i = 0; i < communityLength; i++) {
+
+                if (sharedpref.getString(array[i], "No").contains("Yes")) {
+                    isPaidMember = true;
+                }
             }
         }
 
@@ -250,7 +270,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
                 }
-
 
 
             }

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +39,9 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
     private int pHour;
     private int pMinute;
     private InputMethodManager imm;
+    private AutoCompleteTextView WorkLocation, BirthPlace;
+
+    private static final String TAG = "Signup_Additional_Info_";
 
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
@@ -335,10 +339,10 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
         EditText editTextRelationMobile = (EditText) view.findViewById(R.id.editTextRelationMobile);
 
 
-        final AutoCompleteTextView WorkLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextWorkLocation);
+        WorkLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextWorkLocation);
         AutoCompleteTextView NativePlace = (AutoCompleteTextView) view.findViewById(R.id.editTextNativePlace);
         AutoCompleteTextView RelationLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextRelationLocation);
-        final AutoCompleteTextView BirthPlace = (AutoCompleteTextView) view.findViewById(R.id.editTextBirthPlace);
+        BirthPlace = (AutoCompleteTextView) view.findViewById(R.id.editTextBirthPlace);
 
         editTextBirthTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -849,7 +853,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             return new VerificationError("lifestyle");
         } else if (complexionStatus.contains("Select") || physicalStatus.contains("Select")) {
             return new VerificationError("physical");
-        } else if ((horoscopeStatus.trim().contains("?") || horoscopeStatus.trim().contains("Yes")) &&((birthTime == null || birthPlace == null) || (birthTime.trim().isEmpty() || birthPlace.trim().isEmpty() || gotra.trim().isEmpty() || manglikStatus.contains("?") ))) {
+        } else if ((horoscopeStatus.trim().contains("?") || horoscopeStatus.trim().contains("Yes")) && ((birthTime == null || birthPlace == null) || (birthTime.trim().isEmpty() || birthPlace.trim().isEmpty() || gotra.trim().isEmpty() || manglikStatus.contains("?")))) {
             return new VerificationError("horoscope");
         } else {
             return null;

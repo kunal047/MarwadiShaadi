@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -56,35 +57,22 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Search extends AppCompatActivity {
 
-    ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
-    boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
-    TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
-    LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
-    int colorg, colorb;
-    Button mOpenIDSearchButton;
-    private static int casebreak;
-    TextView statetextView, citytextview;
-    CardView advCV;
-    public ProgressDialog dialog;
-    TextView tvMin, tvMax;
-    Button addButton, searchaddbutton;
-    AutoCompleteTextView autoCompleteState, autocompletecity;
-    static String addTextState, addPrevious = "";
-    static String addTextcity, addPreviousc = "";
     public static EditText maritalstatus;
     public static EditText familystatus;
-    Bundle bundle;
-
-
     public static EditText annualincome;
     public static EditText physicalstatus;
     public static EditText spinnerCastSearch;
     public static int countmaritalstatus = 0, countfamilystatus = 0, countannualincome = 0, countphysicalstatus = 0, countspinnerCastSearch = 0;
     public static List<SuggestionModel> suggestionModelList2;
-
-
-    boolean int_very_fair, int_fair, int_wheatish, int_wheatish_brown, int_dark, int_doesnt_matter = true, int_profession, int_job, int_retired, int_business, int_not_employed, int_studying, int_dont_matter = true, intSlim, intAthletic, intHeavy, intAverage, intDoesntMatter = true;
-    CheckBox very_fair, fair, wheatish, wheatish_brown, dark, doesnt_matter, profession, job, retired, business, not_employed, studying, dont_matter, slim, athletic, average, heavy, doesntMatter;
+    public static List<String> CastList = new ArrayList<>();
+    public static List<String> familystatusList = new ArrayList<>();
+    public static List<String> maritalstatusList = new ArrayList<>();
+    public static List<String> AIList = new ArrayList<>();
+    public static List<String> physicalstatusList = new ArrayList<>();
+    static String addTextState, addPrevious = "";
+    static String addTextcity, addPreviousc = "";
+    private static int casebreak;
+    public ProgressDialog dialog;
     public List<String> complexion = new ArrayList<>();
     public List<String> occupation = new ArrayList<>();
     public List<String> statesList = new ArrayList<>();
@@ -95,11 +83,20 @@ public class Search extends AppCompatActivity {
     public List<String> occupationAll = new ArrayList<>();
     public List<String> educationAll = new ArrayList<>();
     public List<String> bodyTypeAll = new ArrayList<>();
-    public static List<String> CastList = new ArrayList<>();
-    public static List<String> familystatusList = new ArrayList<>();
-    public static List<String> maritalstatusList = new ArrayList<>();
-    public static List<String> AIList = new ArrayList<>();
-    public static List<String> physicalstatusList = new ArrayList<>();
+    ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
+    boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
+    TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
+    LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
+    int colorg, colorb;
+    Button mOpenIDSearchButton;
+    TextView statetextView, citytextview;
+    CardView advCV;
+    TextView tvMin, tvMax;
+    Button addButton, searchaddbutton, searchRemoveButtonForCity, stateRemoveButton;
+    AutoCompleteTextView autoCompleteState, autocompletecity;
+    Bundle bundle;
+    boolean int_very_fair, int_fair, int_wheatish, int_wheatish_brown, int_dark, int_doesnt_matter = true, int_profession, int_job, int_retired, int_business, int_not_employed, int_studying, int_dont_matter = true, intSlim, intAthletic, intHeavy, intAverage, intDoesntMatter = true;
+    CheckBox very_fair, fair, wheatish, wheatish_brown, dark, doesnt_matter, profession, job, retired, business, not_employed, studying, dont_matter, slim, athletic, average, heavy, doesntMatter;
     List<String> cityAutoCompleteList = new ArrayList<>();
     List<String> stateAutoCompleteList = new ArrayList<>();
     CityAdapter cityAdapter;
@@ -136,7 +133,6 @@ public class Search extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,26 +143,25 @@ public class Search extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String[] community= getResources().getStringArray(R.array.communities);
-        SharedPreferences communityPackage= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String[] community = getResources().getStringArray(R.array.communities);
+        SharedPreferences communityPackage = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         CastList.clear();
         final SharedPreferences sharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        for(int i=0;i<5;i++){
-            if(community[i].trim().toCharArray()[0]==customer_id.trim().toCharArray()[0])
-            {
+        for (int i = 0; i < 5; i++) {
+            if (community[i].trim().toCharArray()[0] == customer_id.trim().toCharArray()[0]) {
                 CastList.add(community[i]);
-            }else if(communityPackage.getString(community[i],null).contains("Yes")){
+            } else if (communityPackage.getString(community[i], null).contains("Yes")) {
                 CastList.add(community[i]);
             }
 
         }
 
         spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
-        String community_text= CastList.toString().replace("[", "").replace("]", "");
+        String community_text = CastList.toString().replace("[", "").replace("]", "");
         spinnerCastSearch.setText(community_text);
         init();
         height_from = (Spinner) findViewById(R.id.height_from);
@@ -211,16 +206,16 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 3;
-                BottomSheetDialogFragment btm=null;
-                if(sharedPreferences!=null){
-                    if(sharedPreferences.getString("maritalStatusArray",null)!=null && sharedPreferences.getString("maritalStatusArray",null).trim().length()>0){
-                        String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(", ");
+                BottomSheetDialogFragment btm = null;
+                if (sharedPreferences != null) {
+                    if (sharedPreferences.getString("maritalStatusArray", null) != null && sharedPreferences.getString("maritalStatusArray", null).trim().length() > 0) {
+                        String[] arr = sharedPreferences.getString("maritalStatusArray", null).replace("[", "").replace("]", "").split(", ");
 
-                         btm = new BottomSheet(0,arr);
-                    }else
+                        btm = new BottomSheet(0, arr);
+                    } else
                         btm = new BottomSheet(0);
-                }else
-                     btm = new BottomSheet(0);
+                } else
+                    btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
             }
         });
@@ -230,14 +225,14 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 4;
-                BottomSheetDialogFragment btm=null;
-                if(sharedPreferences!=null){
-                    if(sharedPreferences.getString("familyStatusArray",null)!=null && sharedPreferences.getString("familyStatusArray",null).trim().length()>0){
-                        String [] arr = sharedPreferences.getString("familyStatusArray",null).replace("[","").replace("]","").split(", ");
-                        btm = new BottomSheet(0,arr);
-                    }else
+                BottomSheetDialogFragment btm = null;
+                if (sharedPreferences != null) {
+                    if (sharedPreferences.getString("familyStatusArray", null) != null && sharedPreferences.getString("familyStatusArray", null).trim().length() > 0) {
+                        String[] arr = sharedPreferences.getString("familyStatusArray", null).replace("[", "").replace("]", "").split(", ");
+                        btm = new BottomSheet(0, arr);
+                    } else
                         btm = new BottomSheet(0);
-                }else
+                } else
                     btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
             }
@@ -248,14 +243,14 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 5;
-                BottomSheetDialogFragment btm=null;
-                if(sharedPreferences!=null){
-                    if(sharedPreferences.getString("annualArray",null)!=null && sharedPreferences.getString("annualArray",null).trim().length()>0){
-                        String [] arr = sharedPreferences.getString("annualArray",null).replace("[","").replace("]","").split(", ");
-                        btm = new BottomSheet(0,arr);
-                    }else
+                BottomSheetDialogFragment btm = null;
+                if (sharedPreferences != null) {
+                    if (sharedPreferences.getString("annualArray", null) != null && sharedPreferences.getString("annualArray", null).trim().length() > 0) {
+                        String[] arr = sharedPreferences.getString("annualArray", null).replace("[", "").replace("]", "").split(", ");
+                        btm = new BottomSheet(0, arr);
+                    } else
                         btm = new BottomSheet(0);
-                }else
+                } else
                     btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
 
@@ -267,14 +262,14 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 casebreak = 6;
-                BottomSheetDialogFragment btm=null;
-                if(sharedPreferences!=null){
-                    if(sharedPreferences.getString("physicalStatusArray",null)!=null && sharedPreferences.getString("physicalStatusArray",null).trim().length()>0){
-                        String [] arr = sharedPreferences.getString("physicalStatusArray",null).replace("[","").replace("]","").split(", ");
-                        btm = new BottomSheet(0,arr);
-                    }else
+                BottomSheetDialogFragment btm = null;
+                if (sharedPreferences != null) {
+                    if (sharedPreferences.getString("physicalStatusArray", null) != null && sharedPreferences.getString("physicalStatusArray", null).trim().length() > 0) {
+                        String[] arr = sharedPreferences.getString("physicalStatusArray", null).replace("[", "").replace("]", "").split(", ");
+                        btm = new BottomSheet(0, arr);
+                    } else
                         btm = new BottomSheet(0);
-                }else
+                } else
                     btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
 
@@ -283,21 +278,23 @@ public class Search extends AppCompatActivity {
 
 
         addButton = (Button) findViewById(R.id.search_add_state);
+        stateRemoveButton = (Button) findViewById(R.id.search_remove_state);
+
         searchaddbutton = (Button) findViewById(R.id.search_add_city);
+        searchRemoveButtonForCity = (Button) findViewById(R.id.search_remove_city);
+
+
         statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
         citytextview = (TextView) findViewById(R.id.text_view_search_add_city);
         autoCompleteState = (AutoCompleteTextView) findViewById(R.id.search_state);
         autocompletecity = (AutoCompleteTextView) findViewById(R.id.search_city);
 
         for (Place place : App.placeslist) {
-            if(!stateAutoCompleteList.contains(place.getState())){
+            if (!stateAutoCompleteList.contains(place.getState())) {
                 stateAutoCompleteList.add(place.getState());
             }
             cityAutoCompleteList.add(place.getCity());
         }
-
-
-
 
 
         //autocomplete city and state
@@ -306,7 +303,7 @@ public class Search extends AppCompatActivity {
         autocompletecity.setAdapter(cityAdapter);
 
         autoCompleteState.setThreshold(1);
-        cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_state,stateAutoCompleteList);
+        cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_state, stateAutoCompleteList);
         autoCompleteState.setAdapter(cityAdapter);
 
         advCV = (CardView) findViewById(R.id.advanced_search);
@@ -337,6 +334,21 @@ public class Search extends AppCompatActivity {
 
             }
         });
+
+        stateRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String[] state = statetextView.getText().toString().split("\\n");
+                statesList.remove(state[0]);
+                state = Arrays.copyOfRange(state, 1, state.length);
+                String results = TextUtils.join("\n", state);
+                statetextView.setText(results);
+                addPrevious = results;
+
+            }
+        });
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -345,12 +357,15 @@ public class Search extends AppCompatActivity {
                     autoCompleteState.setText("");
                     Toast.makeText(getApplicationContext(), "Please click + button after state selection ", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(!statesList.contains(addTextState)){
+                    if (!statesList.contains(addTextState)) {
+
                         statesList.add(addTextState);
                         statetextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                        statetextView.setText((addPrevious + "\n" + addTextState));
+                        statetextView.setText((addTextState + "\n" + addPrevious));
                         addPrevious = statetextView.getText().toString();
-                    }else {
+                        stateRemoveButton.setVisibility(View.VISIBLE);
+
+                    } else {
                         Toast.makeText(Search.this, "Already added", Toast.LENGTH_SHORT).show();
                     }
 
@@ -367,16 +382,30 @@ public class Search extends AppCompatActivity {
                     autocompletecity.setText("");
                     Toast.makeText(getApplicationContext(), "Please click + button after city selection ", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(!cityList.contains(addTextcity)){
+                    if (!cityList.contains(addTextcity)) {
                         cityList.add(addTextcity);
-                        citytextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                        citytextview.setText(addPreviousc + "\n" + addTextcity);
+                        citytextview.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                        citytextview.setText(addTextcity + "\n" + addPreviousc);
                         addPreviousc = citytextview.getText().toString();
-                    }else {
+                        searchRemoveButtonForCity.setVisibility(View.VISIBLE);
+
+                    } else {
                         Toast.makeText(Search.this, "Already added", Toast.LENGTH_SHORT).show();
                     }
                     autocompletecity.setText("");
                 }
+            }
+        });
+
+        searchRemoveButtonForCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] city = citytextview.getText().toString().split("\\n");
+                cityList.remove(city[0]);
+                city = Arrays.copyOfRange(city, 1, city.length);
+                String result = TextUtils.join("\n", city);
+                citytextview.setText(result);
+                addPreviousc = result;
             }
         });
 
@@ -745,14 +774,14 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 casebreak = 1;
-                BottomSheetDialogFragment btm=null;
-                if(sharedPreferences!=null){
-                    if(sharedPreferences.getString("communities",null)!=null && sharedPreferences.getString("communities",null).trim().length()>0){
-                        String [] arr = sharedPreferences.getString("communities",null).replace("[","").replace("]","").split(", ");
-                        btm = new BottomSheet(0,arr);
-                    }else
+                BottomSheetDialogFragment btm = null;
+                if (sharedPreferences != null) {
+                    if (sharedPreferences.getString("communities", null) != null && sharedPreferences.getString("communities", null).trim().length() > 0) {
+                        String[] arr = sharedPreferences.getString("communities", null).replace("[", "").replace("]", "").split(", ");
+                        btm = new BottomSheet(0, arr);
+                    } else
                         btm = new BottomSheet(0);
-                }else
+                } else
                     btm = new BottomSheet(0);
                 btm.show(getSupportFragmentManager(), btm.getTag());
             }
@@ -772,18 +801,8 @@ public class Search extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
-
-
-
-                FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search_Submit);
-                search.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search_Submit);
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                 new BackEnd().execute("","","","","","","","","");
@@ -797,15 +816,15 @@ public class Search extends AppCompatActivity {
                 */
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String gender = sharedPreferences.getString("gender", null);
-                if(gender.contains("Male")){
+                if (gender.contains("Male")) {
 
                     gender = "Female";
-                }else {
+                } else {
 
                     gender = "Male";
                 }
                 String query = "";
-                query = "select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes') and (tbl_login.user_deleted='0') and ( tbl_user.gender='"+gender+"' ) ";
+                query = "select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree, tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER join tbl_state on tbl_state.state_id=tbl_user.state INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no inner join tbl_city on tbl_user.city=tbl_city.City_id where ( tbl_login.user_active ='Yes') and (tbl_login.user_deleted='0') and ( tbl_user.gender='" + gender + "' ) ";
 //                ON tbl_user.customer_no=tbl_user_files.customer_no
                 int year = Calendar.getInstance().get(Calendar.YEAR);
                 query += "and (YEAR(tbl_user.birthdate) >=" + Integer.toString(year - Integer.parseInt(tvMax.getText().toString())) + " and YEAR(tbl_user.birthdate)<=" + Integer.toString(year - Integer.parseInt(tvMin.getText().toString())) + ")";
@@ -827,7 +846,6 @@ public class Search extends AppCompatActivity {
                         query += "and ( tbl_user.height<=" + s2.substring(s2.length() - 5, s2.length() - 2) + " and tbl_user.height>=" + s1.substring(s1.length() - 5, s1.length() - 2) + ")";
                     }
                 }
-
 
 
                 String str = "";
@@ -983,7 +1001,7 @@ public class Search extends AppCompatActivity {
                 }
                 query += ")";
 
-                if (bodyType.contains("matter") ) {
+                if (bodyType.contains("matter")) {
                     query += (" and (  tbl_user.body_structure=\"" + complexion.get(0).toString() + "\"");
 
                     for (int i = 1; i < bodyType.size(); i++) {
@@ -1000,7 +1018,7 @@ public class Search extends AppCompatActivity {
                 }
                 query += ")";
 
-                if (occupation.contains("matter") ) {
+                if (occupation.contains("matter")) {
                     query += (" and ( tbl_user.current_occup=\"" + occupation.get(0).toString() + "\"");
                     for (int i = 1; i < occupation.size(); i++) {
                         query += (" or tbl_user.current_occup= \"" + occupation.get(i).toString() + "\"");
@@ -1084,22 +1102,22 @@ public class Search extends AppCompatActivity {
                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = sharedpref.edit();
-                editor.putString("ageLow",tvMin.getText().toString());
-                editor.putString("ageHigh",tvMax.getText().toString());
-                editor.putString("heightLow",s1);
-                editor.putString("heightHigh",s2);
-                editor.putString("communities",spinnerCastSearch.getText().toString());
+                editor.putString("ageLow", tvMin.getText().toString());
+                editor.putString("ageHigh", tvMax.getText().toString());
+                editor.putString("heightLow", s1);
+                editor.putString("heightHigh", s2);
+                editor.putString("communities", spinnerCastSearch.getText().toString());
                 editor.putString("educationArray", education.toString());
-                editor.putString("sortBy",itm);
-                editor.putString("maritalStatusArray",maritalstatus.getText().toString());
-                editor.putString("familyStatusArray",familystatus.getText().toString());
-                editor.putString("manglik",mangli);
-                editor.putString("children",childs);
+                editor.putString("sortBy", itm);
+                editor.putString("maritalStatusArray", maritalstatus.getText().toString());
+                editor.putString("familyStatusArray", familystatus.getText().toString());
+                editor.putString("manglik", mangli);
+                editor.putString("children", childs);
                 editor.putString("occupationArray", occupation.toString());
-                editor.putString("annualArray",annualincome.getText().toString());
+                editor.putString("annualArray", annualincome.getText().toString());
                 editor.putString("complexionArray", complexion.toString());
                 editor.putString("bodyTypeArray", bodyType.toString());
-                editor.putString("physicalStatusArray",physicalstatus.getText().toString());
+                editor.putString("physicalStatusArray", physicalstatus.getText().toString());
                 editor.apply();
 
 
@@ -1139,58 +1157,56 @@ public class Search extends AppCompatActivity {
         doesntMatter = (CheckBox) findViewById(R.id.bodytype_doesnt_matter);
 
 
-
-
         //setting old search values
 
-        if(sharedPreferences!=null) {
+        if (sharedPreferences != null) {
 
-            if (sharedPreferences.getString("ageLow",null) != null) {
-                tvMin.setText(sharedPreferences.getString("ageLow",null));
-                rangeSeekbar.setMinStartValue(Float.valueOf(sharedPreferences.getString("ageLow",null)));
+            if (sharedPreferences.getString("ageLow", null) != null) {
+                tvMin.setText(sharedPreferences.getString("ageLow", null));
+                rangeSeekbar.setMinStartValue(Float.valueOf(sharedPreferences.getString("ageLow", null)));
             }
-            if (sharedPreferences.getString("ageHigh",null) != null) {
-                tvMax.setText(sharedPreferences.getString("ageHigh",null));
-                rangeSeekbar.setMaxStartValue(Float.valueOf(sharedPreferences.getString("ageHigh",null)));
+            if (sharedPreferences.getString("ageHigh", null) != null) {
+                tvMax.setText(sharedPreferences.getString("ageHigh", null));
+                rangeSeekbar.setMaxStartValue(Float.valueOf(sharedPreferences.getString("ageHigh", null)));
             }
             String[] hf = getResources().getStringArray(R.array.height_array);
 
-            if (sharedPreferences.getString("heightLow",null) != null) {
+            if (sharedPreferences.getString("heightLow", null) != null) {
 
                 for (String s : hf) {
 
-                    if (s.contains(sharedPreferences.getString("heightLow",null))) {
+                    if (s.contains(sharedPreferences.getString("heightLow", null))) {
                         height_from.setSelection(Arrays.asList(hf).indexOf(s));
                     }
                 }
             }
 
-            if (sharedPreferences.getString("heightHigh",null) != null) {
+            if (sharedPreferences.getString("heightHigh", null) != null) {
                 for (String s : hf) {
 
-                    if (s.contains(sharedPreferences.getString("heightHigh",null))) {
+                    if (s.contains(sharedPreferences.getString("heightHigh", null))) {
                         height_to.setSelection(Arrays.asList(hf).indexOf(s));
                     }
                 }
             }
-            if (sharedPreferences.getString("communities",null) != null) {
-                String [] arr = sharedPreferences.getString("communities",null).replace("[","").replace("]","").split(",");
-                for(String s : arr)
-                CastList.add(s);
+            if (sharedPreferences.getString("communities", null) != null) {
+                String[] arr = sharedPreferences.getString("communities", null).replace("[", "").replace("]", "").split(",");
+                for (String s : arr)
+                    CastList.add(s);
                 countspinnerCastSearch = CastList.size();
-                spinnerCastSearch.setText(sharedPreferences.getString("communities",null));
+                spinnerCastSearch.setText(sharedPreferences.getString("communities", null));
             }
 
 
-            if (sharedPreferences.getString("educationArray",null) != null) {
-                if (sharedPreferences.getString("educationArray",null).contains("Engineer")) {
+            if (sharedPreferences.getString("educationArray", null) != null) {
+                if (sharedPreferences.getString("educationArray", null).contains("Engineer")) {
                     intengineer = true;
                     tengineer.setTextColor(colorg);
                     education.add(tengineer.getText().toString());
                     iengineer.setImageResource(R.drawable.engineer);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains("Doctor")) {
+                if (sharedPreferences.getString("educationArray", null).contains("Doctor")) {
                     intdoctor = true;
                     tdoctor.setTextColor(colorg);
                     education.add(tdoctor.getText().toString());
@@ -1198,14 +1214,14 @@ public class Search extends AppCompatActivity {
                     idoctor.setImageResource(R.drawable.doctor);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tcacs.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tcacs.getText().toString())) {
                     intcacs = true;
                     tcacs.setTextColor(colorg);
                     education.add(tcacs.getText().toString());
                     icacs.setImageResource(R.drawable.ca);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tllb.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tllb.getText().toString())) {
                     intllb = true;
                     tllb.setTextColor(colorg);
                     education.add(tllb.getText().toString());
@@ -1213,7 +1229,7 @@ public class Search extends AppCompatActivity {
                     illb.setImageResource(R.drawable.llb);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tpg.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tpg.getText().toString())) {
                     intpg = true;
                     tpg.setTextColor(colorg);
                     education.add(tpg.getText().toString());
@@ -1221,7 +1237,7 @@ public class Search extends AppCompatActivity {
                     ipg.setImageResource(R.drawable.mba);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tg.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tg.getText().toString())) {
                     intg = true;
                     tg.setTextColor(colorg);
                     education.add(tg.getText().toString());
@@ -1229,7 +1245,7 @@ public class Search extends AppCompatActivity {
                     ig.setImageResource(R.drawable.grad);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tug.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tug.getText().toString())) {
                     intug = true;
                     tug.setTextColor(colorg);
                     education.add(tug.getText().toString());
@@ -1237,7 +1253,7 @@ public class Search extends AppCompatActivity {
                     iug.setImageResource(R.drawable.undergrad);
 
                 }
-                if (sharedPreferences.getString("educationArray",null).contains(tmbamca.getText().toString())) {
+                if (sharedPreferences.getString("educationArray", null).contains(tmbamca.getText().toString())) {
                     intmbamca = true;
                     tmbamca.setTextColor(colorg);
                     education.add(tmbamca.getText().toString());
@@ -1246,140 +1262,139 @@ public class Search extends AppCompatActivity {
 
                 }
             }
-            if (sharedPreferences.getString("sortBy",null) != null) {
+            if (sharedPreferences.getString("sortBy", null) != null) {
                 hf = getResources().getStringArray(R.array.sort_by_array);
 
                 for (String s : hf) {
 
-                    if (sharedPreferences.getString("sortBy",null).contains(s)) {
+                    if (sharedPreferences.getString("sortBy", null).contains(s)) {
                         sort_by.setSelection(Arrays.asList(hf).indexOf(s));
                     }
                 }
             }
 
-            if (sharedPreferences.getString("maritalStatusArray",null) != null) {
-                String [] arr = sharedPreferences.getString("maritalStatusArray",null).replace("[","").replace("]","").split(",");
-                for(String s : arr)
-                maritalstatusList.add(s);
+            if (sharedPreferences.getString("maritalStatusArray", null) != null) {
+                String[] arr = sharedPreferences.getString("maritalStatusArray", null).replace("[", "").replace("]", "").split(",");
+                for (String s : arr)
+                    maritalstatusList.add(s);
                 countmaritalstatus = maritalstatusList.size();
-                maritalstatus.setText(sharedPreferences.getString("maritalStatusArray",null));
+                maritalstatus.setText(sharedPreferences.getString("maritalStatusArray", null));
             }
-            if (sharedPreferences.getString("familyStatusArray",null) != null) {
-                String [] arr = sharedPreferences.getString("familyStatusArray",null).replace("[","").replace("]","").split(",");
-                for(String s : arr)
+            if (sharedPreferences.getString("familyStatusArray", null) != null) {
+                String[] arr = sharedPreferences.getString("familyStatusArray", null).replace("[", "").replace("]", "").split(",");
+                for (String s : arr)
                     familystatusList.add(s);
                 countfamilystatus = familystatusList.size();
 
-                familystatus.setText(sharedPreferences.getString("familyStatusArray",null));
+                familystatus.setText(sharedPreferences.getString("familyStatusArray", null));
             }
-            if (sharedPreferences.getString("manglik",null) != null) {
+            if (sharedPreferences.getString("manglik", null) != null) {
                 hf = getResources().getStringArray(R.array.manglik_search_array);
                 for (String s : hf) {
 
-                    if (s.contains(sharedPreferences.getString("manglik",null))) {
+                    if (s.contains(sharedPreferences.getString("manglik", null))) {
                         manglik.setSelection(Arrays.asList(hf).indexOf(s));
                     }
                 }
             }
-            if (sharedPreferences.getString("children",null) != null) {
+            if (sharedPreferences.getString("children", null) != null) {
                 hf = getResources().getStringArray(R.array.children_array);
                 for (String s : hf) {
 
-                    if (s.contains(sharedPreferences.getString("children",null))) {
+                    if (s.contains(sharedPreferences.getString("children", null))) {
                         children.setSelection(Arrays.asList(hf).indexOf(s));
                     }
                 }
             }
-            if (sharedPreferences.getString("occupationArray",null) != null) {
-                if (sharedPreferences.getString("occupationArray",null).contains("Profession") ) {
+            if (sharedPreferences.getString("occupationArray", null) != null) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Profession")) {
                     profession.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Job")) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Job")) {
                     job.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Retired")) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Retired")) {
                     retired.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Business") ) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Business")) {
                     business.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Not Employed") ) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Not Employed")) {
                     not_employed.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Studying-Not Employed") ) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Studying-Not Employed")) {
                     studying.setChecked(true);
                 }
-                if (sharedPreferences.getString("occupationArray",null).contains("Does not matter") ) {
+                if (sharedPreferences.getString("occupationArray", null).contains("Does not matter")) {
                     dont_matter.setChecked(true);
                 }
             }
-            if (sharedPreferences.getString("annualArray",null) != null) {
-                String [] arr = sharedPreferences.getString("annualArray",null).replace("[","").replace("]","").split(",");
-                for(String s : arr)
+            if (sharedPreferences.getString("annualArray", null) != null) {
+                String[] arr = sharedPreferences.getString("annualArray", null).replace("[", "").replace("]", "").split(",");
+                for (String s : arr)
                     AIList.add(s);
                 countannualincome = AIList.size();
 
-                annualincome.setText(sharedPreferences.getString("annualArray",null));
+                annualincome.setText(sharedPreferences.getString("annualArray", null));
             }
-            if (sharedPreferences.getString("complexionArray",null) != null) {
-                if (sharedPreferences.getString("complexionArray",null).contains("Very Fair") ) {
+            if (sharedPreferences.getString("complexionArray", null) != null) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Very Fair")) {
                     very_fair.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Fair") ) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Fair")) {
                     fair.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Wheatish") ) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Wheatish")) {
                     wheatish.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Wheatish Brown") ) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Wheatish Brown")) {
                     wheatish_brown.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Dark") ) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Dark")) {
                     dark.setChecked(true);
                 }
-                if (sharedPreferences.getString("complexionArray",null).contains("Does not matter") ) {
+                if (sharedPreferences.getString("complexionArray", null).contains("Does not matter")) {
                     doesnt_matter.setChecked(true);
                 }
 
             }
-            if (sharedPreferences.getString("bodyTypeArray",null) != null) {
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Slim") ) {
+            if (sharedPreferences.getString("bodyTypeArray", null) != null) {
+                if (sharedPreferences.getString("bodyTypeArray", null).contains("Slim")) {
                     slim.setChecked(true);
                 }
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Athletic") ) {
+                if (sharedPreferences.getString("bodyTypeArray", null).contains("Athletic")) {
                     athletic.setChecked(true);
                 }
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Average") ) {
+                if (sharedPreferences.getString("bodyTypeArray", null).contains("Average")) {
                     average.setChecked(true);
                 }
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Heavy") ) {
+                if (sharedPreferences.getString("bodyTypeArray", null).contains("Heavy")) {
                     heavy.setChecked(true);
                 }
-                if (sharedPreferences.getString("bodyTypeArray",null).contains("Does not matter") ) {
+                if (sharedPreferences.getString("bodyTypeArray", null).contains("Does not matter")) {
                     doesntMatter.setChecked(true);
                 }
 
 
             }
-            if (sharedPreferences.getString("physicalStatusArray",null) != null) {
-                String [] arr = sharedPreferences.getString("physicalStatusArray",null).replace("[","").replace("]","").split(",");
-                for(String s : arr)
+            if (sharedPreferences.getString("physicalStatusArray", null) != null) {
+                String[] arr = sharedPreferences.getString("physicalStatusArray", null).replace("[", "").replace("]", "").split(",");
+                for (String s : arr)
                     physicalstatusList.add(s);
                 countphysicalstatus = physicalstatusList.size();
 
-                physicalstatus.setText(sharedPreferences.getString("physicalStatusArray",null));
+                physicalstatus.setText(sharedPreferences.getString("physicalStatusArray", null));
             }
 
 
         }
 
 
-
         //doesnt matter all deselect anything selected doesnt matter deselected
         doesnt_matter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(doesnt_matter.isChecked()){
+                if (doesnt_matter.isChecked()) {
                     very_fair.setChecked(false);
                     fair.setChecked(false);
                     wheatish.setChecked(false);
@@ -1390,8 +1405,7 @@ public class Search extends AppCompatActivity {
         });
 
 
-
-       // pizza
+        // pizza
         very_fair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1407,12 +1421,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                if (very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(false);
                     int_doesnt_matter = false;
                     complexion.remove(doesnt_matter.getText().toString());
                 }
-                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                if (!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(true);
                     int_doesnt_matter = true;
                     complexion.add(doesnt_matter.getText().toString());
@@ -1434,12 +1448,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                if (very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(false);
                     int_doesnt_matter = false;
                     complexion.remove(doesnt_matter.getText().toString());
                 }
-                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                if (!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(true);
                     int_doesnt_matter = true;
                     complexion.add(doesnt_matter.getText().toString());
@@ -1461,12 +1475,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                if (very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(false);
                     int_doesnt_matter = false;
                     complexion.remove(doesnt_matter.getText().toString());
                 }
-                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                if (!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(true);
                     int_doesnt_matter = true;
                     complexion.add(doesnt_matter.getText().toString());
@@ -1488,12 +1502,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                if (very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(false);
                     int_doesnt_matter = false;
                     complexion.remove(doesnt_matter.getText().toString());
                 }
-                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                if (!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(true);
                     int_doesnt_matter = true;
                     complexion.add(doesnt_matter.getText().toString());
@@ -1515,12 +1529,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
+                if (very_fair.isChecked() || fair.isChecked() || dark.isChecked() || wheatish.isChecked() || wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(false);
                     int_doesnt_matter = false;
                     complexion.remove(doesnt_matter.getText().toString());
                 }
-                if(!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
+                if (!very_fair.isChecked() && !fair.isChecked() && !dark.isChecked() && !wheatish.isChecked() && !wheatish_brown.isChecked()) {
                     doesnt_matter.setChecked(true);
                     int_doesnt_matter = true;
                     complexion.add(doesnt_matter.getText().toString());
@@ -1543,7 +1557,7 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(doesnt_matter.isChecked()){
+                if (doesnt_matter.isChecked()) {
                     very_fair.setChecked(false);
                     int_very_fair = false;
                     complexion.remove(very_fair.getText().toString());
@@ -1579,12 +1593,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1606,12 +1620,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1633,12 +1647,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1660,12 +1674,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1686,12 +1700,12 @@ public class Search extends AppCompatActivity {
                     occupation.add(not_employed.getText().toString());
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1713,12 +1727,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
+                if (profession.isChecked() || job.isChecked() || retired.isChecked() || business.isChecked() || not_employed.isChecked() || studying.isChecked()) {
                     dont_matter.setChecked(false);
                     int_dont_matter = false;
                     occupation.remove(dont_matter.getText().toString());
                 }
-                if(!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
+                if (!profession.isChecked() && !job.isChecked() && !retired.isChecked() && !business.isChecked() && !not_employed.isChecked() && !studying.isChecked()) {
                     dont_matter.setChecked(true);
                     int_dont_matter = true;
                     occupation.add(dont_matter.getText().toString());
@@ -1740,7 +1754,7 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Removed", Toast.LENGTH_SHORT).show();
 
                 }
-                if(dont_matter.isChecked()){
+                if (dont_matter.isChecked()) {
                     profession.setChecked(false);
                     int_profession = false;
                     occupation.remove(profession.getText().toString());
@@ -1780,12 +1794,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                if (slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
                     doesntMatter.setChecked(false);
                     intDoesntMatter = false;
                     bodyType.remove(doesntMatter.getText().toString());
                 }
-                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                if (!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
                     doesntMatter.setChecked(true);
                     intDoesntMatter = true;
                     bodyType.add(doesntMatter.getText().toString());
@@ -1807,12 +1821,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                if (slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
                     doesntMatter.setChecked(false);
                     intDoesntMatter = false;
                     bodyType.remove(doesntMatter.getText().toString());
                 }
-                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                if (!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
                     doesntMatter.setChecked(true);
                     intDoesntMatter = true;
                     bodyType.add(doesntMatter.getText().toString());
@@ -1834,12 +1848,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                if (slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
                     doesntMatter.setChecked(false);
                     intDoesntMatter = false;
                     bodyType.remove(doesntMatter.getText().toString());
                 }
-                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                if (!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
                     doesntMatter.setChecked(true);
                     intDoesntMatter = true;
                     bodyType.add(doesntMatter.getText().toString());
@@ -1861,12 +1875,12 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
+                if (slim.isChecked() || athletic.isChecked() || average.isChecked() || heavy.isChecked()) {
                     doesntMatter.setChecked(false);
                     intDoesntMatter = false;
                     bodyType.remove(doesntMatter.getText().toString());
                 }
-                if(!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
+                if (!slim.isChecked() && !athletic.isChecked() && !average.isChecked() && !heavy.isChecked()) {
                     doesntMatter.setChecked(true);
                     intDoesntMatter = true;
                     bodyType.add(doesntMatter.getText().toString());
@@ -1888,7 +1902,7 @@ public class Search extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
 
                 }
-                if(doesntMatter.isChecked()) {
+                if (doesntMatter.isChecked()) {
                     slim.setChecked(false);
                     intSlim = false;
                     bodyType.remove(slim.getText().toString());
@@ -1903,7 +1917,7 @@ public class Search extends AppCompatActivity {
                     bodyType.remove(heavy.getText().toString());
 
                 }
-                }
+            }
         });
 
 
@@ -1920,6 +1934,26 @@ public class Search extends AppCompatActivity {
         return true;
     }
 
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
+
+        int age;
+
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+
+        age = currentYear - DOByear;
+
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
+                --age;
+            }
+        }
+        return age;
+    }
 
     private class BackEnd extends AsyncTask<String, String, String> {
         @Override
@@ -1945,12 +1979,12 @@ public class Search extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONArray response) {
 
-                            Vector<String> customers=new Vector<>();
-                            for(int i=0;i<response.length();i++){
-                                JSONArray user= null;
+                            Vector<String> customers = new Vector<>();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONArray user = null;
                                 try {
                                     user = response.getJSONArray(i);
-                                    if((customers.indexOf(user.getString(3))==-1)){
+                                    if ((customers.indexOf(user.getString(3)) == -1)) {
                                         customers.add(user.getString(3));
                                         DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                                         Date now = new Date();
@@ -1973,14 +2007,14 @@ public class Search extends AppCompatActivity {
                                         int a = getAge(year, month, day);
                                         String age = Integer.toString(a);
                                         SuggestionModel suggestionModel;
-                                        if(user.get(8).equals("")){
-                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
-                                        }else{
-                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        if (user.get(8).equals("")) {
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString() + " " + user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                        } else {
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(1).toString(), user.get(2).toString() + " " + user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }
-                                        suggestionModelList2.add(suggestionModel);}
-                                }
-                                catch (JSONException e) {
+                                        suggestionModelList2.add(suggestionModel);
+                                    }
+                                } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -1991,9 +2025,9 @@ public class Search extends AppCompatActivity {
                                     cityList.clear();
                                     statesList.clear();
                                     addPrevious = addPreviousc = "";
-                                    Intent intent=new Intent(getApplicationContext(),SearchResultsActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    intent.putExtra("which","advSearch");
+                                    intent.putExtra("which", "advSearch");
                                     startActivity(intent);
                                     finish();
                                 }
@@ -2009,7 +2043,7 @@ public class Search extends AppCompatActivity {
                                 }
                             });
 
-                            Toast.makeText(getApplicationContext(),"Network Error Occurder. Please check Internet",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Network Error Occurder. Please check Internet", Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -2021,26 +2055,6 @@ public class Search extends AppCompatActivity {
             super.onPostExecute(s);
 
         }
-    }
-    public int getAge(int DOByear, int DOBmonth, int DOBday) {
-
-        int age;
-
-        final Calendar calenderToday = Calendar.getInstance();
-        int currentYear = calenderToday.get(Calendar.YEAR);
-        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
-        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-
-        age = currentYear - DOByear;
-
-        if (DOBmonth > currentMonth) {
-            --age;
-        } else if (DOBmonth == currentMonth) {
-            if (DOBday > todayDay) {
-                --age;
-            }
-        }
-        return age;
     }
 
 }

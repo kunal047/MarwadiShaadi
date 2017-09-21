@@ -511,7 +511,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     str = response.getString(0);
-                                    Log.d(TAG, "onResponse: value is =============================== " + str);
 
                                     if (str.equals("logged")) {
                                         builder= new AlertDialog.Builder(LoginActivity.this);
@@ -529,15 +528,6 @@ public class LoginActivity extends AppCompatActivity {
                                         alert = builder.create();
                                         alert.show();
 
-//                                                                 builder.setNegativeButton(
-//                                                                         "Edit Number",
-//                                                                         new DialogInterface.OnClickListener() {
-//                                                                             public void onClick(DialogInterface dialog, int id) {
-//                                                                             }
-//                                                                         });
-
-
-
                                     } else if (str.contains("success")) {
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
@@ -550,8 +540,9 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         JSONArray communityArray = response.getJSONArray(5);
+                                        editor.putInt("cal", communityArray.length());
 
-                                        for (int i = 0; i < 5; i++) {
+                                        for (int i = 0; i < communityArray.length(); i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
                                         }
                                         editor.apply();
@@ -563,8 +554,10 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("gender", customer_gender);
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
+                                        editor.putBoolean("isLoggedIn", true);
 
                                         communityArray = response.getJSONArray(5);
+                                        editor.putInt("cal", communityArray.length());
 
                                         for (int i = 0; i < communityArray.length(); i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
@@ -668,7 +661,23 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("firstname", response.getString(3));
                                         editor.putString("surname", response.getString(4));
                                         JSONArray communityArray = response.getJSONArray(5);
-                                        editor.putString("communityArrayLength", String.valueOf(communityArray.length()));
+                                        editor.putInt("cal", communityArray.length());
+                                        for (int i = 0; i < communityArray.length(); i++) {
+                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                        }
+                                        editor.apply();
+
+                                        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                        editor = sharedpref.edit();
+
+                                        editor.putString("customer_id", customer_id);
+                                        editor.putString("gender", customer_gender);
+                                        editor.putString("firstname", response.getString(3));
+                                        editor.putString("surname", response.getString(4));
+                                        editor.putBoolean("isLoggedIn", true);
+
+                                        communityArray = response.getJSONArray(5);
+                                        editor.putInt("cal", communityArray.length());
 
                                         for (int i = 0; i < communityArray.length(); i++) {
                                             editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
@@ -688,7 +697,7 @@ public class LoginActivity extends AppCompatActivity {
                                         });
 
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Please enter correct email address or password", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), "Please enter correct User id or password", Toast.LENGTH_LONG).show();
                                     }
 
 
