@@ -1,17 +1,16 @@
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    xmlns:fab="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:id="@+id/entire_ui"
-    android:layout_height="match_parent">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:fab="http://schemas.android.com/tools"
+                                                 android:id="@+id/entire_ui"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -19,31 +18,33 @@
             android:layout_width="match_parent"
             android:layout_height="290dp"
             android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimary"
             android:fitsSystemWindows="true"
             android:titleTextColor="@color/colorPrimary"
-            android:background="@color/colorPrimary"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+            app:contentScrim="?attr/colorPrimaryDark"
             app:expandedTitleMarginBottom="10dp"
             app:expandedTitleMarginStart="10dp"
-            app:contentScrim="?attr/colorPrimaryDark"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_scrollFlags="scroll|enterAlways"
             >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="@color/black"
                 android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:titleTextColor="@color/black"
                 />
+
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_marginTop="45dp"
-
                 android:layout_gravity="center_horizontal"
+
+                android:layout_marginTop="45dp"
                 app:autoPlay="false"
                 app:fillColor="#FFFFFFFF"
                 app:indicatorGravity="end"
@@ -54,29 +55,42 @@
                 app:strokeColor="#FF777777"
                 app:strokeWidth="0.5dp"/>
 
+            <TextView
+                android:id="@+id/showTextOnPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="120dp"
+                android:text="Upload your photo \n to view"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
             <ImageView
                 android:id="@+id/imageViewInformation"
-                android:layout_gravity="end|bottom"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="end|bottom"
                 android:layout_marginRight="10dp"
                 app:srcCompat="@mipmap/information"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/colorPrimary"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"/>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/profile_tabs"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="2dp"
-            app:tabTextColor="@color/white"
-            android:background="@color/colorPrimary"
-            app:tabMode="scrollable"/>
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/white"/>
 
         <View
             android:layout_width="match_parent"
@@ -92,15 +106,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
-
-
-
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:orientation="horizontal"
         android:id="@+id/fabmenu"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:orientation="horizontal">
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/menu_yellow"
@@ -109,98 +120,94 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
-            fab:menu_labels_style="@style/MenuLabelsStyle"
-            fab:menu_labels_showAnimation="@anim/jump_from_down"
-            fab:menu_labels_hideAnimation="@anim/jump_to_down"
             fab:menu_animationDelayPerItem="0"
+            fab:menu_labels_hideAnimation="@anim/jump_to_down"
+            fab:menu_labels_showAnimation="@anim/jump_from_down"
+            fab:menu_labels_style="@style/MenuLabelsStyle"
             fab:menu_shadowColor="#444"
-           >
+            >
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_favourite"
-                app:fab_progress_showBackground="false"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/fab_fav"
                 app:fab_colorNormal="#ffD000"
                 app:fab_colorPressed="#ffD000"
                 app:fab_colorRipple="#FFD000"
-                app:fab_showShadow="true"
                 app:fab_label="Add to Favourites"
+                app:fab_progress_showBackground="false"
                 app:fab_shadowColor="#66000000"
                 app:fab_shadowRadius="1dp"
                 app:fab_shadowXOffset="1dp"
                 app:fab_shadowYOffset="3dp"
-                style="@style/MenuButtonsStyle" />
+                app:fab_showShadow="true"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_send_message"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:src="@drawable/fab_chat"
                 app:fab_colorNormal="#00C864"
                 app:fab_colorPressed="#00C864"
                 app:fab_colorRipple="#00C864"
-                android:src="@drawable/fab_chat"
-                app:fab_label="Send Message"
-                style="@style/MenuButtonsStyle" />
+                app:fab_label="Send Message"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_send_interest"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:src="@drawable/fab_heart"
                 app:fab_colorNormal="#FF0000"
                 app:fab_colorPressed="#FF0000"
                 app:fab_colorRipple="#FF0000"
-                android:src="@drawable/fab_heart"
-                app:fab_label="Send Interest"
-                style="@style/MenuButtonsStyle" />
+                app:fab_label="Send Interest"/>
 
-             <com.github.clans.fab.FloatingActionButton
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_share_profile"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:src="@drawable/fab_share"
                 app:fab_colorNormal="#7A0724"
                 app:fab_colorPressed="#7A0724"
                 app:fab_colorRipple="#7A0724"
-                android:src="@drawable/fab_share"
-                app:fab_label="Share Profile"
-                style="@style/MenuButtonsStyle" />
+                app:fab_label="Share Profile"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_save"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:src="@drawable/fab_save"
                 app:fab_colorNormal="#386AFF"
                 app:fab_colorPressed="#386AFF"
                 app:fab_colorRipple="#386AFF"
-                android:src="@drawable/fab_save"
-                app:fab_label="Save as PDF"
-                style="@style/MenuButtonsStyle" />
+                app:fab_label="Save as PDF"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_edit_photos"
+                style="@style/MenuButtonsStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:src="@drawable/ic_user_edit"
                 app:fab_colorNormal="#386AFF"
                 app:fab_colorPressed="#386AFF"
                 app:fab_colorRipple="#386AFF"
-                android:src="@drawable/ic_user_edit"
-                app:fab_label="Edit Photos"
-                style="@style/MenuButtonsStyle" />
+                app:fab_label="Edit Photos"/>
 
         </com.github.clans.fab.FloatingActionMenu>
 
 
-
-
     </FrameLayout>
-
-
 
 
 </android.support.design.widget.CoordinatorLayout>

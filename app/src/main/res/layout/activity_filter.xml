@@ -1,463 +1,469 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
     >
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/filter_toolbar"
-        android:theme="@style/MyToolbartheme"
         android:layout_width="match_parent"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
     </android.support.v7.widget.Toolbar>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <android.support.v7.widget.CardView
-    app:cardCornerRadius="10dp"
-    android:layout_margin="10dp"
-    android:elevation="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:drawableLeft="@drawable/profile_location"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="By location"
-            android:textColor="#000000"
-            android:textSize="16dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:weightSum="5">
-
-            <EditText
-                android:id="@+id/filter_by_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:background="#fff"
-                android:clickable="true"
-                android:drawableLeft="@drawable/signup_location"
-                android:drawablePadding="10dp"
-                android:ems="10"
-                android:hint="Type State"
-                android:inputType="text"
-                android:textSize="16dp" />
-
-            <Button
-                android:id="@+id/search_add_state"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:background="@layout/circular_button"
-                android:text="+"
-                android:textColor="#eee"
-                android:textSize="20sp" />
-
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542"></View>
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/text_view_search_add_state"
-            android:textStyle="bold"
-            android:paddingLeft="10dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:drawableLeft="@drawable/profile_edu"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="By education"
-            android:textColor="#000000"
-            android:textSize="16dp" />
-
-        <HorizontalScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarFadeDuration="2"
-            android:scrollbarSize="2dp"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="horizontal">
+            android:elevation="10dp"
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/profile_location"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="By location"
+                    android:textColor="#000000"
+                    android:textSize="16dp"/>
 
                 <LinearLayout
-                    android:id="@+id/list_doctor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <EditText
+                        android:id="@+id/filter_by_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:background="#fff"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/signup_location"
+                        android:drawablePadding="10dp"
+                        android:ems="10"
+                        android:hint="Type State"
+                        android:inputType="text"
+                        android:textSize="16dp"/>
+
+                    <Button
+                        android:id="@+id/search_add_state"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@layout/circular_button"
+                        android:text="+"
+                        android:textColor="#eee"
+                        android:textSize="20sp"/>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542"></View>
+
+                <TextView
+                    android:id="@+id/text_view_search_add_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    />
 
-                    <ImageView
-                        android:id="@+id/doctor"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/doctor_black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/profile_edu"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="By education"
+                    android:textColor="#000000"
+                    android:textSize="16dp"/>
 
-                    <TextView
-                        android:id="@+id/text_doctor"
-                        android:layout_width="50dp"
+                <HorizontalScrollView
+                    android:id="@+id/scrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    android:scrollbarFadeDuration="2"
+                    android:scrollbarSize="2dp"
+                    android:scrollbarStyle="insideOverlay"
+                    android:scrollbars="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Doctor"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:clickable="true"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/list_doctor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/doctor"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/doctor_black"/>
+
+                            <TextView
+                                android:id="@+id/text_doctor"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Doctor"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_engineer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/engineer"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/engineer_black"/>
+
+                            <TextView
+                                android:id="@+id/text_engineer"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Engineer"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_mab_mca"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/mba_mca"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/mba_black"/>
+
+                            <TextView
+                                android:id="@+id/text_mba_mca"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="MBA/MCA"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_ca_cs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/ca_cs"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/ca_black"/>
+
+                            <TextView
+                                android:id="@+id/text_ca_cs"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="CA/CS"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_llb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/llb"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/llb_black"/>
+
+                            <TextView
+                                android:id="@+id/text_llb"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="LLB"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_pg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/pg"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/mba_black"/>
+
+                            <TextView
+                                android:id="@+id/text_pg"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Post\nGraduate"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_g"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp">
+
+                            <ImageView
+                                android:id="@+id/g"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/grad_black"/>
+
+                            <TextView
+                                android:id="@+id/text_g"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Graduate"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/list_ug"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="10dp">
+
+                            <ImageView
+                                android:id="@+id/ug"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:clickable="true"
+                                android:src="@drawable/undergrad_black"/>
+
+                            <TextView
+                                android:id="@+id/text_ug"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Under\nGraduate"
+                                android:textSize="12dp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="By age"
+                    android:textColor="#000000"
+                    android:textSize="16dp"/>
 
                 <LinearLayout
-                    android:id="@+id/list_engineer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/engineer"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/engineer_black" />
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/text_engineer"
-                        android:layout_width="50dp"
+                        android:id="@+id/textMin"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Engineer"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:textColor="#000"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/textMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@+id/rangeSeekbar"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:textColor="#000"
+                        android:textSize="16dp"/>
                 </LinearLayout>
+
+                <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+                    android:id="@+id/rangeSeekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:bar_color="#1a000000"
+                    app:bar_highlight_color="#fb6542"
+                    app:corner_radius="2"
+                    app:data_type="_integer"
+                    app:left_thumb_color="@color/colorPrimary"
+                    app:left_thumb_color_pressed="@color/colorPrimary"
+                    app:max_value="71"
+                    app:min_value="18"
+                    app:right_thumb_color="@color/colorPrimary"
+                    app:right_thumb_color_pressed="@color/colorPrimary"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/profile_income"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="By annual income"
+                    android:textColor="#000000"
+                    android:textSize="16dp"/>
+
+                <EditText
+                    android:id="@+id/search_Annual_income"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#fff"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="Select Annual Income"
+                    android:textSize="16dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_margin="10dp"
+                    android:background="#59fb6542"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Sort by"
+                    android:textColor="@color/black"
+                    />
 
                 <LinearLayout
-                    android:id="@+id/list_mab_mca"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:weightSum="2">
 
-                    <ImageView
-                        android:id="@+id/mba_mca"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/mba_black" />
-
-                    <TextView
-                        android:id="@+id/text_mba_mca"
-                        android:layout_width="50dp"
+                    <CheckBox
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="MBA/MCA"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:text="Registration"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Last Login"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/list_ca_cs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/filter_submit"
+                    android:layout_width="80dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="15dp"
+                    android:background="@layout/button_border_corner_circle_"
+                    android:text="Ok"
+                    android:textColor="#fff"/>
 
-                    <ImageView
-                        android:id="@+id/ca_cs"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/ca_black" />
-
-                    <TextView
-                        android:id="@+id/text_ca_cs"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="CA/CS"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_llb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/llb"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/llb_black" />
-
-                    <TextView
-                        android:id="@+id/text_llb"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="LLB"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_pg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/pg"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/mba_black" />
-
-                    <TextView
-                        android:id="@+id/text_pg"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Post\nGraduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_g"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp">
-
-                    <ImageView
-                        android:id="@+id/g"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/grad_black" />
-
-                    <TextView
-                        android:id="@+id/text_g"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Graduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/list_ug"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="10dp">
-
-                    <ImageView
-                        android:id="@+id/ug"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:clickable="true"
-                        android:src="@drawable/undergrad_black" />
-
-                    <TextView
-                        android:id="@+id/text_ug"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Under\nGraduate"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
             </LinearLayout>
-        </HorizontalScrollView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542"></View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:drawableLeft="@drawable/profile_name"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="By age"
-            android:textColor="#000000"
-            android:textSize="16dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textMin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:textColor="#000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textMax"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/rangeSeekbar"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textColor="#000"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-            android:id="@+id/rangeSeekbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:bar_color="#1a000000"
-            app:bar_highlight_color="#fb6542"
-            app:corner_radius="2"
-            app:data_type="_integer"
-            app:left_thumb_color="@color/colorPrimary"
-            app:left_thumb_color_pressed="@color/colorPrimary"
-            app:max_value="71"
-            app:min_value="18"
-            app:right_thumb_color="@color/colorPrimary"
-            app:right_thumb_color_pressed="@color/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542"></View>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:drawableLeft="@drawable/profile_income"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="By annual income"
-            android:textColor="#000000"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/search_Annual_income"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="#fff"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="Select Annual Income"
-            android:textSize="16dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="10dp"
-            android:background="#59fb6542"></View>
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sort by"
-            android:textColor="@color/black"
-            />
-        <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:text="Registration"
-                android:layout_height="wrap_content" />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:text="Last Login"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="80dp"
-            android:layout_height="35dp"
-            android:background="@layout/button_border_corner_circle_"
-            android:layout_gravity="center_horizontal"
-            android:text="Ok"
-            android:textColor="#fff"
-            android:layout_margin="15dp"
-            android:id="@+id/filter_submit"/>
-
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
     </ScrollView>
-    </LinearLayout>
+</LinearLayout>

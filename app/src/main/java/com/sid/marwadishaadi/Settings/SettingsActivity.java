@@ -28,9 +28,14 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.sid.marwadishaadi.About_Us.AboutUsActivity;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Blocked_Members.BlockedActivity;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Contact_Us.ContactUsActivity;
 import com.sid.marwadishaadi.Faq.FaqActivity;
 import com.sid.marwadishaadi.Login.LoginActivity;
@@ -38,10 +43,6 @@ import com.sid.marwadishaadi.Notifications_Util;
 import com.sid.marwadishaadi.Payment_Policy.PaymentPolicyActivity;
 import com.sid.marwadishaadi.Privacy_Policy.PrivacyPolicyActivity;
 import com.sid.marwadishaadi.R;
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -264,8 +265,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
 
-
-
         reset_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -447,7 +446,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/ResetPassword")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
@@ -463,7 +462,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 if (user.getString(0).equals(old_pass_encrypt)) {
 
                                     final String quer = "update tbl_login set password = \"" + HashConverter(user_new_pass) + "\" where customer_no=\"" + customer_id + "\";";
-                                    AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
+                                    AndroidNetworking.post(Constants.AWS_SERVER + "/ResetPassword")
                                             .addBodyParameter("query", quer)
                                             .setPriority(Priority.HIGH)
                                             .build()

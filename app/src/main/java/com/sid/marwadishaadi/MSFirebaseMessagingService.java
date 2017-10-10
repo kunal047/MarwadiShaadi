@@ -24,8 +24,8 @@ public class MSFirebaseMessagingService extends FirebaseMessagingService {
 
         // checking if user has notification ON/OFF in settings
         SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean notificationStatus = userinfo.getBoolean("Notification_Status",true);
-        if (notificationStatus){
+        Boolean notificationStatus = userinfo.getBoolean("Notification_Status", true);
+        if (notificationStatus) {
             Notifications_Util.createNotification(remoteMessage.getData().get("Type"), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), this, 1);
         }
 

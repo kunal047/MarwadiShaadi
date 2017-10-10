@@ -3,9 +3,9 @@ package com.sid.marwadishaadi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
-import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -28,16 +27,21 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class Filter extends AppCompatActivity {
 
 
+    static String addTextState, addPrevious = "";
+    private static int casebreak;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
     LinearLayout ldoctor, lengineer, lmbamca, lcacs, lpg, lg, lug, lllb;
     int colorg, colorb;
-    static String  addTextState,addPrevious="";
-    Button complete,addButton;
+    Button complete, addButton;
     TextView statetextView;
     EditText autoCompleteState;
     private EditText annualincome;
+
+    public Filter() {
+
+    }
 
     public static int getCasebreak() {
         return casebreak;
@@ -46,11 +50,6 @@ public class Filter extends AppCompatActivity {
     public static void setCasebreak(int casebreak) {
         Filter.casebreak = casebreak;
     }
-    public Filter()
-    {
-
-    }
-    private static int casebreak;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -68,7 +67,7 @@ public class Filter extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        statetextView=(TextView)findViewById(R.id.text_view_search_add_state);
+        statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
         complete = (Button) findViewById(R.id.filter_submit);
 
         idoctor = (ImageView) findViewById(R.id.doctor);
@@ -98,24 +97,22 @@ public class Filter extends AppCompatActivity {
         lg = (LinearLayout) findViewById(R.id.list_g);
         lug = (LinearLayout) findViewById(R.id.list_ug);
 
-        autoCompleteState=(EditText)findViewById(R.id.filter_by_location);
-        addButton=(Button)findViewById(R.id.search_add_state);
-        final TextView statetextView=(TextView)findViewById(R.id.text_view_search_add_state);
+        autoCompleteState = (EditText) findViewById(R.id.filter_by_location);
+        addButton = (Button) findViewById(R.id.search_add_state);
+        final TextView statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addTextState = autoCompleteState.getText().toString();
-                if(addTextState.equals(""))
-                {
-                    Toast.makeText(getApplicationContext(),"Please click + button after state selection ",Toast.LENGTH_SHORT).show();
-                }
-                else {
+                if (addTextState.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please click + button after state selection ", Toast.LENGTH_SHORT).show();
+                } else {
 
-                    statetextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
-                    statetextView.setText(addPrevious+"\n"+addTextState);
-                    addPrevious=statetextView.getText().toString();
+                    statetextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    statetextView.setText(addPrevious + "\n" + addTextState);
+                    addPrevious = statetextView.getText().toString();
                     autoCompleteState.setText("");
-                    Toast.makeText(getApplicationContext(),"Added successfully ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Added successfully ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -123,9 +120,9 @@ public class Filter extends AppCompatActivity {
         annualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                casebreak=5;
-                BottomSheetDialogFragment btm= new BottomSheet(4);
-                btm.show(getSupportFragmentManager(),btm.getTag());
+                casebreak = 5;
+                BottomSheetDialogFragment btm = new BottomSheet(4);
+                btm.show(getSupportFragmentManager(), btm.getTag());
             }
         });
 
@@ -133,14 +130,14 @@ public class Filter extends AppCompatActivity {
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Filter.this,DashboardActivity.class);
+                Intent i = new Intent(Filter.this, DashboardActivity.class);
                 startActivity(i);
             }
         });
 
         // get seekbar from view
 
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar)findViewById(R.id.rangeSeekbar);
+        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
 // get min and max text view
         final TextView tvMin = (TextView) findViewById(R.id.textMin);
         final TextView tvMax = (TextView) findViewById(R.id.textMax);
@@ -462,7 +459,7 @@ public class Filter extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
         return true;

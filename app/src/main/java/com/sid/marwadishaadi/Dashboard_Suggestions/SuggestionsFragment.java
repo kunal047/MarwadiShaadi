@@ -1,5 +1,6 @@
 package com.sid.marwadishaadi.Dashboard_Suggestions;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -14,14 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.SortBy;
@@ -48,6 +50,8 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class SuggestionsFragment extends Fragment {
 
+
+    private static final String TAG = "SuggestionsFragment";
     private static int page_no = 0;
     protected Handler handler;
     private List<SuggestionModel> suggestionModelList = new ArrayList<>();
@@ -62,12 +66,10 @@ public class SuggestionsFragment extends Fragment {
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
     private String suggestionShowPhotos, suggestionSort;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ProgressBar progressBar;
-
-    private static final String TAG = "SuggestionsFragment";
-
+    //    private ProgressBar progressBar;
     //    private OnLoadMoreListener mOnLoadMoreListener;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ProgressDialog progressDialog;
 
     @Override
 
@@ -92,12 +94,16 @@ public class SuggestionsFragment extends Fragment {
 
         View mview = inflater.inflate(R.layout.fragment_suggestions, container, false);
         empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
+
         empty_view_suggestions.setVisibility(View.GONE);
 
-        progressBar = (ProgressBar) mview.findViewById(R.id.favourite_progress_bar);
+//        progressBar = (ProgressBar) mview.findViewById(R.id.suggestion_progress_bar);
 
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = new ProgressDialog(getActivity());
 
+        progressDialog.setMessage("Loading profiles...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
@@ -108,16 +114,28 @@ public class SuggestionsFragment extends Fragment {
         String[] array = getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
+
         int communityLength = communityChecker.getInt("cal", 0);
 
-        if (customer_id != null && communityChecker != null && array.length > 0) {
-            for (int i = 0; i < communityLength; i++) {
+        try {
 
-                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                    res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            if (customer_id != null && communityChecker != null && array.length > 0) {
+
+
+                for (int i = 0; i < communityLength; i++) {
+
+                    if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                        res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+                    }
                 }
             }
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+            Log.d(TAG, "onCreateView: array index out of bound ---------------- " + e.toString());
+
         }
+
 
         handler = new Handler();
 
@@ -188,7 +206,12 @@ public class SuggestionsFragment extends Fragment {
                 // displaying it
                 JSONArray response = new JSONArray(res);
                 // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
-                parseSuggestions(response);
+
+                if (response.length() > 0) {
+
+                    parseSuggestions(response);
+
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -202,7 +225,6 @@ public class SuggestionsFragment extends Fragment {
             @Override
             public void onLoadMore() throws InterruptedException {
 
-//                progressBar.setVisibility(View.VISIBLE);
 
                 suggestionModelList.add(null);
                 suggestionAdapter.notifyDataSetChanged();
@@ -226,10 +248,7 @@ public class SuggestionsFragment extends Fragment {
 
     private void refreshContent() {
         page_no = 0;
-        progressBar.setVisibility(View.VISIBLE);
         new PrepareSuggestions().execute();
-
-
     }
 
     public int getAge(int DOByear, int DOBmonth, int DOBday) {
@@ -271,11 +290,9 @@ public class SuggestionsFragment extends Fragment {
 
     public void parseSuggestions(JSONArray response) {
 
-        progressBar.setVisibility(View.GONE);
-
         try {
 
-            if (response.length() == 0) {
+            if (response.length() == 0 && suggestionModelList.size() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -359,6 +376,9 @@ public class SuggestionsFragment extends Fragment {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -379,7 +399,8 @@ public class SuggestionsFragment extends Fragment {
             suggestionShowPhotos = sortBy.getString("showPhotos", "yes");
             suggestionSort = sortBy.getString("sortBy", "Recently");
 
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareSuggestions/{customerNo}/{gender}/{page}")
+
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareSuggestions/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .addPathParameter("page", String.valueOf(page_no))
@@ -402,15 +423,10 @@ public class SuggestionsFragment extends Fragment {
 
                                 if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
 
+                                    parseSuggestions(response);
+
                                     return;
                                 } else {
-
-                                    if (page_no == 0) {
-                                        suggestionModelList.clear();
-                                        suggestionAdapter.notifyDataSetChanged();
-                                    }
-
-
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
@@ -423,8 +439,9 @@ public class SuggestionsFragment extends Fragment {
 
                         @Override
                         public void onError(ANError error) {
-
                             // handle error
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -436,9 +453,17 @@ public class SuggestionsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            progressBar.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
             suggestionAdapter.setLoaded();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Do something after 100ms
+                    progressDialog.dismiss();
+                }
+            }, 1000);
 
 
         }

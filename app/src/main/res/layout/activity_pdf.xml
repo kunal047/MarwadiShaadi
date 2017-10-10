@@ -1,72 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="06/22/2017"
-                android:textSize="12dp"
-                android:layout_margin="4dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="MarwadiShaadi"
-                android:textSize="12dp"
-                android:gravity="right"
-                android:layout_margin="4dp"/>
-        </LinearLayout>
-        
-    <ImageView
-            android:id="@+id/pdfImage"
-            android:layout_width="200dp"
-            android:layout_height="250dp"
-            android:src="@drawable/default_drawer"
-            android:layout_gravity="center_horizontal"
-            />
-    <TextView
-        android:id="@+id/pdfImageName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Siddhesh Rane"
-        fontPath="fonts/OpenSans-Bold.ttf"
-        tools:ignore="MissingPrefix"
-        android:gravity="center_horizontal"/>
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-        android:layout_marginTop="4dp">
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile ID: "
-            fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"/>
-
-            <TextView
-                android:id="@+id/pdfImageId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="M1234"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
-        </LinearLayout>
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,355 +12,449 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-    <!--lhs-->
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:text="06/22/2017"
+            android:textSize="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="MarwadiShaadi"
+            android:textSize="12dp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pdfImage"
+        android:layout_width="200dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/default_drawer"
+        />
+
+    <TextView
+        android:id="@+id/pdfImageName"
+        fontPath="fonts/OpenSans-Bold.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Siddhesh Rane"
+        tools:ignore="MissingPrefix"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:layout_marginLeft="10dp">
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <TextView
+
+            fontPath="fonts/OpenSans-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Individual Details"
-            android:textColor="@color/colorPrimary"
+            android:text="Profile ID: "
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:id="@+id/pdfImageId"
             fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Siddhesh Rane"
-                android:id="@+id/pdfName"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Age: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20 years"
-                android:id="@+id/pdfAge"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-
-            android:layout_marginTop="4dp">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status: " />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Never Married"
-                android:id="@+id/pdfMaritalStatus"
-
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Birthday: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24 May 1997"
-                android:id="@+id/pdfDob"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Male"
-                android:id="@+id/pdfGender"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Location: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mumbai, Maharashtra"
-                android:id="@+id/pdfLocation"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mob: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+91-9004918906"
-                android:id="@+id/pdfContact"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Community: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Maheshwari"
-                android:id="@+id/pdfCommunity"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Subcaste: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shwetambar"
-                android:id="@+id/pdfSubcaste"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Height: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5ft 8 inch"
-                android:id="@+id/pdfHeight"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Designation: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Employee"
-                android:id="@+id/pdfDesignation"
-                />
-        </LinearLayout>
-
+            android:text="M1234"
+            tools:ignore="MissingPrefix"/>
     </LinearLayout>
 
-    <!--rhs-->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="10dp">
-        <TextView
-            android:id="@+id/textView"
-            fontPath="fonts/OpenSans-Bold.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="About Me"
-            android:textColor="@color/colorPrimary"
-            tools:ignore="MissingPrefix" />
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="I love coding"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/pdfAbout"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hobbies/Interests"
-            android:textColor="@color/colorPrimary"
-            fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reading"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/pdfHobby"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lifestyle"
-            android:textColor="@color/colorPrimary"
-            fontPath="fonts/OpenSans-Bold.ttf"
-            tools:ignore="MissingPrefix"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"/>
+        <!--lhs-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Diet: "
-                />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Non Vegetarian"
-                android:id="@+id/pdfDiet"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Individual Details"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Siddhesh Rane"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Age: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20 years"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status: "/>
+
+                <TextView
+                    android:id="@+id/pdfMaritalStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Never Married"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Birthday: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfDob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24 May 1997"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mumbai, Maharashtra"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mob: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+91-9004918906"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Community: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfCommunity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maheshwari"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subcaste: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfSubcaste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shwetambar"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfHeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5ft 8 inch"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Designation: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfDesignation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employee"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
+
+        <!--rhs-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
             <TextView
+                android:id="@+id/textView"
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Drinking: "
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="About Me"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"/>
+
+            <TextView
+                android:id="@+id/pdfAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="I love coding"
                 />
 
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No"
-                android:id="@+id/pdfDrink"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Hobbies/Interests"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"/>
+
+            <TextView
+                android:id="@+id/pdfHobby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Reading"
                 />
+
+            <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Lifestyle"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Diet: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfDiet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Non Vegetarian"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Drinking: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfDrink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smoking: "
+                    />
+
+                <TextView
+                    android:id="@+id/pdfSmoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"
+                    />
+            </LinearLayout>
+
+
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Smoking: "
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No"
-                android:id="@+id/pdfSmoke"
-                />
-        </LinearLayout>
-
-
-    </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

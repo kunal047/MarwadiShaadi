@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
     >
+
     <ImageView
         android:id="@+id/fb_gallery_pic"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_margin="2dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/profile"
-        android:layout_margin="2dp"/>
+        android:src="@drawable/profile"/>
+
     <ImageView
         android:id="@+id/is_selected"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:background="#99000000"
         android:padding="70dp"
-        android:visibility="gone"
         android:src="@drawable/tick_white"
-        android:background="#99000000"/>
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/is_primary"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:background="#99000000"
         android:padding="70dp"
-        android:visibility="gone"
         android:src="@drawable/tick"
-        android:background="#99000000"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

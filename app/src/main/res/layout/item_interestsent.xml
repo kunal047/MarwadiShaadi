@@ -10,12 +10,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilepic"
+        <RelativeLayout
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:padding="10dp"
-            android:src="@drawable/default_drawer"/>
+            android:layout_height="100dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profilepic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="10dp"
+                android:src="@drawable/default_drawer"/>
+
+            <TextView
+                android:id="@+id/showTextOnPictureOfInterestSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:text="Upload your \n photo to view"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

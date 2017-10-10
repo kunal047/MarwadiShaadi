@@ -14,25 +14,23 @@ import com.hendrix.pdfmyxml.utils.MeasureUtils;
  * @author Tomer Shalev
  */
 abstract public class AbstractViewRenderer implements IViewRenderer {
-    protected View      _view               = null;
-    protected Context   _ctx                = null;
-    private Bitmap      _bmp                = null;
-    private boolean     _flagReuseBitmap    = false;
-    private Object      _data               = null;
+    protected View _view = null;
+    protected Context _ctx = null;
+    private Bitmap _bmp = null;
+    private boolean _flagReuseBitmap = false;
+    private Object _data = null;
 
     /**
-     *
-     * @param ctx           a context
-     * @param layoutResId   a layout resource id
+     * @param ctx         a context
+     * @param layoutResId a layout resource id
      */
     public AbstractViewRenderer(Context ctx, int layoutResId) {
         this(ctx, LayoutInflater.from(ctx).inflate(layoutResId, null));
     }
 
     /**
-     *
-     * @param ctx   a context
-     * @param view  an inflated view
+     * @param ctx  a context
+     * @param view an inflated view
      */
     public AbstractViewRenderer(Context ctx, View view) {
         attachContext(ctx);
@@ -60,9 +58,9 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
      * @param bitmap a bitmap to render into (reused)
      * @param width  the width
      * @param height the height
-     *
-     * <h1>Note: </h1>
-     * on API <= 17, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
+     *               <p>
+     *               <h1>Note: </h1>
+     *               on API <= 17, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
      */
     @Override
     public final Bitmap render(Bitmap bitmap, int width, int height) {
@@ -70,24 +68,24 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
 
         initView(getView());
 
-        View view       = getView();
+        View view = getView();
 
-        int specWidth   = View.MeasureSpec.makeMeasureSpec(width,  width==0   ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
-        int specHeight  = View.MeasureSpec.makeMeasureSpec(height, height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specWidth = View.MeasureSpec.makeMeasureSpec(width, width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specHeight = View.MeasureSpec.makeMeasureSpec(height, height == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
 
         view.measure(specWidth, specHeight);
 
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
 
         // recycle bitmap
-        Bitmap b        = bitmap;//Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap b = bitmap;//Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
 
-        Canvas c        = new Canvas(b);
+        Canvas c = new Canvas(b);
         c.translate(-view.getScrollX(), -view.getScrollY());
 
         view.draw(c);
 
-        return  _bmp=b;
+        return _bmp = b;
     }
 
     /**
@@ -95,25 +93,25 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
      *
      * @param width  the wanted width for rendering, in Pixels. if 0, then the view will measure itself as big as it needs to be(only on <b>API > 17</b>).
      * @param height the wanted height for rendering, in Pixels. if 0, then the view will measure itself as big as it needs to be(only on <b>API > 17</b>).
-     *
-     * <h1>Note: </h1>
-     * on <b>API <= 17</b>, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
+     *               <p>
+     *               <h1>Note: </h1>
+     *               on <b>API <= 17</b>, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
      */
-    @Override final public Bitmap render(int width, int height) {
+    @Override
+    final public Bitmap render(int width, int height) {
         validate();
 
         initView(getView());
 
-        View view       = getView();
+        View view = getView();
 
-        int specWidth   = View.MeasureSpec.makeMeasureSpec(width  == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : width,  width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
-        int specHeight  = View.MeasureSpec.makeMeasureSpec(height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : height, height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specWidth = View.MeasureSpec.makeMeasureSpec(width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : width, width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specHeight = View.MeasureSpec.makeMeasureSpec(height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : height, height == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
         int a = ViewGroup.LayoutParams.MATCH_PARENT;
         System.out.println(a);
         try {
             view.measure(specWidth, specHeight);
-        }
-        catch (NullPointerException exc) {
+        } catch (NullPointerException exc) {
             exc.printStackTrace();
         }
 
@@ -122,38 +120,36 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
         Bitmap b;
 
         // recycle bitmap
-        if(!_flagReuseBitmap) {
+        if (!_flagReuseBitmap) {
             disposeBitmap();
             b = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        }
-        else {
+        } else {
             // reuse bitmap
-            b = (_bmp==null || _bmp.isRecycled()) ? Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888) : _bmp;
+            b = (_bmp == null || _bmp.isRecycled()) ? Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888) : _bmp;
             b.eraseColor(Color.TRANSPARENT);
         }
 
-        Canvas c        = new Canvas(b);
+        Canvas c = new Canvas(b);
         c.translate(-view.getScrollX(), -view.getScrollY());
 
         view.draw(c);
 
-        return _bmp=b;
+        return _bmp = b;
     }
 
-     final public Bitmap render2(int width, int height) {
+    final public Bitmap render2(int width, int height) {
         validate();
 
         initView(getView());
 
-        View view       = getView();
+        View view = getView();
 
-        int specWidth   = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, width),  width==0   ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
-        int specHeight  = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, height), height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specWidth = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, width), width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specHeight = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, height), height == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
 
         try {
             view.measure(specWidth, specHeight);
-        }
-        catch (NullPointerException exc) {
+        } catch (NullPointerException exc) {
             exc.printStackTrace();
         }
 
@@ -162,22 +158,21 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
         Bitmap b;
 
         // recycle bitmap
-        if(!_flagReuseBitmap) {
+        if (!_flagReuseBitmap) {
             disposeBitmap();
             b = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        }
-        else {
+        } else {
             // reuse bitmap
-            b = (_bmp==null || _bmp.isRecycled()) ? Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888) : _bmp;
+            b = (_bmp == null || _bmp.isRecycled()) ? Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888) : _bmp;
             b.eraseColor(Color.TRANSPARENT);
         }
 
-        Canvas c        = new Canvas(b);
+        Canvas c = new Canvas(b);
         c.translate(-view.getScrollX(), -view.getScrollY());
 
         view.draw(c);
 
-        return _bmp=b;
+        return _bmp = b;
     }
 
     /**
@@ -232,14 +227,13 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
      * @throws IllegalArgumentException if context or view is null
      */
     private void validate() {
-        if(_ctx==null)
+        if (_ctx == null)
             throw new IllegalArgumentException("ViewRenderer:: context was not set!!");
-        if(_view==null)
+        if (_view == null)
             throw new IllegalArgumentException("ViewRenderer:: view or layout resource was not set!!");
     }
 
     /**
-     *
      * @return flag reuse bitmap
      */
     public boolean isReuseBitmap() {
@@ -269,18 +263,18 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
      * dispose the bitmap
      */
     public void disposeBitmap() {
-        if(_bmp != null)
+        if (_bmp != null)
             _bmp.recycle();
         _bmp = null;
     }
 
     @Override
-    public void setData(Object data) {
-        _data = data;
+    public Object getData() {
+        return _data;
     }
 
     @Override
-    public Object getData() {
-        return _data;
+    public void setData(Object data) {
+        _data = data;
     }
 }

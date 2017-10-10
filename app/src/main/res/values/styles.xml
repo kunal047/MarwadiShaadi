@@ -18,9 +18,9 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="MenuButtonsStyle">
         <item name="fab_size">mini</item>
@@ -94,7 +94,7 @@
     </style>
 
 
-    <style name="MainCoordinatorLayoutStyle" />
+    <style name="MainCoordinatorLayoutStyle"/>
 
     <style name="MainAppBarLayoutStyle">
         <item name="android:layout_height">wrap_content</item>
@@ -121,11 +121,11 @@
     </style>
 
     <style name="MyTransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="android:windowIsTranslucent">true</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowIsFloating">true</item>
-    <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 </resources>

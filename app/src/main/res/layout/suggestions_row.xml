@@ -269,6 +269,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:srcCompat="@drawable/profile_height"/>
 
+            <TextView
+                android:id="@+id/textViewToUploadPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Upload your \n photo to view"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/cardView"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imgAdd"/>
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </ScrollView>

@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -44,6 +45,8 @@ import java.util.TimeZone;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * Created by USER on 02-06-2017.
@@ -51,7 +54,6 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class RecentAdapter extends RecyclerView.Adapter {
 
-    private static final String TAG = "RecentAdapter";
     private final int VIEW_PROG = 0;
     private final int VIEW_ITEM = 1;
     private boolean recentIsLoading;
@@ -68,6 +70,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
     private int lastVisibleItem, totalItemCount;
     private ProgressBar progressBar;
     private boolean isPaidMember = false;
+    private boolean hasDP;
 
     public RecentAdapter(Context context, List<RecentModel> recentModelList, RecyclerView recyclerView) {
         this.context = context;
@@ -140,6 +143,9 @@ public class RecentAdapter extends RecyclerView.Adapter {
                     isPaidMember = true;
                 }
             }
+            SharedPreferences sharedPref = iView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+            hasDP = sharedPref.getBoolean("hasDP", false);
+
 
             return new RecentViewHolder(iView);
         } else {
@@ -189,20 +195,24 @@ public class RecentAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            if (isPaidMember || hasDP) {
 
-            if (!isPaidMember) {
+                Glide.with(context)
+                        .load(recentModel.getRecentUserImage())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .into(((RecentViewHolder) holder).recentUserImage);
+                ((RecentViewHolder) holder).showTextOnPicture.setVisibility(View.GONE);
+
+            } else {
+
                 Glide.with(context)
                         .load(recentModel.getRecentUserImage())
                         .placeholder(R.drawable.default_drawer)
                         .error(R.drawable.default_drawer)
                         .bitmapTransform(new BlurTransformation(context))
                         .into(((RecentViewHolder) holder).recentUserImage);
-            } else {
-                Glide.with(context)
-                        .load(recentModel.getRecentUserImage())
-                        .placeholder(R.drawable.default_drawer)
-                        .error(R.drawable.default_drawer)
-                        .into(((RecentViewHolder) holder).recentUserImage);
+                ((RecentViewHolder) holder).showTextOnPicture.setVisibility(View.VISIBLE);
 
             }
 
@@ -383,7 +393,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
     public class RecentViewHolder extends RecyclerView.ViewHolder {
 
         ImageView recentUserImage;
-        TextView recentName, recentAge, recentHighestDegree, recentLocation, recentOnline, recentCustomerId;
+        TextView recentName, recentAge, recentHighestDegree, recentLocation, recentOnline, recentCustomerId, showTextOnPicture;
         SparkButton sparkButtonInterest, sparkButtonFavourite;
 
 
@@ -397,6 +407,9 @@ public class RecentAdapter extends RecyclerView.Adapter {
             recentHighestDegree = (TextView) itemView.findViewById(R.id.recentTextViewEducation);
             recentLocation = (TextView) itemView.findViewById(R.id.recentTextViewCity);
             recentOnline = (TextView) itemView.findViewById(R.id.recentTextViewLastOnline);
+            showTextOnPicture = (TextView) itemView.findViewById(R.id.showTextOnPictureOfRecent);
+
+
             sparkButtonFavourite = (SparkButton) itemView.findViewById(R.id.recentFav);
             sparkButtonInterest = (SparkButton) itemView.findViewById(R.id.recentInterest);
 
@@ -416,7 +429,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
             String status = params[2];
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
                     .addBodyParameter("status", status)
@@ -446,7 +459,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
             String customerId = params[0];
             String favId = params[1];
 
-            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addFavFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("favId", favId)
                     .addBodyParameter("status", favouriteState)

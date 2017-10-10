@@ -22,7 +22,7 @@ public interface IViewRenderer extends IDisposable, IData {
     /**
      * render the view
      *
-     * @param width the width
+     * @param width  the width
      * @param height the height
      */
     Bitmap render(int width, int height);
@@ -31,7 +31,7 @@ public interface IViewRenderer extends IDisposable, IData {
      * render the view
      *
      * @param bitmap a bitmap to render into
-     * @param width the width
+     * @param width  the width
      * @param height the height
      */
     Bitmap render(Bitmap bitmap, int width, int height);

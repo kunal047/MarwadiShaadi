@@ -18,17 +18,18 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.sid.marwadishaadi.Blocked_Members.BlockedActivity;
-import com.sid.marwadishaadi.DeviceRegistration;
-import com.sid.marwadishaadi.Notifications.NotificationsModel;
-import com.sid.marwadishaadi.Notifications_Util;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sid.marwadishaadi.Blocked_Members.BlockedActivity;
+import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.DeviceRegistration;
+import com.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.sid.marwadishaadi.Notifications_Util;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
@@ -36,7 +37,6 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,9 +75,9 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         Bundle extras = getIntent().getExtras();
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        String first_name = sharedpref.getString("firstname",null);
-        String last_name = sharedpref.getString("surname",null);
-        customer_name = first_name + " " +last_name;
+        String first_name = sharedpref.getString("firstname", null);
+        String last_name = sharedpref.getString("surname", null);
+        customer_name = first_name + " " + last_name;
 
         if (extras.getString("customerId") != null) {
             customerId = extras.getString("customerId");
@@ -211,7 +211,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         String messageRead = "0"; // 0 - unread , 1 - read
         String fromDelete = ""; // yes if deleted from sender
         String toDelete = ""; // use if deleted from receiver
-        AndroidNetworking.post("http://208.91.199.50:5000/uploadChat")
+        AndroidNetworking.post(Constants.AWS_SERVER + "/uploadChat")
                 .addBodyParameter("messageFromId", messageFromId)
                 .addBodyParameter("messageToId", messageToId)
                 .addBodyParameter("replyTo", replyTo)
@@ -235,7 +235,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                         Date currentDate = calendar.getTime();
                         String hash = String.valueOf(currentDate.hashCode());
 
-                        final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,false,false,true,false,false,false,false,false, false);
+                        final NotificationsModel notification = new NotificationsModel(hash, customer_name, date, 3, false, false, false, true, false, false, false, false, false, false);
                         mDatabase.child(hash).setValue(notification);
 
                         // sending push notification to her
@@ -282,7 +282,8 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         return true;
     }
-    public void setData(DataSnapshot dataSnapshot){
+
+    public void setData(DataSnapshot dataSnapshot) {
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
@@ -296,7 +297,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         protected Void doInBackground(String... params) {
 
             query = params[0];
-            AndroidNetworking.post("http://208.91.199.50:5000/getChat")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/getChat")
                     .addBodyParameter("query", query)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -311,11 +312,11 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
                                     SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z", Locale.getDefault());
                                     Date date = format.parse(string);
 
-                                    Calendar cal=Calendar.getInstance();
+                                    Calendar cal = Calendar.getInstance();
                                     cal.setTime(date);
-                                    cal.add(Calendar.HOUR_OF_DAY,-5);
-                                    cal.add(Calendar.MINUTE,-30);
-                                    date=cal.getTime();
+                                    cal.add(Calendar.HOUR_OF_DAY, -5);
+                                    cal.add(Calendar.MINUTE, -30);
+                                    date = cal.getTime();
 
                                     Message message;
                                     if (jsnrry.getString(3).contains(customerId)) {
@@ -344,21 +345,20 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
             return null;
         }
     }
-    private class SetSeen extends AsyncTask<String ,String,String>
-    {
+
+    private class SetSeen extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... strings) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/unblock")
-                    .addBodyParameter("query",strings[0])
+            AndroidNetworking.post(Constants.AWS_SERVER + "/unblock")
+                    .addBodyParameter("query", strings[0])
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
 
                             try {
-                                if(response.getString(0).contains("success"))
-                                {
+                                if (response.getString(0).contains("success")) {
 
                                 }
                             } catch (JSONException e) {

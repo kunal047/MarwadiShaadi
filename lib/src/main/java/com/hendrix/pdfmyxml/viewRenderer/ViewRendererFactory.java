@@ -15,11 +15,10 @@ public class ViewRendererFactory {
     /**
      * recycle a view renderer with the following
      *
-     * @param ctx the context
-     * @param view the view to renderer
-     * @param width the width
+     * @param ctx    the context
+     * @param view   the view to renderer
+     * @param width  the width
      * @param height the height
-     *
      * @return a bitmap of the view
      */
     static public Bitmap getBitmapOfView(Context ctx, View view, int width, int height) {
@@ -29,11 +28,10 @@ public class ViewRendererFactory {
     /**
      * recycle a view renderer with the following
      *
-     * @param ctx the context
+     * @param ctx         the context
      * @param layoutResId the layout resource identifier
-     * @param width the width
-     * @param height the height
-     *
+     * @param width       the width
+     * @param height      the height
      * @return a bitmap of the view
      */
     static public Bitmap getBitmapOfView(Context ctx, int layoutResId, int width, int height) {

@@ -7,7 +7,7 @@ package com.sid.marwadishaadi.Dashboard_Reverse_Matching;
 public class ReverseModel {
 
     private String img_url;
-    private String name,customerID;
+    private String name, customerID;
     private int age;
     private String educationDegree, location, customerNo;
 
@@ -67,6 +67,7 @@ public class ReverseModel {
 
     public void setAge(int age) {
         this.age = age;
-    }}
+    }
+}
 
 

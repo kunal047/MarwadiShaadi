@@ -28,6 +28,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
@@ -488,7 +489,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
-                i.putExtra("similarOf",clickedID);
+                i.putExtra("similarOf", clickedID);
                 startActivity(i);
                 getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
@@ -512,17 +513,17 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         });
 
 
-        cache = new File(getCacheDir() + "/" + "familyprofile" +clickedID+ ".srl");
+        cache = new File(getCacheDir() + "/" + "familyprofile" + clickedID + ".srl");
 
         // loading cached copy
-        String res = CacheHelper.retrieve("familyprofile",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("familyprofile", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"familyprofile");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "familyprofile");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
@@ -579,17 +580,17 @@ public class ProfileFamilyDetailsFragment extends Fragment {
         return this.casebreak;
     }
 
-    public void loadedFromNetwork(JSONArray response){
+    public void loadedFromNetwork(JSONArray response) {
 
 
         //saving fresh in cache
-        CacheHelper.save("familyprofile",response.toString(),cache);
+        CacheHelper.save("familyprofile", response.toString(), cache);
 
         // marking cache
         isAlreadyLoadedFromCache = true;
 
         // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"familyprofile");
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "familyprofile");
 
         // displaying it
         parseFamilyProfile(response);
@@ -601,7 +602,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
         protected Void doInBackground(String... strings) {
             String cus = strings[0];
-            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileFamilyDetails")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .setTag(this)
@@ -614,24 +615,24 @@ public class ProfileFamilyDetailsFragment extends Fragment {
                             //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"familyprofile");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "familyprofile");
 
                                 //
                                 //
                                 //
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
                                     // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -648,7 +649,6 @@ public class ProfileFamilyDetailsFragment extends Fragment {
 
             return null;
         }
-
 
 
     }

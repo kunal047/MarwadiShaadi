@@ -1,43 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
 
-<de.hdodenhof.circleimageview.CircleImageView
-    android:id="@+id/imgAdd"
-    android:layout_width="170dp"
-    android:layout_height="170dp"
-    android:layout_margin="5dp"
-    android:src="@drawable/default_drawer"/>
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="170dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgAdd"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/default_drawer"/>
+
+        <TextView
+            android:id="@+id/showTextOnPictureOfSimilar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="50dp"
+            android:text="Upload your \n photo to view"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/name_age"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:padding="2dp"
         android:textColor="#000"
-        android:padding="2dp"/>
+        android:textSize="16dp"
+        android:textStyle="bold"/>
+
     <TextView
 
         android:id="@+id/education"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12dp"
+        android:layout_gravity="center"
+        android:padding="2dp"
         android:textColor="#000"
-        android:padding="2dp"/>
+        android:textSize="12dp"/>
+
     <TextView
         android:id="@+id/city"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:padding="2dp"
         android:textColor="#000"
-        android:padding="2dp"/>
+        android:textSize="12dp"/>
 
 
 </LinearLayout>

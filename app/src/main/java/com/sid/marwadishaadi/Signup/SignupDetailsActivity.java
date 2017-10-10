@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,10 +34,12 @@ import com.sid.marwadishaadi.PlacesAdapter;
 import com.sid.marwadishaadi.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -180,9 +181,25 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
                 first_name = name.getText().toString();
                 last_name = surname.getText().toString();
                 date_of_birth = dob.getText().toString();
-                Date date = new Date("13-Jun-2017");
+
+                Date date = new Date();
+                String userDateFormat = "MMM dd, yyyy";
+                DateFormat sdf = new SimpleDateFormat(userDateFormat);
+                Date datey = null;
+                try {
+                    datey = sdf.parse(date_of_birth);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                date_of_birth = formatter.format(date);
+                date_of_birth = formatter.format(datey);
+
+                int diffInYears = (int) TimeUnit.MILLISECONDS.toDays(date.getTime() - datey.getTime()) / 365;
+
+//                date_of_birth = dob.toString();
+
                 mobile_number = mobile.getText().toString();
                 user_caste = caste.getSelectedItem().toString();
                 user_location = location.getText().toString();
@@ -193,13 +210,18 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
 
                 if (first_name.trim().isEmpty() || last_name.trim().isEmpty() || date_of_birth.isEmpty() || mobile_number.isEmpty() || user_caste.isEmpty() || user_caste.contains("Select") || user_location.trim().isEmpty()) {
 
-                    Toast.makeText(SignupDetailsActivity.this, "All fields are necessary", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupDetailsActivity.this, "All fields are necessary", Toast.LENGTH_LONG).show();
 
                 } else if (mobile_number.length() != 10 || !TextUtils.isDigitsOnly(mobile_number)) {
 
-                    Toast.makeText(SignupDetailsActivity.this, "Mobile number is incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupDetailsActivity.this, "Mobile number is incorrect", Toast.LENGTH_LONG).show();
+
+                } else if (diffInYears < 18) {
+
+                    Toast.makeText(SignupDetailsActivity.this, "You must be at-least 18 years to register", Toast.LENGTH_LONG).show();
 
                 } else {
+
                     gender = ((RadioButton) findViewById(radioGroup.getCheckedRadioButtonId())).getText().toString();
                     sd.setFirst_name(first_name);
                     sd.setLast_name(last_name);

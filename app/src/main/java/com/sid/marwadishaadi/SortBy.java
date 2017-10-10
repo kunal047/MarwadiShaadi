@@ -35,7 +35,6 @@ public class SortBy extends AppCompatActivity {
         Button sortByCancel = (Button) findViewById(R.id.sortby_cancel);
 
 
-
         int selectedId = radioGroupSortBy.getCheckedRadioButtonId();
         // find the radiobutton by returned id
         radioButton = (RadioButton) findViewById(selectedId);
@@ -72,8 +71,6 @@ public class SortBy extends AppCompatActivity {
 //        } else {
 //            checkBoxOnlyWithPhotos.setChecked(false);
 //        }
-
-
 
 
         radioGroupSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

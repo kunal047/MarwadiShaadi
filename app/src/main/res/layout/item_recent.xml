@@ -116,6 +116,19 @@
             app:sparkbutton_primaryColor="@color/fav_primary_color"
             app:sparkbutton_secondaryColor="@color/fav_secondary_color"/>
 
+        <TextView
+            android:id="@+id/showTextOnPictureOfRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/recentUserImage"
+            android:layout_alignStart="@+id/recentUserImage"
+            android:layout_below="@+id/recentTextViewLastOnline"
+            android:layout_marginTop="48dp"
+            android:text="Upload your \n photo to view"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

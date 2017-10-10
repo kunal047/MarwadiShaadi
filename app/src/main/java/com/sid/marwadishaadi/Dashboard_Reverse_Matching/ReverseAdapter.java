@@ -22,6 +22,8 @@ import java.util.List;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Sid on 31-May-17.
  */
@@ -37,6 +39,8 @@ public class ReverseAdapter extends RecyclerView.Adapter {
     private ProgressBar progressBar;
     private RecyclerView reverseRecyclerView;
     private boolean isPaidMember;
+    private boolean hasDP;
+
 
     private List<ReverseModel> reverseModelList;
     private Context context;
@@ -65,7 +69,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                     }
                 }
 
-                if (!reverseIsLoading && totalItemCount  <= (lastVisibleItem + visibleThreshold)) {
+                if (!reverseIsLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     // End has been reached
                     // Do something
 
@@ -122,11 +126,18 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                 }
             }
 
+            SharedPreferences sharedPref = itemView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+            hasDP = sharedPref.getBoolean("hasDP", false);
+
             return new ReverseViewHolder(itemView);
 
         } else {
             View iView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_loading_item, parent, false);
+
+            SharedPreferences sharedPref = iView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+            hasDP = sharedPref.getBoolean("hasDP", false);
+
             return new ProgressViewHolder(iView);
         }
 
@@ -141,7 +152,16 @@ public class ReverseAdapter extends RecyclerView.Adapter {
 
             final ReverseModel rev = reverseModelList.get(position);
 
-            if (!isPaidMember) {
+
+            if (isPaidMember || hasDP) {
+                Glide.with(context)
+                        .load(rev.getImg_url())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .fitCenter()
+                        .into(((ReverseViewHolder) holder).dp);
+                ((ReverseViewHolder) holder).showTextOnPicture.setVisibility(View.GONE);
+            } else {
 
                 Glide.with(context)
                         .load(R.drawable.default_drawer)
@@ -150,15 +170,9 @@ public class ReverseAdapter extends RecyclerView.Adapter {
                         .error(R.drawable.default_drawer)
                         .fitCenter()
                         .into(((ReverseViewHolder) holder).dp);
-            } else {
-                Glide.with(context)
-                        .load(rev.getImg_url())
-                        .placeholder(R.drawable.default_drawer)
-                        .error(R.drawable.default_drawer)
-                        .fitCenter()
-                        .into(((ReverseViewHolder) holder).dp);
-            }
 
+                ((ReverseViewHolder) holder).showTextOnPicture.setVisibility(View.VISIBLE);
+            }
 
 
             ((ReverseViewHolder) holder).name.setText(rev.getName());
@@ -209,6 +223,8 @@ public class ReverseAdapter extends RecyclerView.Adapter {
         private ImageView dp;
         private TextView name;
         private TextView age, education, city;
+        private TextView showTextOnPicture;
+
 
         public ReverseViewHolder(View itemView) {
             super(itemView);
@@ -218,6 +234,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
             age = (TextView) itemView.findViewById(R.id.user_profile_age);
             city = (TextView) itemView.findViewById(R.id.user_profile_city);
             education = (TextView) itemView.findViewById(R.id.user_profile_education);
+            showTextOnPicture = (TextView) itemView.findViewById(R.id.showTextOnPicture);
 
         }
 

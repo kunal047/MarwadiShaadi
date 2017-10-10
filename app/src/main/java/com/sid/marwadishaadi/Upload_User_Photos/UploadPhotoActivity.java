@@ -33,10 +33,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.sid.marwadishaadi.Analytics_Util;
-import com.sid.marwadishaadi.Membership.MembershipActivity;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.facebook.CallbackManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
@@ -47,6 +43,11 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.Membership.MembershipActivity;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -110,7 +111,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
 
         String source = getIntent().getStringExtra("from");
-        if (!source.equalsIgnoreCase("otp")) {
+
+        if (source != null && !source.equalsIgnoreCase("otp")) {
             new FetchPhoto().execute();
         }
 //        fblogin = (Button) findViewById(R.id.fb_login_button);
@@ -185,7 +187,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         submit = (Button) findViewById(R.id.submit_photo);
 
-        submit.setOnClickListener(  new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -900,7 +902,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchPhotos")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchPhotos")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -948,7 +950,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/removePhotos")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/removePhotos")
                     .addBodyParameter("customerNo", customer_id)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -978,7 +980,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         protected Void doInBackground(File... params) {
 
             File file_name = params[0];
-            AndroidNetworking.upload("http://208.91.199.50:5000/uploadPhotos")
+            AndroidNetworking.upload(Constants.AWS_SERVER + "/uploadPhotos")
                     .addMultipartFile("image_one", file_name)
                     .addMultipartParameter("customerNo", customer_id)
                     .addMultipartParameter("file_type", file_type)

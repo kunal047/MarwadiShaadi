@@ -10,12 +10,12 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class Analytics_Util {
 
-    public static void logAnalytic(FirebaseAnalytics mFirebaseAnalytics,String name,String type){
+    public static void logAnalytic(FirebaseAnalytics mFirebaseAnalytics, String name, String type) {
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,name);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE,type);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }
 }

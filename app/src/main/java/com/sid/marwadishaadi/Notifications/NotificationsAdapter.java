@@ -23,6 +23,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private final Context context;
     private List<NotificationsModel> notificationsModelList;
 
+    public NotificationsAdapter(Context context, List<NotificationsModel> notificationsModelList) {
+
+        this.context = context;
+        this.notificationsModelList = notificationsModelList;
+
+    }
+
     @Override
     public NotificationsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -37,8 +44,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         holder.timestamp.setText(notificationsModel.getTimeStamp());
 
-        if(notificationsModel.isBday())
-        {
+        if (notificationsModel.isBday()) {
             String notification = "Marwadishaadi.com wishes you a very happy birthday.";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
@@ -50,11 +56,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_birthday)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isInterestAcc())
-        {
-            String notification = notificationsModel.getName()+" has accepted your interest request.";
+        } else if (notificationsModel.isInterestAcc()) {
+            String notification = notificationsModel.getName() + " has accepted your interest request.";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
                 holder.notiftext.setTypeface(null, Typeface.NORMAL);
@@ -65,11 +68,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_interest)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isInterestRec())
-        {
-            String notification = notificationsModel.getName()+" has sent you an interest request.";
+        } else if (notificationsModel.isInterestRec()) {
+            String notification = notificationsModel.getName() + " has sent you an interest request.";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
                 holder.notiftext.setTypeface(null, Typeface.NORMAL);
@@ -80,13 +80,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_interest)
                     .into(holder.notifimage);
 
-        }
-        else if(notificationsModel.isSuggested())
-        {   String notification=null;
-            if(notificationsModel.getNumber()>1)
-                notification = "you have "+ notificationsModel.getNumber()+" new suggestions.";
-            else if(notificationsModel.getNumber()==1)
-                notification = "you have "+ notificationsModel.getNumber()+" new suggestion.";
+        } else if (notificationsModel.isSuggested()) {
+            String notification = null;
+            if (notificationsModel.getNumber() > 1)
+                notification = "you have " + notificationsModel.getNumber() + " new suggestions.";
+            else if (notificationsModel.getNumber() == 1)
+                notification = "you have " + notificationsModel.getNumber() + " new suggestion.";
 
 
             holder.notiftext.setText(notification);
@@ -99,12 +98,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_suggestion)
                     .into(holder.notifimage);
 
-        }
-
-
-
-        else if(notificationsModel.isMsgRec())
-        {
+        } else if (notificationsModel.isMsgRec()) {
             String notification;
             if (notificationsModel.getName() == null) {
                 notification = "You received a new message.";
@@ -122,10 +116,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_msg)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isOffers())
-        {
+        } else if (notificationsModel.isOffers()) {
             String notification = "Offers!!!";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
@@ -137,10 +128,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_offer)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isPremMem())
-        {
+        } else if (notificationsModel.isPremMem()) {
             String notification = "Become a member to experience premium features of our service ";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
@@ -152,10 +140,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_membership)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isReminders())
-        {
+        } else if (notificationsModel.isReminders()) {
             String notification = "Reminders!!!";
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
@@ -167,15 +152,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_reminder)
                     .into(holder.notifimage);
 
-        }
-
-        else if(!notificationsModel.isMemExp())
-        {
-            String notification=null ;
-            if(notificationsModel.getNumber()>1)
-                notification= "Your membership is about to expire in "+ notificationsModel.getNumber()+"days.";
-            if(notificationsModel.getNumber()==1)
-                notification= "Your membership is going to expire tomorrow";
+        } else if (!notificationsModel.isMemExp()) {
+            String notification = null;
+            if (notificationsModel.getNumber() > 1)
+                notification = "Your membership is about to expire in " + notificationsModel.getNumber() + "days.";
+            if (notificationsModel.getNumber() == 1)
+                notification = "Your membership is going to expire tomorrow";
 
             holder.notiftext.setText(notification);
             if (notificationsModel.isRead()) {
@@ -187,10 +169,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     .load(R.drawable.notif_reminder)
                     .into(holder.notifimage);
 
-        }
-
-        else if(notificationsModel.isMemExp())
-        {
+        } else if (notificationsModel.isMemExp()) {
             String notification = "Your membrship has expired.";
             holder.notiftext.setText(notification);
 
@@ -207,7 +186,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         }
 
 
-
     }
 
     @Override
@@ -215,27 +193,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return notificationsModelList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView notiftext,timestamp;
+        TextView notiftext, timestamp;
         ImageView notifimage;
 
-        public MyViewHolder(View view){
+        public MyViewHolder(View view) {
             super(view);
-            timestamp=(TextView)view.findViewById(R.id.timestamp);
-            notiftext=(TextView)view.findViewById(R.id.notiftext);
-            notifimage=(ImageView)view.findViewById(R.id.notifimage);
+            timestamp = (TextView) view.findViewById(R.id.timestamp);
+            notiftext = (TextView) view.findViewById(R.id.notiftext);
+            notifimage = (ImageView) view.findViewById(R.id.notifimage);
         }
 
     }
-
-    public NotificationsAdapter(Context context, List<NotificationsModel> notificationsModelList){
-
-        this.context=context;
-        this.notificationsModelList = notificationsModelList;
-
-    }
-
 
 
 }

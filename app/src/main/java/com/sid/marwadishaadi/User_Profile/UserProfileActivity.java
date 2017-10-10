@@ -29,7 +29,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,8 +65,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.DeviceRegistration;
-import com.sid.marwadishaadi.Membership.MembershipActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -123,13 +122,16 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
     private View view;
     private String name;
     private String userid_from_deeplink;
-    private ProgressDialog progressDialog;
+
     private boolean isPaidMember;
     private ArrayList<String> images;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
     private ImageView imageViewInformation;
     private String createdOn, lastActiveOn;
+    private ProgressDialog progressDialog;
+    private boolean hasDP;
+    private TextView showTextOnPhoto;
 
     public static void shareApp(Context context) {
         final String appPackageName = context.getPackageName();
@@ -150,6 +152,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         boolean called = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        progressDialog = new ProgressDialog(UserProfileActivity.this);
+
+        progressDialog.setMessage("Loading profile...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Getting current ConnectionQuality
         ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
@@ -162,15 +171,11 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
         // Getting current bandwidth
         int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
-        Log.d(TAG, "onCreate: bandwidth of internet is --------------------------------------------- " + currentBandwidth);
-        Log.d(TAG, "onCreate: connection quality is ------------------------------------------------ " + connectionQuality.toString());
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageViewInformation = (ImageView) findViewById(R.id.imageViewInformation);
 
-        progressDialog = new ProgressDialog(UserProfileActivity.this);
-        progressDialog.setMessage("Loading profile...");
-        progressDialog.setCancelable(false);
+        showTextOnPhoto = (TextView) findViewById(R.id.showTextOnPhoto);
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle("");
@@ -187,19 +192,29 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         customer_name = sharedpref.getString("firstname", null);
         clickedID = customer_id;
 
+        SharedPreferences sharedPref = getSharedPreferences("userDp", MODE_PRIVATE);
+        hasDP = sharedPref.getBoolean("hasDP", false);
+
+
         int communityLength = sharedpref.getInt("cal", 0);
-        String[] array = getResources().getStringArray(R.array.communities);
+        try {
+
+            String[] array = getResources().getStringArray(R.array.communities);
 
 
-        if (customer_id != null && array.length > 0) {
+            if (customer_id != null && array.length > 0) {
 
-            for (int i = 0; i < communityLength; i++) {
+                for (int i = 0; i < communityLength; i++) {
 
-                if (sharedpref.getString(array[i], "No").contains("Yes")) {
-                    isPaidMember = true;
+                    if (sharedpref.getString(array[i], "No").contains("Yes")) {
+                        isPaidMember = true;
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
+
 
         Intent data = getIntent();
 
@@ -212,8 +227,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
         new FetchInformation().execute();
 
-        // ============================ DEEPLINK ========================================
-
         String deeplink = data.getStringExtra("deeplink");
         if (deeplink != null) {
             userid_from_deeplink = deeplink.substring(deeplink.lastIndexOf("/") + 1);
@@ -221,8 +234,6 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             new ProfilePicture().execute(clickedID);
             Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
         }
-
-        // =================================================================================
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
 
@@ -255,19 +266,16 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             @Override
             public void onClick(View v) {
 
-                if (customer_id != clickedID && !isPaidMember) {
-
-                    Toast.makeText(getApplicationContext(), "To view photos get membership !", Toast.LENGTH_LONG).show();
-
-                    Intent i = new Intent(UserProfileActivity.this, MembershipActivity.class);
-                    startActivity(i);
-
-                } else {
-
+                if (customer_id == clickedID || isPaidMember || hasDP) {
                     Intent i = new Intent(UserProfileActivity.this, FullscreenImageActivity.class);
                     i.putExtra("customerNo", clickedID);
                     i.putExtra("from", "userprofile");
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Upload your photo to view", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(UserProfileActivity.this, UploadPhotoActivity.class);
                     startActivity(i);
                 }
 
@@ -783,7 +791,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             final String cus = params[0];
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchProfilePicture")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchProfilePicture")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -811,8 +819,9 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 if (images.size() > 0) {
 
-                                    if (isPaidMember) {
+                                    if (customer_id == clickedID || isPaidMember || hasDP) {
                                         Glide.with(getApplicationContext()).load(images.get(0)).into(imageView);
+                                        showTextOnPhoto.setVisibility(View.INVISIBLE);
 
                                     } else {
                                         Glide.with(getApplicationContext())
@@ -822,6 +831,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                                 .error(R.drawable.default_drawer)
                                                 .bitmapTransform(new BlurTransformation(getApplicationContext()))
                                                 .into(imageView);
+                                        showTextOnPhoto.setVisibility(View.VISIBLE);
+
                                     }
 
 
@@ -832,6 +843,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                                 }
 
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressDialog.dismiss();
+                                    }
+                                });
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -841,6 +859,8 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
 
                         @Override
                         public void onError(ANError anError) {
+                            progressDialog.dismiss();
+                            Toast.makeText(UserProfileActivity.this, "Check your internet connection", Toast.LENGTH_LONG).show();
 
                         }
 
@@ -852,14 +872,13 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
         }
     }
 
     class FetchInformation extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchInformation")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchInformation")
                     .addBodyParameter("customerNo", clickedID)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -937,7 +956,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         protected Void doInBackground(String... params) {
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchPDFDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchPDFDetails")
                     .addBodyParameter("customerNo", clickedID)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1174,7 +1193,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             String status = params[2];
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
                     .addBodyParameter("status", status)
@@ -1205,7 +1224,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             String favId = params[1];
             String favouriteState = params[2];
 
-            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addFavFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("favId", favId)
                     .addBodyParameter("status", favouriteState)
@@ -1232,7 +1251,7 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         protected Void doInBackground(String... params) {
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/getStatus")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/getStatus")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("clickedId", clickedID)
                     .setPriority(Priority.HIGH)

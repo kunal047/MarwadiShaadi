@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +31,7 @@ import java.util.Calendar;
 public class Signup_Additional_Info_Fragment extends Fragment implements Step {
 
 
+    private static final String TAG = "Signup_Additional_Info_";
     public static Signup_Additional_Info_Fragment ai = new Signup_Additional_Info_Fragment();
     protected PlacesAdapter placesAdapter;
     private String aboutMe = "", hobbies = "", grandfatherName = "", mamaSurname = "", familyType = "", familyValues = "", nativePlace = "", subcaste = "", instituteName, workLocation, highestDegree, dietStatus, smokeStatus, drinkStatus, complexionStatus, physicalStatus, birthTime = "", birthPlace = "", gotra = "", manglikStatus = "", horoscopeStatus = "", relationNameStatus = "", relationFirstName = "", relationOccupation = "", relationLocation = "", relationMobile = "";
@@ -40,9 +40,6 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
     private int pMinute;
     private InputMethodManager imm;
     private AutoCompleteTextView WorkLocation, BirthPlace;
-
-    private static final String TAG = "Signup_Additional_Info_";
-
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

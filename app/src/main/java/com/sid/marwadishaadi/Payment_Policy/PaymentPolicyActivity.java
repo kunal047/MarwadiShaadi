@@ -1,8 +1,8 @@
 package com.sid.marwadishaadi.Payment_Policy;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.sid.marwadishaadi.R;
@@ -29,9 +29,9 @@ public class PaymentPolicyActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
-        overridePendingTransition(R.anim.exit,0);
+        overridePendingTransition(R.anim.exit, 0);
         return true;
     }
 }

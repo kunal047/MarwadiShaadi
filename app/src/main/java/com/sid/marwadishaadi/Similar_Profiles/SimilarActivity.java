@@ -15,10 +15,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class SimilarActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         String clickedID = i.getStringExtra("similarOf");
-        if (clickedID!=null){
+        if (clickedID != null) {
             customer_id = clickedID;
         }
 
@@ -89,17 +90,17 @@ public class SimilarActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
 
-        cache = new File(getCacheDir() + "/" + "similarprofiles" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "similarprofiles" + customer_id + ".srl");
 
         // loading cached copy
-        String res = CacheHelper.retrieve("similarprofiles",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("similarprofiles", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(SimilarActivity.this,CacheHelper.generateHash(res),"similarprofiles");
+                CacheHelper.saveHash(SimilarActivity.this, CacheHelper.generateHash(res), "similarprofiles");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
@@ -187,28 +188,36 @@ public class SimilarActivity extends AppCompatActivity {
     }
 
 
-    public void loadedFromNetwork(JSONArray response){
+    public void loadedFromNetwork(JSONArray response) {
 
 
         //saving fresh in cache
-        CacheHelper.save("similarprofiles",response.toString(),cache);
+        CacheHelper.save("similarprofiles", response.toString(), cache);
 
         // marking cache
         isAlreadyLoadedFromCache = true;
 
         // storing latest cache hash
-        CacheHelper.saveHash(SimilarActivity.this,CacheHelper.generateHash(response.toString()),"similarprofiles");
+        CacheHelper.saveHash(SimilarActivity.this, CacheHelper.generateHash(response.toString()), "similarprofiles");
 
         // displaying it
-       parseSimilarProfiles(response);
+        parseSimilarProfiles(response);
 
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        finish();
+        return true;
+    }
+
     private class PrepareSimilar extends AsyncTask<Void, Void, Void> {
 
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.get("http://208.91.199.50:5000/prepareSimilar/{customerNo}/{gender}")
+            AndroidNetworking.get(Constants.AWS_SERVER + "/prepareSimilar/{customerNo}/{gender}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .setPriority(Priority.HIGH)
@@ -220,20 +229,20 @@ public class SimilarActivity extends AppCompatActivity {
                         public void onResponse(JSONArray response) {
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(SimilarActivity.this,"similarprofiles");
+                                String cacheResponseHash = CacheHelper.retrieveHash(SimilarActivity.this, "similarprofiles");
 
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -253,12 +262,5 @@ public class SimilarActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
         }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        finish();
-        return true;
     }
 }

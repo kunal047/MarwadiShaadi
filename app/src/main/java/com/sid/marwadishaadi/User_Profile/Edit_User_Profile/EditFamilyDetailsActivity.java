@@ -16,6 +16,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
@@ -110,7 +111,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileFamilyDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -185,7 +186,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editFamilyDetailsFamily")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editFamilyDetailsFamily")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("fatherName", f)
                     .addBodyParameter("fatherOccupation", fo)

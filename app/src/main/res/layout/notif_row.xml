@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
     >
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginRight="10dp"
+                  android:layout_marginTop="10dp"
+                  android:orientation="horizontal">
+
         <ImageView
-            android:paddingLeft="6dp"
-            android:paddingRight="10dp"
             android:id="@+id/notifimage"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/notif_birthday" />
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical"
-    >
-        <TextView
-            android:id="@+id/notiftext"
+            android:paddingLeft="6dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/notif_birthday"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mervin has accepted your interest request"
-            android:textSize="14dp"
-            android:clickable="true"/>
-        <TextView
-            android:id="@+id/timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Time"
-            android:textSize="10dp"
-            android:clickable="true"/>
-</LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/notiftext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Mervin has accepted your interest request"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:clickable="true"
+                android:text="Time"
+                android:textSize="10dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#59fb6542"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="#59fb6542"
         >
 
     </View>

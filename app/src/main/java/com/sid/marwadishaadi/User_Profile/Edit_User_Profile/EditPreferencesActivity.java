@@ -30,11 +30,11 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.sid.marwadishaadi.App;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.PlacesAdapter;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +48,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditPreferencesActivity extends AppCompatActivity {
 
-    public static  EditText prefannualincome;
+    public static EditText prefannualincome;
     ImageView idoctor, iengineer, imbamca, icacs, ipg, ig, iug, illb;
     boolean intdoctor = false, intengineer = false, intmbamca = false, intcacs = false, intpg = false, intg = false, intug = false, intllb = false;
     TextView tdoctor, tengineer, tmbamca, tcacs, tpg, tg, tug, tllb;
@@ -108,7 +108,6 @@ public class EditPreferencesActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
 
         age = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
@@ -276,7 +275,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 SharedPreferences sharedpref = getSharedPreferences("prefai", MODE_PRIVATE);
                 uai = sharedpref.getString("ai", null);
                 ai = uai;
-                
+
                 strArrayAnnual = prefannualincome.getText().toString().split(",");
 
                 new EditPartnerPreferences().execute();
@@ -305,7 +304,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
         age.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
-                
+
             }
         });
 
@@ -341,7 +340,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                
+
 //                strArrayAnnual = s.toString().split(",");
             }
 
@@ -655,7 +654,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profilePartnerPreferences")
                     .addBodyParameter("customerNo", customer_id)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
@@ -803,7 +802,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
 
                                 str = response.getString(9).replace("[", "").replace("]", "");
                                 strArray = str.split(",");
-                                
+
                                 if (strArray == null) {
 
                                     occupationDontMatter.setChecked(true);
@@ -853,12 +852,10 @@ public class EditPreferencesActivity extends AppCompatActivity {
                                 }
 
 
-
-                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", "").replace("\"", "").replace("000000","0L").replace("00000", "L"));
+                                prefannualincome.setText(response.getString(11).replace("[", "").replace("]", "").replace("\"", "").replace("000000", "0L").replace("00000", "L"));
 
 
                                 strArrayAnnual = prefannualincome.getText().toString().split(",");
-
 
 
                             } catch (JSONException e) {
@@ -903,9 +900,9 @@ public class EditPreferencesActivity extends AppCompatActivity {
             } else {
                 annualincome = ai.replace("[", "").replace("]", "");
             }
-            
 
-            AndroidNetworking.post("http://208.91.199.50:5000/editPreferences")
+
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editPreferences")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("minAge", mina)
                     .addBodyParameter("maxAge", maxa)
@@ -931,7 +928,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                         @Override
                         public void onError(ANError anError) {
 
-                            
+
                         }
                     });
             return null;

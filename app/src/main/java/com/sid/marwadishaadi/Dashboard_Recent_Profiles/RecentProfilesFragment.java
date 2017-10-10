@@ -23,6 +23,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
@@ -98,17 +99,24 @@ public class RecentProfilesFragment extends Fragment {
 
         SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
 
-       int communityLength = communityChecker.getInt("cal", 0);
+        int communityLength = communityChecker.getInt("cal", 0);
 
-        if (customer_id != null && communityChecker != null && array.length > 0) {
-            for (int i = 0; i < communityLength; i++) {
+        try {
 
-                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                    res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            if (customer_id != null && communityChecker != null && array.length > 0) {
+                for (int i = 0; i < communityLength; i++) {
 
+                    if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                        res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
+
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         // analytics
@@ -205,7 +213,7 @@ public class RecentProfilesFragment extends Fragment {
 
         try {
 
-            if (response.length() == 0) {
+            if (response.length() == 0 && recentList.size() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -370,7 +378,7 @@ public class RecentProfilesFragment extends Fragment {
             String recentShowPhotos = sortBy.getString("showPhotos", "yes");
             String recentSort = sortBy.getString("sortBy", "Registered");
 
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareRecent/{customerNo}/{gender}/{page}")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareRecent/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .addPathParameter("page", String.valueOf(recent_page_no))
@@ -393,7 +401,6 @@ public class RecentProfilesFragment extends Fragment {
                                 String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "recent_profiles");
 
                                 if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
-                                    //  .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
                                 } else {
 

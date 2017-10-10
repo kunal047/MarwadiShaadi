@@ -153,8 +153,7 @@
                 android:inputType="phone"
                 android:padding="6dp"
                 android:textSize="12dp"
-                />
-
+            />
 
             <AutoCompleteTextView
                 android:id="@+id/signup_location"
@@ -165,7 +164,7 @@
                 android:completionThreshold="1"
                 android:drawableLeft="@drawable/signup_location"
                 android:drawablePadding="10dp"
-                android:hint="Location"
+                android:hint="Current Location"
                 android:imeOptions="actionDone"
                 android:inputType="text|textAutoComplete"
                 android:maxLines="1"

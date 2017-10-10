@@ -5,5 +5,5 @@ package com.sid.marwadishaadi;
  */
 
 public interface OnLoadMoreListener {
-        void onLoadMore() throws InterruptedException;
+    void onLoadMore() throws InterruptedException;
 }

@@ -8,20 +8,24 @@ public class Notif_Message {
 
     private String from;
     private String msg;
+    private String fullname;
+
+    public Notif_Message(String from, String msg, String fullname) {
+        this.from = from;
+        this.msg = msg;
+        this.fullname = fullname;
+    }
+
+    public Notif_Message(String from, String msg) {
+        this.from = from;
+        this.msg = msg;
+    }
 
     public String getFullname() {
         return fullname;
     }
 
     public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    private String fullname;
-
-    public Notif_Message(String from, String msg, String fullname) {
-        this.from = from;
-        this.msg = msg;
         this.fullname = fullname;
     }
 
@@ -38,11 +42,6 @@ public class Notif_Message {
     }
 
     public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Notif_Message(String from, String msg) {
-        this.from = from;
         this.msg = msg;
     }
 }

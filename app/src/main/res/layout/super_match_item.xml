@@ -1,48 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp">
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="5dp"
+                                    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <com.meg7.widget.SvgImageView
-        android:layout_gravity="center"
-        android:layout_margin="2dp"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/profile"
-        app:svg_raw_resource="@raw/shape_heart"
-        android:scaleType="centerCrop" />
+
+        <com.meg7.widget.SvgImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile"
+            app:svg_raw_resource="@raw/shape_heart"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:textColor="#000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Siddhesh Rane, 21"
-            android:textStyle="bold"
-            android:textSize="15dp"/>
+            android:textColor="#000"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
         <TextView
-            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
             android:text="B. Tech"
-            android:textStyle="bold"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
         <TextView
-            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
             android:text="Mumbai"
-            android:textStyle="bold"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

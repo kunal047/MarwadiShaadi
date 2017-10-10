@@ -12,15 +12,14 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
 import com.sid.marwadishaadi.Membership.MembershipActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsActivity;
-import com.sid.marwadishaadi.R;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +39,7 @@ public class Notifications_Util {
     static String api_key = "key=AAAAUe8pB3Q:APA91bGbd9V8mrZ8dtvzXqjgcbtdqlRHXVzBcZpX1mM_f2jPe1EcH6p0Ksl4MjmORMRUGM7tCQUUhH9dAxHdvGEkQpwn11D5YQ9ag5ZGRRDI1UWX_G19UirKcSSbi9eAHf8nexG5jPd9";
     static DatabaseReference mDatabase;
 
-    public static Notification.Builder createNotification(String type, String title, String message, Context context, int notifyid){
+    public static Notification.Builder createNotification(String type, String title, String message, Context context, int notifyid) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -50,136 +49,138 @@ public class Notifications_Util {
                 .setAutoCancel(true)
                 .setContentText(message)
                 .setSound(notifsound)
-                .setContentIntent(getIntent(getType(type),context));
+                .setContentIntent(getIntent(getType(type), context));
 
-        notificationManager.notify(notifyid,notification.build());
+        notificationManager.notify(notifyid, notification.build());
 
         return notification;
 
     }
 
-    public static void unRegisterDevice(String customer_id,String registration_id){
+    public static void unRegisterDevice(String customer_id, String registration_id) {
 
         mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Devices");
         mDatabase.child(registration_id).removeValue();
     }
 
-    public static void RegisterDevice(String customer_id,String registration_id){
+    public static void RegisterDevice(String customer_id, String registration_id) {
 
         mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Devices");
-        DeviceRegistration deviceRegistration = new DeviceRegistration(registration_id,customer_id);
+        DeviceRegistration deviceRegistration = new DeviceRegistration(registration_id, customer_id);
         mDatabase.child(deviceRegistration.getDevice_id()).setValue(deviceRegistration);
     }
 
-    public static void SendNotification(String registration_id,String bodymsg,String titlemsg,String type){
+    public static void SendNotification(String registration_id, String bodymsg, String titlemsg, String type) {
 
         JSONObject notification = new JSONObject();
         try {
-            notification.put("to",registration_id);
+            notification.put("to", registration_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         JSONObject body = new JSONObject();
         try {
-            body.put("body",bodymsg);
-            body.put("title",titlemsg);
-            notification.put("notification",body);
+            body.put("body", bodymsg);
+            body.put("title", titlemsg);
+            notification.put("notification", body);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         JSONObject data = new JSONObject();
         try {
-            data.put("Type",type);
-            notification.put("data",data);
+            data.put("Type", type);
+            notification.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
         AndroidNetworking.post("https://fcm.googleapis.com/fcm/send")
-            .addHeaders("Content-Type","application/json")
-            .addHeaders("Authorization",api_key)
-            .addJSONObjectBody(notification)
-            .setTag("test")
-            .setPriority(Priority.MEDIUM)
-            .build()
-            .getAsJSONObject(new JSONObjectRequestListener() {
-                @Override
-                public void onResponse(JSONObject response) {
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Authorization", api_key)
+                .addJSONObjectBody(notification)
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                }
-                @Override
-                public void onError(ANError error) {
-                    // handle error
+                    }
 
-                }
-            });
+                    @Override
+                    public void onError(ANError error) {
+                        // handle error
+
+                    }
+                });
 
     }
-    public static void stackNotification(Notification.Builder notification, int times, Context context,List<Notif_Message> allmsg,String type,int notifyid){
+
+    public static void stackNotification(Notification.Builder notification, int times, Context context, List<Notif_Message> allmsg, String type, int notifyid) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notification.setStyle(inboxStyle);
 
-        for (int i=0;i<times;i++){
+        for (int i = 0; i < times; i++) {
 
-            if (i==times-1){
+            if (i == times - 1) {
 
-                String summary = allmsg.size() +" "+"new " + type;
+                String summary = allmsg.size() + " " + "new " + type;
                 String summary_usernames;
 
-                if (allmsg.size() == 1){
-                    if (type.equals("Interest")){
+                if (allmsg.size() == 1) {
+                    if (type.equals("Interest")) {
                         summary_usernames = allmsg.get(0).getFullname() + " sent you an interest";
-                    }else if(type.equals("Interest Accepted")){
+                    } else if (type.equals("Interest Accepted")) {
                         summary_usernames = allmsg.get(0).getFullname() + " accepted your interest";
-                    }else{
+                    } else {
                         summary_usernames = allmsg.get(0).getFrom() + " sent you a message";
                     }
-                }else if(allmsg.size() == 2){
-                    if (type.equals("Interest")){
-                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() +" sent you a interest";
-                    }else if (type.equals("Interest Accepted")){
-                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() +" accepted your interest";
-                    }else{
-                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() +" messaged you";
+                } else if (allmsg.size() == 2) {
+                    if (type.equals("Interest")) {
+                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() + " sent you a interest";
+                    } else if (type.equals("Interest Accepted")) {
+                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() + " accepted your interest";
+                    } else {
+                        summary_usernames = allmsg.get(0).getFrom() + " and " + allmsg.get(1).getFrom() + " messaged you";
                     }
-                }else{
-                    if(type.equals("Interest")){
+                } else {
+                    if (type.equals("Interest")) {
                         summary_usernames = allmsg.get(0).getFrom() + "," + allmsg.get(1).getFrom() + " and " + ((allmsg.size()) - 2) + " others sent you interest";
-                    }else if(type.equals("Interest Accepted")){
+                    } else if (type.equals("Interest Accepted")) {
                         summary_usernames = allmsg.get(0).getFrom() + "," + allmsg.get(1).getFrom() + " and " + ((allmsg.size()) - 2) + " others accepted your interest" + type;
-                    }else{
+                    } else {
                         summary_usernames = allmsg.get(0).getFrom() + "," + allmsg.get(1).getFrom() + " and " + ((allmsg.size()) - 2) + " others messaged you";
                     }
                 }
 
-                if (type.equals("Message")){
+                if (type.equals("Message")) {
                     inboxStyle.addLine(allmsg.get(i).getFrom() + " : " + allmsg.get(i).getMsg());
-                }else{
+                } else {
                     inboxStyle.addLine(allmsg.get(i).getFullname());
                 }
                 inboxStyle.setSummaryText(summary);
                 notification.setContentTitle(summary);
                 notification.setContentText(summary_usernames);
-                notificationManager.notify(notifyid,notification.build());
-            }else{
-                if (type.equals("Message")){
+                notificationManager.notify(notifyid, notification.build());
+            } else {
+                if (type.equals("Message")) {
                     inboxStyle.addLine(allmsg.get(i).getFrom() + " : " + allmsg.get(i).getMsg());
-                }else{
+                } else {
                     inboxStyle.addLine(allmsg.get(i).getFullname());
                 }
-                notificationManager.notify(notifyid,notification.build());
+                notificationManager.notify(notifyid, notification.build());
             }
         }
 
     }
 
 
-    public static int getIcon(String type){
-        switch (type){
+    public static int getIcon(String type) {
+        switch (type) {
             case "Suggestions":
                 return R.drawable.notif_suggestion;
             case "Interest Request":
@@ -204,8 +205,8 @@ public class Notifications_Util {
     }
 
 
-    public static int getType(String type){
-        switch (type){
+    public static int getType(String type) {
+        switch (type) {
             case "Suggestions":
                 return 0;
             case "Interest Request":
@@ -228,12 +229,13 @@ public class Notifications_Util {
                 return 9;
         }
     }
-    public static PendingIntent getIntent(int type, Context context){
+
+    public static PendingIntent getIntent(int type, Context context) {
 
         // notifications intent
 
         Intent i;
-        switch (type){
+        switch (type) {
 
             // suggestion
             case 0:
@@ -247,7 +249,7 @@ public class Notifications_Util {
 
             // interest accept
             case 2:
-                i =  new Intent(context,InterestActivity.class);
+                i = new Intent(context, InterestActivity.class);
                 break;
 
             // message
@@ -272,21 +274,21 @@ public class Notifications_Util {
 
             // offers
             case 7:
-                i=new Intent(context,NotificationsActivity.class);
+                i = new Intent(context, NotificationsActivity.class);
                 break;
 
             // bday
             case 8:
-                i = new Intent(context,NotificationsActivity.class);
+                i = new Intent(context, NotificationsActivity.class);
                 break;
 
             default:
-                i = new Intent(context,NotificationsActivity.class);
+                i = new Intent(context, NotificationsActivity.class);
                 break;
 
         }
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
 

@@ -3,9 +3,9 @@ package com.sid.marwadishaadi.Notifications;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +15,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
@@ -23,13 +30,6 @@ import com.sid.marwadishaadi.Membership.MembershipActivity;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +39,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NotificationsActivity extends AppCompatActivity {
 
-    private List<NotificationsModel> notificationsModelList =new ArrayList<>();
+    private List<NotificationsModel> notificationsModelList = new ArrayList<>();
     private RecyclerView recyclerView;
     private NotificationsAdapter notificationsAdapter;
-    private View ChildView ;
+    private View ChildView;
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference mDatabase;
     private DatabaseReference count;
@@ -62,8 +62,6 @@ public class NotificationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notifications);
 
 
-
-
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
@@ -71,15 +69,14 @@ public class NotificationsActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
-        if (customer_id !=null){
+        if (customer_id != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
             count = FirebaseDatabase.getInstance().getReference(customer_id);
         }
 
 
         // analytics
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Notifications","view");
-
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Notifications", "view");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.notify_toolbar);
@@ -93,7 +90,7 @@ public class NotificationsActivity extends AppCompatActivity {
         empty_view.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        notificationsAdapter =  new NotificationsAdapter(this, notificationsModelList);
+        notificationsAdapter = new NotificationsAdapter(this, notificationsModelList);
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
@@ -110,14 +107,14 @@ public class NotificationsActivity extends AppCompatActivity {
 
                 int size = (int) dataSnapshot.getChildrenCount();
 
-                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     counts++;
-                    if (snap.getKey().equals("Notifications")){
-                        isdata=true;
+                    if (snap.getKey().equals("Notifications")) {
+                        isdata = true;
                         recyclerView.setVisibility(View.VISIBLE);
                         empty_view.setVisibility(View.GONE);
                     }
-                    if (counts==size && !isdata ){
+                    if (counts == size && !isdata) {
                         empty_view.setVisibility(View.VISIBLE);
                     }
                 }
@@ -136,7 +133,7 @@ public class NotificationsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (counts==0){
+        if (counts == 0) {
             empty_view.setVisibility(View.VISIBLE);
         }
 
@@ -173,61 +170,60 @@ public class NotificationsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent motionEvent) {
                 ChildView = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-                if(ChildView != null && gesturedetector.onTouchEvent(motionEvent)) {
-                    int position  = recyclerView.getChildAdapterPosition(ChildView);
+                if (ChildView != null && gesturedetector.onTouchEvent(motionEvent)) {
+                    int position = recyclerView.getChildAdapterPosition(ChildView);
                     NotificationsModel notificationsModel = notificationsModelList.get(position);
 
                     mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
                     mDatabase.child(notificationsModel.getId()).child("isRead").setValue(true);
 
 
-                    if (notificationsModel.isSuggested()){
+                    if (notificationsModel.isSuggested()) {
 
                         notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this, DashboardActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isPremMem()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isPremMem()) {
 
                         notificationsModel.setRead(true);
-                        Intent i = new Intent(NotificationsActivity.this,MembershipActivity.class);
+                        Intent i = new Intent(NotificationsActivity.this, MembershipActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isMemExp()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isMemExp()) {
 
                         notificationsModel.setRead(true);
                         Intent i = new Intent(NotificationsActivity.this, UpgradeMembershipActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isMsgRec()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isMsgRec()) {
 
                         notificationsModel.setRead(true);
-                        Intent i = new Intent(NotificationsActivity.this,DefaultDialogsActivity.class);
+                        Intent i = new Intent(NotificationsActivity.this, DefaultDialogsActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isInterestAcc()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isInterestAcc()) {
 
                         notificationsModel.setRead(true);
-                        Intent i = new Intent(NotificationsActivity.this,UserProfileActivity.class);
+                        Intent i = new Intent(NotificationsActivity.this, UserProfileActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isInterestRec()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isInterestRec()) {
                         notificationsModel.setRead(true);
-                        Intent i = new Intent(NotificationsActivity.this,InterestActivity.class);
+                        Intent i = new Intent(NotificationsActivity.this, InterestActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }else if(notificationsModel.isOffers()){
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isOffers()) {
 
                         notificationsModel.setRead(true);
-                        Intent i = new Intent(NotificationsActivity.this,UpgradeMembershipActivity.class);
+                        Intent i = new Intent(NotificationsActivity.this, UpgradeMembershipActivity.class);
                         startActivity(i);
-                        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-                    }
-                    else if(notificationsModel.isBday())
-                    {
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    } else if (notificationsModel.isBday()) {
                         notificationsModel.setRead(true);
                         View bday_view = getLayoutInflater().inflate(R.layout.birthday_dialog, null);
                         AlertDialog.Builder bday = new AlertDialog.Builder(NotificationsActivity.this);
@@ -254,8 +250,7 @@ public class NotificationsActivity extends AppCompatActivity {
         prepareBlockData();
 
 
-
-        ItemTouchHelper.SimpleCallback touchevents = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback touchevents = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -276,33 +271,31 @@ public class NotificationsActivity extends AppCompatActivity {
                     notificationsAdapter.notifyDataSetChanged();
                 }
             }
-            };
-
+        };
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchevents);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public void setData(DataSnapshot dataSnapshot){
+    public void setData(DataSnapshot dataSnapshot) {
 
-            NotificationsModel notificationsModel = dataSnapshot.getValue(NotificationsModel.class);
-            notificationsModelList.add(notificationsModel);
-            notificationsAdapter.notifyDataSetChanged();
+        NotificationsModel notificationsModel = dataSnapshot.getValue(NotificationsModel.class);
+        notificationsModelList.add(notificationsModel);
+        notificationsAdapter.notifyDataSetChanged();
 
     }
 
-    public void prepareBlockData()
-    {
+    public void prepareBlockData() {
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    setData(dataSnapshot);
+                setData(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    setData(dataSnapshot);
+                setData(dataSnapshot);
             }
 
             @Override
@@ -346,10 +339,10 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
-        overridePendingTransition(R.anim.exit,0);
+        overridePendingTransition(R.anim.exit, 0);
         return true;
     }
 }

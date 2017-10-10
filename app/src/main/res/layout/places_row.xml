@@ -14,7 +14,7 @@
         android:paddingRight="8dp"
         android:paddingTop="16dp"
         android:text="White"
-        android:textColor="@color/black"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"/>
 
 </RelativeLayout>

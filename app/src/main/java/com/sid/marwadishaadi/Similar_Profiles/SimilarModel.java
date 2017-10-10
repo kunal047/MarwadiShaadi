@@ -6,7 +6,17 @@ package com.sid.marwadishaadi.Similar_Profiles;
 
 public class SimilarModel {
 
-    String name, city,education,imgAdd, age;
+    String name, city, education, imgAdd, age;
+    String customer_id;
+
+    public SimilarModel(String name, String city, String education, String imgAdd, String age, String customer_id) {
+        this.customer_id = customer_id;
+        this.name = name;
+        this.city = city;
+        this.education = education;
+        this.imgAdd = imgAdd;
+        this.age = age;
+    }
 
     public String getCustomer_id() {
         return customer_id;
@@ -16,23 +26,12 @@ public class SimilarModel {
         this.customer_id = customer_id;
     }
 
-    String customer_id;
-
     public String getImgAdd() {
         return imgAdd;
     }
 
     public void setImgAdd(String imgAdd) {
         this.imgAdd = imgAdd;
-    }
-
-    public SimilarModel(String name, String city, String education, String imgAdd, String age,String customer_id) {
-        this.customer_id = customer_id;
-        this.name = name;
-        this.city = city;
-        this.education = education;
-        this.imgAdd = imgAdd;
-        this.age = age;
     }
 
     public String getName() {

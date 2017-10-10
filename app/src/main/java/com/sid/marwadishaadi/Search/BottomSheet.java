@@ -26,6 +26,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.App;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard_Suggestions.SuggestionDataAdapter;
 import com.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.sid.marwadishaadi.Filter;
@@ -70,7 +71,6 @@ import static com.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.p
 import static com.sid.marwadishaadi.Signup.Signup_Partner_Preferences_Fragment.preferencePhysicalstatus;
 import static com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity.prefannualincome;
 import static com.sid.marwadishaadi.User_Profile.ProfileAdditionalDetailsFragment.SOME_INTENT_FILTER_NAME;
-
 
 
 public class BottomSheet extends BottomSheetDialogFragment {
@@ -126,7 +126,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     EditText relativeName, relativeOccupation, relativeMobile;
     Button relationUpdate;
     String r, rn, ro, rl, rm;
-    String[] array={};
+    String[] array = {};
     AutoCompleteTextView relativeLocation;
 
 
@@ -136,18 +136,25 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private UsersAdapter adapter;
     private int coun;
     private String customer_id;
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
+                    updateDisplay(birthTime, hourOfDay, minute);
+                }
+            };
 
     public BottomSheet() {
 
     }
+
 
     public BottomSheet(int i, String[] array) {
         this.array = array;
         if (i == 0) {
             Search search = new Search();
             content = search.getCasebreak();
-        }else if (i == 111) {
+        } else if (i == 111) {
             content = 111;
         } else if (i == 112) {
             content = 112;
@@ -181,6 +188,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
     }
 
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
@@ -200,10 +213,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
             //----------------- SEARCH ----------------------------------------------------------
 
             case 1:
-                if(array!= null && array.length>0)
-                {
-                    contentView = viewGetter2(R.array.caste_array_search, array);}
-                else
+                if (array != null && array.length > 0) {
+                    contentView = viewGetter2(R.array.caste_array_search, array);
+                } else
                     contentView = viewGetter(R.array.caste_array_search);
                 count = 2;
                 break;
@@ -216,7 +228,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
 
             case 3:
-                if(array!= null && array.length>0) {
+                if (array != null && array.length > 0) {
 
                     contentView = viewGetter2(R.array.status_search_array, array);
                 } else
@@ -225,7 +237,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
 
             case 4:
-                if(array!= null && array.length>0) {
+                if (array != null && array.length > 0) {
 
                     contentView = viewGetter2(R.array.fstatus_search_array, array);
                 } else
@@ -234,16 +246,16 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 break;
 
             case 5:
-                if(array!= null && array.length>0) {
+                if (array != null && array.length > 0) {
 
                     contentView = viewGetter2(R.array.aincome_search_array, array);
-                }else
+                } else
                     contentView = viewGetter(R.array.aincome_search_array);
                 count = 2;
                 break;
 
             case 6:
-                if(array!= null && array.length>0) {
+                if (array != null && array.length > 0) {
 
 
                     contentView = viewGetter2(R.array.physicalstatus_search_array, array);
@@ -599,24 +611,23 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         lname.setText("");
                         id.setText("");
 
-                    }
-                      else if (!strid.trim().isEmpty()) {
+                    } else if (!strid.trim().isEmpty()) {
 //and tbl_login.user_deleted='0' removed from below queries
 
                         new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name ,tbl_user.occup_designation,tbl_user.surname  from tbl_user inner join tbl_city on tbl_user.city=tbl_city.City_id  INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes'  ) and (tbl_login.user_deleted='0') and  tbl_user.customer_no=\"" + strid.trim() + "\"; ");
-                        } else if ((!strlname.trim().isEmpty() && !strfname.trim().isEmpty())) {
+                    } else if ((!strlname.trim().isEmpty() && !strfname.trim().isEmpty())) {
 
                         new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and (tbl_login.user_deleted='0') and  (tbl_user.first_name=\"" + strfname.trim() + "\"and tbl_user.surname=\"" + strlname.trim() + "\" ) order by created_on asc ;");
-                        } else if ((!strlname.trim().isEmpty() || !strfname.trim().isEmpty())) {
+                    } else if ((!strlname.trim().isEmpty() || !strfname.trim().isEmpty())) {
 
-                            if (!strlname.trim().isEmpty()) {
-                                new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and (tbl_login.user_deleted='0') and  ( tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='" + gender + "') order by created_on asc ;");
-                            } else {
-                                new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER JOIN tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and (tbl_login.user_deleted='0') and  tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
-                            }
+                        if (!strlname.trim().isEmpty()) {
+                            new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user inner join tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and (tbl_login.user_deleted='0') and  ( tbl_user.surname=\"" + strlname.trim() + "\"  and tbl_user.gender='" + gender + "') order by created_on asc ;");
                         } else {
-                            Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
+                            new BackNd().execute("select tbl_user.birthdate,tbl_user.first_name,tbl_user.customer_no,tbl_user.edu_degree,tbl_user.occup_location,tbl_user.height,tbl_user.occup_company,tbl_user.anuual_income,tbl_user.marrital_status,tbl_city.City_name,tbl_user.occup_designation,tbl_user.surname from tbl_user INNER JOIN tbl_city on tbl_user.city=tbl_city.City_id INNER JOIN tbl_login ON tbl_user.customer_no=tbl_login.customer_no where ( tbl_login.user_active ='Yes' ) and (tbl_login.user_deleted='0') and  tbl_user.first_name=\"" + strfname.trim() + "\"  order by created_on asc;");
                         }
+                    } else {
+                        Toast.makeText(getContext(), "Search detail can't be empty", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             });
@@ -635,12 +646,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     }
                     switch (content) {
                         case 1:
-                            String community_text= result.toString().replace("[", "").replace("]", "");
+                            String community_text = result.toString().replace("[", "").replace("]", "");
                             spinnerCastSearch.setText(community_text);
                             CastList = result;
                             SharedPreferences sharedpref = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                             SharedPreferences.Editor editorcast = sharedpref.edit();
-                            editorcast.putString("communities",spinnerCastSearch.getText().toString());
+                            editorcast.putString("communities", spinnerCastSearch.getText().toString());
                             editorcast.apply();
                             countspinnerCastSearch = coun;
                             break;
@@ -650,24 +661,24 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 preferenceMaritalstatus.setText(result.toString());
                                 break;
                             } else {
-                                String marital_text= result.toString().replace("[", "").replace("]", "");
+                                String marital_text = result.toString().replace("[", "").replace("]", "");
                                 maritalstatus.setText(marital_text);
                                 maritalstatusList = result;
                                 SharedPreferences sharedprefmari = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editormari = sharedprefmari.edit();
-                                editormari.putString("maritalStatusArray",maritalstatus.getText().toString());
+                                editormari.putString("maritalStatusArray", maritalstatus.getText().toString());
 
                                 editormari.apply();
                                 countmaritalstatus = coun;
                                 break;
                             }
                         case 4:
-                            String family_text= result.toString().replace("[", "").replace("]", "");
+                            String family_text = result.toString().replace("[", "").replace("]", "");
                             familystatus.setText(family_text);
                             familystatusList = result;
                             SharedPreferences sharedpreffam = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                             SharedPreferences.Editor editorfam = sharedpreffam.edit();
-                            editorfam.putString("familyStatusArray",familystatus.getText().toString());
+                            editorfam.putString("familyStatusArray", familystatus.getText().toString());
                             editorfam.apply();
                             countfamilystatus = coun;
                             break;
@@ -685,12 +696,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                             } else {
 
-                                annualincome.setText(result.toString().replace("[","").replace("]",""));
+                                annualincome.setText(result.toString().replace("[", "").replace("]", ""));
                                 AIList = result;
                                 countannualincome = coun;
                                 SharedPreferences sharedprefai = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editorai = sharedprefai.edit();
-                                editorai.putString("annualArray",annualincome.getText().toString());
+                                editorai.putString("annualArray", annualincome.getText().toString());
                                 editorai.apply();
                             }
                             break;
@@ -705,7 +716,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                 physicalstatusList = (result);
                                 SharedPreferences sharedprephy = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
                                 SharedPreferences.Editor editorphy = sharedprephy.edit();
-                                editorphy.putString("physicalStatusArray",physicalstatus.getText().toString());
+                                editorphy.putString("physicalStatusArray", physicalstatus.getText().toString());
                                 editorphy.apply();
                                 countphysicalstatus = coun;
                                 break;
@@ -722,16 +733,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
     public String getS() {
         return s;
     }
+
     public void setS(String s) {
         BottomSheet.s = s;
     }
+
     private View viewGetter(int array) {
 
         ArrayList<User> arrayOfUsers = new ArrayList<>();
         String[] str = getResources().getStringArray(array);
         for (int i = 0; i < str.length; i++) {
             User user = new User(str[i], "null");
-            if(i==0)
+            if (i == 0)
                 user.setBox(true);
             arrayOfUsers.add(user);
         }
@@ -755,11 +768,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
         boolean b;
         String[] str = getResources().getStringArray(array);
         for (int i = 1; i < str.length; i++) {
-            if(Arrays.asList(arr).indexOf(str[i]) == -1)
-            {
-                b=false;
-            }
-            else {
+            if (Arrays.asList(arr).indexOf(str[i]) == -1) {
+                b = false;
+            } else {
                 b = true;
             }
             User user = new User(str[i], "null", false);
@@ -773,7 +784,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-
     private View viewGetter2(int array, String[] arr) {
 
 
@@ -785,12 +795,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
         boolean b;
         String[] str = getResources().getStringArray(array);
         for (String ss : str) {
-            if(Arrays.asList(arr).indexOf(ss) == -1)
-            {
+            if (Arrays.asList(arr).indexOf(ss) == -1) {
 
-                b=false;
-            }
-            else {
+                b = false;
+            } else {
                 b = true;
             }
             User user = new User(ss, "null", false);
@@ -804,6 +812,34 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
+    private void updateDisplay(EditText birthtime, int hour, int minute) {
+        birthtime.setText(
+                new StringBuilder()
+                        .append(pad(hour)).append(":")
+                        .append(pad(minute)));
+    }
+
+    public int getAge(int DOByear, int DOBmonth, int DOBday) {
+
+        int age;
+
+        final Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+
+        age = currentYear - DOByear;
+
+        if (DOBmonth > currentMonth) {
+            --age;
+        } else if (DOBmonth == currentMonth) {
+            if (DOBday > todayDay) {
+                --age;
+            }
+        }
+        return age;
+    }
+
     private class BackNd extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -815,7 +851,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post("http://208.91.199.50:5000/searchById")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()
@@ -869,9 +905,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
                                     /*SuggestionModel suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, name, customerNo, education, occupationLocation, height, occupationCompany, annualIncome, maritalStatus, hometown, occupationDesignation, favouriteStatus, interestStatus);*/
                                         SuggestionModel suggestionModel;
                                         if (user.get(8).equals("")) {
-                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString() + " " + user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), "No Income mentioned.", user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         } else {
-                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString()+" "+user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
+                                            suggestionModel = new SuggestionModel(Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + user.get(3).toString() + "/thumb/" + user.get(0).toString(), user.get(2).toString() + " " + user.get(12).toString(), user.get(3).toString(), user.get(4).toString(), user.get(5).toString(), user.get(6).toString(), user.get(7).toString(), user.get(8).toString(), user.get(9).toString(), user.get(10).toString(), user.get(11).toString(), "0", "Not");
                                         }
                                         sm.add(suggestionModel);
 //
@@ -919,10 +955,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
     private class EditPersonalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
-
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalEducationDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editPersonalEducationDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("education", e)
                     .addBodyParameter("edu_degree", hd)
@@ -952,7 +987,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profilePersonalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -988,13 +1023,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
+
     private class FetchProfessionalEducationDetails extends AsyncTask<Void, Void, Void> {
 
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profilePersonalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1062,11 +1098,12 @@ public class BottomSheet extends BottomSheetDialogFragment {
             return null;
         }
     }
+
     private class EditPersonalProfessionalDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editPersonalProfessionDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editPersonalProfessionDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("occupation", o)
                     .addBodyParameter("annualIncome", ai)
@@ -1098,7 +1135,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1131,7 +1168,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsAboutMe")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editAdditionalDetailsAboutMe")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("aboutMe", am)
                     .setPriority(Priority.HIGH)
@@ -1158,7 +1195,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1187,11 +1224,11 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
     }
 
-     private class EditAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
+    private class EditAdditionalHobbiesDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHobbies")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editAdditionalDetailsHobbies")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("hobbies", h)
                     .setTag(this)
@@ -1219,7 +1256,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1276,7 +1313,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsLifestyle")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editAdditionalDetailsLifestyle")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("smokingHabit", sh)
                     .addBodyParameter("eatingHabit", eh)
@@ -1306,7 +1343,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileAdditionalDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1361,7 +1398,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editAdditionalDetailsHoroscope")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editAdditionalDetailsHoroscope")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("birthTime", bt)
                     .addBodyParameter("birthPlace", bp)
@@ -1393,7 +1430,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/profileFamilyDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileFamilyDetails")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -1435,7 +1472,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/editFamilyDetailsRelation")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editFamilyDetailsRelation")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("relation", r)
                     .addBodyParameter("relativeName", rn)
@@ -1459,49 +1496,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
             return null;
         }
-    }
-
-    private void updateDisplay(EditText birthtime, int hour, int minute) {
-        birthtime.setText(
-                new StringBuilder()
-                        .append(pad(hour)).append(":")
-                        .append(pad(minute)));
-    }
-
-    private static String pad(int c) {
-        if (c >= 10)
-            return String.valueOf(c);
-        else
-            return "0" + String.valueOf(c);
-    }
-
-    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
-            new TimePickerDialog.OnTimeSetListener() {
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                    updateDisplay(birthTime, hourOfDay, minute);
-                }
-            };
-
-    public int getAge(int DOByear, int DOBmonth, int DOBday) {
-
-        int age;
-
-        final Calendar calenderToday = Calendar.getInstance();
-        int currentYear = calenderToday.get(Calendar.YEAR);
-        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
-        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-
-        age = currentYear - DOByear;
-
-        if (DOBmonth > currentMonth) {
-            --age;
-        } else if (DOBmonth == currentMonth) {
-            if (DOBday > todayDay) {
-                --age;
-            }
-        }
-        return age;
     }
 
 }

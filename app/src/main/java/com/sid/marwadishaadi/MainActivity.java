@@ -1,4 +1,5 @@
 package com.sid.marwadishaadi;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,18 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-
 import com.sid.marwadishaadi.Intro_Slides.Intro1Fragment;
 import com.sid.marwadishaadi.Intro_Slides.Intro2Fragment;
-import com.sid.marwadishaadi.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private ViewPager mviewpager;
 
-   @Override
+    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     Intro1Fragment intro1Fragment = new Intro1Fragment();
                     return intro1Fragment;
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
     }
-
 
 
 }

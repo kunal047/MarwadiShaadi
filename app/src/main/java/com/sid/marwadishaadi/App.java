@@ -4,14 +4,11 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.sid.marwadishaadi.R;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +18,7 @@ import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class App extends Application{
+public class App extends Application {
 
     public static List<Place> placeslist = new ArrayList<>();
 
@@ -42,7 +39,7 @@ public class App extends Application{
     }
 
 
-    private class FetchLocation extends AsyncTask<Void,Void,Void> {
+    private class FetchLocation extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -51,30 +48,30 @@ public class App extends Application{
         @Override
         protected Void doInBackground(Void... voids) {
 
-                AndroidNetworking.post("http://208.91.199.50:5000/fetchCityStateCountry")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Place place;
-                        try {
-                            for(int i = 0;i<response.length();i++) {
-                                JSONArray array = response.getJSONArray(i);
-                                place = new Place(array.getString(0), array.getString(2), array.getString(4));
-                                App.placeslist.add(place);
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchCityStateCountry")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Place place;
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONArray array = response.getJSONArray(i);
+                                    place = new Place(array.getString(0), array.getString(2), array.getString(4));
+                                    App.placeslist.add(place);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
                         }
 
-                    }
+                        @Override
+                        public void onError(ANError anError) {
 
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+                        }
+                    });
 
             return null;
         }

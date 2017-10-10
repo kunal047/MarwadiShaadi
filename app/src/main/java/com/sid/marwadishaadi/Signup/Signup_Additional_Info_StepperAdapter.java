@@ -20,7 +20,7 @@ public class Signup_Additional_Info_StepperAdapter extends AbstractFragmentStepA
 
     @Override
     public Step createStep(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 Signup_Basic_Info_Fragment signupBasicInfoFragment = new Signup_Basic_Info_Fragment();
                 return signupBasicInfoFragment;
@@ -42,7 +42,7 @@ public class Signup_Additional_Info_StepperAdapter extends AbstractFragmentStepA
     @NonNull
     @Override
     public StepViewModel getViewModel(@IntRange(from = 0) int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return new StepViewModel.Builder(context)
                         .setTitle("Basic") //can be a CharSequence instead
@@ -56,6 +56,6 @@ public class Signup_Additional_Info_StepperAdapter extends AbstractFragmentStepA
                         .setTitle("Partner") //can be a CharSequence instead
                         .create();
         }
-      return null;
+        return null;
     }
 }

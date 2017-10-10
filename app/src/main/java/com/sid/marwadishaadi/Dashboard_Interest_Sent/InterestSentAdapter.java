@@ -12,15 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Lawrence Dalmet on 07-06-2017.
@@ -34,7 +35,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
     private Context context;
     private List<InterestSentModel> interestSentModelList;
     private boolean isPaidMember;
-
+    private boolean hasDP;
 
 
     public InterestSentAdapter(Context context, List<InterestSentModel> interestSentModelList) {
@@ -43,7 +44,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
         this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         // analytics
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Sent Interest view","view");
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Sent Interest view", "view");
     }
 
     @Override
@@ -60,6 +61,10 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
             }
         }
 
+        SharedPreferences sharedPref = itemView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+
+        hasDP = sharedPref.getBoolean("hasDP", false);
+
         return new MyViewHolder(itemView);
     }
 
@@ -70,7 +75,19 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
 
         String ag = interestSentModel.getName() + ", " + interestSentModel.getAge() + " years";
 
-        if (!isPaidMember) {
+        if (isPaidMember || hasDP) {
+
+            Glide.with(context)
+                    .load(interestSentModel.getImgAdd())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .into(holder.profilepic);
+
+            holder.showTextOnPhoto.setVisibility(View.GONE);
+
+        } else {
+
             Glide.with(context)
                     .load(interestSentModel.getImgAdd())
                     .centerCrop()
@@ -79,13 +96,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
                     .bitmapTransform(new BlurTransformation(context))
                     .into(holder.profilepic);
 
-        } else {
-            Glide.with(context)
-                    .load(interestSentModel.getImgAdd())
-                    .centerCrop()
-                    .placeholder(R.drawable.default_drawer)
-                    .error(R.drawable.default_drawer)
-                    .into(holder.profilepic);
+            holder.showTextOnPhoto.setVisibility(View.VISIBLE);
 
         }
 
@@ -99,8 +110,8 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
-                i.putExtra("from","interestSent");
-                i.putExtra("customerNo",interestSentModel.getCustomerId());
+                i.putExtra("from", "interestSent");
+                i.putExtra("customerNo", interestSentModel.getCustomerId());
                 context.startActivity(i);
             }
         });
@@ -110,8 +121,8 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
-                i.putExtra("from","interestSent");
-                i.putExtra("customerNo",interestSentModel.getCustomerId());
+                i.putExtra("from", "interestSent");
+                i.putExtra("customerNo", interestSentModel.getCustomerId());
                 context.startActivity(i);
             }
         });
@@ -123,7 +134,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name_age, location, degree, req_status, date;
+        public TextView name_age, location, degree, req_status, date, showTextOnPhoto;
         public ImageView profilepic;
 
         public MyViewHolder(View view) {
@@ -135,6 +146,7 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
             profilepic = (ImageView) view.findViewById(R.id.profilepic);
             date = (TextView) view.findViewById(R.id.date);
 
+            showTextOnPhoto = (TextView) view.findViewById(R.id.showTextOnPictureOfInterestSent);
 
 
         }

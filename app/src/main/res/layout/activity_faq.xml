@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
     >
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/faq_toolbar"
-        android:theme="@style/MyToolbartheme"
         android:layout_width="match_parent"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
     </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -31,161 +32,165 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q1"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a1"
                 android:layout_marginTop="6dp"
+                android:text="@string/a1"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q2"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a2"
                 android:layout_marginTop="6dp"
+                android:text="@string/a2"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q3"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="@string/a3"
-                android:layout_marginTop="6dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/a31"
-                android:layout_marginTop="6dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/a31"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="@string/a32"
-                android:layout_marginTop="6dp"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="@string/a33"
-                android:layout_marginTop="6dp"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="@string/a34"
-                android:layout_marginTop="6dp"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q4"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a4"
                 android:layout_marginTop="6dp"
+                android:text="@string/a4"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q5"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a5"
                 android:layout_marginTop="6dp"
+                android:text="@string/a5"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q6"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a6"
                 android:layout_marginTop="6dp"
+                android:text="@string/a6"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q7"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a7"
                 android:layout_marginTop="6dp"
+                android:text="@string/a7"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q8"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a8"
                 android:layout_marginTop="6dp"
+                android:text="@string/a8"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:text="@string/q9"
                 android:textColor="#000000"
-                android:layout_marginTop="30dp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/a9"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/a9"
                 />
 
         </LinearLayout>

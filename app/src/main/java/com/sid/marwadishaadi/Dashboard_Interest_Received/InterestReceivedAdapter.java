@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -41,6 +42,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -57,6 +60,8 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
     private boolean isPaidMember;
+    private boolean hasDP;
+
 
     public InterestReceivedAdapter(Context context, List<InterestReceivedModel> interestReceivedModelList, RecyclerView rv) {
         this.context = context;
@@ -75,14 +80,22 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", "null");
         customer_name = sharedpref.getString("firstname", "null");
-
-        String[] array = context.getResources().getStringArray(R.array.communities);
-        SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
-        for (int i = 0; i < 5; i++) {
-            if (communityChecker.getString(array[i], "null").contains("Yes")) {
-                isPaidMember = true;
+        try {
+            String[] array = context.getResources().getStringArray(R.array.communities);
+            SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
+            for (int i = 0; i < 5; i++) {
+                if (communityChecker.getString(array[i], "null").contains("Yes")) {
+                    isPaidMember = true;
+                }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
+
+
+        SharedPreferences sharedPref = itemView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+
+        hasDP = sharedPref.getBoolean("hasDP", false);
 
         return new MyViewHolder(itemView);
     }
@@ -97,7 +110,19 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
         holder.customerNo.setText(interestReceivedModel.getCustomerId());
 
 
-        if (!isPaidMember) {
+        if (isPaidMember || hasDP) {
+
+            Glide.with(context)
+                    .load(interestReceivedModel.getUserImage())
+                    .centerCrop()
+                    .placeholder(R.drawable.default_drawer)
+                    .error(R.drawable.default_drawer)
+                    .into(holder.userImage);
+
+            holder.showTextOnPhoto.setVisibility(View.GONE);
+
+        } else {
+
             Glide.with(context)
                     .load(interestReceivedModel.getUserImage())
                     .centerCrop()
@@ -105,13 +130,9 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
                     .bitmapTransform(new BlurTransformation(context))
                     .error(R.drawable.default_drawer)
                     .into(holder.userImage);
-        } else {
-            Glide.with(context)
-                    .load(interestReceivedModel.getUserImage())
-                    .centerCrop()
-                    .placeholder(R.drawable.default_drawer)
-                    .error(R.drawable.default_drawer)
-                    .into(holder.userImage);
+
+            holder.showTextOnPhoto.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -173,7 +194,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView userImage;
-        public TextView name, age, highestDegree, location, status, customerNo;
+        public TextView name, age, highestDegree, location, status, customerNo, showTextOnPhoto;
         public ImageView accept, reject;
 
         public MyViewHolder(final View itemView) {
@@ -187,6 +208,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
             reject = (ImageView) itemView.findViewById(R.id.interest_reject);
             customerNo = (TextView) itemView.findViewById(R.id.textViewCustomerNo);
 
+            showTextOnPhoto = (TextView) itemView.findViewById(R.id.showTextOnPictureOfInterestReceived);
 
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -304,7 +326,7 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
             String clickedId = params[0];
             String status = params[1];
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareInterest")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("clickedId", clickedId)
                     .addBodyParameter("status", status)

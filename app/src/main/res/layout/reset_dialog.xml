@@ -1,116 +1,116 @@
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusableInTouchMode="true">
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:src="@drawable/reset"/>
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                android:text="Please enter the correct old password and the new password which you wish to set"
+                android:textSize="14dp"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/user_old_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text3"
+                    android:layout_marginTop="10dp"
+                    android:hint="Old password"
+                    android:inputType="textPassword"
+                    android:textSize="12dp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/user_new_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text3"
+                    android:layout_marginTop="10dp"
+                    android:hint="New Password"
+                    android:inputType="textPassword"
+                    android:textSize="12dp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/user_reset"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@layout/button_border_corner_circle_"
+                android:text="Reset"
+                android:textColor="#fff"
+                android:textSize="16dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:text="Or"
+                android:textSize="12dp"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/reset_call_us"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="20dp"
-                    android:src="@drawable/reset" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/text3"
-                    android:text="Please enter the correct old password and the new password which you wish to set"
+                    android:drawableLeft="@drawable/signup_phone"
+                    android:gravity="center_vertical"
+                    android:text="CONTACT US:"
+                    android:textColor="#000"
+                    android:textSize="14dp"/>
+
+                <TextView
+                    android:id="@+id/reset_call_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="90221 12277"
+                    android:textColor="#000"
                     android:textSize="14dp"
-                    android:layout_margin="10dp"
                     />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/user_old_pass"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/text3"
-                        android:layout_marginTop="10dp"
-                        android:hint="Old password"
-                        android:inputType="textPassword"
-                        android:textSize="12dp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/user_new_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/text3"
-                        android:layout_marginTop="10dp"
-                        android:hint="New Password"
-                        android:inputType="textPassword"
-                        android:textSize="12dp" />
-                </android.support.design.widget.TextInputLayout>
-
-                    <Button
-                        android:id="@+id/user_reset"
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
-                        android:text="Reset"
-                        android:textColor="#fff"
-                        android:textSize="16dp"
-                        android:layout_marginTop="40dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@layout/button_border_corner_circle_"
-                        />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:text="Or"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="12dp" />
-
-                <LinearLayout
-                    android:id="@+id/reset_call_us"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:orientation="horizontal"
-                    android:clickable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CONTACT US:"
-                        android:textSize="14dp"
-                        android:textColor="#000"
-                        android:drawableLeft="@drawable/signup_phone"
-                        android:gravity="center_vertical"/>
-
-                    <TextView
-                        android:id="@+id/reset_call_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="90221 12277"
-                        android:textSize="14dp"
-                        android:textColor="#000"
-                        android:gravity="center_vertical"
-                        />
-                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
 

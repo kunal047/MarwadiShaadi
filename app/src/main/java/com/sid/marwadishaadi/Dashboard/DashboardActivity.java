@@ -2,6 +2,7 @@ package com.sid.marwadishaadi.Dashboard;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard_Favourites.FavouritesFragment;
 import com.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
 import com.sid.marwadishaadi.Dashboard_Recent_Profiles.RecentProfilesFragment;
@@ -62,6 +63,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -72,8 +76,11 @@ public class DashboardActivity extends AppCompatActivity
         ViewPager.OnPageChangeListener {
 
 
+    private static final String TAG = "DashboardActivity";
+    private static ProgressDialog progressDialog;
     TextView nameDrawer;
-
+    SharedPreferences.Editor editorGetDP;
+    SharedPreferences getDP;
     private DashboardSectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ImageView userdp;
@@ -85,13 +92,32 @@ public class DashboardActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private int notificationCount = 0;
     private MenuItem m;
-
-    private static final String TAG = "DashboardActivity";
+    private boolean hasInternet = true;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+    public boolean hasInternetAccess(Context context) {
+        boolean success = false;
+        try {
+            HttpURLConnection urlc = (HttpURLConnection)
+                    (new URL("http://clients3.google.com/generate_204")
+                            .openConnection());
+            urlc.setRequestProperty("User-Agent", "Android");
+            urlc.setRequestProperty("Connection", "close");
+            urlc.setConnectTimeout(1500);
+            urlc.connect();
+            success = (urlc.getResponseCode() == 204 &&
+                    urlc.getContentLength() == 0);
+        } catch (IOException e) {
+//                Log.e(TAG, "Error checking internet connection", e);
+        }
+
+        return success;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +129,14 @@ public class DashboardActivity extends AppCompatActivity
         PendingIntent pintent = PendingIntent
                 .getService(this, 0, intent, 0);
 
+        progressDialog = new ProgressDialog(DashboardActivity.this);
+        progressDialog.setMessage("Loading your matches...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         // Getting current ConnectionQuality
         ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
-        if(connectionQuality == ConnectionQuality.EXCELLENT) {
+        if (connectionQuality == ConnectionQuality.EXCELLENT) {
             // do something
         } else if (connectionQuality == ConnectionQuality.POOR) {
             // do something
@@ -114,8 +145,25 @@ public class DashboardActivity extends AppCompatActivity
         }
         // Getting current bandwidth
         int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
-        Log.d(TAG, "onCreate: bandwidth of internet is --------------------------------------------- " + currentBandwidth);
-        Log.d(TAG, "onCreate: connection quality is ------------------------------------------------ " + connectionQuality.toString());
+
+//        if (hasInternetAccess(getApplicationContext())) {
+//
+//
+////            Toast.makeText(getContext(), "No internet Connection", Toast.LENGTH_LONG).show();
+//
+//            Snackbar snackbar = Snackbar
+//                    .make(interest, "No internet connection!", Snackbar.LENGTH_LONG)
+//                    .setAction("RETRY", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                        }
+//                    });
+
+// Changing message text color
+//            snackbar.setActionTextColor(Color.RED);
+//            progressDialog.dismiss();
+//
+//        }
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         // Start service every three hour
@@ -133,41 +181,24 @@ public class DashboardActivity extends AppCompatActivity
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) { // connected to the internet
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                // connected to wifi
-//                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+
             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                // connected to the mobile provider's data plan
-//                Toast.makeText(getApplicationContext(), activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+
+
             }
         } else {
             // not connected to the internet
             Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
         }
-//        Intent intent = getIntent();
-//        mChosenContinueMethod = intent.getIntExtra(CONTINUE_METHOD, OVERLAY_METHOD);
-//
-//        mEnterAnimation = new AlphaAnimation(0f, 1f);
-//        mEnterAnimation.setDuration(600);
-//        mEnterAnimation.setFillAfter(true);
-//
-//        mExitAnimation = new AlphaAnimation(1f, 0f);
-//        mExitAnimation.setDuration(600);
-//        mExitAnimation.setFillAfter(true);
-//
-//        mChainTourGuide = ChainTourGuide.init(this).with(TourGuide.Technique.Click)
-//                .setPointer(new Pointer())
-//                .setToolTip(new ToolTip()
-//                        .setTitle("Suggestion")
-//                        .setDescription("Get your suggestion")
-//                        .setGravity(Gravity.RIGHT))
-//                .setOverlay(new Overlay()
-//                        .setEnterAnimation(mEnterAnimation)
-//                        .setExitAnimation(mExitAnimation));
+
+        getDP = getSharedPreferences("userDp", MODE_PRIVATE);
+        editorGetDP = getDP.edit();
 
 
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
+
 
         if (customer_id != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
@@ -496,7 +527,7 @@ public class DashboardActivity extends AppCompatActivity
         protected Void doInBackground(Void... params) {
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/fetchProfilePictureDrawer")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/fetchProfilePictureDrawer")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -509,9 +540,19 @@ public class DashboardActivity extends AppCompatActivity
                             try {
 
                                 String name = response.getString(0) + " " + response.getString(1);
-                                if (response.length() == 3) {
+
+                                if (response.length() < 3) {
+
+
+                                    editorGetDP.putBoolean("hasDP", false);
+                                    editorGetDP.apply();
+
+                                } else if (response.length() == 3) {
 
                                     String imageURL = "http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + response.getString(2);
+
+                                    editorGetDP.putBoolean("hasDP", true);
+                                    editorGetDP.apply();
 
                                     SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     SharedPreferences.Editor editors = userinfo.edit();
@@ -557,6 +598,12 @@ public class DashboardActivity extends AppCompatActivity
                     });
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
         }
     }
 }

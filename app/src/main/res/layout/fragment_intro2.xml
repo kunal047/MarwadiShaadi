@@ -1,16 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.sid.marwadishaadi.Intro_Slides.Intro2Fragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:fitsSystemWindows="true"
+             tools:context="com.sid.marwadishaadi.Intro_Slides.Intro2Fragment">
 
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/slider2min"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/slider2min"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,30 +18,30 @@
         android:orientation="vertical"
         >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="A unique portal that brings together all Marwadi's and offers exclusivity for Khandelwal, Agarwal, Maheshwari and Jain communities\n Talaash aapki zimmedari hamari! "
-        android:textAlignment="center"
-        android:textColor="#fff"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        fontPath="fonts/OpenSans-Bold.ttf"
-        tools:ignore="MissingPrefix"/>
+        <TextView
+            fontPath="fonts/OpenSans-Bold.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="300dp"
+            android:text="A unique portal that brings together all Marwadi's and offers exclusivity for Khandelwal, Agarwal, Maheshwari and Jain communities\n Talaash aapki zimmedari hamari! "
+            android:textAlignment="center"
+            android:textColor="#fff"
+            tools:ignore="MissingPrefix"/>
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/get_started"
-        android:background="@layout/button_border_corner_circle_"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:layout_gravity="bottom|center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@layout/button_border_corner_circle_"
         android:text="Get Started"
+        android:textAllCaps="false"
         android:textColor="#fff"
-        android:textSize="16dp"
-        android:textAllCaps="false"/>
+        android:textSize="16dp"/>
 
 </FrameLayout>

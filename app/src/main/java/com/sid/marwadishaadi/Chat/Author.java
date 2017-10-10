@@ -10,7 +10,6 @@ public class Author implements IUser {
     String id, name, avatar;
 
 
-
     @Override
     public String getId() {
         return id;

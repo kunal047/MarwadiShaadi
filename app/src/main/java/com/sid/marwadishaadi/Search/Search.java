@@ -36,6 +36,7 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListen
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.sid.marwadishaadi.App;
 import com.sid.marwadishaadi.CityAdapter;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard_Suggestions.SuggestionModel;
 import com.sid.marwadishaadi.Place;
 import com.sid.marwadishaadi.R;
@@ -1970,7 +1971,7 @@ public class Search extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/searchById")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/searchById")
                     .addBodyParameter("query", strings[0])
                     .setPriority(Priority.HIGH)
                     .build()

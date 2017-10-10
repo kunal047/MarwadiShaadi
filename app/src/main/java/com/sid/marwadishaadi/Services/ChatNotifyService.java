@@ -9,7 +9,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
-import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -19,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -81,7 +81,7 @@ public class ChatNotifyService extends Service {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/checkForChat")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/checkForChat")
                     .addBodyParameter("customerNo", customer_no)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -158,7 +158,7 @@ public class ChatNotifyService extends Service {
 //            sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //            query="select count(msg_id) from tbl_message where msg_to='"+sharedPreferences.getString("customer_id","A1001")+"' and msg_read='0';";
 //
-//            AndroidNetworking.post("http://208.91.199.50:5000/ResetPassword")
+//            AndroidNetworking.post(Constants.AWS_SERVER + "/ResetPassword")
 //                    .addBodyParameter("query",query)
 //                    .build()
 //                    .getAsJSONArray(new JSONArrayRequestListener() {

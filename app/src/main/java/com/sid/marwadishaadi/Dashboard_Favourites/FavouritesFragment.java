@@ -17,10 +17,11 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,16 +69,16 @@ public class FavouritesFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        cache = new File(getCacheDir() + "/" + "favourites" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "favourites" + customer_id + ".srl");
 
-        Analytics_Util.logAnalytic(mFirebaseAnalytics,"Favourites","view");
+        Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "view");
 
         mProgressBar = (ProgressBar) mview.findViewById(R.id.favourites_loading);
         mProgressBar.setVisibility(View.VISIBLE);
 
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
-        favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList,empty_view);
+        favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList, empty_view);
 
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
@@ -95,20 +96,19 @@ public class FavouritesFragment extends Fragment {
         });
 
 
-
         // loading cached copy
-        String res = CacheHelper.retrieve("favourites",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("favourites", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"favourites");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "favourites");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
-               // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
+                // .makeText(getContext(), "Loading from cache....", .LENGTH_SHORT).show();
                 parseFavourites(response);
 
             } catch (JSONException e) {
@@ -124,16 +124,16 @@ public class FavouritesFragment extends Fragment {
 
         try {
 
-                                mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
 
-            if(response.length() == 0){
+            if (response.length() == 0 && favouritesList.size() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         empty_view.setVisibility(View.VISIBLE);
                     }
                 });
-            }else{
+            } else {
 
                 empty_view.setVisibility(View.GONE);
                 favouritesList.clear();
@@ -168,7 +168,7 @@ public class FavouritesFragment extends Fragment {
 
                     FavouriteModel favouriteModel = new FavouriteModel(customerNo, name, occupationLocation, education, Integer.parseInt(age), "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, interestStatus);
 
-                    if (!favouritesList.contains(favouriteModel)){
+                    if (!favouritesList.contains(favouriteModel)) {
                         favouritesList.add(0, favouriteModel);
                     }
 
@@ -211,6 +211,23 @@ public class FavouritesFragment extends Fragment {
         return age;
     }
 
+    public void loadedFromNetwork(JSONArray response) {
+
+
+        //saving fresh in cache
+        CacheHelper.save("favourites", response.toString(), cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "favourites");
+
+        // displaying it
+        parseFavourites(response);
+
+    }
+
     private class PrepareFavourites extends AsyncTask<String, Void, Void> {
 
 
@@ -224,7 +241,7 @@ public class FavouritesFragment extends Fragment {
         protected Void doInBackground(String... params) {
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareFavourites")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareFavourites")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -236,24 +253,24 @@ public class FavouritesFragment extends Fragment {
                             //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"favourites");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "favourites");
 
-                               //
-                               //
+                                //
+                                //
                                 //
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                   // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
+                                    // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -275,22 +292,5 @@ public class FavouritesFragment extends Fragment {
             mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-    public void loadedFromNetwork(JSONArray response){
-
-
-        //saving fresh in cache
-        CacheHelper.save("favourites",response.toString(),cache);
-
-        // marking cache
-        isAlreadyLoadedFromCache = true;
-
-        // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"favourites");
-
-        // displaying it
-        parseFavourites(response);
-
     }
 }

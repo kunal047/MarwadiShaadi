@@ -21,13 +21,14 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.Payment.activity.WebViewActivity;
 import com.sid.marwadishaadi.Payment.utility.AvenuesParams;
 import com.sid.marwadishaadi.Payment.utility.ServiceUtility;
 import com.sid.marwadishaadi.R;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +63,7 @@ public class MembershipActivity extends AppCompatActivity {
     ProgressDialog dialog;
     TextView dash, clear1, clear2, clear3, clear4, clear5, clear6;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private AlertDialog resetbox;
 
 
     public static Integer getCalculate() {
@@ -233,34 +235,35 @@ public class MembershipActivity extends AppCompatActivity {
                                 } else {
                                     String user_code = code.getText().toString().trim();
                                     if (user_code.trim().equals("")) {
-                                        Toast.makeText(MembershipActivity.this, "Please Enter coupon code" + getEmojiByUnicode(0x1F611), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MembershipActivity.this, "Please enter coupon code" + getEmojiByUnicode(0x1F611), Toast.LENGTH_SHORT).show();
                                     } else {
                                         new BCKND().execute(user_code);
+
                                     }
                                 }
 
                             } else {
-                                Toast.makeText(getApplicationContext(), "Already Added one Coupon", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Already added coupon", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
 
 
-                    AlertDialog resetbox = reset.create();
+                    resetbox = reset.create();
                     resetbox.show();
 
                 } else {
 //                    .makeText(getApplicationContext(),"Already Added one coupon code"+getEmojiByUnicode(0x1F636),.LENGTH_SHORT).show();
                     AlertDialog.Builder ald = new AlertDialog.Builder(view.getRootView().getContext());
-                    ald.setTitle("Coupon Code details are");
+                    ald.setTitle("Coupon code details:- ");
                     String ad = "";
                     if (pair_c_discount_type.equals("Percent")) {
                         ad = "%";
                     } else {
                         ad = "Rs.";
                     }
-                    //                                            +"coupon type : "+pair_c_type+"\n"
-                    ald.setMessage("Coupon code :" + pair_c_code + "\n" + "Discount Type : " + pair_c_discount_type + "\n" + "Discount : " + pair_c_discount + ad + "\n" + "Discount will added when go for payment");
+                    //                                            +"coupon type : "+pair_c_type+"\n" + "Discount Type: " + pair_c_discount_type +
+                    ald.setMessage("Coupon code: " + pair_c_code + "\n" + "Discount: " + pair_c_discount + ad + "\n" + "* Discount will added when go for payment");
                     AlertDialog resetbox = ald.create();
                     resetbox.show();
                 }
@@ -722,7 +725,7 @@ public class MembershipActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             String query = "SELECT c_code,c_type,c_discount_type,c_discount,c_used,active,c_allowed_number FROM tbl_coupans where c_code=\"" + strings[0] + "\"";
 
-            AndroidNetworking.post("http://10.0.0.21:5050/checkCoupon")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/checkCoupon")
                     .addBodyParameter("query", query)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -733,7 +736,7 @@ public class MembershipActivity extends AppCompatActivity {
 
                             try {
                                 if (response.getString(0).equals("no")) {
-                                    Toast.makeText(MembershipActivity.this, "No coupon code found" + getEmojiByUnicode(0x1F60E), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MembershipActivity.this, "No coupon code found " + getEmojiByUnicode(0x1F60E), Toast.LENGTH_LONG).show();
                                     goAway = "NO";
                                 } else {
                                     try {
@@ -766,10 +769,19 @@ public class MembershipActivity extends AppCompatActivity {
                                             //tvamount.setText(Integer.toString(calculate));
                                             counts = 1;
 
-                                            Toast.makeText(MembershipActivity.this, "Added coupon successfully Discount will added when go for payment " + getEmojiByUnicode(0x1F60A), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(MembershipActivity.this, "Coupon successfully added\nGo for payment to avail discount " + getEmojiByUnicode(0x1F60A), Toast.LENGTH_LONG).show();
+
+
                                         } else {
                                             Toast.makeText(MembershipActivity.this, "This coupon code is no longer available" + getEmojiByUnicode(0x1F620), Toast.LENGTH_SHORT).show();
                                         }
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                resetbox.dismiss();
+                                            }
+                                        });
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

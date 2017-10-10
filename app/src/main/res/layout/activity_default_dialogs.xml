@@ -20,11 +20,11 @@
         android:layout_below="@+id/chat_toolbar">
 
 
-    <com.stfalcon.chatkit.dialogs.DialogsList
-        android:id="@+id/dialogsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        <com.stfalcon.chatkit.dialogs.DialogsList
+            android:id="@+id/dialogsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

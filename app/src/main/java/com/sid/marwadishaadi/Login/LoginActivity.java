@@ -14,7 +14,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,6 +32,7 @@ import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.sid.marwadishaadi.Notifications_Util;
@@ -237,7 +237,8 @@ public class LoginActivity extends AppCompatActivity {
                                          email = login_email.getText().toString().toLowerCase();
                                          pass = login_pass.getText().toString();
 
-                                         if (!email.trim().matches("^[m|a|j|k|o|M|A|J|K|O][0-9]{4,6}") | EmailChecker(email) & !pass.trim().isEmpty()) {
+                                         if ((!email.trim().matches("^[m|a|j|k|o|M|A|J|K|O][0-9]{4,6}") | EmailChecker(email)) && (email.trim().length() > 0 || pass.trim().length() > 0)) {
+
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
                                              dialog.show();
@@ -265,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                  Looper.prepare();
                                                              }
                                                              if (str.equals("logged")) {
-                                                                 builder= new AlertDialog.Builder(LoginActivity.this);
+                                                                 builder = new AlertDialog.Builder(LoginActivity.this);
                                                                  builder.setMessage("You have already logged in from other device. Please logout from that to continue");
                                                                  builder.setCancelable(false);
 
@@ -288,7 +289,6 @@ public class LoginActivity extends AppCompatActivity {
 //                                                                             public void onClick(DialogInterface dialog, int id) {
 //                                                                             }
 //                                                                         });
-
 
 
                                                              } else {
@@ -326,17 +326,17 @@ public class LoginActivity extends AppCompatActivity {
                                                                      overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
                                                                  } else if (str.equals("failure")) {
-                                                                     Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
+                                                                     Toast.makeText(LoginActivity.this, "Your email-id or password is incorrect", Toast.LENGTH_SHORT).show();
                                                                      dialog.dismiss();
                                                                      scheduledExecutorService.shutdown();
                                                                  } else if (str.equals("----")) {
                                                                      //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
-                                                                     Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                     Toast.makeText(LoginActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
                                                                      dialog.dismiss();
                                                                      scheduledExecutorService.shutdown();
 
                                                                  } else {
-                                                                     Toast.makeText(getApplicationContext(), "Please enter correct Email Address", Toast.LENGTH_SHORT).show();
+                                                                     Toast.makeText(getApplicationContext(), "Please enter correct email-id", Toast.LENGTH_SHORT).show();
                                                                      dialog.dismiss();
                                                                      scheduledExecutorService.shutdown();
                                                                  }
@@ -353,85 +353,87 @@ public class LoginActivity extends AppCompatActivity {
                                              Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
 
                                              // rest
-                                         } else if ((email.trim().contains("M") | email.trim().contains("m") | email.trim().contains("a") | email.trim().contains("A") | email.trim().contains("o") | email.trim().contains("O") | email.trim().contains("J") | email.trim().contains("j") | email.trim().contains("K") | email.trim().contains("k")) & !pass.trim().isEmpty()) {
-                                             dialog.setMessage("Please Wait...");
-                                             dialog.show();
-                                             pass = HashConverter(pass);
-                                             new BackGround().execute("user_id", email, pass);
+                                         } else {
+                                             if ((email.trim().contains("M") | email.trim().contains("m") | email.trim().contains("a") | email.trim().contains("A") | email.trim().contains("o") | email.trim().contains("O") | email.trim().contains("J") | email.trim().contains("j") | email.trim().contains("K") | email.trim().contains("k")) & !pass.trim().isEmpty()) {
+                                                 dialog.setMessage("Please Wait...");
+                                                 dialog.show();
+                                                 pass = HashConverter(pass);
+                                                 new BackGround().execute("user_id", email, pass);
 
-                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
-                                             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                                                 @Override
-                                                 public void run() {
-                                                     try {
+                                                 final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                                 scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                     @Override
+                                                     public void run() {
+                                                         try {
 
-                                                         if (!checker) {
+                                                             if (!checker) {
 
-                                                         } else {
-                                                             if (Looper.myLooper() == null) {
-                                                                 Looper.prepare();
-                                                             }
-
-
-                                                             if (str.equals("success")) {
-                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                                 SharedPreferences.Editor editors = userinfo.edit();
-                                                                 editors.putBoolean("isLoggedIn", true);
-                                                                 editors.putString("id", customer_id);
-                                                                 editors.apply();
-
-                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                                                 SharedPreferences.Editor editor = sharedpref.edit();
-                                                                 editor.putBoolean("isLoggedIn", true);
-                                                                 editor.putString("email", email);
-                                                                 editor.putString("password", pass);
-                                                                 editor.putString("customer_id", customer_id);
-                                                                 editor.putString("gender", customer_gender);
-                                                                 editor.apply();
-                                                                 dialog.dismiss();
-
-
-                                                                 registerMe();
-                                                                 Intent deeplink_data = getIntent();
-                                                                 String deeplink = deeplink_data.getStringExtra("deeplink");
-                                                                 if (deeplink != null) {
-                                                                     Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
-                                                                     i.putExtra("deeplink", deeplink);
-                                                                     startActivity(i);
-                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                             } else {
+                                                                 if (Looper.myLooper() == null) {
+                                                                     Looper.prepare();
                                                                  }
 
 
-                                                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                                                 startActivity(i);
-                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                                 if (str.equals("success")) {
+                                                                     SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                     SharedPreferences.Editor editors = userinfo.edit();
+                                                                     editors.putBoolean("isLoggedIn", true);
+                                                                     editors.putString("id", customer_id);
+                                                                     editors.apply();
 
-                                                             } else if (str.equals("failure")) {
-                                                                 Toast.makeText(LoginActivity.this, "Your Email or Password is incorrect, Please try again !!", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
-                                                             } else if (str.equals("----")) {
-                                                                 //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
-                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
+                                                                     SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                     SharedPreferences.Editor editor = sharedpref.edit();
+                                                                     editor.putBoolean("isLoggedIn", true);
+                                                                     editor.putString("email", email);
+                                                                     editor.putString("password", pass);
+                                                                     editor.putString("customer_id", customer_id);
+                                                                     editor.putString("gender", customer_gender);
+                                                                     editor.apply();
+                                                                     dialog.dismiss();
 
-                                                             } else {
-                                                                 Toast.makeText(getApplicationContext(), "Please enter correct password or User ID", Toast.LENGTH_SHORT).show();
-                                                                 dialog.dismiss();
-                                                                 scheduledExecutorService.shutdown();
+
+                                                                     registerMe();
+                                                                     Intent deeplink_data = getIntent();
+                                                                     String deeplink = deeplink_data.getStringExtra("deeplink");
+                                                                     if (deeplink != null) {
+                                                                         Intent i = new Intent(LoginActivity.this, UserProfileActivity.class);
+                                                                         i.putExtra("deeplink", deeplink);
+                                                                         startActivity(i);
+                                                                         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                                                     }
+
+
+                                                                     Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                                                     startActivity(i);
+                                                                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                                                 } else if (str.equals("failure")) {
+                                                                     Toast.makeText(LoginActivity.this, "Your email-id or password is incorrect", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+                                                                 } else if (str.equals("----")) {
+                                                                     //                        android.app.Dialog dlg=new android.app.Dialog(getApplicationContext(),R.layout.error);
+                                                                     Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+
+                                                                 } else {
+                                                                     Toast.makeText(getApplicationContext(), "Please enter correct password or User ID", Toast.LENGTH_SHORT).show();
+                                                                     dialog.dismiss();
+                                                                     scheduledExecutorService.shutdown();
+                                                                 }
+                                                                 Looper.loop();
                                                              }
-                                                             Looper.loop();
+                                                         } catch (Exception e) {
+
                                                          }
-                                                     } catch (Exception e) {
-
                                                      }
-                                                 }
-                                             }, 1, 3, TimeUnit.SECONDS);
-                                             Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
+                                                 }, 1, 3, TimeUnit.SECONDS);
+                                                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
 
-                                         } else {
-                                             Toast.makeText(LoginActivity.this, "Please enter email address or userId", Toast.LENGTH_SHORT).show();
+                                             } else {
+                                                 Toast.makeText(LoginActivity.this, "Please enter email address or userId", Toast.LENGTH_SHORT).show();
+                                             }
                                          }
                                      }
                                  }
@@ -487,7 +489,7 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             if (strings[0].contains("email")) {
-                AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
+                AndroidNetworking.post(Constants.AWS_SERVER + "/checkLogin/{check}")
                         .addPathParameter("check", "email")
                         .addBodyParameter("email", strings[1])
                         .addBodyParameter("password", strings[2])
@@ -513,7 +515,7 @@ public class LoginActivity extends AppCompatActivity {
                                     str = response.getString(0);
 
                                     if (str.equals("logged")) {
-                                        builder= new AlertDialog.Builder(LoginActivity.this);
+                                        builder = new AlertDialog.Builder(LoginActivity.this);
                                         builder.setMessage("You have already logged in from other device. Please logout from that to continue");
                                         builder.setCancelable(false);
 
@@ -600,7 +602,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
             } else {
-                AndroidNetworking.post("http://208.91.199.50:5000/checkLogin/{check}")
+                AndroidNetworking.post(Constants.AWS_SERVER + "/checkLogin/{check}")
                         .addPathParameter("check", "id")
                         .addBodyParameter("email", strings[1])
                         .addBodyParameter("password", strings[2])
@@ -623,7 +625,7 @@ public class LoginActivity extends AppCompatActivity {
                                     checker = true;
 
                                     if (str.equals("logged")) {
-                                        builder= new AlertDialog.Builder(LoginActivity.this);
+                                        builder = new AlertDialog.Builder(LoginActivity.this);
                                         builder.setMessage("You have already logged in.\nPlease logout from your other devices to continue.");
                                         builder.setCancelable(false);
 
@@ -646,7 +648,6 @@ public class LoginActivity extends AppCompatActivity {
 //                                                                             public void onClick(DialogInterface dialog, int id) {
 //                                                                             }
 //                                                                         });
-
 
 
                                     } else if (str.contains("success")) {
@@ -697,7 +698,7 @@ public class LoginActivity extends AppCompatActivity {
                                         });
 
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Please enter correct User id or password", Toast.LENGTH_LONG).show();
+//                                        Toast.makeText(getApplicationContext(), "Please enter correct User id or password", Toast.LENGTH_LONG).show();
                                     }
 
 
@@ -727,7 +728,6 @@ public class LoginActivity extends AppCompatActivity {
             }
             return null;
         }
-
 
         @Override
         protected void onPostExecute(String s) {

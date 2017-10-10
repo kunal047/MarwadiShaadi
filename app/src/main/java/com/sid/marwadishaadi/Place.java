@@ -16,8 +16,8 @@ public class Place {
         this.state = state;
     }
 
-    public String getPlace(){
-        return this.city +", "+this.state + ", " +this.country;
+    public String getPlace() {
+        return this.city + ", " + this.state + ", " + this.country;
     }
 
 

@@ -13,6 +13,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
 import com.sid.marwadishaadi.R;
 import com.stfalcon.chatkit.dialogs.DialogsList;
@@ -93,7 +94,6 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
         });
 
 
-
         new ListCreater().execute();
     }
 
@@ -111,6 +111,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
             return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -120,7 +121,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
 
     @Override
     public void onBackPressed() {
-        Intent i= new Intent(getApplicationContext(), DashboardActivity.class);
+        Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
         startActivity(i);
         super.onBackPressed();
     }
@@ -153,7 +154,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
             //inner join tbl_user on tbl_message.msg_from!="+
 
             //TODO Changed here
-            AndroidNetworking.post("http://208.91.199.50:5000/getChat")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/getChat")
                     .addBodyParameter("query", query)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -194,11 +195,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
 //                                            SimpleDateFormat format = new SimpleDateFormat("dd MMM");
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
-                                            Calendar cal=Calendar.getInstance();
+                                            Calendar cal = Calendar.getInstance();
                                             cal.setTime(date);
-                                            cal.add(Calendar.HOUR_OF_DAY,-5);
-                                            cal.add(Calendar.MINUTE,-30);
-                                            date=cal.getTime();
+                                            cal.add(Calendar.HOUR_OF_DAY, -5);
+                                            cal.add(Calendar.MINUTE, -30);
+                                            date = cal.getTime();
                                             DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
                                             format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);
@@ -222,11 +223,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
                                             String string = jsnrry.getString(3);
                                             SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM yyyy HH:mm:ss z");
                                             Date date = format.parse(string);
-                                            Calendar cal=Calendar.getInstance();
+                                            Calendar cal = Calendar.getInstance();
                                             cal.setTime(date);
-                                            cal.add(Calendar.HOUR_OF_DAY,-5);
-                                            cal.add(Calendar.MINUTE,-30);
-                                            date=cal.getTime();
+                                            cal.add(Calendar.HOUR_OF_DAY, -5);
+                                            cal.add(Calendar.MINUTE, -30);
+                                            date = cal.getTime();
                                             DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
                                             format.setTimeZone(TimeZone.getTimeZone("IST"));
                                             Message msg = new Message(jsnrry.getString(0), usrme, jsnrry.getString(2), date);

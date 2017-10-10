@@ -30,10 +30,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-
-import com.sid.marwadishaadi.Login.LoginActivity;
-
-import com.sid.marwadishaadi.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -41,6 +37,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.Login.LoginActivity;
+import com.sid.marwadishaadi.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +48,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    public static final int REQUEST_PERMISSION_SETTING = 105;
+    public static final int CALL_PHONE_PERMISSION = 102;
     private static final String TAG = "";
     protected EditText email;
     protected Button submit;
@@ -57,9 +58,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private String user_email;
     private boolean sentmail;
     private FirebaseAnalytics mFirebaseAnalytics;
-    public static final int REQUEST_PERMISSION_SETTING = 105;
-    public static final int CALL_PHONE_PERMISSION=102;
     private View view;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -97,29 +97,34 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 // add permission here
                 int permissionCheck = ContextCompat.checkSelfPermission(ForgotPasswordActivity.this, Manifest.permission.CALL_PHONE);
 
-                if (permissionCheck == PackageManager.PERMISSION_DENIED){
+                if (permissionCheck == PackageManager.PERMISSION_DENIED) {
 
-                    if(!getPermissionStatus()){
+                    if (!getPermissionStatus()) {
 
                         Dexter.withActivity(ForgotPasswordActivity.this)
-                            .withPermission(Manifest.permission.CALL_PHONE)
-                            .withListener(new PermissionListener() {
-                                @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                                    Call();
-                                }
-                                @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                                .withPermission(Manifest.permission.CALL_PHONE)
+                                .withListener(new PermissionListener() {
+                                    @Override
+                                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                                        Call();
+                                    }
 
-                                    setPermissionStatus();
-                                    showSettings();
-                                }
-                                @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                    @Override
+                                    public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                                }
-                            }).check();
-                    }else{
-                      showSettings();
+                                        setPermissionStatus();
+                                        showSettings();
+                                    }
+
+                                    @Override
+                                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                                    }
+                                }).check();
+                    } else {
+                        showSettings();
                     }
-                }else{
+                } else {
                     Call();
                 }
 
@@ -138,7 +143,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    public void Call(){
+    public void Call() {
 
         final Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + call_us_number.getText().toString()));//change the number
@@ -169,11 +174,52 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == CALL_PHONE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Call();
+            } else {
+                Toast.makeText(ForgotPasswordActivity.this, "Unable to get Permission", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void showSettings() {
+        Snackbar snackbar = Snackbar
+                .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getApplicationContext().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    private Boolean getPermissionStatus() {
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isPhonePermissionDenied", false);
+    }
+
+    private void setPermissionStatus() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sharedpref.edit();
+        edit.putBoolean("isPhonePermissionDenied", true);
+        edit.apply();
+    }
+
     private class SendMail extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/sendMail")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/sendMail")
                     .addBodyParameter("forgotPassEmail", user_email)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
@@ -193,13 +239,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
-
     private class ForgotPassword extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/forgotPassword")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/forgotPassword")
                     .addBodyParameter("forgotPassEmail", user_email)
                     .setTag(this)
                     .setPriority(Priority.MEDIUM)
@@ -243,46 +288,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
 
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if (requestCode == CALL_PHONE_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Call();
-            } else {
-                    Toast.makeText(ForgotPasswordActivity.this,"Unable to get Permission",Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-
-        private void showSettings(){
-            Snackbar snackbar = Snackbar
-                .make(view.getRootView(), "Go to settings and grant permission", Snackbar.LENGTH_LONG)
-                .setAction("Settings", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package",getApplicationContext().getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                    }
-                });
-
-            snackbar.show();
-        }
-        private Boolean getPermissionStatus(){
-            SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            return sharedpref.getBoolean("isPhonePermissionDenied", false);
-        }
-
-        private void setPermissionStatus(){
-
-            SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor edit =  sharedpref.edit();
-            edit.putBoolean("isPhonePermissionDenied",true);
-            edit.apply();
-        }
-    }
+}
 
 

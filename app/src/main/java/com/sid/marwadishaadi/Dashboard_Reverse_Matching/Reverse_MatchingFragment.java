@@ -22,6 +22,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.OnLoadMoreListener;
 import com.sid.marwadishaadi.R;
 
@@ -45,6 +46,7 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 public class Reverse_MatchingFragment extends Fragment {
 
+    private static final String TAG = "Reverse_MatchingFragmen";
     private static int reverse_page_no = 0;
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<ReverseModel> reverseModelList = new ArrayList<>();
@@ -90,17 +92,23 @@ public class Reverse_MatchingFragment extends Fragment {
 
         cache = new File(getCacheDir() + "/" + "reversematching" + customer_id + ".srl");
 
-        String[] array = getResources().getStringArray(R.array.communities);
+        try {
 
-        SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
-        if (customer_id != null && communityChecker != null) {
-            for (int i = 0; i < 5; i++) {
+            String[] array = getResources().getStringArray(R.array.communities);
 
-                if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
-                    res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+            SharedPreferences communityChecker = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+            if (customer_id != null && communityChecker != null) {
+                for (int i = 0; i < 5; i++) {
+
+                    if (communityChecker.getString(array[i], "No").contains("Yes") && array[i].toCharArray()[0] != customer_id.toCharArray()[0]) {
+                        res += " OR tbl_user.customer_no LIKE '" + array[i].toCharArray()[0] + "%'";
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
+
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
@@ -171,7 +179,6 @@ public class Reverse_MatchingFragment extends Fragment {
                     reverseAdapter.notifyDataSetChanged();
 
 
-
                     reverseModelList.remove(reverseModelList.size() - 1);
                     reverseAdapter.notifyDataSetChanged();
 
@@ -179,7 +186,6 @@ public class Reverse_MatchingFragment extends Fragment {
                 }
             }
         });
-
 
 
         return mview;
@@ -197,7 +203,8 @@ public class Reverse_MatchingFragment extends Fragment {
             mProgressBar.setVisibility(View.GONE);
 
 
-            if (response.toString().contains("zero")) {
+            if (response.toString().contains("zero") && reverseModelList.size() == 0) {
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -211,6 +218,7 @@ public class Reverse_MatchingFragment extends Fragment {
                 for (int i = 0; i < response.length(); i++) {
 
                     JSONArray array = response.getJSONArray(i);
+
                     if (array.getString(0).contains("no new result")) {
                         break;
                     } else {
@@ -262,6 +270,8 @@ public class Reverse_MatchingFragment extends Fragment {
     }
 
     private void refreshContent() {
+        reverseModelList.clear();
+        reverseAdapter.notifyDataSetChanged();
         new PrepareReverse().execute();
     }
 
@@ -318,7 +328,7 @@ public class Reverse_MatchingFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareReverse/{customerNo}/{gender}/{page}")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareReverse/{customerNo}/{gender}/{page}")
                     .addPathParameter("customerNo", customer_id)
                     .addPathParameter("gender", customer_gender)
                     .addPathParameter("page", String.valueOf(reverse_page_no))
@@ -341,6 +351,8 @@ public class Reverse_MatchingFragment extends Fragment {
 
                                 if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
                                     // .makeText(getContext(), "data same found", .LENGTH_SHORT).show();
+                                    parseReverseMatches(response);
+
                                     return;
                                 } else {
 

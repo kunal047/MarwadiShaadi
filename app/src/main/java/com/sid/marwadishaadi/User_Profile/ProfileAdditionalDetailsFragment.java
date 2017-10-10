@@ -26,6 +26,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Search.BottomSheet;
@@ -33,7 +34,6 @@ import com.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 
 import java.io.File;
 
@@ -43,25 +43,18 @@ import static com.facebook.FacebookSdk.getCacheDir;
 public class ProfileAdditionalDetailsFragment extends Fragment {
 
     public static final String SOME_INTENT_FILTER_NAME = "SOME_INTENT_FILTER_NAME";
+    private static int casebreak;
+    TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
     private TextView edit_about;
     private TextView edit_hobbies;
     private TextView edit_lifestyle;
     private TextView edit_horoscope;
-    private static int casebreak;
     private Button similar;
     private CardView mCardViewAboutMe, mCardViewHobbies;
     private File cache = null;
     private boolean isAlreadyLoadedFromCache = false;
     private String clickedID, customer_id;
-
-
-    TextView aboutMe, hobbies, eatingHabits, drinkingHabits, smokingHabits, birthtime, gotra, manglik, matchHoroscope;
     private boolean isPaidMember = false;
-
-    public ProfileAdditionalDetailsFragment() {
-        // Required empty public constructor
-    }
-
     private BroadcastReceiver someBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -113,6 +106,10 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         }
     };
 
+    public ProfileAdditionalDetailsFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -158,19 +155,24 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         manglik = (TextView) mview.findViewById(R.id.manglik);
         matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
 
+        try {
 
-        String[] array = getResources().getStringArray(R.array.communities);
+            String[] array = getResources().getStringArray(R.array.communities);
 
-        int communityLength = sharedpref.getInt("cal", 0);
-        if (customer_id != null  && array.length > 0) {
+            int communityLength = sharedpref.getInt("cal", 0);
+            if (customer_id != null && array.length > 0) {
 
-            for (int i = 0; i < communityLength; i++) {
+                for (int i = 0; i < communityLength; i++) {
 
-                if (sharedpref.getString(array[i], "No").contains("Yes")) {
-                    isPaidMember = true;
+                    if (sharedpref.getString(array[i], "No").contains("Yes")) {
+                        isPaidMember = true;
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
         }
+
 
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");
@@ -249,7 +251,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Drinking habit)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Drinking habit)"))) {
                     drinkingHabits.setVisibility(View.GONE);
                 }
             }
@@ -296,10 +298,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
-                }
-
-                else
-                if (customer_id == clickedID ) {
+                } else if (customer_id == clickedID) {
 
                     // show as it is
 
@@ -316,9 +315,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0 && customer_id != clickedID) {
                     birthtime.setVisibility(View.GONE);
-                }
-                else
-                if (customer_id == clickedID ) {
+                } else if (customer_id == clickedID) {
 
                     // show as it is
 
@@ -356,7 +353,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)"))) {
                     gotra.setVisibility(View.GONE);
                 }
             }
@@ -364,7 +361,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Gotra)"))) {
                     gotra.setVisibility(View.GONE);
                 }
 
@@ -378,14 +375,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (customer_id != clickedID && (s.length() == 0 ||  s.toString().trim().equals("(Manglik)"))) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Manglik)"))) {
                     manglik.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Manglik)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Manglik)"))) {
                     manglik.setVisibility(View.GONE);
                 }
 
@@ -399,14 +396,14 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)"))) {
                     matchHoroscope.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if ( customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)")) ) {
+                if (customer_id != clickedID && (s.length() == 0 || s.toString().trim().equals("(Should match horoscope ?)"))) {
                     matchHoroscope.setVisibility(View.GONE);
                 }
 
@@ -426,7 +423,6 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         }
 
 
-
         if (customer_id.equals(clickedID)) {
             similar.setVisibility(View.GONE);
         }
@@ -434,7 +430,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
-                i.putExtra("similarOf",clickedID);
+                i.putExtra("similarOf", clickedID);
                 startActivity(i);
                 getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
@@ -478,18 +474,18 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         });
 
 
-        cache = new File(getCacheDir() + "/" + "additionalprofile" +clickedID+ ".srl");
+        cache = new File(getCacheDir() + "/" + "additionalprofile" + clickedID + ".srl");
 
 
         // loading cached copy
-        String res = CacheHelper.retrieve("additionalprofile",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("additionalprofile", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"additionalprofile");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "additionalprofile");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
@@ -517,7 +513,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             hobbies.setText(result.getString(1));
             String eh = result.getString(2) + " Diet";
             eatingHabits.setText(eh);
-            String dh =  result.getString(3) + " (Drinking habit)";
+            String dh = result.getString(3) + " (Drinking habit)";
             drinkingHabits.setText(dh);
             String sh = result.getString(4) + " (Smoking habit)";
             smokingHabits.setText(sh);
@@ -525,11 +521,11 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             if (result.getString(5).length() == 0 && result.getString(6).length() == 0) {
                 bl = "";
             } else if (result.getString(5).length() == 0) {
-                bl = "Born at "+result.getString(6);
+                bl = "Born at " + result.getString(6);
             } else if (result.getString(6).length() == 0) {
-                bl = "Born on "+result.getString(5);
+                bl = "Born on " + result.getString(5);
             } else {
-                bl = "Born on "+result.getString(5) + " at " + result.getString(6);
+                bl = "Born on " + result.getString(5) + " at " + result.getString(6);
 
             }
 
@@ -549,21 +545,25 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
     }
 
-    public void loadedFromNetwork(JSONArray response){
+    public void loadedFromNetwork(JSONArray response) {
 
 
         //saving fresh in cache
-        CacheHelper.save("additionalprofile",response.toString(),cache);
+        CacheHelper.save("additionalprofile", response.toString(), cache);
 
         // marking cache
         isAlreadyLoadedFromCache = true;
 
         // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"additionalprofile");
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "additionalprofile");
 
         // displaying it
         parseAdditionalProfile(response);
 
+    }
+
+    public int getCasebreak() {
+        return this.casebreak;
     }
 
     private class ProfileAdditionalDetails extends AsyncTask<String, Void, Void> {
@@ -571,7 +571,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
 
         protected Void doInBackground(String... strings) {
             String cus = strings[0];
-            AndroidNetworking.post("http://208.91.199.50:5000/profileAdditionalDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profileAdditionalDetails")
                     .addBodyParameter("customerNo", cus)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -582,24 +582,20 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
                             //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"additionalprofile");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "additionalprofile");
 
-                                //
-                                //
-                                //
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
-                                    // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }
@@ -621,9 +617,5 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
             super.onPostExecute(aVoid);
 
         }
-    }
-
-    public int getCasebreak() {
-        return this.casebreak;
     }
 }

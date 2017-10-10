@@ -236,8 +236,13 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_partner_preferences, R.id.prefWorkLocation, App.placeslist);
         workLocation.setAdapter(placesAdapter);
 
-        pf.setPrefMinAge(""); pf.setPrefMaxAge(""); pf.setPrefHeightTo(""); pf.setPrefHeightFrom("");
-        pf.setPrefAnnualIncome(""); pf.setPrefPhysicalStatus(""); pf.setPrefWorkLocation("");
+        pf.setPrefMinAge("");
+        pf.setPrefMaxAge("");
+        pf.setPrefHeightTo("");
+        pf.setPrefHeightFrom("");
+        pf.setPrefAnnualIncome("");
+        pf.setPrefPhysicalStatus("");
+        pf.setPrefWorkLocation("");
         pf.setPrefMaritalStatus("");
         pf.setPreferenceEducation(Collections.<String>emptyList());
         pf.setPreferenceOccupation(Collections.<String>emptyList());
@@ -943,7 +948,7 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         } else if (pf.getPrefHeightFrom().contains("Select") || pf.getPrefHeightTo().contains("Select") || pf.getPreferenceEducation().isEmpty() || pf.getPrefMaritalStatus().contains("Select")) {
 
             return new VerificationError("error");
-        } else if (Integer.parseInt(pf.getPrefHeightFrom().replace("cm", "").split("-")[1].trim()) > Integer.parseInt(pf.getPrefHeightTo().replace("cm", "").split("-")[1].trim())){
+        } else if (Integer.parseInt(pf.getPrefHeightFrom().replace("cm", "").split("-")[1].trim()) > Integer.parseInt(pf.getPrefHeightTo().replace("cm", "").split("-")[1].trim())) {
             return new VerificationError("height");
         }
 

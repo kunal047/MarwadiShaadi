@@ -1,10 +1,10 @@
 <android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/family_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
 
@@ -15,14 +15,14 @@
 
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,43 +30,44 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Family"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/family_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Family"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/family_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/father_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/father_occupation"
@@ -84,90 +85,90 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_occupation"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/family_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_action_profile_status"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/family_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_action_profile_value"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/native_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_location"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/subcaste"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_caste"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/grandpa_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/mama_surname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            app:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="10dp"
             app:cardBackgroundColor="#fff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -175,31 +176,31 @@
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Relatives"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1.8"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:clickable="true"
-                    android:gravity="end|center_vertical"
-                    android:drawableLeft="@drawable/ic_user_edit"
-                    android:layout_marginRight="20dp"
-                    android:id="@+id/relatives_clear"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1.8"
+                        android:text="Relatives"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20dp"
+                        android:textStyle="italic"/>
+
+                    <TextView
+                        android:id="@+id/relatives_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_user_edit"
+                        android:gravity="end|center_vertical"/>
                 </LinearLayout>
 
                 <TextView
@@ -207,45 +208,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/relative_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_name"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:id="@+id/relative_occupation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_designation"
-                    android:gravity="center_vertical"
                     android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"
                     />
 
                 <TextView
                     android:id="@+id/relative_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textColor="#2d2d2d"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/profile_location"
-                    android:gravity="center_vertical"
                     android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"
                     />
 
                 <TextView
@@ -253,25 +254,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#2d2d2d"
-                    android:textSize="16dp"
                     android:drawableLeft="@drawable/profile_contact"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:drawablePadding="10dp"/>
+                    android:textColor="#2d2d2d"
+                    android:textSize="16dp"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <Button
             android:id="@+id/similar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@layout/button_border_corner_circle_"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="View Similar Profiles"
             android:textAllCaps="false"
-            android:layout_gravity="center"
-            android:background="@layout/button_border_corner_circle_"
-            android:textColor="@color/white"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:textColor="@color/white"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

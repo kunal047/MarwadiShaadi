@@ -23,18 +23,18 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
     private int count;
     private OnPicSelectedListener onPicSelectedListener;
 
-    public void setListener(OnPicSelectedListener listener)    {
-        this.onPicSelectedListener = listener;
-    }
-
-    public FbGalleryAdapter(Context context,List<FbGalleryModel> fbGalleryModelList) {
+    public FbGalleryAdapter(Context context, List<FbGalleryModel> fbGalleryModelList) {
         this.fbGalleryModelList = fbGalleryModelList;
         this.context = context;
     }
 
+    public void setListener(OnPicSelectedListener listener) {
+        this.onPicSelectedListener = listener;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext())
+        View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fb_gallery_row, parent, false);
         return new FbGalleryAdapter.MyViewHolder(itemView);
     }
@@ -42,7 +42,7 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        FbGalleryModel fbGalleryModel=fbGalleryModelList.get(position);
+        FbGalleryModel fbGalleryModel = fbGalleryModelList.get(position);
 
         Glide.with(context)
                 .load(fbGalleryModel.getUrl())
@@ -54,42 +54,41 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
         return fbGalleryModelList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView fb_pic;
         public ImageView selected;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            fb_pic=(ImageView)itemView.findViewById(R.id.fb_gallery_pic);
+            fb_pic = (ImageView) itemView.findViewById(R.id.fb_gallery_pic);
             selected = (ImageView) itemView.findViewById(R.id.is_selected);
             fb_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     FbGalleryModel fbmodel = fbGalleryModelList.get(position);
-                    if (selected.getVisibility() == View.GONE){
+                    if (selected.getVisibility() == View.GONE) {
                         fbmodel.setSelected(true);
                         selected.setVisibility(View.VISIBLE);
                         count++;
-                        if(onPicSelectedListener!=null)
-                        {
+                        if (onPicSelectedListener != null) {
                             onPicSelectedListener.updateToolbar(count);
                         }
-                    }else{
+                    } else {
                         fbmodel.setSelected(false);
                         selected.setVisibility(View.GONE);
                         count--;
-                        if(onPicSelectedListener!=null)
-                        {
+                        if (onPicSelectedListener != null) {
                             onPicSelectedListener.updateToolbar(count);
                         }
                     }
                 }
             });
         }
-    }
-    @Override
-    public int getItemViewType(int position) {
-        return position;
     }
 }

@@ -17,7 +17,7 @@ public class RecycledViewRenderer extends SimpleViewRenderer {
     /**
      * recycle the view renderer with a new view
      *
-     * @param ctx the context
+     * @param ctx  the context
      * @param view a new view
      */
     public RecycledViewRenderer recycleWith(Context ctx, View view) {
@@ -31,7 +31,7 @@ public class RecycledViewRenderer extends SimpleViewRenderer {
     /**
      * recycle the view renderer with a new view
      *
-     * @param ctx the context
+     * @param ctx         the context
      * @param layoutResId a resource layout id
      */
     public RecycledViewRenderer recycleWith(Context ctx, int layoutResId) {

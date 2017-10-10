@@ -11,8 +11,7 @@ public class MeasureUtils {
     private MeasureUtils() {
     }
 
-    static public int DIPToPixels(Context context, float dip)
-    {
+    static public int DIPToPixels(Context context, float dip) {
         final float scale = context.getResources().getDisplayMetrics().density;
 
         // also can use
@@ -21,8 +20,7 @@ public class MeasureUtils {
         return (int) (dip * scale + 0.5f);
     }
 
-    static public int pixelsToDIP(Context context, int pixels)
-    {
+    static public int pixelsToDIP(Context context, int pixels) {
         final float scale = context.getResources().getDisplayMetrics().density;
 
         return (int) ((pixels - 0.5f) / scale);

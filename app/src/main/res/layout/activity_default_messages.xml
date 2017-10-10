@@ -1,21 +1,21 @@
 <RelativeLayout
-    android:id="@+id/relative_chat"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_chat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-        <android.support.v7.widget.Toolbar
-            android:clickable="true"
-            android:id="@+id/chat_msg_toolbar"
-            android:theme="@style/MyToolbartheme"
-            android:layout_width="match_parent"
-            android:titleTextColor="@android:color/white"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            >
-        </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/chat_msg_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:clickable="true"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
+        >
+    </android.support.v7.widget.Toolbar>
 
 
     <com.stfalcon.chatkit.messages.MessagesList
@@ -23,21 +23,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/input"
+        android:layout_below="@+id/chat_msg_toolbar"
+        app:dateHeaderTextSize="10dp"
+        app:incomingBubblePaddingBottom="8dp"
+        app:incomingBubblePaddingLeft="8dp"
+        app:incomingBubblePaddingRight="8dp"
+        app:incomingBubblePaddingTop="8dp"
         app:incomingDefaultBubbleColor="#FED4CA"
         app:incomingDefaultBubblePressedColor="#FE9077"
         app:incomingDefaultBubbleSelectedColor="@color/gray"
         app:incomingDefaultImageOverlayPressedColor="@color/black_10"
         app:incomingDefaultImageOverlaySelectedColor="@color/gray_transparent"
-        app:incomingBubblePaddingBottom="8dp"
-        app:incomingBubblePaddingTop="8dp"
-        app:incomingBubblePaddingRight="8dp"
-        app:incomingBubblePaddingLeft="8dp"
-        app:dateHeaderTextSize="10dp"
-        app:incomingTimeTextSize="10dp"
-        app:outcomingTimeTextSize="10dp"
         app:incomingTextColor="@color/black"
         app:incomingTextLinkColor="@color/colorPrimary"
         app:incomingTextSize="14dp"
+        app:incomingTimeTextSize="10dp"
+        app:outcomingBubblePaddingBottom="8dp"
+        app:outcomingBubblePaddingLeft="8dp"
+        app:outcomingBubblePaddingRight="8dp"
+        app:outcomingBubblePaddingTop="8dp"
         app:outcomingDefaultBubbleColor="@color/colorPrimary"
         app:outcomingDefaultBubblePressedColor="@color/colorPrimaryDark"
         app:outcomingDefaultBubbleSelectedColor="@color/gray_dark_transparent"
@@ -46,11 +50,7 @@
         app:outcomingTextColor="@color/white"
         app:outcomingTextLinkColor="@color/brown"
         app:outcomingTextSize="14dp"
-        app:outcomingBubblePaddingBottom="8dp"
-        app:outcomingBubblePaddingTop="8dp"
-        app:outcomingBubblePaddingRight="8dp"
-        app:outcomingBubblePaddingLeft="8dp"
-        android:layout_below="@+id/chat_msg_toolbar" />
+        app:outcomingTimeTextSize="10dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -65,9 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:inputHint="@string/hint_enter_a_message"
         app:inputButtonDefaultBgColor="@color/colorPrimary"
         app:inputButtonDefaultBgPressedColor="@color/colorPrimary"
+        app:inputHint="@string/hint_enter_a_message"
         app:showAttachmentButton="false"/>
 
 </RelativeLayout>

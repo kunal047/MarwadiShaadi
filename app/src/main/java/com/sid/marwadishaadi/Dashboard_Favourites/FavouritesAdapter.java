@@ -20,16 +20,17 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.bumptech.glide.Glide;
-import com.sid.marwadishaadi.DeviceRegistration;
-import com.sid.marwadishaadi.Notifications.NotificationsModel;
-import com.sid.marwadishaadi.Notifications_Util;
-import com.sid.marwadishaadi.R;
-import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.DeviceRegistration;
+import com.sid.marwadishaadi.Notifications.NotificationsModel;
+import com.sid.marwadishaadi.Notifications_Util;
+import com.sid.marwadishaadi.R;
+import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
 import org.json.JSONArray;
 
@@ -41,21 +42,25 @@ import java.util.TimeZone;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by pranay on 02-06-2017.
  */
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.MyViewHolder> {
 
+    private static final String TAG = "FavouritesAdapter";
     Context context;
     private List<FavouriteModel> fav;
-    private String customer_id,customer_name;
+    private String customer_id, customer_name;
     private LinearLayout empty_view_favourites;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabases;
     private boolean isPaidMember;
+    private boolean hasDP;
 
-    public FavouritesAdapter(Context context, List<FavouriteModel> fav,LinearLayout empty_view_favourites) {
+    public FavouritesAdapter(Context context, List<FavouriteModel> fav, LinearLayout empty_view_favourites) {
         this.context = context;
         this.fav = fav;
         this.empty_view_favourites = empty_view_favourites;
@@ -67,9 +72,9 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                 .inflate(R.layout.fav_row, parent, false);
 
 
-        SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+        SharedPreferences sharedpref = itemView.getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
-        customer_name = sharedpref.getString("firstname",null);
+        customer_name = sharedpref.getString("firstname", null);
 
         String[] array = context.getResources().getStringArray(R.array.communities);
         SharedPreferences communityChecker = PreferenceManager.getDefaultSharedPreferences(context);
@@ -78,6 +83,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                 isPaidMember = true;
             }
         }
+        SharedPreferences sharedPref = itemView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+        hasDP = sharedPref.getBoolean("hasDP", false);
 
         return new MyViewHolder(itemView);
 
@@ -105,13 +112,16 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 //                .error(R.drawable.default_drawer);
 
 
-        if (isPaidMember) {
+        if (isPaidMember || hasDP) {
             Glide.with(context)
                     .load(favouriteModel.getImageurl())
                     .placeholder(R.drawable.default_drawer)
                     .error(R.drawable.default_drawer)
                     .fitCenter()
                     .into(holder.fav_profile_image);
+
+            holder.showTextOnPicture.setVisibility(View.GONE);
+
         } else {
             Glide.with(context)
                     .load(favouriteModel.getImageurl())
@@ -120,8 +130,10 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                     .fitCenter()
                     .bitmapTransform(new BlurTransformation(context))
                     .into(holder.fav_profile_image);
-        }
 
+            holder.showTextOnPicture.setVisibility(View.VISIBLE);
+
+        }
 
 
 //        Picasso.with(context).load(favouriteModel.getImageurl()).fit().into(holder.fav_profile_image);
@@ -131,7 +143,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             public void onClick(View view) {
                 fav.remove(position);
                 notifyDataSetChanged();
-                if (fav.size() == 0){
+                if (fav.size() == 0) {
                     if (empty_view_favourites.getVisibility() != View.VISIBLE) {
                         empty_view_favourites.setVisibility(View.VISIBLE);
                     }
@@ -160,7 +172,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
                 Date currentDate = calendar.getTime();
                 String hash = String.valueOf(currentDate.hashCode());
-                final NotificationsModel notification= new NotificationsModel(hash, customer_name,date,3,false,true,false,false,false,false,false,false,false, false);
+                final NotificationsModel notification = new NotificationsModel(hash, customer_name, date, 3, false, true, false, false, false, false, false, false, false, false);
                 mDatabase.child(hash).setValue(notification);
 
                 // sending push notification to her
@@ -207,8 +219,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
-                i.putExtra("from","favourites");
-                i.putExtra("customerNo",favouriteModel.getCustomerId());
+                i.putExtra("from", "favourites");
+                i.putExtra("customerNo", favouriteModel.getCustomerId());
                 context.startActivity(i);
             }
         });
@@ -217,30 +229,40 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, UserProfileActivity.class);
-                i.putExtra("from","favourites");
-                i.putExtra("customerNo",favouriteModel.getCustomerId());
+                i.putExtra("from", "favourites");
+                i.putExtra("customerNo", favouriteModel.getCustomerId());
                 context.startActivity(i);
             }
         });
     }
 
-    public void setData(DataSnapshot dataSnapshot){
+    public void setData(DataSnapshot dataSnapshot) {
 
         // looping through all the devices and sending push notification to each of 'em
         DeviceRegistration device = dataSnapshot.getValue(DeviceRegistration.class);
         Notifications_Util.SendNotification(device.getDevice_id(), customer_name + " sent you an Interest", "Marwadi Shaadi: New Interest", "Interest Request");
     }
+
     @Override
     public int getItemCount() {
         return fav.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView fav_name_age, fav_city, fav_education, favCustomerId;
+        TextView fav_name_age, fav_city, fav_education, favCustomerId, showTextOnPicture;
         ImageView fav_profile_image;
         Button remove, sendInterest;
-
 
 
         public MyViewHolder(View view) {
@@ -253,6 +275,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             fav_profile_image = (ImageView) view.findViewById(R.id.fav_profile_image);
             remove = (Button) view.findViewById(R.id.remove);
             sendInterest = (Button) view.findViewById(R.id.send_interest);
+            showTextOnPicture = (TextView) view.findViewById(R.id.showTextOnPicture);
 
 
         }
@@ -265,20 +288,20 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
 
             String customerIdToRemove = params[0];
 
-            AndroidNetworking.post("http://208.91.199.50:5000/removeFromFavourite")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/removeFromFavourite")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("customerNoToRemove", customerIdToRemove)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
                         public void onResponse(JSONArray response) {
-                            
+
 
                         }
 
                         @Override
                         public void onError(ANError error) {
-                            
+
                             // handle error
                         }
                     });
@@ -301,7 +324,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String formatted = format.format(Calendar.getInstance().getTime());
 
-            AndroidNetworking.post("http://208.91.199.50:5000/sendInterest")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/sendInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .addBodyParameter("interestSentTo", customerIdToSendInterest)
                     .addBodyParameter("interestSentTime", formatted)
@@ -320,14 +343,5 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
                     });
             return null;
         }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 }

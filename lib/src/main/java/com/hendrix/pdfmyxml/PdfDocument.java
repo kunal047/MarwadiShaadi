@@ -1,6 +1,5 @@
 package com.hendrix.pdfmyxml;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -25,91 +24,61 @@ import java.util.ArrayList;
 /**
  * a PDF document creator
  *
- * @see com.hendrix.pdfmyxml.PdfDocument.Builder
- *
  * @author Tomer Shalev
+ * @see com.hendrix.pdfmyxml.PdfDocument.Builder
  */
 @SuppressWarnings("UnusedDeclaration")
-public class PdfDocument implements IDisposable{
+public class PdfDocument implements IDisposable {
     static final public String TAG_PDF_MY_XML = "PDF_MY_XML";
 
-    private static final String sDefault_Filename_prefix                      = "pdf_";
-    // android context
-    private Context                             _ctx                    = null;
-    // the orientation
-    private A4_MODE                             _orientation            = A4_MODE.LANDSCAPE;
-    // file name
-    private String                              file_name;
-    // file object of pdf
-    private File                                file;
-    // save directory of pdf
-    private File                                save_directory;
-    // state of the rendering
-    private boolean                             _isWorking              = false;
-    // inflate on main thread
-    private boolean                             _inflateOnMainThread    = false;
+    private static final String sDefault_Filename_prefix = "pdf_";
     // rendered pages streams
-    protected ArrayList<InputStream>            _pages_rendered         = null;
+    protected ArrayList<InputStream> _pages_rendered = null;
     // views to render
-    protected ArrayList<AbstractViewRenderer>   _pages                  = null;
+    protected ArrayList<AbstractViewRenderer> _pages = null;
+    // android context
+    private Context _ctx = null;
+    // the orientation
+    private A4_MODE _orientation = A4_MODE.LANDSCAPE;
+    // file name
+    private String file_name;
+    // file object of pdf
+    private File file;
+    // save directory of pdf
+    private File save_directory;
+    // state of the rendering
+    private boolean _isWorking = false;
+    // inflate on main thread
+    private boolean _inflateOnMainThread = false;
     // async part
-    private Handler                             _handler                = new Handler();
+    private Handler _handler = new Handler();
     // background thread
-    private Thread                              _thread                 = null;
+    private Thread _thread = null;
     // exception if happened
-    private Exception                           _error                  = null;
+    private Exception _error = null;
 
     /**
      * the rendered dimensions in {@code Pixels} of the {@link AbstractViewRenderer}
      */
-    private int                                 _renderWidth            = 0;
-    private int                                 _renderHeight           = 0;
+    private int _renderWidth = 0;
+    private int _renderHeight = 0;
+    private Callback _listener = null;
 
     public PdfDocument(Context ctx) {
         setContext(ctx);
 
-        _pages          = new ArrayList<>();
+        _pages = new ArrayList<>();
         _pages_rendered = new ArrayList<>();
-    }
-
-    /**
-     * the document orientation, contains aspect ratio info
-     */
-    public enum A4_MODE {
-        PORTRAIT(0.707f, A4.PORTRAIT), LANDSCAPE(1.41f, A4.LANDSCAPE);
-
-        private float   _ar;
-        private float[] _a4 = null;
-
-        A4_MODE(float ar, float[] mode) {
-            _ar = ar;
-            _a4 = mode;
-        }
-
-        /**
-         *
-         * @return the aspect ratio of the mode {@code ar = width/height}
-         */
-        public float aspectRatio() { return _ar; }
-
-        /**
-         *
-         * @return the corresponding mode in pdfjet lib
-         */
-        public float[] A4() {
-            return _a4;
-        }
     }
 
     /**
      * add a page with a custom class view renderer. please note that <b>the bitmap of the view will be recycled.</b>
      *
      * @param page a view renderer instance
-     *
      * @see com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer
      */
     public void addPage(AbstractViewRenderer page) {
-        if(_inflateOnMainThread)
+        if (_inflateOnMainThread)
             renderView(page);
         else
             _pages.add(page);
@@ -120,7 +89,6 @@ public class PdfDocument implements IDisposable{
      * the user to recycle.
      *
      * @param page a bitmap
-     *
      */
     public void addPage(Bitmap page) {
         ByteArrayInputStream stream = BitmapUtils.bitmapToPngInputStream(page);
@@ -130,8 +98,7 @@ public class PdfDocument implements IDisposable{
     /**
      * clear all of the pages and rendered pages
      */
-    public void clearPages()
-    {
+    public void clearPages() {
         _pages.clear();
         _pages_rendered.clear();
     }
@@ -141,8 +108,7 @@ public class PdfDocument implements IDisposable{
      *
      * @param value width in {@code Pixels}
      */
-    public void setRenderWidth(int value)
-    {
+    public void setRenderWidth(int value) {
         _renderWidth = value;
     }
 
@@ -151,8 +117,7 @@ public class PdfDocument implements IDisposable{
      *
      * @param value height in {@code Pixels}
      */
-    public void setRenderHeight(int value)
-    {
+    public void setRenderHeight(int value) {
         _renderHeight = value;
     }
 
@@ -166,9 +131,7 @@ public class PdfDocument implements IDisposable{
     }
 
     /**
-     *
      * @return get the orientation
-     *
      * @see PdfDocument.A4_MODE
      */
     public A4_MODE getOrientation() {
@@ -179,7 +142,6 @@ public class PdfDocument implements IDisposable{
      * set the orientation
      *
      * @param orientation {@code {PORTRAIT, LANDSCAPE}}
-     *
      * @see PdfDocument.A4_MODE
      */
     public void setOrientation(A4_MODE orientation) {
@@ -187,9 +149,7 @@ public class PdfDocument implements IDisposable{
     }
 
 
-
     /**
-     *
      * @return the pdf file name
      */
     public String getFileName() {
@@ -215,7 +175,6 @@ public class PdfDocument implements IDisposable{
     }
 
     /**
-     *
      * @return the pdf {@link java.io.File} if available
      */
     public File getFile() {
@@ -261,7 +220,7 @@ public class PdfDocument implements IDisposable{
 
                 //_pages_rendered.clear();
 
-                if(!_inflateOnMainThread) {
+                if (!_inflateOnMainThread) {
                     for (AbstractViewRenderer view : _pages) {
                         renderView(view);
                     }
@@ -278,8 +237,8 @@ public class PdfDocument implements IDisposable{
                     @Override
                     public void run() {
 
-                        if(_listener != null) {
-                            if(_error != null)
+                        if (_listener != null) {
+                            if (_error != null)
                                 _listener.onError(_error);
                             else
                                 _listener.onComplete(file);
@@ -298,8 +257,6 @@ public class PdfDocument implements IDisposable{
         _thread.start();
     }
 
-    private Callback _listener = null;
-
     /**
      * set a listener for the PDF generation events
      *
@@ -309,33 +266,32 @@ public class PdfDocument implements IDisposable{
         _listener = listener;
     }
 
-    private void internal_generatePdf()
-    {
-        String name                 = (file_name == null) ? sDefault_Filename_prefix + System.currentTimeMillis() : file_name;
+    private void internal_generatePdf() {
+        String name = (file_name == null) ? sDefault_Filename_prefix + System.currentTimeMillis() : file_name;
 
-        file_name                   = name + ".pdf";
+        file_name = name + ".pdf";
         //File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "pdf");
-        File dir                    = save_directory == null ? _ctx.getExternalFilesDir(null) : save_directory;
+        File dir = save_directory == null ? _ctx.getExternalFilesDir(null) : save_directory;
 
-        file                        = new File(dir, file_name);
-        _error                      = null;
+        file = new File(dir, file_name);
+        _error = null;
 
         try {
-            FileOutputStream fos    = new FileOutputStream(file);//"Example_01.pdf");
-            PDF pdf                 = new com.pdfjet.PDF(fos);
+            FileOutputStream fos = new FileOutputStream(file);//"Example_01.pdf");
+            PDF pdf = new com.pdfjet.PDF(fos);
 
             Page page;
             Image image;
             float ar;
 
             for (InputStream inputStream : _pages_rendered) {
-                page                = new Page(pdf, _orientation.A4());
-                image               = new Image(pdf, inputStream, ImageType.PNG);
+                page = new Page(pdf, _orientation.A4());
+                image = new Image(pdf, inputStream, ImageType.PNG);
 
 
                 inputStream.close(); //doesn't do anything in byte array
 
-                ar                  = page.getWidth() / image.getWidth();
+                ar = page.getWidth() / image.getWidth();
 
                 image.scaleBy(ar);
 
@@ -344,8 +300,7 @@ public class PdfDocument implements IDisposable{
 
             pdf.flush();
             fos.close();
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             _error = exc;
         }
 
@@ -359,13 +314,13 @@ public class PdfDocument implements IDisposable{
     private void renderView(AbstractViewRenderer page) {
         page.attachContext(_ctx);
 
-        if(_renderWidth==0 || _renderHeight==0)
-            if(Build.VERSION.SDK_INT <= 17){
+        if (_renderWidth == 0 || _renderHeight == 0)
+            if (Build.VERSION.SDK_INT <= 17) {
 
             }
 
 
-        Bitmap bmp                  = page.render(_renderWidth, _renderHeight);
+        Bitmap bmp = page.render(_renderWidth, _renderHeight);
         ByteArrayInputStream stream = BitmapUtils.bitmapToPngInputStream(bmp);
 
         page.disposeBitmap();
@@ -380,11 +335,11 @@ public class PdfDocument implements IDisposable{
         _pages.clear();
         _pages_rendered.clear();
 
-        _error      = null;
-        _isWorking  = false;
+        _error = null;
+        _isWorking = false;
 
-        file_name   = null;
-        file        = null;
+        file_name = null;
+        file = null;
 
     }
 
@@ -398,6 +353,35 @@ public class PdfDocument implements IDisposable{
         _listener = null;
         _handler = null;
         _thread = null;
+    }
+
+    /**
+     * the document orientation, contains aspect ratio info
+     */
+    public enum A4_MODE {
+        PORTRAIT(0.707f, A4.PORTRAIT), LANDSCAPE(1.41f, A4.LANDSCAPE);
+
+        private float _ar;
+        private float[] _a4 = null;
+
+        A4_MODE(float ar, float[] mode) {
+            _ar = ar;
+            _a4 = mode;
+        }
+
+        /**
+         * @return the aspect ratio of the mode {@code ar = width/height}
+         */
+        public float aspectRatio() {
+            return _ar;
+        }
+
+        /**
+         * @return the corresponding mode in pdfjet lib
+         */
+        public float[] A4() {
+            return _a4;
+        }
     }
 
     /**
@@ -441,7 +425,6 @@ public class PdfDocument implements IDisposable{
          * add a page with a custom class view renderer. please note that <b>the bitmap of the view will be recycled</b>.
          *
          * @param page a view renderer instance
-         *
          * @see com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer
          */
         public Builder addPage(AbstractViewRenderer page) {
@@ -455,8 +438,7 @@ public class PdfDocument implements IDisposable{
          *
          * @param value width in {@code Pixels}
          */
-        public Builder renderWidth(int value)
-        {
+        public Builder renderWidth(int value) {
             _doc.setRenderWidth(value);
 
             return this;
@@ -467,8 +449,7 @@ public class PdfDocument implements IDisposable{
          *
          * @param value height in {@code Pixels}
          */
-        public Builder renderHeight(int value)
-        {
+        public Builder renderHeight(int value) {
             _doc.setRenderHeight(value);
 
             return this;
@@ -479,7 +460,6 @@ public class PdfDocument implements IDisposable{
          * the user to recycle.
          *
          * @param page a bitmap
-         *
          */
         public Builder addPage(Bitmap page) {
             _doc.addPage(page);
@@ -538,7 +518,6 @@ public class PdfDocument implements IDisposable{
          * set the orientation
          *
          * @param mode {@code {PORTRAIT, LANDSCAPE}}
-         *
          * @see PdfDocument.A4_MODE
          */
         public Builder orientation(A4_MODE mode) {
@@ -546,7 +525,6 @@ public class PdfDocument implements IDisposable{
 
             return this;
         }
-
 
 
     }

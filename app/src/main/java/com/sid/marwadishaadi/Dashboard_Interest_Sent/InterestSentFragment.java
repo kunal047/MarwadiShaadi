@@ -19,6 +19,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
 
 import org.json.JSONArray;
@@ -36,8 +37,8 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 import static com.facebook.FacebookSdk.getCacheDir;
+import static com.sid.marwadishaadi.Dashboard_Interest.InterestActivity.interestStatus;
 
 
 public class InterestSentFragment extends Fragment {
@@ -75,7 +76,7 @@ public class InterestSentFragment extends Fragment {
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
-        cache = new File(getCacheDir() + "/" + "interestsent" +customer_id+ ".srl");
+        cache = new File(getCacheDir() + "/" + "interestsent" + customer_id + ".srl");
 
         swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
         recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
@@ -98,14 +99,14 @@ public class InterestSentFragment extends Fragment {
 
 
         // loading cached copy
-        String res = CacheHelper.retrieve("interest_sent",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("interest_sent", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"interest_sent");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "interest_sent");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
@@ -124,7 +125,7 @@ public class InterestSentFragment extends Fragment {
 
     private void parseInterestSent(JSONArray response) {
         try {
-                                mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
             if (response.length() == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -173,12 +174,12 @@ public class InterestSentFragment extends Fragment {
                     InterestSentModel interestSentModels = new InterestSentModel(customerNo, name, cityName, education, "http://www.marwadishaadi.com/uploads/cust_" + customerNo + "/thumb/" + imageUrl, replyAction, Integer.parseInt(age), "Interest sent on " + interestSentOn);
 
 
-                        if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
+                    if ((interestStatus.contains("Accepted") && replyAction.contains("Yes")) || (interestStatus.contains("Rejected") && replyAction.contains("No")) || (interestStatus.contains("Awaiting") && replyAction.contains("Awaiting"))) {
 
-                            interestListSent.add(0, interestSentModels);
-                            interestSentAdapter.notifyDataSetChanged();
+                        interestListSent.add(0, interestSentModels);
+                        interestSentAdapter.notifyDataSetChanged();
 
-                        }
+                    }
 
                 }
             }
@@ -218,6 +219,23 @@ public class InterestSentFragment extends Fragment {
         return age;
     }
 
+    public void loadedFromNetwork(JSONArray response) {
+
+
+        //saving fresh in cache
+        CacheHelper.save("interest_sent", response.toString(), cache);
+
+        // marking cache
+        isAlreadyLoadedFromCache = true;
+
+        // storing latest cache hash
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "interest_sent");
+
+        // displaying it
+        parseInterestSent(response);
+
+    }
+
     public class PrepareSentInterest extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -231,7 +249,7 @@ public class InterestSentFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/prepareSentInterest")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/prepareSentInterest")
                     .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
@@ -267,7 +285,6 @@ public class InterestSentFragment extends Fragment {
 //                            }
 
 
-
                         }
 
                         @Override
@@ -286,22 +303,5 @@ public class InterestSentFragment extends Fragment {
             mProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-    public void loadedFromNetwork(JSONArray response){
-
-
-        //saving fresh in cache
-        CacheHelper.save("interest_sent",response.toString(),cache);
-
-        // marking cache
-        isAlreadyLoadedFromCache = true;
-
-        // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"interest_sent");
-
-        // displaying it
-        parseInterestSent(response);
-
     }
 }

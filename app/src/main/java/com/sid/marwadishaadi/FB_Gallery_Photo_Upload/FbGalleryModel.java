@@ -9,9 +9,15 @@ public class FbGalleryModel {
     private String url;
     private boolean isSelected;
 
+    public FbGalleryModel(String url, boolean isSelected) {
+        this.url = url;
+        this.isSelected = isSelected;
+    }
+
     public boolean isSelected() {
         return isSelected;
     }
+
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
@@ -19,12 +25,8 @@ public class FbGalleryModel {
     public String getUrl() {
         return url;
     }
+
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public FbGalleryModel(String url, boolean isSelected) {
-        this.url = url;
-        this.isSelected = isSelected;
     }
 }

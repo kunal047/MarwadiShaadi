@@ -13,11 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.sid.marwadishaadi.Analytics_Util;
-import com.sid.marwadishaadi.R;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.R;
 
 import java.util.regex.Pattern;
 
@@ -26,6 +26,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class
 SignupActivity extends AppCompatActivity {
 
+    public static SignupActivity su = new SignupActivity();
     protected EditText email;
     protected EditText pass;
     protected EditText confirm;
@@ -37,10 +38,7 @@ SignupActivity extends AppCompatActivity {
     private ImageView confirmShowPassword;
     private ImageView confirmHidePassword;
     private FirebaseAnalytics mFirebaseAnalytics;
-
     private String uemail, upass;
-
-    public static SignupActivity su = new SignupActivity();
 
     public String getUemail() {
         return uemail;

@@ -3,26 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sid.marwadishaadi.FB_Gallery_Photo_Upload.FbGalleryActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/fbgallery_toolbar"
         android:layout_width="match_parent"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/MyToolbartheme"
         android:background="?attr/colorPrimary"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
+
         <Button
             android:id="@+id/fb_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
-            android:background="@color/colorPrimary"
-            android:textAllCaps="false"
             android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:text="Done"
+            android:textAllCaps="false"
             />
     </android.support.v7.widget.Toolbar>
 

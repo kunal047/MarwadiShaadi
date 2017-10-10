@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -18,6 +18,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.App;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.PlacesAdapter;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -31,18 +32,19 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class EditPersonalDetailsActivity extends AppCompatActivity {
-    Spinner maritalStatus,height,physcialStatus,complexion,built;
+    Spinner maritalStatus, height, physcialStatus, complexion, built;
     EditText contactNumber, weight;
     AutoCompleteTextView location;
     String customer_id;
 
-    String  ms,h,c,l,w,ps,co,b;
+    String ms, h, c, l, w, ps, co, b;
     private PlacesAdapter placesAdapter;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +60,15 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Button update=(Button) findViewById(R.id.advnext);
-        maritalStatus=(Spinner) findViewById(R.id.marital_status);
-        height=(Spinner) findViewById(R.id.edit_height);
+        Button update = (Button) findViewById(R.id.advnext);
+        maritalStatus = (Spinner) findViewById(R.id.marital_status);
+        height = (Spinner) findViewById(R.id.edit_height);
 
-        physcialStatus=(Spinner) findViewById(R.id.physical_status);
-        complexion=(Spinner) findViewById(R.id.edit_complexion);
-        built=(Spinner)findViewById(R.id.built);
-        contactNumber=(EditText) findViewById(R.id.mobile);
-        weight=(EditText) findViewById(R.id.weight);
+        physcialStatus = (Spinner) findViewById(R.id.physical_status);
+        complexion = (Spinner) findViewById(R.id.edit_complexion);
+        built = (Spinner) findViewById(R.id.built);
+        contactNumber = (EditText) findViewById(R.id.mobile);
+        weight = (EditText) findViewById(R.id.weight);
 
 
         // autocomplete location fetch
@@ -99,25 +101,22 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
         });
 
 
-
     }
+
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
         return true;
     }
 
 
-
-
-    class FetchPersonalIndividualDetails extends AsyncTask<String,String,String>
-    {
+    class FetchPersonalIndividualDetails extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            AndroidNetworking.post("http://208.91.199.50:5000/profilePersonalDetails")
-                    .addBodyParameter("customerNo",customer_id)
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profilePersonalDetails")
+                    .addBodyParameter("customerNo", customer_id)
                     .setPriority(Priority.HIGH)
                     .build()
                     .getAsJSONArray(new JSONArrayRequestListener() {
@@ -135,7 +134,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 String[] complexion_array = getResources().getStringArray(R.array.complexion_array);
                                 String[] built_array = getResources().getStringArray(R.array.built_array);
 
-                                for (String s:marital_array){
+                                for (String s : marital_array) {
                                     if (array.getString(3).equals(s))
 
                                     {
@@ -144,7 +143,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 }
 
 
-                                for (String s:height_array){
+                                for (String s : height_array) {
                                     if (array.getString(8).equals(s))
 
                                     {
@@ -153,7 +152,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 }
 
 
-                                for (String s:complexion_array){
+                                for (String s : complexion_array) {
                                     if (array.getString(10).equals(s))
 
                                     {
@@ -162,7 +161,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 }
 
 
-                                for (String s:built_array){
+                                for (String s : built_array) {
                                     if (array.getString(11).equals(s))
 
                                     {
@@ -171,7 +170,7 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 }
 
 
-                                for (String s:physicalStatus_array){
+                                for (String s : physicalStatus_array) {
                                     if (array.getString(12).equals(s))
 
                                     {
@@ -184,18 +183,17 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
                                 weight.setText(array.getString(9));
 
 
-
-
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
+
                         @Override
-                        public void onError(ANError error){}
+                        public void onError(ANError error) {
+                        }
 
                     });
-                    return null;
+            return null;
         }
 
         @Override
@@ -206,37 +204,35 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public class EditIndividualDetails extends AsyncTask<Void,Void,Void>{
-                @Override
-                protected Void doInBackground(Void... params){
+    public class EditIndividualDetails extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
 
 
+            AndroidNetworking.post(Constants.AWS_SERVER + "/editPersonalIndividualDetails")
+                    .addBodyParameter("customerNo", customer_id)
+                    .addBodyParameter("marrital_status", ms)
+                    .addBodyParameter("height", h)
+                    .addBodyParameter("mobile_phone", c)
+                    .addBodyParameter("address", l)
+                    .addBodyParameter("weight", w)
+                    .addBodyParameter("special_cases", ps)
+                    .addBodyParameter("complexion", co)
+                    .addBodyParameter("body_structure", b)
+                    .setTag(this)
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                    AndroidNetworking.post("http://208.91.199.50:5000/editPersonalIndividualDetails")
-                            .addBodyParameter("customerNo", customer_id)
-                            .addBodyParameter("marrital_status",ms)
-                            .addBodyParameter("height",h)
-                            .addBodyParameter("mobile_phone",c)
-                            .addBodyParameter("address",l)
-                            .addBodyParameter("weight",w)
-                            .addBodyParameter("special_cases",ps)
-                            .addBodyParameter("complexion",co)
-                            .addBodyParameter("body_structure",b)
-                            .setTag(this)
-                            .setPriority(Priority.HIGH)
-                            .build()
-                            .getAsJSONArray(new JSONArrayRequestListener() {
-                                @Override
-                                public void onResponse(JSONArray response) {
+                        }
 
-                                }
+                        @Override
+                        public void onError(ANError anError) {
 
-                                @Override
-                                public void onError(ANError anError) {
-
-                                }
-                            });
-
+                        }
+                    });
 
 
             return null;

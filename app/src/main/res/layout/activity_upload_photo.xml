@@ -1,174 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:background="@drawable/uploadimage"
     android:fitsSystemWindows="true"
+    android:orientation="horizontal"
     tools:context="com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity">
     xmlns:tools="http://schemas.android.com/tools">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
+
         <LinearLayout
-            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:orientation="vertical">
 
             <!--<Button-->
-                <!--android:id="@+id/fb_login_button"-->
-                <!--android:layout_width="280dp"-->
-                <!--android:layout_height="35dp"-->
-                <!--android:text="Upload photos from Facebook"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:textSize="12dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--style="@style/com_facebook_button"-->
-                <!--android:drawableLeft="@drawable/com_facebook_button_icon"-->
-                <!--/>-->
+            <!--android:id="@+id/fb_login_button"-->
+            <!--android:layout_width="280dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:text="Upload photos from Facebook"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:textSize="12dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--style="@style/com_facebook_button"-->
+            <!--android:drawableLeft="@drawable/com_facebook_button_icon"-->
+            <!--/>-->
 
             <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_marginBottom="10dp">-->
-                <!--<View-->
-                    <!--android:layout_width="100dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:background="#fff"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--&gt;-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginBottom="10dp">-->
+            <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#fff"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--&gt;-->
 
-                <!--</View>-->
+            <!--</View>-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Or"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:textColor="#fff"-->
-                    <!--android:textSize="12dp"-->
-                    <!--android:textStyle="bold" />-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Or"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="#fff"-->
+            <!--android:textSize="12dp"-->
+            <!--android:textStyle="bold" />-->
 
-                <!--<View-->
-                    <!--android:layout_width="100dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:background="#fff"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--&gt;-->
+            <!--<View-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#fff"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--&gt;-->
 
-                <!--</View>-->
+            <!--</View>-->
             <!--</LinearLayout>-->
 
             <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center_horizontal"
+                fontPath="fonts/OpenSans-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
                 android:text="Tap to add a photo"
-        android:gravity="center_horizontal"
-        android:textSize="14dp"
-        android:textColor="@color/colorPrimary"
-        fontPath="fonts/OpenSans-Bold.ttf"
-        tools:ignore="MissingPrefix"
-        />
+                android:textColor="@color/colorPrimary"
+                android:textSize="14dp"
+                tools:ignore="MissingPrefix"
+                />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="10dp"
-            android:clickable="true"
-            android:tag="default"
-            android:id="@+id/photo1"
-            android:scaleType="centerCrop"
-            android:src="@drawable/photo"
-            android:layout_gravity="center_horizontal"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/photo1"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/photo"
+                    android:tag="default"/>
 
-    <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="30dp"
-    android:layout_marginLeft="30dp"
-    android:orientation="horizontal"
-    android:layout_gravity="center_horizontal"
-    >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal"
+                    >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:tag="default"
-        android:id="@+id/photo2"
-        android:src="@drawable/photo"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo2"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_margin="10dp"
+                        android:clickable="true"
+                        android:src="@drawable/photo"
+                        android:tag="default"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:id="@+id/photo3"
-        android:tag="default"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:src="@drawable/photo"/>
-</LinearLayout>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo3"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_margin="10dp"
+                        android:clickable="true"
+                        android:src="@drawable/photo"
+                        android:tag="default"/>
+                </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
 
-        >
+                    >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_margin="10dp"
-            android:id="@+id/photo4"
-            android:tag="default"
-            android:clickable="true"
-            android:src="@drawable/photo"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo4"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_margin="10dp"
+                        android:clickable="true"
+                        android:src="@drawable/photo"
+                        android:tag="default"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_margin="10dp"
-            android:clickable="true"
-            android:tag="default"
-            android:id="@+id/photo5"
-            android:src="@drawable/photo"/>
-    </LinearLayout>
-    </LinearLayout>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo5"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_margin="10dp"
+                        android:clickable="true"
+                        android:src="@drawable/photo"
+                        android:tag="default"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
+                android:id="@+id/submit_photo"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/submit_photo"
-                android:text="Finish"
-                android:textColor="#fff"
-                android:background="@layout/button_border_corner_circle_"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="30dp"/>
+                android:layout_margin="30dp"
+                android:background="@layout/button_border_corner_circle_"
+                android:text="Finish"
+                android:textColor="#fff"/>
 
 
         </LinearLayout>

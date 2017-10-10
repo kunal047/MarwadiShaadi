@@ -1,8 +1,8 @@
 package com.sid.marwadishaadi.About_Us;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.sid.marwadishaadi.R;
@@ -15,6 +15,7 @@ public class AboutUsActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +31,10 @@ public class AboutUsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
-        overridePendingTransition(R.anim.exit,0);
+        overridePendingTransition(R.anim.exit, 0);
 
         return true;
     }

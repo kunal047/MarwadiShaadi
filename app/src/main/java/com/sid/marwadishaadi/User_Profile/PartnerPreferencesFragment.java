@@ -17,6 +17,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.sid.marwadishaadi.CacheHelper;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Similar_Profiles.SimilarActivity;
 import com.sid.marwadishaadi.User_Profile.Edit_User_Profile.EditPreferencesActivity;
@@ -92,14 +93,15 @@ public class PartnerPreferencesFragment extends Fragment {
         }
 
 
-        if(customer_id.equals(clickedID)){
-        similar.setVisibility(View.GONE);}
+        if (customer_id.equals(clickedID)) {
+            similar.setVisibility(View.GONE);
+        }
 
         similar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), SimilarActivity.class);
-                i.putExtra("similarOf",clickedID);
+                i.putExtra("similarOf", clickedID);
                 startActivity(i);
                 getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
@@ -116,17 +118,17 @@ public class PartnerPreferencesFragment extends Fragment {
         });
 
 
-        cache = new File(getCacheDir() + "/" + "partnerprofile" +clickedID+ ".srl");
+        cache = new File(getCacheDir() + "/" + "partnerprofile" + clickedID + ".srl");
 
         // loading cached copy
-        String res = CacheHelper.retrieve("partnerprofile",cache);
-        if(!res.equals("")){
+        String res = CacheHelper.retrieve("partnerprofile", cache);
+        if (!res.equals("")) {
             try {
 
                 isAlreadyLoadedFromCache = true;
 
                 // storing cache hash
-                CacheHelper.saveHash(getContext(),CacheHelper.generateHash(res),"partnerprofile");
+                CacheHelper.saveHash(getContext(), CacheHelper.generateHash(res), "partnerprofile");
 
                 // displaying it
                 JSONArray response = new JSONArray(res);
@@ -138,7 +140,7 @@ public class PartnerPreferencesFragment extends Fragment {
             }
         }
 
-            new PartnerPreference().execute(clickedID);
+        new PartnerPreference().execute(clickedID);
 
 
         return mview;
@@ -185,7 +187,6 @@ public class PartnerPreferencesFragment extends Fragment {
             final String hd = str;
 
 
-
             str = response.getString(9).replace("[", "").replace("]", "").replace("\"", "");
 
             final String o = str;
@@ -211,7 +212,7 @@ public class PartnerPreferencesFragment extends Fragment {
                             build.setText(b);
                         }
 
-                        if ( ps != null && ps.trim().length() == 0) {
+                        if (ps != null && ps.trim().length() == 0) {
                             physicalStatus.setVisibility(View.GONE);
                         } else {
                             physicalStatus.setText(ps);
@@ -236,7 +237,7 @@ public class PartnerPreferencesFragment extends Fragment {
                             highestDegree.setText(hd);
                         }
 
-                        if ( ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
+                        if (ai != null && ai.replace("[", "").replace("]", "").replace("\"", "").trim().length() == 0) {
                             annualIncome.setVisibility(View.GONE);
 
                         } else {
@@ -254,28 +255,29 @@ public class PartnerPreferencesFragment extends Fragment {
     }
 
 
-    public void loadedFromNetwork(JSONArray response){
+    public void loadedFromNetwork(JSONArray response) {
 
 
         //saving fresh in cache
-        CacheHelper.save("partnerprofile",response.toString(),cache);
+        CacheHelper.save("partnerprofile", response.toString(), cache);
 
         // marking cache
         isAlreadyLoadedFromCache = true;
 
         // storing latest cache hash
-        CacheHelper.saveHash(getContext(),CacheHelper.generateHash(response.toString()),"partnerprofile");
+        CacheHelper.saveHash(getContext(), CacheHelper.generateHash(response.toString()), "partnerprofile");
 
         // displaying it
         parsePartnerProfile(response);
 
     }
+
     class PartnerPreference extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... strings) {
             String cus = strings[0];
-            AndroidNetworking.post("http://208.91.199.50:5000/profilePartnerPreferences")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/profilePartnerPreferences")
 
                     .addBodyParameter("customerNo", cus)
                     .setTag(this)
@@ -289,24 +291,24 @@ public class PartnerPreferencesFragment extends Fragment {
                             //
 
                             // if no change in data
-                            if (isAlreadyLoadedFromCache){
+                            if (isAlreadyLoadedFromCache) {
 
                                 String latestResponseHash = CacheHelper.generateHash(response.toString());
-                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(),"partnerprofile");
+                                String cacheResponseHash = CacheHelper.retrieveHash(getContext(), "partnerprofile");
 
                                 //
                                 //
                                 //
 
-                                if (cacheResponseHash!=null && latestResponseHash.equals(cacheResponseHash)){
+                                if (cacheResponseHash != null && latestResponseHash.equals(cacheResponseHash)) {
                                     // Toast.makeText(getContext(), "data same found", Toast.LENGTH_SHORT).show();
                                     return;
-                                }else{
+                                } else {
 
                                     // hash not matched
                                     loadedFromNetwork(response);
                                 }
-                            }else{
+                            } else {
                                 // first time load
                                 loadedFromNetwork(response);
                             }

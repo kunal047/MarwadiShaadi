@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-group='com.github.hendrixstring'
+group = 'com.github.hendrixstring'
 
 android {
     compileSdkVersion 21

@@ -1,6 +1,7 @@
 package com.sid.marwadishaadi.Otp_Verification;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +32,6 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -40,6 +40,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.sid.marwadishaadi.Analytics_Util;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.Upload_User_Photos.UploadPhotoActivity;
 
@@ -81,6 +82,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
     private TextView textViewEditNumber;
     private AlertDialog.Builder builder1;
     private Boolean wantToCloseDialog;
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -230,22 +233,31 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                progressDialog = new ProgressDialog(Otp_VerificationActivity.this);
+                progressDialog.setMessage("Setting up your profile...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
                 // analytics
                 Analytics_Util.logAnalytic(mFirebaseAnalytics, "OTP verification", "button");
 
                 String user_otp = otp.getText().toString();
-//                Toast.makeText(getApplicationContext(), "OTP created is" + Integer.toString(OTP), Toast.LENGTH_SHORT).show();
 
+//                Toast.makeText(getApplicationContext(), "OTP created is" + Integer.toString(OTP), Toast.LENGTH_SHORT).show();
 //                new SendSignUpDetails().execute();
+
                 if (user_otp.equals(Integer.toString(OTP))) {
                     new SendSignUpDetails().execute();
                 } else if (user_otp.equals("")) {
+
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Please enter your OTP", Toast.LENGTH_LONG).show();
+
                 } else if (!TextUtils.isDigitsOnly(user_otp) || user_otp.length() < 6) {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Incorrect OTP", Toast.LENGTH_LONG).show();
                 }
 
-                // rest
             }
         });
 
@@ -253,7 +265,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         otp_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 // add permission here
                 int permissionCheck = ContextCompat.checkSelfPermission(Otp_VerificationActivity.this, Manifest.permission.CALL_PHONE);
@@ -384,7 +395,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            AndroidNetworking.post("http://208.91.199.50:5000/signUpDetails")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/signUpDetails")
                     .addBodyParameter("firstName", sd.getFirst_name())
                     .addBodyParameter("lastName", sd.getLast_name())
                     .addBodyParameter("dateOfBirth", sd.getDate_of_birth())
@@ -410,7 +421,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            new SendBasicInfo().execute();
+            new SendBasicInfo().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
         }
     }
 
@@ -426,7 +437,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            AndroidNetworking.post("http://208.91.199.50:5000/basicInfo")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/basicInfo")
                     .addBodyParameter("height", bi.getHeight())
                     .addBodyParameter("built", bi.getBuilt())
                     .addBodyParameter("maritalStatus", bi.getMaritalStatus())
@@ -461,7 +472,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            new SendAdditionalInfo().execute();
+            new SendAdditionalInfo().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
         }
     }
 
@@ -478,7 +489,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             }
 
 
-            AndroidNetworking.post("http://208.91.199.50:5000/additionalInfo")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/additionalInfo")
                     .addBodyParameter("aboutMe", ai.getAboutMe())
                     .addBodyParameter("hobbies", ai.getHobbies())
                     .addBodyParameter("grandfatherName", ai.getGrandfatherName())
@@ -538,7 +549,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            new SendPartnerPreference().execute();
+            new SendPartnerPreference().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 
         }
     }
@@ -555,7 +566,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             if (pf.getPrefPhysicalStatus().contains("Matter")) {
                 pf.setPrefPhysicalStatus("");
             }
-            AndroidNetworking.post("http://208.91.199.50:5000/uploadPreferences")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/uploadPreferences")
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("minAge", pf.getPrefMinAge())
                     .addBodyParameter("maxAge", pf.getPrefMaxAge())
@@ -587,7 +598,8 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            new SendSignUp().execute();
+            new SendSignUp().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
         }
     }
 
@@ -601,7 +613,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            AndroidNetworking.post("http://208.91.199.50:5000/signUp")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/signUp")
                     .addBodyParameter("custNo", newCustomerNo)
                     .addBodyParameter("email", su.getUemail())
                     .addBodyParameter("password", su.getUpass())
@@ -623,6 +635,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.dismiss();
             Intent i = new Intent(Otp_VerificationActivity.this, UploadPhotoActivity.class);
             i.putExtra("from", "otp");
             startActivity(i);
@@ -636,7 +649,6 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             {
                 //Your user name
-
                 String username = "Rishi1";
                 //Your authentication key
                 String authkey = "d808a22243XX";

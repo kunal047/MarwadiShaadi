@@ -10,7 +10,7 @@ public class DeviceRegistration {
     private String device_id;
     private String customer_id;
 
-    public DeviceRegistration(){
+    public DeviceRegistration() {
     }
 
     public DeviceRegistration(String device_id, String customer_id) {

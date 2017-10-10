@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:focusableInTouchMode="true"
-    android:padding="16dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical"
+              android:padding="16dp">
 
     <ImageView
-        android:layout_margin="20dp"
-        android:layout_gravity="center_horizontal"
         android:layout_width="72dp"
         android:layout_height="72dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
         android:src="@drawable/coupon"/>
 
-        <android.support.design.widget.TextInputLayout
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/code"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/text4"
-                android:hint="Enter Coupon Code"
-                android:textSize="12dp"
-                android:id="@+id/code"
-                android:inputType="text"
-                />
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:id="@+id/redeem"
-            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"
-            android:text="Redeem"
-            android:textColor="#fff"
-            android:textSize="16dp"
-            android:background="@layout/button_border_corner_circle_"
-
+            android:layout_below="@+id/text4"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Coupon Code"
+            android:inputType="textCapCharacters"
+            android:textSize="12dp"
             />
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/redeem"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"
+        android:background="@layout/button_border_corner_circle_"
+        android:text="Redeem"
+        android:textColor="#fff"
+        android:textSize="16dp"
+
+        />
+</LinearLayout>

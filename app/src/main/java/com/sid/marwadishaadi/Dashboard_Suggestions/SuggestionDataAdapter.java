@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sid.marwadishaadi.Chat.DefaultMessagesActivity;
+import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.DeviceRegistration;
 import com.sid.marwadishaadi.Membership.UpgradeMembershipActivity;
 import com.sid.marwadishaadi.Notifications.NotificationsModel;
@@ -50,6 +50,8 @@ import java.util.TimeZone;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Lawrence Dalmet on 31-05-2017.
  */
@@ -57,6 +59,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = "SuggestionDataAdapter";
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
     private final Context context;
@@ -75,8 +78,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String[] array;
     private boolean isPaidMember;
     private OnLoadMoreListener mOnLoadMoreListener;
-
-    private static final String TAG = "SuggestionDataAdapter";
+    private boolean hasDP;
 
     public SuggestionDataAdapter(Context context, final List<SuggestionModel> suggestionModelList, RecyclerView recyclerView) {
 
@@ -158,6 +160,10 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     isPaidMember = true;
                 }
             }
+            SharedPreferences sharedPref = iView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+            hasDP = sharedPref.getBoolean("hasDP", false);
+
+
             return new SuggestionViewHolder(iView);
         } else {
             iView = LayoutInflater.from(parent.getContext())
@@ -165,6 +171,10 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             SharedPreferences sharedpref = iView.getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
             customer_id = sharedpref.getString("customer_id", null);
             customer_name = sharedpref.getString("firstname", null);
+
+            SharedPreferences sharedPref = iView.getContext().getSharedPreferences("userDp", MODE_PRIVATE);
+            hasDP = sharedPref.getBoolean("hasDP", false);
+
 
             return new ProgressViewHolder(iView);
         }
@@ -196,19 +206,24 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((SuggestionViewHolder) holder).name.setText(ag);
             ((SuggestionViewHolder) holder).cusId.setText(suggest.getCusId());
 
-            if (!isPaidMember) {
+            if (isPaidMember || hasDP) {
+
+                Glide.with(context)
+                        .load(suggest.getImgAdd())
+                        .placeholder(R.drawable.default_drawer)
+                        .error(R.drawable.default_drawer)
+                        .into(((SuggestionViewHolder) holder).imgAdd);
+                ((SuggestionViewHolder) holder).showTextOnPicture.setVisibility(View.GONE);
+
+            } else {
+
                 Glide.with(context)
                         .load(suggest.getImgAdd())
                         .placeholder(R.drawable.default_drawer)
                         .error(R.drawable.default_drawer)
                         .bitmapTransform(new BlurTransformation(context))
                         .into(((SuggestionViewHolder) holder).imgAdd);
-            } else {
-                Glide.with(context)
-                        .load(suggest.getImgAdd())
-                        .placeholder(R.drawable.default_drawer)
-                        .error(R.drawable.default_drawer)
-                        .into(((SuggestionViewHolder) holder).imgAdd);
+                ((SuggestionViewHolder) holder).showTextOnPicture.setVisibility(View.VISIBLE);
 
             }
 
@@ -407,7 +422,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     class SuggestionViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, cusId, highDeg, workLoc, height, company, annInc, mariSta, hometown;
+        TextView name, cusId, highDeg, workLoc, height, company, annInc, mariSta, hometown, showTextOnPicture;
         ImageView imgAdd;
         SparkButton sparkButtonChat, sparkButtonInterest, sparkButtonFav;
 
@@ -415,6 +430,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public SuggestionViewHolder(View view) {
 
             super(view);
+            showTextOnPicture = (TextView) view.findViewById(R.id.textViewToUploadPicture);
             name = (TextView) view.findViewById(R.id.name);
             cusId = (TextView) view.findViewById(R.id.cusId);
             imgAdd = (ImageView) view.findViewById(R.id.imgAdd);
@@ -504,7 +520,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             String customerId = params[0];
             String interestId = params[1];
             String status = params[2];
-            AndroidNetworking.post("http://208.91.199.50:5000/addInterestFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addInterestFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("interestId", interestId)
                     .addBodyParameter("status", status)
@@ -534,7 +550,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             String customerId = params[0];
             String favId = params[1];
 
-            AndroidNetworking.post("http://208.91.199.50:5000/addFavFromSuggestion")
+            AndroidNetworking.post(Constants.AWS_SERVER + "/addFavFromSuggestion")
                     .addBodyParameter("customerNo", customerId)
                     .addBodyParameter("favId", favId)
                     .addBodyParameter("status", favouriteState)

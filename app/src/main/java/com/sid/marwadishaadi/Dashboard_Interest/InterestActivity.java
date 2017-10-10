@@ -22,21 +22,19 @@ import java.util.TreeSet;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class InterestActivity extends AppCompatActivity implements
-        ViewPager.OnPageChangeListener{
+        ViewPager.OnPageChangeListener {
 
 
-
-    private InterestSectionPagerAdaper interestSectionPagerAdaper;
-    private ViewPager mviewpager;
     public static Set<String> interestStatus = new TreeSet<>();
     InterestSentFragment.PrepareSentInterest prepareSentInterest = new InterestSentFragment().new PrepareSentInterest();
     InterestReceivedFragment.PrepareReceivedInterest prepareReceivedInterest = new InterestReceivedFragment().new PrepareReceivedInterest();
+    private InterestSectionPagerAdaper interestSectionPagerAdaper;
+    private ViewPager mviewpager;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 
 
     @Override
@@ -73,7 +71,7 @@ public class InterestActivity extends AppCompatActivity implements
     @Override
     public void onPageSelected(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 getSupportActionBar().setTitle("Received Interest");
                 break;
@@ -88,45 +86,6 @@ public class InterestActivity extends AppCompatActivity implements
 
     }
 
-
-
-    public class InterestSectionPagerAdaper extends FragmentStatePagerAdapter{
-
-        public InterestSectionPagerAdaper(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position){
-                case 0:
-                    InterestReceivedFragment interestReceivedFragment = new InterestReceivedFragment();
-                    return interestReceivedFragment;
-                case 1:
-                    InterestSentFragment interestSentFragment = new InterestSentFragment();
-                    return interestSentFragment;
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position){
-                case 0:
-                    return "Received";
-                case 1:
-                    return "Sent";
-            }
-           return null;
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_interest, menu);
@@ -139,11 +98,10 @@ public class InterestActivity extends AppCompatActivity implements
 
         switch (id) {
             case R.id.action_accepted:
-                if (item.isChecked()){
+                if (item.isChecked()) {
                     item.setChecked(false);
                     interestStatus.remove("Accepted");
-                }
-                else{
+                } else {
                     item.setChecked(true);
                     interestStatus.add("Accepted");
                 }
@@ -177,14 +135,51 @@ public class InterestActivity extends AppCompatActivity implements
 //            prepareReceivedInterest.execute();
 //        }
 
-         return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         finish();
-        overridePendingTransition(R.anim.exit,0);
+        overridePendingTransition(R.anim.exit, 0);
         return true;
+    }
+
+    public class InterestSectionPagerAdaper extends FragmentStatePagerAdapter {
+
+        public InterestSectionPagerAdaper(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    InterestReceivedFragment interestReceivedFragment = new InterestReceivedFragment();
+                    return interestReceivedFragment;
+                case 1:
+                    InterestSentFragment interestSentFragment = new InterestSentFragment();
+                    return interestSentFragment;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            switch (position) {
+                case 0:
+                    return "Received";
+                case 1:
+                    return "Sent";
+            }
+            return null;
+        }
     }
 }

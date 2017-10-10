@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
     >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/aboutus_toolbar"
         android:layout_width="match_parent"
-        android:theme="@style/MyToolbartheme"
-        android:titleTextColor="@android:color/white"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
+        android:theme="@style/MyToolbartheme"
+        android:titleTextColor="@android:color/white"
         >
     </android.support.v7.widget.Toolbar>
 
@@ -36,8 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Profile"
-                android:textSize="16dp"
-                android:textColor="#000"/>
+                android:textColor="#000"
+                android:textSize="16dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="About the Portal"
-                android:textSize="16dp"
-                android:textColor="#000"/>
+                android:textColor="#000"
+                android:textSize="16dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -63,16 +63,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Our Team"
-                android:textSize="16dp"
-                android:textColor="#000"/>
+                android:textColor="#000"
+                android:textSize="16dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Dr. Mohan T Karwa"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
                 />
 
             <TextView
@@ -86,9 +87,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Rishi Karwa"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
                 />
 
             <TextView
@@ -102,9 +103,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Aruna Mohan Karwa"
-                android:textStyle="bold"
-                android:textSize="16dp"
                 android:textColor="@color/colorPrimary"
+                android:textSize="16dp"
+                android:textStyle="bold"
                 />
 
             <TextView
@@ -118,9 +119,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Sareeka Kasat"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
                 />
 
             <TextView
@@ -134,9 +135,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Swati Karwa"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
                 />
 
             <TextView
@@ -150,16 +151,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="Jayesh Malpani"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/jayesh"/>
         </LinearLayout>
     </ScrollView>

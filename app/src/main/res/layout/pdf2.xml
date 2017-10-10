@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="1072px"
     android:layout_height="2000px"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,27 +16,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical">
 
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Individual Details"
-                android:textColor="@color/colorPrimary"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
+                android:text="Individual Details"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -44,18 +45,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfHeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5ft 8 inch"
-                    android:id="@+id/pdfHeight"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,18 +66,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfWeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="50 kg"
-                    android:id="@+id/pdfWeight"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,18 +87,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfComplexion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fair"
-                    android:id="@+id/pdfComplexion"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,18 +108,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfBodyType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Slim"
-                    android:id="@+id/pdfBodyType"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,28 +129,31 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfPhysicalStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Perfectly Normal"
-                    android:id="@+id/pdfPhysicalStatus"
                     />
             </LinearLayout>
+
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Educational Details"
-                android:textColor="@color/colorPrimary"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
+                android:text="Educational Details"
+                android:textColor="@color/colorPrimary"
+                tools:ignore="MissingPrefix"
                 />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,12 +168,14 @@
                     android:text="Graduate"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -169,18 +183,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfHighestDegree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="B. Tech"
-                    android:id="@+id/pdfHighestDegree"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -188,27 +204,30 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfInstituteName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VJTI"
-                    android:id="@+id/pdfInstituteName"
                     />
             </LinearLayout>
+
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Professional Details"
                 android:textColor="@color/colorPrimary"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"            />
+                tools:ignore="MissingPrefix"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -216,18 +235,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfOccupation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Job"
-                    android:id="@+id/pdfOccupation"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -235,18 +256,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfDesignation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Employee"
-                    android:id="@+id/pdfDesignation"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -254,18 +277,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfCompany"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MarwadiShaadi"
-                    android:id="@+id/pdfCompany"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -273,42 +298,44 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfIncome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INR 15L to 20L"
-                    android:id="@+id/pdfIncome"
                     />
             </LinearLayout>
         </LinearLayout>
 
         <!--rhs-->
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
+                    fontPath="fonts/OpenSans-Bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:text="Horoscope"
                     android:textColor="@color/colorPrimary"
-                    fontPath="fonts/OpenSans-Bold.ttf"
-                    tools:ignore="MissingPrefix"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"/>
+                    tools:ignore="MissingPrefix"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -316,48 +343,10 @@
                         />
 
                     <TextView
+                        android:id="@+id/pdfBirthTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="9:36 PM"
-                        android:id="@+id/pdfBirthTime"
-                        />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="4dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Birth Place: "
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mumbai"
-                        android:id="@+id/pdfBirthplace"
-                        />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="4dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gotra: "
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="96 kuli"
-                        android:id="@+id/pdfGotra"
                         />
                 </LinearLayout>
 
@@ -371,21 +360,64 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Manglik: " />
+                        android:text="Birth Place: "
+                        />
 
                     <TextView
-                        android:id="@+id/pdfManglik"
+                        android:id="@+id/pdfBirthplace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No" />
+                        android:text="Mumbai"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="4dp">
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gotra: "
+                        />
+
+                    <TextView
+                        android:id="@+id/pdfGotra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="96 kuli"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Manglik: "/>
+
+                    <TextView
+                        android:id="@+id/pdfManglik"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -393,28 +425,31 @@
                         />
 
                     <TextView
+                        android:id="@+id/pdfMatchHoroscope"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Yes"
-                        android:id="@+id/pdfMatchHoroscope"
                         />
                 </LinearLayout>
             </LinearLayout>
+
             <TextView
+                fontPath="fonts/OpenSans-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Family Details"
                 android:textColor="@color/colorPrimary"
-                fontPath="fonts/OpenSans-Bold.ttf"
-                tools:ignore="MissingPrefix"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"/>
+                tools:ignore="MissingPrefix"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -422,18 +457,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFatherName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Santosh Rane"
-                    android:id="@+id/pdfFatherName"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -441,18 +478,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFatherOccupation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Business"
-                    android:id="@+id/pdfFatherOccupation"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -460,18 +499,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFatherOccupationDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Oil Merchant"
-                    android:id="@+id/pdfFatherOccupationDetail"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -479,18 +520,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFamilyStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upper Middle Class"
-                    android:id="@+id/pdfFamilyStatus"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -498,18 +541,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFamilyType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nuclear"
-                    android:id="@+id/pdfFamilyType"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -517,18 +562,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfFamilyValues"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Modern"
-                    android:id="@+id/pdfFamilyValues"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -536,19 +583,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfNativePlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Goa"
-                    android:id="@+id/pdfNativePlace"
                     />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -556,18 +604,20 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfGrandfatherName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yashwant Rane"
-                    android:id="@+id/pdfGrandfatherName"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -575,10 +625,10 @@
                     />
 
                 <TextView
+                    android:id="@+id/pdfMama"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Almeida"
-                    android:id="@+id/pdfMama"
                     />
             </LinearLayout>
 
