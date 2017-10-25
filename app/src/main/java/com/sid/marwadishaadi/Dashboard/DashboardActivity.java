@@ -44,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.Dashboard_Around_Me.AroundMeFragment;
 import com.sid.marwadishaadi.Dashboard_Favourites.FavouritesFragment;
 import com.sid.marwadishaadi.Dashboard_Interest.InterestActivity;
 import com.sid.marwadishaadi.Dashboard_Recent_Profiles.RecentProfilesFragment;
@@ -334,7 +335,7 @@ public class DashboardActivity extends AppCompatActivity
         mSectionsPagerAdapter = new DashboardSectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.dash_container);
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
 
@@ -446,13 +447,14 @@ public class DashboardActivity extends AppCompatActivity
                 getSupportActionBar().setTitle("Reverse Matching ");
                 break;
             case 3:
+                getSupportActionBar().setTitle("Around Me");
+                break;
+            case 4:
                 getSupportActionBar().setTitle("Favourites");
                 break;
            /* case 4:
                 getSupportActionBar().setTitle("Super Match ");
                 break;*/
-
-
         }
     }
 
@@ -482,11 +484,12 @@ public class DashboardActivity extends AppCompatActivity
                     Reverse_MatchingFragment reverse_matchingFragment = new Reverse_MatchingFragment();
                     return reverse_matchingFragment;
                 case 3:
+                    AroundMeFragment aroundMeFragment = new AroundMeFragment();
+                    return aroundMeFragment;
+                case 4:
                     FavouritesFragment favouritesFragment = new FavouritesFragment();
                     return favouritesFragment;
-               /*case 4:
-                    SuperMatchFragment superMatchFragment = new SuperMatchFragment();
-                    return superMatchFragment;*/
+
 
             }
             return null;
@@ -494,7 +497,7 @@ public class DashboardActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -507,9 +510,10 @@ public class DashboardActivity extends AppCompatActivity
                 case 2:
                     return "Reverse Matching";
                 case 3:
-                    return "Favourites";
-               /* case 4:
-                    return "Super Match";*/
+                    return "Around Me";
+               case 4:
+                   return "Favourites";
+
 
                 default:
                     return null;
