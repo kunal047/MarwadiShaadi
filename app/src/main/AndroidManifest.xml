@@ -250,6 +250,11 @@
             android:name=".Dashboard_Reverse_Matching.SortByReverse"
             android:theme="@style/MyTransparentTheme">
         </activity>
+
+        <activity
+            android:name=".Dashboard_Around_Me.SortByAroundMe"
+            android:theme="@style/MyTransparentTheme">
+        </activity>
     </application>
 
 </manifest>
