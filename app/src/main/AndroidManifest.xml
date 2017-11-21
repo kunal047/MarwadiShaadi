@@ -3,16 +3,13 @@
           package="com.sid.marwadishaadi">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
-
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".App"
@@ -24,17 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
-        <!--
-             The API key for Google Maps-based APIs.
-        -->
+        <!--              The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAMVRbZltmxdxAi17Rius__iU9Yvltq_34" />
+            android:value="AIzaSyAMVRbZltmxdxAi17Rius__iU9Yvltq_34"/>
 
         <activity
             android:name=".SplashScreen"
@@ -61,35 +55,33 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <service android:name=".MSFirebaseMessagingService">
+        <service android:name=".MSFirebaseMessagingService"
+                 android:enabled="true"
+                 android:exported="true">
             <intent-filter>
-
-
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".MyService">
+        <service android:name=".MyService"
+                 android:enabled="true"
+                 android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
         <service
             android:name=".Services.ChatNotifyService"
             android:enabled="true">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE"/>
             </intent-filter>
-
         </service>
-
         <service
             android:name=".Services.InterestNotifyService"
             android:enabled="true">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE"/>
             </intent-filter>
-
         </service>
 
         <activity
@@ -250,10 +242,11 @@
             android:name=".Dashboard_Reverse_Matching.SortByReverse"
             android:theme="@style/MyTransparentTheme">
         </activity>
-
         <activity
             android:name=".Dashboard_Around_Me.SortByAroundMe"
             android:theme="@style/MyTransparentTheme">
+        </activity>
+        <activity android:name=".Dashboard_Around_Me.LocationAroundMe">
         </activity>
     </application>
 

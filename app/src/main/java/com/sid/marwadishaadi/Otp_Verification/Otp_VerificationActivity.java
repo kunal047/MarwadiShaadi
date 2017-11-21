@@ -313,7 +313,7 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         final Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + otp_call.getText().toString()));//change the number
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getApplicationContext(), "Permission_Util for Call Denied!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Permission for Call Denied!", Toast.LENGTH_LONG).show();
             return;
         } else {
             AlertDialog.Builder discarduser = new AlertDialog.Builder(Otp_VerificationActivity.this);
@@ -321,6 +321,16 @@ public class Otp_VerificationActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
                             startActivity(callIntent);
                         }
                     })

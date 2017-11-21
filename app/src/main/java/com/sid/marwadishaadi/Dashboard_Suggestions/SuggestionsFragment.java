@@ -132,8 +132,6 @@ public class SuggestionsFragment extends Fragment {
 
         } catch (ArrayIndexOutOfBoundsException e) {
 
-            Log.d(TAG, "onCreateView: array index out of bound ---------------- " + e.toString());
-
         }
 
 

@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sid.marwadishaadi.Chat.DefaultDialogsActivity;
 import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard_Around_Me.AroundMeFragment;
@@ -77,7 +78,6 @@ public class DashboardActivity extends AppCompatActivity
         ViewPager.OnPageChangeListener {
 
 
-    private static final String TAG = "DashboardActivity";
     private static ProgressDialog progressDialog;
     TextView nameDrawer;
     SharedPreferences.Editor editorGetDP;
@@ -94,6 +94,7 @@ public class DashboardActivity extends AppCompatActivity
     private int notificationCount = 0;
     private MenuItem m;
     private boolean hasInternet = true;
+    private static final String TAG = "DashboardActivity";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -129,6 +130,8 @@ public class DashboardActivity extends AppCompatActivity
         Intent intent = new Intent(this, ChatNotifyService.class);
         PendingIntent pintent = PendingIntent
                 .getService(this, 0, intent, 0);
+
+
 
         progressDialog = new ProgressDialog(DashboardActivity.this);
         progressDialog.setMessage("Loading your matches...");
@@ -204,6 +207,9 @@ public class DashboardActivity extends AppCompatActivity
         if (customer_id != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference(customer_id).child("Notifications");
         }
+        FirebaseMessaging.getInstance().subscribeToTopic("MS");
+
+
 
 
         notificationCount = 0;
