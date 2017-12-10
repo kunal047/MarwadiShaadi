@@ -56,7 +56,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             convertView = inflater.inflate(R.layout.places_row, parent, false);
         }
         Place place = getItem(position);
-        TextView textView = (TextView) convertView.findViewById(R.id.place_name);
+        TextView textView = convertView.findViewById(R.id.place_name);
 
         textView.setText(place.getPlace());
         return convertView;

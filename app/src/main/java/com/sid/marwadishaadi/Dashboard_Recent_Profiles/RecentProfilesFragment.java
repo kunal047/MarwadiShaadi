@@ -82,10 +82,10 @@ public class RecentProfilesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mview = inflater.inflate(R.layout.fragment_recent_profiles, container, false);
-        empty_view_recent = (LinearLayout) mview.findViewById(R.id.empty_view_recent);
+        empty_view_recent = mview.findViewById(R.id.empty_view_recent);
         empty_view_recent.setVisibility(View.GONE);
 
-        loading = (ProgressBar) mview.findViewById(R.id.loading_recent);
+        loading = mview.findViewById(R.id.loading_recent);
         loading.setVisibility(View.VISIBLE);
 
 
@@ -122,11 +122,11 @@ public class RecentProfilesFragment extends Fragment {
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Recent Profiles", "button");
 
-        recentRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview_recent);
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        recentRecyclerView = mview.findViewById(R.id.swipe_recyclerview_recent);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
 
-        textViewPreference = (TextView) mview.findViewById(R.id.preferenceOfRecent);
-        textViewSortBy = (TextView) mview.findViewById(R.id.sortbyOfRecent);
+        textViewPreference = mview.findViewById(R.id.preferenceOfRecent);
+        textViewSortBy = mview.findViewById(R.id.sortbyOfRecent);
 
         recentList = new ArrayList<>();
         recentAdapter = new RecentAdapter(getContext(), recentList, recentRecyclerView);

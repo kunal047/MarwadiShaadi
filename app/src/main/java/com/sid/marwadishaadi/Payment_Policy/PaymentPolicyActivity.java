@@ -21,7 +21,7 @@ public class PaymentPolicyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment__policy);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ppolicy_toolbar);
+        Toolbar toolbar = findViewById(R.id.ppolicy_toolbar);
         toolbar.setTitle("Payment Policy");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

@@ -53,26 +53,26 @@ public class EditPersonalDetailsActivity extends AppCompatActivity {
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_pdetails_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_pdetails_toolbar);
         toolbar.setTitle("Edit Personal Details");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Button update = (Button) findViewById(R.id.advnext);
-        maritalStatus = (Spinner) findViewById(R.id.marital_status);
-        height = (Spinner) findViewById(R.id.edit_height);
+        Button update = findViewById(R.id.advnext);
+        maritalStatus = findViewById(R.id.marital_status);
+        height = findViewById(R.id.edit_height);
 
-        physcialStatus = (Spinner) findViewById(R.id.physical_status);
-        complexion = (Spinner) findViewById(R.id.edit_complexion);
-        built = (Spinner) findViewById(R.id.built);
-        contactNumber = (EditText) findViewById(R.id.mobile);
-        weight = (EditText) findViewById(R.id.weight);
+        physcialStatus = findViewById(R.id.physical_status);
+        complexion = findViewById(R.id.edit_complexion);
+        built = findViewById(R.id.built);
+        contactNumber = findViewById(R.id.mobile);
+        weight = findViewById(R.id.weight);
 
 
         // autocomplete location fetch
-        location = (AutoCompleteTextView) findViewById(R.id.location);
+        location = findViewById(R.id.location);
         location.setThreshold(1);
         placesAdapter = new PlacesAdapter(EditPersonalDetailsActivity.this, R.layout.activity_edit_personal_details, R.id.location, App.placeslist);
         location.setAdapter(placesAdapter);

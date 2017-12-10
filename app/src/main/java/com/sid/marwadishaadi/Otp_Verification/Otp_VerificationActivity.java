@@ -100,15 +100,15 @@ public class Otp_VerificationActivity extends AppCompatActivity {
         view = getWindow().getDecorView().getRootView();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        otp = (EditText) findViewById(R.id.user_otp);
-        submit = (Button) findViewById(R.id.Submit_otp);
-        otp_call = (TextView) findViewById(R.id.otp_call_number);
-        resend_otp = (TextView) findViewById(R.id.resend_otp);
-        otp_contact = (LinearLayout) findViewById(R.id.otp_call_us);
+        otp = findViewById(R.id.user_otp);
+        submit = findViewById(R.id.Submit_otp);
+        otp_call = findViewById(R.id.otp_call_number);
+        resend_otp = findViewById(R.id.resend_otp);
+        otp_contact = findViewById(R.id.otp_call_us);
 
 
-        ImageView imageViewEditNumber = (ImageView) findViewById(R.id.imageViewEditNumber);
-        textViewEditNumber = (TextView) findViewById(R.id.textViewEditNumber);
+        ImageView imageViewEditNumber = findViewById(R.id.imageViewEditNumber);
+        textViewEditNumber = findViewById(R.id.textViewEditNumber);
         textViewEditNumber.setText(sd.getMobile_number());
 
         builder1 = new AlertDialog.Builder(Otp_VerificationActivity.this);

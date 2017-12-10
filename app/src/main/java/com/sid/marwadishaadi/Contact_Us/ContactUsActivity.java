@@ -21,7 +21,7 @@ public class ContactUsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.contactus_toolbar);
+        Toolbar toolbar = findViewById(R.id.contactus_toolbar);
         toolbar.setTitle("Contact Us");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

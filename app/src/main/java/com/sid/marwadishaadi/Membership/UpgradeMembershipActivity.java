@@ -67,44 +67,44 @@ public class UpgradeMembershipActivity extends AppCompatActivity {
 
         cache = new File(getCacheDir() + "/" + "membership" + customer_id + ".srl");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.upgrademembership_toolbar);
+        Toolbar toolbar = findViewById(R.id.upgrademembership_toolbar);
         toolbar.setTitle("Membership Status");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        upgrade = (Button) findViewById(R.id.upgrade);
-        maheshwari = (CardView) findViewById(R.id.maheshwari);
-        agarwal = (CardView) findViewById(R.id.agarwal);
-        jain = (CardView) findViewById(R.id.jain);
-        khandelwal = (CardView) findViewById(R.id.khandelwal);
-        others = (CardView) findViewById(R.id.others);
-        no = (CardView) findViewById(R.id.no_membership);
+        upgrade = findViewById(R.id.upgrade);
+        maheshwari = findViewById(R.id.maheshwari);
+        agarwal = findViewById(R.id.agarwal);
+        jain = findViewById(R.id.jain);
+        khandelwal = findViewById(R.id.khandelwal);
+        others = findViewById(R.id.others);
+        no = findViewById(R.id.no_membership);
 
-        name = (TextView) findViewById(R.id.membership_name);
-        id = (TextView) findViewById(R.id.membership_id);
+        name = findViewById(R.id.membership_name);
+        id = findViewById(R.id.membership_id);
 
-        agarwal_duration = (TextView) findViewById(R.id.duration_agarwal);
-        agarwal_start = (TextView) findViewById(R.id.start_agarwal);
-        agarwal_end = (TextView) findViewById(R.id.end_agarwal);
+        agarwal_duration = findViewById(R.id.duration_agarwal);
+        agarwal_start = findViewById(R.id.start_agarwal);
+        agarwal_end = findViewById(R.id.end_agarwal);
 
-        jain_duration = (TextView) findViewById(R.id.duration_jain);
-        jain_start = (TextView) findViewById(R.id.start_jain);
-        jain_end = (TextView) findViewById(R.id.end_jain);
+        jain_duration = findViewById(R.id.duration_jain);
+        jain_start = findViewById(R.id.start_jain);
+        jain_end = findViewById(R.id.end_jain);
 
-        khandelwal_duration = (TextView) findViewById(R.id.duration_khandelwal);
-        khandelwal_start = (TextView) findViewById(R.id.start_khandelwal);
-        khandelwal_end = (TextView) findViewById(R.id.end_khandelwal);
+        khandelwal_duration = findViewById(R.id.duration_khandelwal);
+        khandelwal_start = findViewById(R.id.start_khandelwal);
+        khandelwal_end = findViewById(R.id.end_khandelwal);
 
-        maheshwari_duration = (TextView) findViewById(R.id.duration_maheshwari);
-        maheshwari_start = (TextView) findViewById(R.id.start_maheshwari);
-        maheshwari_end = (TextView) findViewById(R.id.end_maheshwari);
+        maheshwari_duration = findViewById(R.id.duration_maheshwari);
+        maheshwari_start = findViewById(R.id.start_maheshwari);
+        maheshwari_end = findViewById(R.id.end_maheshwari);
 
-        others_duration = (TextView) findViewById(R.id.duration_others);
-        others_start = (TextView) findViewById(R.id.start_others);
-        others_end = (TextView) findViewById(R.id.end_others);
+        others_duration = findViewById(R.id.duration_others);
+        others_start = findViewById(R.id.start_others);
+        others_end = findViewById(R.id.end_others);
 
-        membership_photo = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.membership_photo);
+        membership_photo = findViewById(R.id.membership_photo);
 
 
         SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

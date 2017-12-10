@@ -75,8 +75,8 @@ public class InterestReceivedFragment extends Fragment {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
 
-        empty_view = (LinearLayout) mview.findViewById(R.id.empty_view);
-        empty_view_sent = (LinearLayout) mview.findViewById(R.id.empty_view_sent);
+        empty_view = mview.findViewById(R.id.empty_view);
+        empty_view_sent = mview.findViewById(R.id.empty_view_sent);
 
         empty_view.setVisibility(View.GONE);
         empty_view_sent.setVisibility(View.GONE);
@@ -87,7 +87,7 @@ public class InterestReceivedFragment extends Fragment {
 
         cache = new File(getCacheDir() + "/" + "interestreceived" + customer_id + ".srl");
 
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -96,8 +96,8 @@ public class InterestReceivedFragment extends Fragment {
             }
         });
 
-        coordinatorLayout = (CoordinatorLayout) mview.findViewById(R.id.interest_layout);
-        recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
+        coordinatorLayout = mview.findViewById(R.id.interest_layout);
+        recyclerView = mview.findViewById(R.id.swipe_recyclerview);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);

@@ -46,7 +46,7 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        BlockModel blocked = (BlockModel) blockModelList.get(position);
+        BlockModel blocked = blockModelList.get(position);
 
         holder.name.setText(blocked.getName());
         holder.cusId.setText(blocked.getId());
@@ -100,10 +100,10 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.MyViewHolder
 
         public MyViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.name);
-            cusId = (TextView) view.findViewById(R.id.cusId);
-            vview = (TextView) view.findViewById(R.id.vview);
-            unblock = (TextView) view.findViewById(R.id.unblock);
+            name = view.findViewById(R.id.name);
+            cusId = view.findViewById(R.id.cusId);
+            vview = view.findViewById(R.id.vview);
+            unblock = view.findViewById(R.id.unblock);
 
         }
 

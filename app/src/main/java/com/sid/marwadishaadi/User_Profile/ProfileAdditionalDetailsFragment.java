@@ -136,24 +136,24 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
         clickedID = customer_id;
 
 
-        mCardViewAboutMe = (CardView) mview.findViewById(R.id.cardViewAboutMe);
-        mCardViewHobbies = (CardView) mview.findViewById(R.id.cardViewHobbies);
+        mCardViewAboutMe = mview.findViewById(R.id.cardViewAboutMe);
+        mCardViewHobbies = mview.findViewById(R.id.cardViewHobbies);
 
-        edit_about = (TextView) mview.findViewById(R.id.aboutme_clear);
-        edit_hobbies = (TextView) mview.findViewById(R.id.hobbies_clear);
-        edit_lifestyle = (TextView) mview.findViewById(R.id.lifestyle_clear);
-        edit_horoscope = (TextView) mview.findViewById(R.id.horoscope_clear);
-        similar = (Button) mview.findViewById(R.id.similar);
+        edit_about = mview.findViewById(R.id.aboutme_clear);
+        edit_hobbies = mview.findViewById(R.id.hobbies_clear);
+        edit_lifestyle = mview.findViewById(R.id.lifestyle_clear);
+        edit_horoscope = mview.findViewById(R.id.horoscope_clear);
+        similar = mview.findViewById(R.id.similar);
 
-        aboutMe = (TextView) mview.findViewById(R.id.about_me);
-        hobbies = (TextView) mview.findViewById(R.id.hobbies);
-        eatingHabits = (TextView) mview.findViewById(R.id.eating_habits);
-        drinkingHabits = (TextView) mview.findViewById(R.id.drinking_habit);
-        smokingHabits = (TextView) mview.findViewById(R.id.smoking_habits);
-        birthtime = (TextView) mview.findViewById(R.id.birthtime_location);
-        gotra = (TextView) mview.findViewById(R.id.gotra);
-        manglik = (TextView) mview.findViewById(R.id.manglik);
-        matchHoroscope = (TextView) mview.findViewById(R.id.match_horoscope);
+        aboutMe = mview.findViewById(R.id.about_me);
+        hobbies = mview.findViewById(R.id.hobbies);
+        eatingHabits = mview.findViewById(R.id.eating_habits);
+        drinkingHabits = mview.findViewById(R.id.drinking_habit);
+        smokingHabits = mview.findViewById(R.id.smoking_habits);
+        birthtime = mview.findViewById(R.id.birthtime_location);
+        gotra = mview.findViewById(R.id.gotra);
+        manglik = mview.findViewById(R.id.manglik);
+        matchHoroscope = mview.findViewById(R.id.match_horoscope);
 
         try {
 
@@ -563,7 +563,7 @@ public class ProfileAdditionalDetailsFragment extends Fragment {
     }
 
     public int getCasebreak() {
-        return this.casebreak;
+        return casebreak;
     }
 
     private class ProfileAdditionalDetails extends AsyncTask<String, Void, Void> {

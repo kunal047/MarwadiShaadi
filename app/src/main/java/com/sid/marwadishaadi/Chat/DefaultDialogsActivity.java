@@ -60,11 +60,11 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
         ListOFMessageOn = new ArrayList<>();
         dla = new DialogsListAdapter<>(super.imageLoader);
 
-        dialogsList = (DialogsList) findViewById(R.id.dialogsList);
+        dialogsList = findViewById(R.id.dialogsList);
         dla.setDatesFormatter(this);
 
         dialogsList.setAdapter(dla);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.chat_toolbar);
+        Toolbar toolbar = findViewById(R.id.chat_toolbar);
         toolbar.setTitle("Inbox");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
@@ -73,7 +73,7 @@ public class DefaultDialogsActivity extends DemoDialogsActivity implements DateF
         pgd.setMessage("Loading your messages...");
         pgd.setCancelable(false);
         pgd.show();
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.chatRefresh);
+        swipeRefreshLayout = findViewById(R.id.chatRefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

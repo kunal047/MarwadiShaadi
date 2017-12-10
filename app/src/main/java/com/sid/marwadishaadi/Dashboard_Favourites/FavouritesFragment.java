@@ -61,7 +61,7 @@ public class FavouritesFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.swipe_to_refresh, container, false);
-        empty_view = (LinearLayout) mview.findViewById(R.id.empty_view_favourites);
+        empty_view = mview.findViewById(R.id.empty_view_favourites);
         empty_view.setVisibility(View.GONE);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
@@ -73,11 +73,11 @@ public class FavouritesFragment extends Fragment {
 
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Favourites", "view");
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.favourites_loading);
+        mProgressBar = mview.findViewById(R.id.favourites_loading);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        recyclerView = mview.findViewById(R.id.swipe_recyclerview);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
         favouritesAdapter = new FavouritesAdapter(getContext(), favouritesList, empty_view);
 
         recyclerView.setHasFixedSize(true);

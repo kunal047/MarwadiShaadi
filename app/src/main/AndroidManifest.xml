@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,7 +26,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
-        <!--              The API key for Google Maps-based APIs. -->
+        <!-- The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAMVRbZltmxdxAi17Rius__iU9Yvltq_34"/>
@@ -55,16 +56,18 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <service android:name=".MSFirebaseMessagingService"
-                 android:enabled="true"
-                 android:exported="true">
+        <service
+            android:name=".MSFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".MyService"
-                 android:enabled="true"
-                 android:exported="true">
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
@@ -236,17 +239,30 @@
         </activity>
         <activity
             android:name=".Dashboard_Recent_Profiles.SortByRecent"
+            android:screenOrientation="portrait"
             android:theme="@style/MyTransparentTheme">
         </activity>
         <activity
             android:name=".Dashboard_Reverse_Matching.SortByReverse"
+            android:screenOrientation="portrait"
             android:theme="@style/MyTransparentTheme">
         </activity>
         <activity
             android:name=".Dashboard_Around_Me.SortByAroundMe"
+            android:screenOrientation="portrait"
             android:theme="@style/MyTransparentTheme">
         </activity>
-        <activity android:name=".Dashboard_Around_Me.LocationAroundMe">
+        <activity
+            android:name=".Dashboard_Around_Me.LocationAroundMe"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTransparentTheme">
+        </activity>
+        <activity
+            android:name=".Elite_Profiles.EliteActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Elite_Profiles.EliteDetailActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -42,13 +42,13 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
         Intent data = getIntent();
         userid = data.getStringExtra("userid");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.fbgallery_toolbar);
+        Toolbar toolbar = findViewById(R.id.fbgallery_toolbar);
         toolbar.setTitle("Select Photos");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.fb_gallery_recyclerview);
+        recyclerView = findViewById(R.id.fb_gallery_recyclerview);
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();
         recyclerView.setItemAnimator(fadeInLeftAnimator);
@@ -60,7 +60,7 @@ public class FbGalleryActivity extends AppCompatActivity implements OnPicSelecte
         fbGalleryAdapter.setListener(this);
 
 
-        Button photo_upload = (Button) findViewById(R.id.fb_upload);
+        Button photo_upload = findViewById(R.id.fb_upload);
         photo_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

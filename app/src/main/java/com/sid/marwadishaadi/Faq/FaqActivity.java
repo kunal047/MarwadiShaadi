@@ -20,7 +20,7 @@ public class FaqActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.faq_toolbar);
+        Toolbar toolbar = findViewById(R.id.faq_toolbar);
         toolbar.setTitle("Faq");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

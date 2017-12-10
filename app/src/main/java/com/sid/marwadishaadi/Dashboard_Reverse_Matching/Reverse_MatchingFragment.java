@@ -83,7 +83,7 @@ public class Reverse_MatchingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View mview = inflater.inflate(R.layout.fragment_reverse__matching, container, false);
-        empty_view_reverse = (LinearLayout) mview.findViewById(R.id.empty_view_reverse);
+        empty_view_reverse = mview.findViewById(R.id.empty_view_reverse);
         empty_view_reverse.setVisibility(View.GONE);
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -116,11 +116,11 @@ public class Reverse_MatchingFragment extends Fragment {
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Reverse Matching", "view");
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.reverse_loading);
+        mProgressBar = mview.findViewById(R.id.reverse_loading);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        reverseRecyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        reverseRecyclerView = mview.findViewById(R.id.swipe_recyclerview);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
 
         reverseRecyclerView.setHasFixedSize(true);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
@@ -137,7 +137,7 @@ public class Reverse_MatchingFragment extends Fragment {
                 refreshContent();
             }
         });
-        showPhotosOfReverse = (TextView) mview.findViewById(R.id.showPhotosOfReverse);
+        showPhotosOfReverse = mview.findViewById(R.id.showPhotosOfReverse);
 
         showPhotosOfReverse.setOnClickListener(new View.OnClickListener() {
             @Override

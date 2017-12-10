@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.sid.marwadishaadi.Elite_Profiles.EliteActivity;
 import com.sid.marwadishaadi.Login.LoginActivity;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
 
@@ -76,18 +78,25 @@ public class SplashScreen extends AppCompatActivity {
                             i.putExtra("deeplink", deeplink);
                         }
                     } else {
-                        i = new Intent(SplashScreen.this, LoginActivity.class);
-                        i.putExtra("deeplink", deeplink);
+
+                            i = new Intent(SplashScreen.this, LoginActivity.class);
+                            i.putExtra("deeplink", deeplink);
+
                     }
 
                 } else {
                     SharedPreferences userfor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editorFor = userfor.edit();
+                    Log.d(TAG, "run: value of is user elite --------------------------- " + isUserElite());
 
                     if (isUserLoggedIn()) {
-                        i = new Intent(SplashScreen.this, DashboardActivity.class);
-                        startActivity(i);
-
+                        if (isUserElite()) {
+                            i = new Intent(SplashScreen.this, EliteActivity.class);
+                            startActivity(i);
+                        } else {
+                            i = new Intent(SplashScreen.this, DashboardActivity.class);
+                            startActivity(i);
+                        }
 
                     } else if (!userfor.getBoolean("firstTime", false)) {
 
@@ -135,8 +144,15 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private boolean isUserLoggedIn() {
+
         SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedpref.getBoolean("isLoggedIn", false);
+    }
+
+    private boolean isUserElite() {
+
+        SharedPreferences sharedpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedpref.getBoolean("isElite", false);
     }
 
     private boolean isFirstLaunch() {

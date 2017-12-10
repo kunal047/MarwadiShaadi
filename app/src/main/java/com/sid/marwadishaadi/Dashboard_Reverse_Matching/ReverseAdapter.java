@@ -214,7 +214,7 @@ public class ReverseAdapter extends RecyclerView.Adapter {
 
         public ProgressViewHolder(View v) {
             super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
+            progressBar = v.findViewById(R.id.progressBar1);
         }
     }
 
@@ -229,12 +229,12 @@ public class ReverseAdapter extends RecyclerView.Adapter {
         public ReverseViewHolder(View itemView) {
             super(itemView);
 
-            dp = (ImageView) itemView.findViewById(R.id.user_profile_img);
-            name = (TextView) itemView.findViewById(R.id.user_profile_name);
-            age = (TextView) itemView.findViewById(R.id.user_profile_age);
-            city = (TextView) itemView.findViewById(R.id.user_profile_city);
-            education = (TextView) itemView.findViewById(R.id.user_profile_education);
-            showTextOnPicture = (TextView) itemView.findViewById(R.id.showTextOnPicture);
+            dp = itemView.findViewById(R.id.user_profile_img);
+            name = itemView.findViewById(R.id.user_profile_name);
+            age = itemView.findViewById(R.id.user_profile_age);
+            city = itemView.findViewById(R.id.user_profile_city);
+            education = itemView.findViewById(R.id.user_profile_education);
+            showTextOnPicture = itemView.findViewById(R.id.showTextOnPicture);
 
         }
 

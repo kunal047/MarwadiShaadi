@@ -70,15 +70,15 @@ SignupActivity extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        email = (EditText) findViewById(R.id.signup_email);
-        pass = (EditText) findViewById(R.id.signup_password);
-        confirm = (EditText) findViewById(R.id.confirm_password);
+        email = findViewById(R.id.signup_email);
+        pass = findViewById(R.id.signup_password);
+        confirm = findViewById(R.id.confirm_password);
 
-        showPassword = (ImageView) findViewById(R.id.show_password);
-        hidePassword = (ImageView) findViewById(R.id.hide_password);
+        showPassword = findViewById(R.id.show_password);
+        hidePassword = findViewById(R.id.hide_password);
 
-        confirmShowPassword = (ImageView) findViewById(R.id.confirm_show_password);
-        confirmHidePassword = (ImageView) findViewById(R.id.confirm_hide_password);
+        confirmShowPassword = findViewById(R.id.confirm_show_password);
+        confirmHidePassword = findViewById(R.id.confirm_hide_password);
 
         showPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +181,7 @@ SignupActivity extends AppCompatActivity {
 //            }
 //        });
 
-        next = (Button) findViewById(R.id.next);
+        next = findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

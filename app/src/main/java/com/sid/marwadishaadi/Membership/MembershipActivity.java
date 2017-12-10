@@ -165,7 +165,7 @@ public class MembershipActivity extends AppCompatActivity {
         setContentView(R.layout.activity_membership);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         PackageInfos = new ArrayList<>();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.membership_toolbar);
+        Toolbar toolbar = findViewById(R.id.membership_toolbar);
         toolbar.setTitle("Membership Status");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
@@ -174,8 +174,8 @@ public class MembershipActivity extends AppCompatActivity {
         init();
         Integer randomNum = ServiceUtility.randInt(0, 9999999);
         orderId.setText(randomNum.toString());
-        skip = (Button) findViewById(R.id.skip);
-        coupon = (Button) findViewById(R.id.coupon);
+        skip = findViewById(R.id.skip);
+        coupon = findViewById(R.id.coupon);
 
         c = 0;
         c1 = 0;
@@ -184,23 +184,23 @@ public class MembershipActivity extends AppCompatActivity {
         c4 = 0;
         c5 = 0;
         c6 = 0;
-        dash = (TextView) findViewById(R.id.dash);
+        dash = findViewById(R.id.dash);
 
-        tvamount = (TextView) findViewById(R.id.amount);
-        gr1 = (RadioGroup) findViewById(R.id.gr1);
-        gr2 = (RadioGroup) findViewById(R.id.gr2);
-        gr3 = (RadioGroup) findViewById(R.id.gr3);
-        gr4 = (RadioGroup) findViewById(R.id.gr4);
-        gr5 = (RadioGroup) findViewById(R.id.gr5);
-        gr6 = (RadioGroup) findViewById(R.id.gr6);
+        tvamount = findViewById(R.id.amount);
+        gr1 = findViewById(R.id.gr1);
+        gr2 = findViewById(R.id.gr2);
+        gr3 = findViewById(R.id.gr3);
+        gr4 = findViewById(R.id.gr4);
+        gr5 = findViewById(R.id.gr5);
+        gr6 = findViewById(R.id.gr6);
 
 
-        clear1 = (TextView) findViewById(R.id.g1reset);
-        clear2 = (TextView) findViewById(R.id.g2reset);
-        clear3 = (TextView) findViewById(R.id.g3reset);
-        clear4 = (TextView) findViewById(R.id.g4reset);
-        clear5 = (TextView) findViewById(R.id.g5reset);
-        clear6 = (TextView) findViewById(R.id.g6reset);
+        clear1 = findViewById(R.id.g1reset);
+        clear2 = findViewById(R.id.g2reset);
+        clear3 = findViewById(R.id.g3reset);
+        clear4 = findViewById(R.id.g4reset);
+        clear5 = findViewById(R.id.g5reset);
+        clear6 = findViewById(R.id.g6reset);
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,9 +220,9 @@ public class MembershipActivity extends AppCompatActivity {
                     reset = new AlertDialog.Builder(MembershipActivity.this);
                     reset.setView(reset_view);
 
-                    final EditText code = (EditText) reset_view.findViewById(R.id.code);
+                    final EditText code = reset_view.findViewById(R.id.code);
 
-                    Button redeem = (Button) reset_view.findViewById(R.id.redeem);
+                    Button redeem = reset_view.findViewById(R.id.redeem);
 
 
                     redeem.setOnClickListener(new View.OnClickListener() {
@@ -333,25 +333,25 @@ public class MembershipActivity extends AppCompatActivity {
             }
         });
 
-        radio1 = (RadioButton) findViewById(R.id.radio1);
-        radio2 = (RadioButton) findViewById(R.id.radio2);
-        radio3 = (RadioButton) findViewById(R.id.radio3);
-        radio4 = (RadioButton) findViewById(R.id.radio4);
-        radio5 = (RadioButton) findViewById(R.id.radio5);
-        radio6 = (RadioButton) findViewById(R.id.radio6);
-        radio7 = (RadioButton) findViewById(R.id.radio7);
+        radio1 = findViewById(R.id.radio1);
+        radio2 = findViewById(R.id.radio2);
+        radio3 = findViewById(R.id.radio3);
+        radio4 = findViewById(R.id.radio4);
+        radio5 = findViewById(R.id.radio5);
+        radio6 = findViewById(R.id.radio6);
+        radio7 = findViewById(R.id.radio7);
 
-        radio8 = (RadioButton) findViewById(R.id.radio8);
-        radio9 = (RadioButton) findViewById(R.id.radio9);
-        radio10 = (RadioButton) findViewById(R.id.radio10);
-        radio11 = (RadioButton) findViewById(R.id.radio11);
-        radio12 = (RadioButton) findViewById(R.id.radio12);
-        radio13 = (RadioButton) findViewById(R.id.radio13);
-        radio14 = (RadioButton) findViewById(R.id.radio14);
-        radio15 = (RadioButton) findViewById(R.id.radio15);
-        radio16 = (RadioButton) findViewById(R.id.radio16);
-        radio17 = (RadioButton) findViewById(R.id.radio17);
-        radio18 = (RadioButton) findViewById(R.id.radio18);
+        radio8 = findViewById(R.id.radio8);
+        radio9 = findViewById(R.id.radio9);
+        radio10 = findViewById(R.id.radio10);
+        radio11 = findViewById(R.id.radio11);
+        radio12 = findViewById(R.id.radio12);
+        radio13 = findViewById(R.id.radio13);
+        radio14 = findViewById(R.id.radio14);
+        radio15 = findViewById(R.id.radio15);
+        radio16 = findViewById(R.id.radio16);
+        radio17 = findViewById(R.id.radio17);
+        radio18 = findViewById(R.id.radio18);
 
         dash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -586,13 +586,13 @@ public class MembershipActivity extends AppCompatActivity {
     }
 
     private void init() {
-        accessCode = (EditText) mview.findViewById(R.id.accessCode);
-        merchantId = (EditText) mview.findViewById(R.id.merchantId);
-        orderId = (EditText) mview.findViewById(R.id.orderId);
-        currency = (EditText) mview.findViewById(R.id.currency);
-        rsaKeyUrl = (EditText) mview.findViewById(R.id.rsaUrl);
-        redirectUrl = (EditText) mview.findViewById(R.id.redirectUrl);
-        cancelUrl = (EditText) mview.findViewById(R.id.cancelUrl);
+        accessCode = mview.findViewById(R.id.accessCode);
+        merchantId = mview.findViewById(R.id.merchantId);
+        orderId = mview.findViewById(R.id.orderId);
+        currency = mview.findViewById(R.id.currency);
+        rsaKeyUrl = mview.findViewById(R.id.rsaUrl);
+        redirectUrl = mview.findViewById(R.id.redirectUrl);
+        cancelUrl = mview.findViewById(R.id.cancelUrl);
     }
 
 

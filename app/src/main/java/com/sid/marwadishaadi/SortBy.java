@@ -28,16 +28,16 @@ public class SortBy extends AppCompatActivity {
         preferences = getSharedPreferences("sort_by", MODE_PRIVATE);
         editor = preferences.edit();
 
-        radioGroupSortBy = (RadioGroup) findViewById(R.id.radioGroupSort);
+        radioGroupSortBy = findViewById(R.id.radioGroupSort);
 
-        CheckBox checkBoxOnlyWithPhotos = (CheckBox) findViewById(R.id.checkBoxOnlyWithPhotos);
-        Button buttonUpdate = (Button) findViewById(R.id.sortby_update);
-        Button sortByCancel = (Button) findViewById(R.id.sortby_cancel);
+        CheckBox checkBoxOnlyWithPhotos = findViewById(R.id.checkBoxOnlyWithPhotos);
+        Button buttonUpdate = findViewById(R.id.sortby_update);
+        Button sortByCancel = findViewById(R.id.sortby_cancel);
 
 
         int selectedId = radioGroupSortBy.getCheckedRadioButtonId();
         // find the radiobutton by returned id
-        radioButton = (RadioButton) findViewById(selectedId);
+        radioButton = findViewById(selectedId);
 
         if (preferences.getString("sortBy", "").contains("Recently")) {
             sortBy = "Recently";
@@ -76,7 +76,7 @@ public class SortBy extends AppCompatActivity {
         radioGroupSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                radioButton = (RadioButton) findViewById(checkedId);
+                radioButton = findViewById(checkedId);
                 if (radioButton.getText().toString().contains("Last")) {
                     sortBy = "Last";
                 } else {

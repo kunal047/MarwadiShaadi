@@ -268,14 +268,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.My
         public MyViewHolder(View view) {
 
             super(view);
-            favCustomerId = (TextView) view.findViewById(R.id.favCustomerId);
-            fav_name_age = (TextView) view.findViewById(R.id.fav_name_age);
-            fav_city = (TextView) view.findViewById(R.id.fav_city);
-            fav_education = (TextView) view.findViewById(R.id.fav_education);
-            fav_profile_image = (ImageView) view.findViewById(R.id.fav_profile_image);
-            remove = (Button) view.findViewById(R.id.remove);
-            sendInterest = (Button) view.findViewById(R.id.send_interest);
-            showTextOnPicture = (TextView) view.findViewById(R.id.showTextOnPicture);
+            favCustomerId = view.findViewById(R.id.favCustomerId);
+            fav_name_age = view.findViewById(R.id.fav_name_age);
+            fav_city = view.findViewById(R.id.fav_city);
+            fav_education = view.findViewById(R.id.fav_education);
+            fav_profile_image = view.findViewById(R.id.fav_profile_image);
+            remove = view.findViewById(R.id.remove);
+            sendInterest = view.findViewById(R.id.send_interest);
+            showTextOnPicture = view.findViewById(R.id.showTextOnPicture);
 
 
         }

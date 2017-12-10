@@ -6,6 +6,6 @@ package com.sid.marwadishaadi.FB_Gallery_Photo_Upload;
 
 public interface OnPicSelectedListener {
 
-    public void updateToolbar(int count);
+    void updateToolbar(int count);
 
 }

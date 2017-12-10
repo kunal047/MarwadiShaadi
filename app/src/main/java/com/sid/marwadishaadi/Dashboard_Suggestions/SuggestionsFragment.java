@@ -93,7 +93,7 @@ public class SuggestionsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View mview = inflater.inflate(R.layout.fragment_suggestions, container, false);
-        empty_view_suggestions = (LinearLayout) mview.findViewById(R.id.empty_view_suggestions);
+        empty_view_suggestions = mview.findViewById(R.id.empty_view_suggestions);
 
         empty_view_suggestions.setVisibility(View.GONE);
 
@@ -137,8 +137,8 @@ public class SuggestionsFragment extends Fragment {
 
         handler = new Handler();
 
-        editprefs = (TextView) mview.findViewById(R.id.preference);
-        filters = (TextView) mview.findViewById(R.id.sortby);
+        editprefs = mview.findViewById(R.id.preference);
+        filters = mview.findViewById(R.id.sortby);
 
         editprefs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,9 +163,9 @@ public class SuggestionsFragment extends Fragment {
         });
 
 
-        recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
+        recyclerView = mview.findViewById(R.id.swipe_recyclerview);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 

@@ -125,24 +125,24 @@ public class ProfileFamilyDetailsFragment extends Fragment {
             }
         }
 
-        edit_family = (TextView) mview.findViewById(R.id.family_clear);
-        edit_relatives = (TextView) mview.findViewById(R.id.relatives_clear);
-        similar = (Button) mview.findViewById(R.id.similar);
+        edit_family = mview.findViewById(R.id.family_clear);
+        edit_relatives = mview.findViewById(R.id.relatives_clear);
+        similar = mview.findViewById(R.id.similar);
 
-        fatherName = (TextView) mview.findViewById(R.id.father_name);
-        fatherOccupation = (TextView) mview.findViewById(R.id.father_occupation);
-        fatherOccupationDetails = (TextView) mview.findViewById(R.id.father_occupation_details);
-        familyStatus = (TextView) mview.findViewById(R.id.family_status);
-        familyType = (TextView) mview.findViewById(R.id.family_type);
-        nativePlace = (TextView) mview.findViewById(R.id.native_place);
-        subcaste = (TextView) mview.findViewById(R.id.subcaste);
-        grandpaName = (TextView) mview.findViewById(R.id.grandpa_name);
-        mamaSurname = (TextView) mview.findViewById(R.id.mama_surname);
-        relation = (TextView) mview.findViewById(R.id.relation);
-        relativeName = (TextView) mview.findViewById(R.id.relative_name);
-        relativeOccupation = (TextView) mview.findViewById(R.id.relative_occupation);
-        relativeLocation = (TextView) mview.findViewById(R.id.relative_location);
-        relativeMobile = (TextView) mview.findViewById(R.id.relative_mobile);
+        fatherName = mview.findViewById(R.id.father_name);
+        fatherOccupation = mview.findViewById(R.id.father_occupation);
+        fatherOccupationDetails = mview.findViewById(R.id.father_occupation_details);
+        familyStatus = mview.findViewById(R.id.family_status);
+        familyType = mview.findViewById(R.id.family_type);
+        nativePlace = mview.findViewById(R.id.native_place);
+        subcaste = mview.findViewById(R.id.subcaste);
+        grandpaName = mview.findViewById(R.id.grandpa_name);
+        mamaSurname = mview.findViewById(R.id.mama_surname);
+        relation = mview.findViewById(R.id.relation);
+        relativeName = mview.findViewById(R.id.relative_name);
+        relativeOccupation = mview.findViewById(R.id.relative_occupation);
+        relativeLocation = mview.findViewById(R.id.relative_location);
+        relativeMobile = mview.findViewById(R.id.relative_mobile);
 
 
         fatherName.addTextChangedListener(new TextWatcher() {
@@ -577,7 +577,7 @@ public class ProfileFamilyDetailsFragment extends Fragment {
     }
 
     public int getCasebreak() {
-        return this.casebreak;
+        return casebreak;
     }
 
     public void loadedFromNetwork(JSONArray response) {

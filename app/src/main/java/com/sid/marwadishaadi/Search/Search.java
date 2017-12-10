@@ -139,7 +139,7 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         suggestionModelList2 = new ArrayList<>();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
+        Toolbar toolbar = findViewById(R.id.search_toolbar);
         toolbar.setTitle("Search");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
@@ -161,48 +161,48 @@ public class Search extends AppCompatActivity {
 
         }
 
-        spinnerCastSearch = (EditText) findViewById(R.id.search_user_caste);
+        spinnerCastSearch = findViewById(R.id.search_user_caste);
         String community_text = CastList.toString().replace("[", "").replace("]", "");
         spinnerCastSearch.setText(community_text);
         init();
-        height_from = (Spinner) findViewById(R.id.height_from);
-        height_to = (Spinner) findViewById(R.id.height_to);
-        sort_by = (Spinner) findViewById(R.id.spinner_sort_by);
-        manglik = (Spinner) findViewById(R.id.search_manglik_status);
-        children = (Spinner) findViewById(R.id.search_children);
+        height_from = findViewById(R.id.height_from);
+        height_to = findViewById(R.id.height_to);
+        sort_by = findViewById(R.id.spinner_sort_by);
+        manglik = findViewById(R.id.search_manglik_status);
+        children = findViewById(R.id.search_children);
 
-        idoctor = (ImageView) findViewById(R.id.doctor);
-        iengineer = (ImageView) findViewById(R.id.engineer);
-        icacs = (ImageView) findViewById(R.id.ca_cs);
-        ipg = (ImageView) findViewById(R.id.pg);
-        ig = (ImageView) findViewById(R.id.g);
-        iug = (ImageView) findViewById(R.id.ug);
-        imbamca = (ImageView) findViewById(R.id.mba_mca);
-        illb = (ImageView) findViewById(R.id.llb);
+        idoctor = findViewById(R.id.doctor);
+        iengineer = findViewById(R.id.engineer);
+        icacs = findViewById(R.id.ca_cs);
+        ipg = findViewById(R.id.pg);
+        ig = findViewById(R.id.g);
+        iug = findViewById(R.id.ug);
+        imbamca = findViewById(R.id.mba_mca);
+        illb = findViewById(R.id.llb);
 
-        tdoctor = (TextView) findViewById(R.id.text_doctor);
-        tengineer = (TextView) findViewById(R.id.text_engineer);
-        tmbamca = (TextView) findViewById(R.id.text_mba_mca);
-        tcacs = (TextView) findViewById(R.id.text_ca_cs);
-        tllb = (TextView) findViewById(R.id.text_llb);
-        tpg = (TextView) findViewById(R.id.text_pg);
-        tg = (TextView) findViewById(R.id.text_g);
-        tug = (TextView) findViewById(R.id.text_ug);
+        tdoctor = findViewById(R.id.text_doctor);
+        tengineer = findViewById(R.id.text_engineer);
+        tmbamca = findViewById(R.id.text_mba_mca);
+        tcacs = findViewById(R.id.text_ca_cs);
+        tllb = findViewById(R.id.text_llb);
+        tpg = findViewById(R.id.text_pg);
+        tg = findViewById(R.id.text_g);
+        tug = findViewById(R.id.text_ug);
 
-        ldoctor = (LinearLayout) findViewById(R.id.list_doctor);
-        lengineer = (LinearLayout) findViewById(R.id.list_engineer);
-        lmbamca = (LinearLayout) findViewById(R.id.list_mab_mca);
-        lcacs = (LinearLayout) findViewById(R.id.list_ca_cs);
-        lllb = (LinearLayout) findViewById(R.id.list_llb);
-        lpg = (LinearLayout) findViewById(R.id.list_pg);
-        lg = (LinearLayout) findViewById(R.id.list_g);
-        lug = (LinearLayout) findViewById(R.id.list_ug);
+        ldoctor = findViewById(R.id.list_doctor);
+        lengineer = findViewById(R.id.list_engineer);
+        lmbamca = findViewById(R.id.list_mab_mca);
+        lcacs = findViewById(R.id.list_ca_cs);
+        lllb = findViewById(R.id.list_llb);
+        lpg = findViewById(R.id.list_pg);
+        lg = findViewById(R.id.list_g);
+        lug = findViewById(R.id.list_ug);
         occupation.add("Does not matter");
         bodyType.add("Does not matter");
         complexion.add("Does not matter");
         education.add("Does not matter");
 
-        maritalstatus = (EditText) findViewById(R.id.search_Marital_status);
+        maritalstatus = findViewById(R.id.search_Marital_status);
         maritalstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,7 +221,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        familystatus = (EditText) findViewById(R.id.search_Family_status);
+        familystatus = findViewById(R.id.search_Family_status);
         familystatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,7 +239,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        annualincome = (EditText) findViewById(R.id.search_Annual_income);
+        annualincome = findViewById(R.id.search_Annual_income);
         annualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,7 +258,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        physicalstatus = (EditText) findViewById(R.id.search_physical_status);
+        physicalstatus = findViewById(R.id.search_physical_status);
         physicalstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,17 +278,17 @@ public class Search extends AppCompatActivity {
         });
 
 
-        addButton = (Button) findViewById(R.id.search_add_state);
-        stateRemoveButton = (Button) findViewById(R.id.search_remove_state);
+        addButton = findViewById(R.id.search_add_state);
+        stateRemoveButton = findViewById(R.id.search_remove_state);
 
-        searchaddbutton = (Button) findViewById(R.id.search_add_city);
-        searchRemoveButtonForCity = (Button) findViewById(R.id.search_remove_city);
+        searchaddbutton = findViewById(R.id.search_add_city);
+        searchRemoveButtonForCity = findViewById(R.id.search_remove_city);
 
 
-        statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
-        citytextview = (TextView) findViewById(R.id.text_view_search_add_city);
-        autoCompleteState = (AutoCompleteTextView) findViewById(R.id.search_state);
-        autocompletecity = (AutoCompleteTextView) findViewById(R.id.search_city);
+        statetextView = findViewById(R.id.text_view_search_add_state);
+        citytextview = findViewById(R.id.text_view_search_add_city);
+        autoCompleteState = findViewById(R.id.search_state);
+        autocompletecity = findViewById(R.id.search_city);
 
         for (Place place : App.placeslist) {
             if (!stateAutoCompleteList.contains(place.getState())) {
@@ -307,11 +307,11 @@ public class Search extends AppCompatActivity {
         cityAdapter = new CityAdapter(getApplicationContext(), R.layout.activity_search, R.id.search_state, stateAutoCompleteList);
         autoCompleteState.setAdapter(cityAdapter);
 
-        advCV = (CardView) findViewById(R.id.advanced_search);
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
+        advCV = findViewById(R.id.advanced_search);
+        final CrystalRangeSeekbar rangeSeekbar = findViewById(R.id.rangeSeekbar);
         // get min and max text view
-        tvMin = (TextView) findViewById(R.id.textMin);
-        tvMax = (TextView) findViewById(R.id.textMax);
+        tvMin = findViewById(R.id.textMin);
+        tvMax = findViewById(R.id.textMax);
         rangeSeekbar.setMinValue(18);
         rangeSeekbar.setMaxValue(71);
 
@@ -769,7 +769,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        mOpenIDSearchButton = (Button) findViewById(R.id.search_by_id_name_open);
+        mOpenIDSearchButton = findViewById(R.id.search_by_id_name_open);
         mOpenIDSearchButton.setFocusable(true);
         spinnerCastSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -788,7 +788,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        mOpenIDSearchButton = (Button) findViewById(R.id.search_by_id_name_open);
+        mOpenIDSearchButton = findViewById(R.id.search_by_id_name_open);
         mOpenIDSearchButton.setFocusable(true);
         mOpenIDSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -802,7 +802,7 @@ public class Search extends AppCompatActivity {
         });
 
 
-        FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search_Submit);
+        FloatingActionButton search = findViewById(R.id.search_Submit);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1136,26 +1136,26 @@ public class Search extends AppCompatActivity {
         });
 
 
-        very_fair = (CheckBox) findViewById(R.id.search_check_very_fair);
-        fair = (CheckBox) findViewById(R.id.search_check_fair);
-        wheatish = (CheckBox) findViewById(R.id.search_check_wheatish);
-        wheatish_brown = (CheckBox) findViewById(R.id.search_check_wheatish_brown);
-        dark = (CheckBox) findViewById(R.id.search_check_dark);
-        doesnt_matter = (CheckBox) findViewById(R.id.complexion_doesnt_matter);
+        very_fair = findViewById(R.id.search_check_very_fair);
+        fair = findViewById(R.id.search_check_fair);
+        wheatish = findViewById(R.id.search_check_wheatish);
+        wheatish_brown = findViewById(R.id.search_check_wheatish_brown);
+        dark = findViewById(R.id.search_check_dark);
+        doesnt_matter = findViewById(R.id.complexion_doesnt_matter);
 
-        profession = (CheckBox) findViewById(R.id.check_profession);
-        job = (CheckBox) findViewById(R.id.check_job);
-        retired = (CheckBox) findViewById(R.id.check_retired);
-        business = (CheckBox) findViewById(R.id.check_business);
-        studying = (CheckBox) findViewById(R.id.check_studying_not_employed);
-        not_employed = (CheckBox) findViewById(R.id.check_not_employed);
-        dont_matter = (CheckBox) findViewById(R.id.occupation_doesnt_matter);
+        profession = findViewById(R.id.check_profession);
+        job = findViewById(R.id.check_job);
+        retired = findViewById(R.id.check_retired);
+        business = findViewById(R.id.check_business);
+        studying = findViewById(R.id.check_studying_not_employed);
+        not_employed = findViewById(R.id.check_not_employed);
+        dont_matter = findViewById(R.id.occupation_doesnt_matter);
 
-        slim = (CheckBox) findViewById(R.id.search_check_slim);
-        athletic = (CheckBox) findViewById(R.id.search_check_athletic);
-        heavy = (CheckBox) findViewById(R.id.search_check_heavy);
-        average = (CheckBox) findViewById(R.id.search_check_average);
-        doesntMatter = (CheckBox) findViewById(R.id.bodytype_doesnt_matter);
+        slim = findViewById(R.id.search_check_slim);
+        athletic = findViewById(R.id.search_check_athletic);
+        heavy = findViewById(R.id.search_check_heavy);
+        average = findViewById(R.id.search_check_average);
+        doesntMatter = findViewById(R.id.bodytype_doesnt_matter);
 
 
         //setting old search values

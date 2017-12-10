@@ -172,15 +172,15 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         // Getting current bandwidth
         int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
 
-        imageView = (ImageView) findViewById(R.id.imageView);
-        imageViewInformation = (ImageView) findViewById(R.id.imageViewInformation);
+        imageView = findViewById(R.id.imageView);
+        imageViewInformation = findViewById(R.id.imageViewInformation);
 
-        showTextOnPhoto = (TextView) findViewById(R.id.showTextOnPhoto);
+        showTextOnPhoto = findViewById(R.id.showTextOnPhoto);
 
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle("");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,17 +235,17 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
             Toast.makeText(UserProfileActivity.this, userid_from_deeplink, Toast.LENGTH_SHORT).show();
         }
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.entire_ui);
+        coordinatorLayout = findViewById(R.id.entire_ui);
 
 
-        fab = (FloatingActionMenu) findViewById(R.id.menu_yellow);
-        fav = (FloatingActionButton) findViewById(R.id.fab_favourite);
-        sendmsg = (FloatingActionButton) findViewById(R.id.fab_send_message);
-        sendinterest = (FloatingActionButton) findViewById(R.id.fab_send_interest);
-        shareprofile = (FloatingActionButton) findViewById(R.id.fab_share_profile);
-        sharesave = (FloatingActionButton) findViewById(R.id.fab_save);
+        fab = findViewById(R.id.menu_yellow);
+        fav = findViewById(R.id.fab_favourite);
+        sendmsg = findViewById(R.id.fab_send_message);
+        sendinterest = findViewById(R.id.fab_send_interest);
+        shareprofile = findViewById(R.id.fab_share_profile);
+        sharesave = findViewById(R.id.fab_save);
 
-        editphotos = (FloatingActionButton) findViewById(R.id.fab_edit_photos);
+        editphotos = findViewById(R.id.fab_edit_photos);
 
 
         String from = data.getStringExtra("from");
@@ -615,12 +615,12 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
         }
 
         profilePageAdapter = new ProfilePageAdapter(getSupportFragmentManager());
-        userinfo = (ViewPager) findViewById(R.id.profile_container);
+        userinfo = findViewById(R.id.profile_container);
         userinfo.setAdapter(profilePageAdapter);
         userinfo.setOffscreenPageLimit(4);
         userinfo.setOnPageChangeListener(this);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.profile_tabs);
+        TabLayout tabLayout = findViewById(R.id.profile_tabs);
         tabLayout.setupWithViewPager(userinfo);
 
     }
@@ -969,24 +969,24 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 @Override
                                 protected void initView(View view) {
 
-                                    pdfImage = (ImageView) view.findViewById(R.id.pdfImage);
-                                    pdfImageName = (TextView) view.findViewById(R.id.pdfImageName);
-                                    pdfImageId = (TextView) view.findViewById(R.id.pdfImageId);
-                                    pdfName = (TextView) view.findViewById(R.id.pdfName);
-                                    pdfAge = (TextView) view.findViewById(R.id.pdfAge);
-                                    pdfMaritalStatus = (TextView) view.findViewById(R.id.pdfMaritalStatus);
-                                    pdfDob = (TextView) view.findViewById(R.id.pdfDob);
-                                    pdfGender = (TextView) view.findViewById(R.id.pdfGender);
-                                    pdfLocation = (TextView) view.findViewById(R.id.pdfLocation);
-                                    pdfContact = (TextView) view.findViewById(R.id.pdfContact);
-                                    pdfCommunity = (TextView) view.findViewById(R.id.pdfCommunity);
-                                    pdfSubcaste = (TextView) view.findViewById(R.id.pdfSubcaste);
-                                    pdfAbout = (TextView) view.findViewById(R.id.pdfAbout);
-                                    pdfHobby = (TextView) view.findViewById(R.id.pdfHobby);
-                                    pdfDiet = (TextView) view.findViewById(R.id.pdfDiet);
-                                    pdfDrink = (TextView) view.findViewById(R.id.pdfDrink);
-                                    pdfSmoke = (TextView) view.findViewById(R.id.pdfSmoke);
-                                    pdfDate = (TextView) view.findViewById(R.id.date);
+                                    pdfImage = view.findViewById(R.id.pdfImage);
+                                    pdfImageName = view.findViewById(R.id.pdfImageName);
+                                    pdfImageId = view.findViewById(R.id.pdfImageId);
+                                    pdfName = view.findViewById(R.id.pdfName);
+                                    pdfAge = view.findViewById(R.id.pdfAge);
+                                    pdfMaritalStatus = view.findViewById(R.id.pdfMaritalStatus);
+                                    pdfDob = view.findViewById(R.id.pdfDob);
+                                    pdfGender = view.findViewById(R.id.pdfGender);
+                                    pdfLocation = view.findViewById(R.id.pdfLocation);
+                                    pdfContact = view.findViewById(R.id.pdfContact);
+                                    pdfCommunity = view.findViewById(R.id.pdfCommunity);
+                                    pdfSubcaste = view.findViewById(R.id.pdfSubcaste);
+                                    pdfAbout = view.findViewById(R.id.pdfAbout);
+                                    pdfHobby = view.findViewById(R.id.pdfHobby);
+                                    pdfDiet = view.findViewById(R.id.pdfDiet);
+                                    pdfDrink = view.findViewById(R.id.pdfDrink);
+                                    pdfSmoke = view.findViewById(R.id.pdfSmoke);
+                                    pdfDate = view.findViewById(R.id.date);
 
 
                                     try {
@@ -1053,32 +1053,32 @@ public class UserProfileActivity extends AppCompatActivity implements ViewPager.
                                 @Override
                                 protected void initView(View view) {
 
-                                    pdfHeight = (TextView) view.findViewById(R.id.pdfHeight);
-                                    pdfWeight = (TextView) view.findViewById(R.id.pdfWeight);
-                                    pdfComplexion = (TextView) view.findViewById(R.id.pdfComplexion);
-                                    pdfBodyType = (TextView) view.findViewById(R.id.pdfBodyType);
-                                    pdfPhysicalStatus = (TextView) view.findViewById(R.id.pdfPhysicalStatus);
-                                    pdfEduLevel = (TextView) view.findViewById(R.id.pdfEduLevel);
-                                    pdfHighestDegree = (TextView) view.findViewById(R.id.pdfHighestDegree);
-                                    pdfInstituteName = (TextView) view.findViewById(R.id.pdfInstituteName);
-                                    pdfOccupation = (TextView) view.findViewById(R.id.pdfOccupation);
-                                    pdfDesignation = (TextView) view.findViewById(R.id.pdfDesignation);
-                                    pdfCompany = (TextView) view.findViewById(R.id.pdfCompany);
-                                    pdfIncome = (TextView) view.findViewById(R.id.pdfIncome);
-                                    pdfBirthTime = (TextView) view.findViewById(R.id.pdfBirthTime);
-                                    pdfBirthPlace = (TextView) view.findViewById(R.id.pdfBirthplace);
-                                    pdfGotra = (TextView) view.findViewById(R.id.pdfGotra);
-                                    pdfManglik = (TextView) view.findViewById(R.id.pdfManglik);
-                                    pdfMatchHoroscope = (TextView) view.findViewById(R.id.pdfMatchHoroscope);
-                                    pdfFatherName = (TextView) view.findViewById(R.id.pdfFatherName);
-                                    pdfFatherOccupation = (TextView) view.findViewById(R.id.pdfFatherOccupation);
-                                    pdfFatherOccupationDetail = (TextView) view.findViewById(R.id.pdfFatherOccupationDetail);
-                                    pdfFamilyStatus = (TextView) view.findViewById(R.id.pdfFamilyStatus);
-                                    pdfFamilyType = (TextView) view.findViewById(R.id.pdfFamilyType);
-                                    pdfFamilyValues = (TextView) view.findViewById(R.id.pdfFamilyValues);
-                                    pdfNativePlaces = (TextView) view.findViewById(R.id.pdfNativePlace);
-                                    pdfGrandfatherName = (TextView) view.findViewById(R.id.pdfGrandfatherName);
-                                    pdfMama = (TextView) view.findViewById(R.id.pdfMama);
+                                    pdfHeight = view.findViewById(R.id.pdfHeight);
+                                    pdfWeight = view.findViewById(R.id.pdfWeight);
+                                    pdfComplexion = view.findViewById(R.id.pdfComplexion);
+                                    pdfBodyType = view.findViewById(R.id.pdfBodyType);
+                                    pdfPhysicalStatus = view.findViewById(R.id.pdfPhysicalStatus);
+                                    pdfEduLevel = view.findViewById(R.id.pdfEduLevel);
+                                    pdfHighestDegree = view.findViewById(R.id.pdfHighestDegree);
+                                    pdfInstituteName = view.findViewById(R.id.pdfInstituteName);
+                                    pdfOccupation = view.findViewById(R.id.pdfOccupation);
+                                    pdfDesignation = view.findViewById(R.id.pdfDesignation);
+                                    pdfCompany = view.findViewById(R.id.pdfCompany);
+                                    pdfIncome = view.findViewById(R.id.pdfIncome);
+                                    pdfBirthTime = view.findViewById(R.id.pdfBirthTime);
+                                    pdfBirthPlace = view.findViewById(R.id.pdfBirthplace);
+                                    pdfGotra = view.findViewById(R.id.pdfGotra);
+                                    pdfManglik = view.findViewById(R.id.pdfManglik);
+                                    pdfMatchHoroscope = view.findViewById(R.id.pdfMatchHoroscope);
+                                    pdfFatherName = view.findViewById(R.id.pdfFatherName);
+                                    pdfFatherOccupation = view.findViewById(R.id.pdfFatherOccupation);
+                                    pdfFatherOccupationDetail = view.findViewById(R.id.pdfFatherOccupationDetail);
+                                    pdfFamilyStatus = view.findViewById(R.id.pdfFamilyStatus);
+                                    pdfFamilyType = view.findViewById(R.id.pdfFamilyType);
+                                    pdfFamilyValues = view.findViewById(R.id.pdfFamilyValues);
+                                    pdfNativePlaces = view.findViewById(R.id.pdfNativePlace);
+                                    pdfGrandfatherName = view.findViewById(R.id.pdfGrandfatherName);
+                                    pdfMama = view.findViewById(R.id.pdfMama);
 
 
                                     try {

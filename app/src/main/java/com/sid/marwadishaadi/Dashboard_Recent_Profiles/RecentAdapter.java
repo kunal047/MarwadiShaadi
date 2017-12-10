@@ -386,7 +386,7 @@ public class RecentAdapter extends RecyclerView.Adapter {
 
         public ProgressViewHolder(View v) {
             super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
+            progressBar = v.findViewById(R.id.progressBar1);
         }
     }
 
@@ -400,18 +400,18 @@ public class RecentAdapter extends RecyclerView.Adapter {
         public RecentViewHolder(final View itemView) {
 
             super(itemView);
-            recentCustomerId = (TextView) itemView.findViewById(R.id.recentCustomerId);
-            recentUserImage = (ImageView) itemView.findViewById(R.id.recentUserImage);
-            recentName = (TextView) itemView.findViewById(R.id.recentTextViewName);
-            recentAge = (TextView) itemView.findViewById(R.id.recentTextViewAge);
-            recentHighestDegree = (TextView) itemView.findViewById(R.id.recentTextViewEducation);
-            recentLocation = (TextView) itemView.findViewById(R.id.recentTextViewCity);
-            recentOnline = (TextView) itemView.findViewById(R.id.recentTextViewLastOnline);
-            showTextOnPicture = (TextView) itemView.findViewById(R.id.showTextOnPictureOfRecent);
+            recentCustomerId = itemView.findViewById(R.id.recentCustomerId);
+            recentUserImage = itemView.findViewById(R.id.recentUserImage);
+            recentName = itemView.findViewById(R.id.recentTextViewName);
+            recentAge = itemView.findViewById(R.id.recentTextViewAge);
+            recentHighestDegree = itemView.findViewById(R.id.recentTextViewEducation);
+            recentLocation = itemView.findViewById(R.id.recentTextViewCity);
+            recentOnline = itemView.findViewById(R.id.recentTextViewLastOnline);
+            showTextOnPicture = itemView.findViewById(R.id.showTextOnPictureOfRecent);
 
 
-            sparkButtonFavourite = (SparkButton) itemView.findViewById(R.id.recentFav);
-            sparkButtonInterest = (SparkButton) itemView.findViewById(R.id.recentInterest);
+            sparkButtonFavourite = itemView.findViewById(R.id.recentFav);
+            sparkButtonInterest = itemView.findViewById(R.id.recentInterest);
 
 
         }

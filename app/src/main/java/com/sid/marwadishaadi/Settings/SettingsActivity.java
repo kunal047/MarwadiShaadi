@@ -92,18 +92,18 @@ public class SettingsActivity extends AppCompatActivity {
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
         toolbar.setTitle("Settings");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        faq = (TextView) findViewById(R.id.faq);
-        aboutus = (TextView) findViewById(R.id.aboutus);
-        privacypolicy = (TextView) findViewById(R.id.privacypolicy);
-        paymentpolicy = (TextView) findViewById(R.id.paymentpolicy);
-        contactus = (TextView) findViewById(R.id.contactus);
-        notificationOnOff = (SwitchCompat) findViewById(R.id.switchNotifications);
+        faq = findViewById(R.id.faq);
+        aboutus = findViewById(R.id.aboutus);
+        privacypolicy = findViewById(R.id.privacypolicy);
+        paymentpolicy = findViewById(R.id.paymentpolicy);
+        contactus = findViewById(R.id.contactus);
+        notificationOnOff = findViewById(R.id.switchNotifications);
 
         notificationOnOff.setChecked(true);
 
@@ -186,13 +186,13 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
 
-        reset_pass = (TextView) findViewById(R.id.reset_password);
-        deactivate_acc = (TextView) findViewById(R.id.deactivate_acc);
-        delete_acc = (TextView) findViewById(R.id.delete_acc);
-        blocked = (TextView) findViewById(R.id.blocked);
-        logout = (TextView) findViewById(R.id.Logout);
-        more = (TextView) findViewById(R.id.more);
-        morelinearlayout = (LinearLayout) findViewById(R.id.morelayout);
+        reset_pass = findViewById(R.id.reset_password);
+        deactivate_acc = findViewById(R.id.deactivate_acc);
+        delete_acc = findViewById(R.id.delete_acc);
+        blocked = findViewById(R.id.blocked);
+        logout = findViewById(R.id.Logout);
+        more = findViewById(R.id.more);
+        morelinearlayout = findViewById(R.id.morelayout);
 
 
         more.setOnClickListener(new View.OnClickListener() {
@@ -274,11 +274,11 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder reset = new AlertDialog.Builder(SettingsActivity.this);
                 reset.setView(reset_view);
 
-                final EditText oldpass = (EditText) reset_view.findViewById(R.id.user_old_pass);
-                final EditText newpass = (EditText) reset_view.findViewById(R.id.user_new_password);
-                Button resetbutton = (Button) reset_view.findViewById(R.id.user_reset);
-                final TextView call_us = (TextView) reset_view.findViewById(R.id.reset_call_number);
-                final LinearLayout reset_contact = (LinearLayout) reset_view.findViewById(R.id.reset_call_us);
+                final EditText oldpass = reset_view.findViewById(R.id.user_old_pass);
+                final EditText newpass = reset_view.findViewById(R.id.user_new_password);
+                Button resetbutton = reset_view.findViewById(R.id.user_reset);
+                final TextView call_us = reset_view.findViewById(R.id.reset_call_number);
+                final LinearLayout reset_contact = reset_view.findViewById(R.id.reset_call_us);
 
                 resetbutton.setOnClickListener(new View.OnClickListener() {
                     @Override

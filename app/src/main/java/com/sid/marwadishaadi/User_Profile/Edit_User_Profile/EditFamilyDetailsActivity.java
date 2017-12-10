@@ -51,19 +51,19 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        fatherName = (EditText) findViewById(R.id.edit_father_name);
-        mamaSurname = (EditText) findViewById(R.id.edit_mama_surname);
-        grandfatherName = (EditText) findViewById(R.id.edit_grandfather_name);
-        nativePlace = (EditText) findViewById(R.id.edit_native_place);
-        subcaste = (EditText) findViewById(R.id.edit_subcaste);
-        fatherOccupationDetails = (EditText) findViewById(R.id.edit_father_occupation_details);
+        fatherName = findViewById(R.id.edit_father_name);
+        mamaSurname = findViewById(R.id.edit_mama_surname);
+        grandfatherName = findViewById(R.id.edit_grandfather_name);
+        nativePlace = findViewById(R.id.edit_native_place);
+        subcaste = findViewById(R.id.edit_subcaste);
+        fatherOccupationDetails = findViewById(R.id.edit_father_occupation_details);
 
-        fatherOccupation = (Spinner) findViewById(R.id.edit_father_occupation);
-        familyStatus = (Spinner) findViewById(R.id.edit_family_status);
-        familyType = (Spinner) findViewById(R.id.edit_family_type);
-        familyValues = (Spinner) findViewById(R.id.edit_family_values);
+        fatherOccupation = findViewById(R.id.edit_father_occupation);
+        familyStatus = findViewById(R.id.edit_family_status);
+        familyType = findViewById(R.id.edit_family_type);
+        familyValues = findViewById(R.id.edit_family_values);
 
-        updateFamily = (Button) findViewById(R.id.update_family);
+        updateFamily = findViewById(R.id.update_family);
 
         new FetchFamilyDetailsFamily().execute();
 
@@ -92,7 +92,7 @@ public class EditFamilyDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_fdetails_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_fdetails_toolbar);
         toolbar.setTitle("Edit Family Details");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

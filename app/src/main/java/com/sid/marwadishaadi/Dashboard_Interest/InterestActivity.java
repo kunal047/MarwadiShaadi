@@ -42,7 +42,7 @@ public class InterestActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.interest_toolbar);
+        Toolbar toolbar = findViewById(R.id.interest_toolbar);
         toolbar.setTitle("Interest");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
@@ -54,11 +54,11 @@ public class InterestActivity extends AppCompatActivity implements
         interestStatus.add("Awaiting");
 
         interestSectionPagerAdaper = new InterestSectionPagerAdaper(getSupportFragmentManager());
-        mviewpager = (ViewPager) findViewById(R.id.interest_container);
+        mviewpager = findViewById(R.id.interest_container);
         mviewpager.setAdapter(interestSectionPagerAdaper);
         mviewpager.setOnPageChangeListener(this);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.interest_tabs);
+        TabLayout tabLayout = findViewById(R.id.interest_tabs);
         tabLayout.setupWithViewPager(mviewpager);
 
     }

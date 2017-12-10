@@ -60,21 +60,21 @@ public class PartnerPreferencesFragment extends Fragment {
         customer_id = sharedpref.getString("customer_id", null);
         clickedID = customer_id;
 
-        edit_prefs = (TextView) mview.findViewById(R.id.partner_prefs_clear);
-        similar = (Button) mview.findViewById(R.id.similar);
+        edit_prefs = mview.findViewById(R.id.partner_prefs_clear);
+        similar = mview.findViewById(R.id.similar);
 
-        age = (TextView) mview.findViewById(R.id.age);
-        height = (TextView) mview.findViewById(R.id.height);
+        age = mview.findViewById(R.id.age);
+        height = mview.findViewById(R.id.height);
 
-        complexionLayout = (LinearLayout) mview.findViewById(R.id.complexionLayout);
-        complexion = (TextView) mview.findViewById(R.id.complexion);
-        build = (TextView) mview.findViewById(R.id.build);
-        physicalStatus = (TextView) mview.findViewById(R.id.physical_status);
-        city = (TextView) mview.findViewById(R.id.city);
-        highestDegree = (TextView) mview.findViewById(R.id.highest_degree);
-        occup = (TextView) mview.findViewById(R.id.occup);
-        maritalStatus = (TextView) mview.findViewById(R.id.marital_status);
-        annualIncome = (TextView) mview.findViewById(R.id.annual_income);
+        complexionLayout = mview.findViewById(R.id.complexionLayout);
+        complexion = mview.findViewById(R.id.complexion);
+        build = mview.findViewById(R.id.build);
+        physicalStatus = mview.findViewById(R.id.physical_status);
+        city = mview.findViewById(R.id.city);
+        highestDegree = mview.findViewById(R.id.highest_degree);
+        occup = mview.findViewById(R.id.occup);
+        maritalStatus = mview.findViewById(R.id.marital_status);
+        annualIncome = mview.findViewById(R.id.annual_income);
 
         Intent data = getActivity().getIntent();
         String from = data.getStringExtra("from");

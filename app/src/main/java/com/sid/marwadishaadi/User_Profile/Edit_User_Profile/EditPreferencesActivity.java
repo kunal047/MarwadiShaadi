@@ -103,72 +103,72 @@ public class EditPreferencesActivity extends AppCompatActivity {
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_prefs_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_prefs_toolbar);
         toolbar.setTitle("Edit Partner Preferences");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        age = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
+        age = findViewById(R.id.rangeSeekbar);
         bundle = getIntent().getExtras();
 
-        complete = (Button) findViewById(R.id.complete);
+        complete = findViewById(R.id.complete);
 
-        idoctor = (ImageView) findViewById(R.id.doctor);
-        iengineer = (ImageView) findViewById(R.id.engineer);
-        icacs = (ImageView) findViewById(R.id.ca_cs);
-        ipg = (ImageView) findViewById(R.id.pg);
-        ig = (ImageView) findViewById(R.id.g);
-        iug = (ImageView) findViewById(R.id.ug);
-        imbamca = (ImageView) findViewById(R.id.mba_mca);
-        illb = (ImageView) findViewById(R.id.llb);
+        idoctor = findViewById(R.id.doctor);
+        iengineer = findViewById(R.id.engineer);
+        icacs = findViewById(R.id.ca_cs);
+        ipg = findViewById(R.id.pg);
+        ig = findViewById(R.id.g);
+        iug = findViewById(R.id.ug);
+        imbamca = findViewById(R.id.mba_mca);
+        illb = findViewById(R.id.llb);
 
-        tdoctor = (TextView) findViewById(R.id.text_doctor);
-        tengineer = (TextView) findViewById(R.id.text_engineer);
-        tmbamca = (TextView) findViewById(R.id.text_mba_mca);
-        tcacs = (TextView) findViewById(R.id.text_ca_cs);
-        tllb = (TextView) findViewById(R.id.text_llb);
-        tpg = (TextView) findViewById(R.id.text_pg);
-        tg = (TextView) findViewById(R.id.text_g);
-        tug = (TextView) findViewById(R.id.text_ug);
+        tdoctor = findViewById(R.id.text_doctor);
+        tengineer = findViewById(R.id.text_engineer);
+        tmbamca = findViewById(R.id.text_mba_mca);
+        tcacs = findViewById(R.id.text_ca_cs);
+        tllb = findViewById(R.id.text_llb);
+        tpg = findViewById(R.id.text_pg);
+        tg = findViewById(R.id.text_g);
+        tug = findViewById(R.id.text_ug);
 
-        ldoctor = (LinearLayout) findViewById(R.id.list_doctor);
-        lengineer = (LinearLayout) findViewById(R.id.list_engineer);
-        lmbamca = (LinearLayout) findViewById(R.id.list_mab_mca);
-        lcacs = (LinearLayout) findViewById(R.id.list_ca_cs);
-        lllb = (LinearLayout) findViewById(R.id.list_llb);
-        lpg = (LinearLayout) findViewById(R.id.list_pg);
-        lg = (LinearLayout) findViewById(R.id.list_g);
-        lug = (LinearLayout) findViewById(R.id.list_ug);
+        ldoctor = findViewById(R.id.list_doctor);
+        lengineer = findViewById(R.id.list_engineer);
+        lmbamca = findViewById(R.id.list_mab_mca);
+        lcacs = findViewById(R.id.list_ca_cs);
+        lllb = findViewById(R.id.list_llb);
+        lpg = findViewById(R.id.list_pg);
+        lg = findViewById(R.id.list_g);
+        lug = findViewById(R.id.list_ug);
 
-        workLocation = (AutoCompleteTextView) findViewById(R.id.work_location);
+        workLocation = findViewById(R.id.work_location);
 
-        heightFrom = (Spinner) findViewById(R.id.height_from);
-        heightTo = (Spinner) findViewById(R.id.height_to);
+        heightFrom = findViewById(R.id.height_from);
+        heightTo = findViewById(R.id.height_to);
 
-        veryFair = (CheckBox) findViewById(R.id.very_fair);
-        fair = (CheckBox) findViewById(R.id.fair);
-        wheatish = (CheckBox) findViewById(R.id.wheatish);
-        wheatishBrown = (CheckBox) findViewById(R.id.wheatish_brown);
-        dark = (CheckBox) findViewById(R.id.dark);
-        slim = (CheckBox) findViewById(R.id.slim);
-        athletic = (CheckBox) findViewById(R.id.athletic);
-        heavy = (CheckBox) findViewById(R.id.heavy);
-        average = (CheckBox) findViewById(R.id.average);
-        professional = (CheckBox) findViewById(R.id.professional);
-        job = (CheckBox) findViewById(R.id.job);
-        retired = (CheckBox) findViewById(R.id.retired);
-        business = (CheckBox) findViewById(R.id.business);
-        notEmployed = (CheckBox) findViewById(R.id.not_employed);
-        studying = (CheckBox) findViewById(R.id.studying_not_employed);
-        complexionDontMatter = (CheckBox) findViewById(R.id.complexion_doesntMatter);
-        occupationDontMatter = (CheckBox) findViewById(R.id.occup_doesntMatter);
-        bodyTypeDontMatter = (CheckBox) findViewById(R.id.bodyType_doesntMatter);
+        veryFair = findViewById(R.id.very_fair);
+        fair = findViewById(R.id.fair);
+        wheatish = findViewById(R.id.wheatish);
+        wheatishBrown = findViewById(R.id.wheatish_brown);
+        dark = findViewById(R.id.dark);
+        slim = findViewById(R.id.slim);
+        athletic = findViewById(R.id.athletic);
+        heavy = findViewById(R.id.heavy);
+        average = findViewById(R.id.average);
+        professional = findViewById(R.id.professional);
+        job = findViewById(R.id.job);
+        retired = findViewById(R.id.retired);
+        business = findViewById(R.id.business);
+        notEmployed = findViewById(R.id.not_employed);
+        studying = findViewById(R.id.studying_not_employed);
+        complexionDontMatter = findViewById(R.id.complexion_doesntMatter);
+        occupationDontMatter = findViewById(R.id.occup_doesntMatter);
+        bodyTypeDontMatter = findViewById(R.id.bodyType_doesntMatter);
 
 
-        tvMin = (TextView) findViewById(R.id.textMin);
-        tvMax = (TextView) findViewById(R.id.textMax);
+        tvMin = findViewById(R.id.textMin);
+        tvMax = findViewById(R.id.textMax);
 
         new FetchEditPartnerPreferences().execute();
 
@@ -320,9 +320,9 @@ public class EditPreferencesActivity extends AppCompatActivity {
         tug.setTextColor(colorb);
 
 
-        maritalstatus = (Spinner) findViewById(R.id.edit_marital_status);
+        maritalstatus = findViewById(R.id.edit_marital_status);
 
-        prefannualincome = (EditText) findViewById(R.id.prefedit_annual_income);
+        prefannualincome = findViewById(R.id.prefedit_annual_income);
         prefannualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,7 +349,7 @@ public class EditPreferencesActivity extends AppCompatActivity {
                 strArrayAnnual = s.toString().replace(", ", ",").split(",");
             }
         });
-        physicalstatus = (Spinner) findViewById(R.id.edit_physical_status);
+        physicalstatus = findViewById(R.id.edit_physical_status);
 
 
         ldoctor.setOnClickListener(new View.OnClickListener() {

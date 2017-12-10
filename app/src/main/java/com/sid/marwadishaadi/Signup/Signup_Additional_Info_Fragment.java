@@ -308,7 +308,7 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_additional__info, container, false);
-        editTextBirthTime = (EditText) view.findViewById(R.id.editTextBirthTime);
+        editTextBirthTime = view.findViewById(R.id.editTextBirthTime);
         editTextBirthTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -322,24 +322,24 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        editTextGotra = (EditText) view.findViewById(R.id.editTextGotra);
+        editTextGotra = view.findViewById(R.id.editTextGotra);
 
 
-        EditText editTextAboutMe = (EditText) view.findViewById(R.id.editTextAboutMe);
-        EditText editTextHobbies = (EditText) view.findViewById(R.id.editTextHobbies);
-        EditText editTextGrandfatherName = (EditText) view.findViewById(R.id.editTextGrandfatherName);
-        EditText editTextMamaSurname = (EditText) view.findViewById(R.id.editTextMamaSurname);
-        EditText editTextSubcaste = (EditText) view.findViewById(R.id.editTextSubcaste);
-        EditText editTextInstituteName = (EditText) view.findViewById(R.id.editTextInstituteName);
-        EditText editTextRelationFirstName = (EditText) view.findViewById(R.id.editTextRelationFirstName);
-        EditText editTextRelationOccupation = (EditText) view.findViewById(R.id.editTextRelationOccupation);
-        EditText editTextRelationMobile = (EditText) view.findViewById(R.id.editTextRelationMobile);
+        EditText editTextAboutMe = view.findViewById(R.id.editTextAboutMe);
+        EditText editTextHobbies = view.findViewById(R.id.editTextHobbies);
+        EditText editTextGrandfatherName = view.findViewById(R.id.editTextGrandfatherName);
+        EditText editTextMamaSurname = view.findViewById(R.id.editTextMamaSurname);
+        EditText editTextSubcaste = view.findViewById(R.id.editTextSubcaste);
+        EditText editTextInstituteName = view.findViewById(R.id.editTextInstituteName);
+        EditText editTextRelationFirstName = view.findViewById(R.id.editTextRelationFirstName);
+        EditText editTextRelationOccupation = view.findViewById(R.id.editTextRelationOccupation);
+        EditText editTextRelationMobile = view.findViewById(R.id.editTextRelationMobile);
 
 
-        WorkLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextWorkLocation);
-        AutoCompleteTextView NativePlace = (AutoCompleteTextView) view.findViewById(R.id.editTextNativePlace);
-        AutoCompleteTextView RelationLocation = (AutoCompleteTextView) view.findViewById(R.id.editTextRelationLocation);
-        BirthPlace = (AutoCompleteTextView) view.findViewById(R.id.editTextBirthPlace);
+        WorkLocation = view.findViewById(R.id.editTextWorkLocation);
+        AutoCompleteTextView NativePlace = view.findViewById(R.id.editTextNativePlace);
+        AutoCompleteTextView RelationLocation = view.findViewById(R.id.editTextRelationLocation);
+        BirthPlace = view.findViewById(R.id.editTextBirthPlace);
 
         editTextBirthTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -656,17 +656,17 @@ public class Signup_Additional_Info_Fragment extends Fragment implements Step {
             }
         });
 
-        Spinner spinnerFamilyType = (Spinner) view.findViewById(R.id.spinnerFamilyType);
-        Spinner spinnerFamilyValues = (Spinner) view.findViewById(R.id.spinnerFamilyValues);
-        Spinner spinnerDietStatus = (Spinner) view.findViewById(R.id.spinnerDietStatus);
-        Spinner spinnerSmokeStatus = (Spinner) view.findViewById(R.id.spinnerSmokeStatus);
-        Spinner spinnerDrinkStatus = (Spinner) view.findViewById(R.id.spinnerDrinkStatus);
-        Spinner spinnerComplexionStatus = (Spinner) view.findViewById(R.id.spinnerComplexionStatus);
-        Spinner spinnerPhysicalStatus = (Spinner) view.findViewById(R.id.spinnerPhysicalStatus);
+        Spinner spinnerFamilyType = view.findViewById(R.id.spinnerFamilyType);
+        Spinner spinnerFamilyValues = view.findViewById(R.id.spinnerFamilyValues);
+        Spinner spinnerDietStatus = view.findViewById(R.id.spinnerDietStatus);
+        Spinner spinnerSmokeStatus = view.findViewById(R.id.spinnerSmokeStatus);
+        Spinner spinnerDrinkStatus = view.findViewById(R.id.spinnerDrinkStatus);
+        Spinner spinnerComplexionStatus = view.findViewById(R.id.spinnerComplexionStatus);
+        Spinner spinnerPhysicalStatus = view.findViewById(R.id.spinnerPhysicalStatus);
 //        Spinner spinnerGotraStatus = (Spinner) view.findViewById(R.id.spinnerGotraStatus);
-        Spinner spinnerManglikStatus = (Spinner) view.findViewById(R.id.spinnerManglikStatus);
-        Spinner spinnerHoroscopeStatus = (Spinner) view.findViewById(R.id.spinnerHoroscopeStatus);
-        Spinner spinnerRelationNameStatus = (Spinner) view.findViewById(R.id.spinner_relation_name_status);
+        Spinner spinnerManglikStatus = view.findViewById(R.id.spinnerManglikStatus);
+        Spinner spinnerHoroscopeStatus = view.findViewById(R.id.spinnerHoroscopeStatus);
+        Spinner spinnerRelationNameStatus = view.findViewById(R.id.spinner_relation_name_status);
 
 
         spinnerFamilyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

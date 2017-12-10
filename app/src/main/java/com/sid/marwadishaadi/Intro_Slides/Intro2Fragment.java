@@ -24,7 +24,7 @@ public class Intro2Fragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_intro2, container, false);
 
-        getStarted = (Button) view.findViewById(R.id.get_started);
+        getStarted = view.findViewById(R.id.get_started);
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

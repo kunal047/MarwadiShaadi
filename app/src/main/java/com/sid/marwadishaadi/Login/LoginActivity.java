@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,6 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Constants;
 import com.sid.marwadishaadi.Dashboard.DashboardActivity;
+import com.sid.marwadishaadi.Elite_Profiles.EliteActivity;
 import com.sid.marwadishaadi.Forgot_Password.ForgotPasswordActivity;
 import com.sid.marwadishaadi.Notifications_Util;
 import com.sid.marwadishaadi.R;
@@ -119,12 +121,12 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
 
-        login_email = (EditText) findViewById(R.id.login_email);
-        login_pass = (EditText) findViewById(R.id.login_password);
-        login = (Button) findViewById(R.id.login);
+        login_email = findViewById(R.id.login_email);
+        login_pass = findViewById(R.id.login_password);
+        login = findViewById(R.id.login);
 
-        showPassword = (ImageView) findViewById(R.id.show_password);
-        hidePassword = (ImageView) findViewById(R.id.hide_password);
+        showPassword = findViewById(R.id.show_password);
+        hidePassword = findViewById(R.id.hide_password);
 
 
         showPassword.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +201,8 @@ public class LoginActivity extends AppCompatActivity {
 //
 //        });
 
-        forgot = (TextView) findViewById(R.id.forgot_link);
-        signup = (TextView) findViewById(R.id.signup_link);
+        forgot = findViewById(R.id.forgot_link);
+        signup = findViewById(R.id.signup_link);
 
 
         forgot.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +239,76 @@ public class LoginActivity extends AppCompatActivity {
                                          email = login_email.getText().toString().toLowerCase();
                                          pass = login_pass.getText().toString();
 
-                                         if ((!email.trim().matches("^[m|a|j|k|o|M|A|J|K|O][0-9]{4,6}") | EmailChecker(email)) && (email.trim().length() > 0 || pass.trim().length() > 0)) {
+                                         if (email.matches("[a-zA-Z]{2}\\d{4}")) {
+
+                                             pass = HashConverter(pass);
+                                             dialog.setMessage("Please Wait...");
+                                             dialog.show();
+                                             new BackGround().execute("user_id", email, pass);
+
+                                             final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(5);
+                                             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     try {
+
+                                                         if (!checker) {
+
+                                                         } else {
+                                                             if (Looper.myLooper() == null) {
+                                                                 Looper.prepare();
+                                                             }
+
+
+                                                             if (str.equals("success")) {
+                                                                 SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                 SharedPreferences.Editor editors = userinfo.edit();
+                                                                 editors.putBoolean("isLoggedIn", true);
+                                                                 editors.putString("id", customer_id);
+                                                                 editors.putBoolean("isElite", true);
+
+                                                                 editors.apply();
+
+                                                                 Log.d(TAG, "run:  int his sh --------------------------------------------");
+                                                                 SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                                                 SharedPreferences.Editor editor = sharedpref.edit();
+                                                                 editor.putBoolean("isElite", true);
+                                                                 editor.putBoolean("isLoggedIn", true);
+                                                                 editor.putString("email", email);
+                                                                 editor.putString("password", pass);
+                                                                 editor.putString("customer_id", customer_id);
+                                                                 editor.putString("gender", customer_gender);
+                                                                 editor.apply();
+                                                                 dialog.dismiss();
+
+                                                                 Intent i = new Intent(LoginActivity.this, EliteActivity.class);
+                                                                 startActivity(i);
+                                                                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                                             } else if (str.equals("failure")) {
+                                                                 Toast.makeText(LoginActivity.this, "Your email-id or password is incorrect", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             } else if (str.equals("----")) {
+                                                                 Toast.makeText(LoginActivity.this, "Please check your Internet Connection", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+
+                                                             } else {
+                                                                 Toast.makeText(getApplicationContext(), "Please enter correct password or User ID", Toast.LENGTH_SHORT).show();
+                                                                 dialog.dismiss();
+                                                                 scheduledExecutorService.shutdown();
+                                                             }
+                                                             Looper.loop();
+                                                         }
+                                                     } catch (Exception e) {
+
+                                                     }
+                                                 }
+                                             }, 1, 3, TimeUnit.SECONDS);
+                                             Analytics_Util.logAnalytic(mFirebaseAnalytics, "Login", "button");
+
+                                         } else if ((!email.trim().matches("^[m|a|j|k|o|M|A|J|K|O][0-9]{4,6}") | EmailChecker(email)) && (email.trim().length() > 0 || pass.trim().length() > 0)) {
 
                                              pass = HashConverter(pass);
                                              dialog.setMessage("Please Wait...");
@@ -486,7 +557,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected String doInBackground(final String... strings) {
 
             if (strings[0].contains("email")) {
                 AndroidNetworking.post(Constants.AWS_SERVER + "/checkLogin/{check}")
@@ -602,8 +673,17 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
             } else {
+
+                Log.d(TAG, "doInBackground: email is ----------------------- " + strings[1]);
+                Log.d(TAG, "doInBackground: password is ------------------------------- " + strings[2]);
+
+                String id = "id";
+                if (strings[1].matches("[a-zA-Z]{2}\\d{4}")) {
+                    id = "eliteid";
+                }
+
                 AndroidNetworking.post(Constants.AWS_SERVER + "/checkLogin/{check}")
-                        .addPathParameter("check", "id")
+                        .addPathParameter("check", id )
                         .addBodyParameter("email", strings[1])
                         .addBodyParameter("password", strings[2])
                         .setPriority(Priority.HIGH)
@@ -651,39 +731,68 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     } else if (str.contains("success")) {
+                                        Log.d(TAG, "onResponse:  success ful login ----------------------------------- ");
                                         customer_id = response.getString(1);
                                         customer_gender = response.getString(2);
 
-                                        SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                        SharedPreferences.Editor editor = saved_values.edit();
-                                        editor.putBoolean("isLoggedIn", true);
-                                        editor.putString("customer_id", customer_id);
-                                        editor.putString("gender", customer_gender);
-                                        editor.putString("firstname", response.getString(3));
-                                        editor.putString("surname", response.getString(4));
-                                        JSONArray communityArray = response.getJSONArray(5);
-                                        editor.putInt("cal", communityArray.length());
-                                        for (int i = 0; i < communityArray.length(); i++) {
-                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                        if (strings[1].matches("[a-zA-Z]{2}\\d{4}")) {
+                                            SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                            SharedPreferences.Editor editor = saved_values.edit();
+                                            editor.putBoolean("isLoggedIn", true);
+                                            editor.putString("customer_id", customer_id);
+                                            editor.putString("gender", customer_gender);
+                                            editor.putString("firstname", response.getString(3));
+                                            editor.putString("surname", response.getString(4));
+
+                                            editor.apply();
+
+                                            SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                            editor = sharedpref.edit();
+
+                                            editor.putString("customer_id", customer_id);
+                                            editor.putString("gender", customer_gender);
+                                            editor.putString("firstname", response.getString(3));
+                                            editor.putString("surname", response.getString(4));
+                                            editor.putBoolean("isLoggedIn", true);
+
+                                            editor.apply();
+
+                                        } else {
+
+                                            SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                            SharedPreferences.Editor editor = saved_values.edit();
+                                            editor.putBoolean("isLoggedIn", true);
+                                            editor.putString("customer_id", customer_id);
+                                            editor.putString("gender", customer_gender);
+                                            editor.putString("firstname", response.getString(3));
+                                            editor.putString("surname", response.getString(4));
+                                            JSONArray communityArray = response.getJSONArray(5);
+                                            editor.putInt("cal", communityArray.length());
+                                            for (int i = 0; i < communityArray.length(); i++) {
+                                                editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                            }
+                                            editor.apply();
+
+                                            SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                            editor = sharedpref.edit();
+
+                                            editor.putString("customer_id", customer_id);
+                                            editor.putString("gender", customer_gender);
+                                            editor.putString("firstname", response.getString(3));
+                                            editor.putString("surname", response.getString(4));
+                                            editor.putBoolean("isLoggedIn", true);
+
+                                            communityArray = response.getJSONArray(5);
+                                            editor.putInt("cal", communityArray.length());
+
+                                            for (int i = 0; i < communityArray.length(); i++) {
+                                                editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
+                                            }
+                                            editor.apply();
+
                                         }
-                                        editor.apply();
 
-                                        SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                        editor = sharedpref.edit();
 
-                                        editor.putString("customer_id", customer_id);
-                                        editor.putString("gender", customer_gender);
-                                        editor.putString("firstname", response.getString(3));
-                                        editor.putString("surname", response.getString(4));
-                                        editor.putBoolean("isLoggedIn", true);
-
-                                        communityArray = response.getJSONArray(5);
-                                        editor.putInt("cal", communityArray.length());
-
-                                        for (int i = 0; i < communityArray.length(); i++) {
-                                            editor.putString(communityArray.getJSONArray(i).getString(0), communityArray.getJSONArray(i).getString(1));
-                                        }
-                                        editor.apply();
 
                                         registerMe();
                                         LoginActivity.this.runOnUiThread(new Runnable() {
@@ -692,7 +801,14 @@ public class LoginActivity extends AppCompatActivity {
                                                 if (dialog.isShowing()) {
                                                     dialog.dismiss();
                                                 }
-                                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                                Intent intent;
+                                                if (strings[1].matches("[a-zA-Z]{2}\\d{4}")) {
+                                                    Log.d(TAG, "run: in this -----------------------------------------");
+                                                    intent = new Intent(getApplicationContext(), EliteActivity.class);
+                                                } else {
+                                                    Log.d(TAG, "run: in this or not -----------------------------------------");
+                                                    intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                                }
                                                 startActivity(intent);
                                             }
                                         });

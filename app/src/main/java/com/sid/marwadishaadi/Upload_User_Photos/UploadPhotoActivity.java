@@ -22,6 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -45,6 +46,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.sid.marwadishaadi.Analytics_Util;
 import com.sid.marwadishaadi.Constants;
+import com.sid.marwadishaadi.Elite_Profiles.EliteDetailActivity;
 import com.sid.marwadishaadi.Membership.MembershipActivity;
 import com.sid.marwadishaadi.R;
 import com.sid.marwadishaadi.User_Profile.UserProfileActivity;
@@ -96,6 +98,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    private static final String TAG = "UploadPhotoActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +110,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         view = getWindow().getDecorView().getRootView();
         SharedPreferences sharedpref = getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
+        Log.e(TAG, "onCreate: customer no ---------------------------------------- " + customer_id);
+
         callbackManager = CallbackManager.Factory.create();
 
-
+        Log.e(TAG, "onCreate: called ");
         String source = getIntent().getStringExtra("from");
 
         if (source != null && !source.equalsIgnoreCase("otp")) {
@@ -185,7 +190,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        submit = (Button) findViewById(R.id.submit_photo);
+        submit = findViewById(R.id.submit_photo);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -416,6 +421,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
 
                         Toast.makeText(UploadPhotoActivity.this, "Set your profile picture", Toast.LENGTH_SHORT).show();
+                    } else if (from.contains("elite")) {
+                        i = new Intent(UploadPhotoActivity.this, EliteDetailActivity.class);
                     } else {
                         i = new Intent(UploadPhotoActivity.this, MembershipActivity.class);
                     }
@@ -427,11 +434,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         });
 
 
-        photo1 = (CircleImageView) findViewById(R.id.photo1);
-        photo2 = (CircleImageView) findViewById(R.id.photo2);
-        photo3 = (CircleImageView) findViewById(R.id.photo3);
-        photo4 = (CircleImageView) findViewById(R.id.photo4);
-        photo5 = (CircleImageView) findViewById(R.id.photo5);
+        photo1 = findViewById(R.id.photo1);
+        photo2 = findViewById(R.id.photo2);
+        photo3 = findViewById(R.id.photo3);
+        photo4 = findViewById(R.id.photo4);
+        photo5 = findViewById(R.id.photo5);
 
         photo1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -914,6 +921,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                 String profile_image = response.getString(0);
                                 userImages = new ArrayList<>();
 
+                                Log.e(TAG, "onResponse: response for upload photo --------------------------------------------------- ");
+
                                 userImages.add("http://www.marwadishaadi.com/uploads/cust_" + customer_id + "/thumb/" + profile_image);
 
                                 if (response.length() > 1) {
@@ -941,7 +950,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                         }
                     });
-            ;
             return null;
         }
     }

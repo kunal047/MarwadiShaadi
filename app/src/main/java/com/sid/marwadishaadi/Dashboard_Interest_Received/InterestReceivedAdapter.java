@@ -199,16 +199,16 @@ public class InterestReceivedAdapter extends RecyclerView.Adapter<InterestReceiv
 
         public MyViewHolder(final View itemView) {
             super(itemView);
-            userImage = (ImageView) itemView.findViewById(R.id.userImage);
-            name = (TextView) itemView.findViewById(R.id.textviewName);
-            highestDegree = (TextView) itemView.findViewById(R.id.textviewHighestDegree);
-            location = (TextView) itemView.findViewById(R.id.textviewLocation);
-            status = (TextView) itemView.findViewById(R.id.interest_status);
-            accept = (ImageView) itemView.findViewById(R.id.interest_accept);
-            reject = (ImageView) itemView.findViewById(R.id.interest_reject);
-            customerNo = (TextView) itemView.findViewById(R.id.textViewCustomerNo);
+            userImage = itemView.findViewById(R.id.userImage);
+            name = itemView.findViewById(R.id.textviewName);
+            highestDegree = itemView.findViewById(R.id.textviewHighestDegree);
+            location = itemView.findViewById(R.id.textviewLocation);
+            status = itemView.findViewById(R.id.interest_status);
+            accept = itemView.findViewById(R.id.interest_accept);
+            reject = itemView.findViewById(R.id.interest_reject);
+            customerNo = itemView.findViewById(R.id.textViewCustomerNo);
 
-            showTextOnPhoto = (TextView) itemView.findViewById(R.id.showTextOnPictureOfInterestReceived);
+            showTextOnPhoto = itemView.findViewById(R.id.showTextOnPictureOfInterestReceived);
 
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override

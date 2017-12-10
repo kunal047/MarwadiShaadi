@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
         SliderAdapter sliderAdapter = new SliderAdapter(getSupportFragmentManager());
-        mviewpager = (ViewPager) findViewById(R.id.main_container);
+        mviewpager = findViewById(R.id.main_container);
         mviewpager.setAdapter(sliderAdapter);
         mviewpager.setOnPageChangeListener(this);
     }

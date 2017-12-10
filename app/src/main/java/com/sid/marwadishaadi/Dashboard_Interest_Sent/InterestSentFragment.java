@@ -61,25 +61,25 @@ public class InterestSentFragment extends Fragment {
         View mview = inflater.inflate(R.layout.fragment_interest_received, container, false);
 
 
-        empty_view = (LinearLayout) mview.findViewById(R.id.empty_view);
-        empty_view_sent = (LinearLayout) mview.findViewById(R.id.empty_view_sent);
+        empty_view = mview.findViewById(R.id.empty_view);
+        empty_view_sent = mview.findViewById(R.id.empty_view_sent);
 
         empty_view.setVisibility(View.GONE);
         empty_view_sent.setVisibility(View.GONE);
 
 
-        mProgressBar = (ProgressBar) mview.findViewById(R.id.int_loading);
+        mProgressBar = mview.findViewById(R.id.int_loading);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
         customer_id = sharedpref.getString("customer_id", null);
         customer_gender = sharedpref.getString("gender", null);
         cache = new File(getCacheDir() + "/" + "interestsent" + customer_id + ".srl");
 
-        swipeRefreshLayout = (SwipeRefreshLayout) mview.findViewById(R.id.swipe);
-        recyclerView = (RecyclerView) mview.findViewById(R.id.swipe_recyclerview);
+        swipeRefreshLayout = mview.findViewById(R.id.swipe);
+        recyclerView = mview.findViewById(R.id.swipe_recyclerview);
         interestListSent = new ArrayList<>();
         interestSentAdapter = new InterestSentAdapter(getContext(), interestListSent);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);

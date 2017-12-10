@@ -97,7 +97,7 @@ public class CityAdapter extends ArrayAdapter<String> {
         }
         String str = list.get(position);
         if (str != null) {
-            TextView textView = (TextView) convertView.findViewById(R.id.place_name);
+            TextView textView = convertView.findViewById(R.id.place_name);
             if (textView != null) {
                 textView.setText(str);
             }

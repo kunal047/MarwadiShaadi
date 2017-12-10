@@ -200,9 +200,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         public MyViewHolder(View view) {
             super(view);
-            timestamp = (TextView) view.findViewById(R.id.timestamp);
-            notiftext = (TextView) view.findViewById(R.id.notiftext);
-            notifimage = (ImageView) view.findViewById(R.id.notifimage);
+            timestamp = view.findViewById(R.id.timestamp);
+            notiftext = view.findViewById(R.id.notiftext);
+            notifimage = view.findViewById(R.id.notifimage);
         }
 
     }

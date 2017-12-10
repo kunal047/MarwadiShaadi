@@ -61,45 +61,45 @@ public class Filter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.filter_toolbar);
+        Toolbar toolbar = findViewById(R.id.filter_toolbar);
         toolbar.setTitle("Filter");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
-        complete = (Button) findViewById(R.id.filter_submit);
+        statetextView = findViewById(R.id.text_view_search_add_state);
+        complete = findViewById(R.id.filter_submit);
 
-        idoctor = (ImageView) findViewById(R.id.doctor);
-        iengineer = (ImageView) findViewById(R.id.engineer);
-        icacs = (ImageView) findViewById(R.id.ca_cs);
-        ipg = (ImageView) findViewById(R.id.pg);
-        ig = (ImageView) findViewById(R.id.g);
-        iug = (ImageView) findViewById(R.id.ug);
-        imbamca = (ImageView) findViewById(R.id.mba_mca);
-        illb = (ImageView) findViewById(R.id.llb);
+        idoctor = findViewById(R.id.doctor);
+        iengineer = findViewById(R.id.engineer);
+        icacs = findViewById(R.id.ca_cs);
+        ipg = findViewById(R.id.pg);
+        ig = findViewById(R.id.g);
+        iug = findViewById(R.id.ug);
+        imbamca = findViewById(R.id.mba_mca);
+        illb = findViewById(R.id.llb);
 
-        tdoctor = (TextView) findViewById(R.id.text_doctor);
-        tengineer = (TextView) findViewById(R.id.text_engineer);
-        tmbamca = (TextView) findViewById(R.id.text_mba_mca);
-        tcacs = (TextView) findViewById(R.id.text_ca_cs);
-        tllb = (TextView) findViewById(R.id.text_llb);
-        tpg = (TextView) findViewById(R.id.text_pg);
-        tg = (TextView) findViewById(R.id.text_g);
-        tug = (TextView) findViewById(R.id.text_ug);
+        tdoctor = findViewById(R.id.text_doctor);
+        tengineer = findViewById(R.id.text_engineer);
+        tmbamca = findViewById(R.id.text_mba_mca);
+        tcacs = findViewById(R.id.text_ca_cs);
+        tllb = findViewById(R.id.text_llb);
+        tpg = findViewById(R.id.text_pg);
+        tg = findViewById(R.id.text_g);
+        tug = findViewById(R.id.text_ug);
 
-        ldoctor = (LinearLayout) findViewById(R.id.list_doctor);
-        lengineer = (LinearLayout) findViewById(R.id.list_engineer);
-        lmbamca = (LinearLayout) findViewById(R.id.list_mab_mca);
-        lcacs = (LinearLayout) findViewById(R.id.list_ca_cs);
-        lllb = (LinearLayout) findViewById(R.id.list_llb);
-        lpg = (LinearLayout) findViewById(R.id.list_pg);
-        lg = (LinearLayout) findViewById(R.id.list_g);
-        lug = (LinearLayout) findViewById(R.id.list_ug);
+        ldoctor = findViewById(R.id.list_doctor);
+        lengineer = findViewById(R.id.list_engineer);
+        lmbamca = findViewById(R.id.list_mab_mca);
+        lcacs = findViewById(R.id.list_ca_cs);
+        lllb = findViewById(R.id.list_llb);
+        lpg = findViewById(R.id.list_pg);
+        lg = findViewById(R.id.list_g);
+        lug = findViewById(R.id.list_ug);
 
-        autoCompleteState = (EditText) findViewById(R.id.filter_by_location);
-        addButton = (Button) findViewById(R.id.search_add_state);
-        final TextView statetextView = (TextView) findViewById(R.id.text_view_search_add_state);
+        autoCompleteState = findViewById(R.id.filter_by_location);
+        addButton = findViewById(R.id.search_add_state);
+        final TextView statetextView = findViewById(R.id.text_view_search_add_state);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +116,7 @@ public class Filter extends AppCompatActivity {
                 }
             }
         });
-        annualincome = (EditText) findViewById(R.id.search_Annual_income);
+        annualincome = findViewById(R.id.search_Annual_income);
         annualincome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,10 +137,10 @@ public class Filter extends AppCompatActivity {
 
         // get seekbar from view
 
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) findViewById(R.id.rangeSeekbar);
+        final CrystalRangeSeekbar rangeSeekbar = findViewById(R.id.rangeSeekbar);
 // get min and max text view
-        final TextView tvMin = (TextView) findViewById(R.id.textMin);
-        final TextView tvMax = (TextView) findViewById(R.id.textMax);
+        final TextView tvMin = findViewById(R.id.textMin);
+        final TextView tvMax = findViewById(R.id.textMax);
         rangeSeekbar.setMinValue(18);
         rangeSeekbar.setMaxValue(71);
 // set listener

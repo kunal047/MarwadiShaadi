@@ -90,7 +90,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
     }
 
     public void setMobile_number(String mobile_number) {
-        this.mobile_number = mobile_number;
+        SignupDetailsActivity.mobile_number = mobile_number;
     }
 
     public String getUser_caste() {
@@ -139,19 +139,19 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
         setContentView(R.layout.activity_signup_details);
 
 
-        name = (EditText) findViewById(R.id.first_name);
-        surname = (EditText) findViewById(R.id.last_name);
-        dob = (EditText) findViewById(R.id.dob);
-        mobile = (EditText) findViewById(R.id.mobile);
-        caste = (Spinner) findViewById(R.id.user_caste);
+        name = findViewById(R.id.first_name);
+        surname = findViewById(R.id.last_name);
+        dob = findViewById(R.id.dob);
+        mobile = findViewById(R.id.mobile);
+        caste = findViewById(R.id.user_caste);
 
         // autcomplete location
-        location = (AutoCompleteTextView) findViewById(R.id.signup_location);
+        location = findViewById(R.id.signup_location);
         placesAdapter = new PlacesAdapter(SignupDetailsActivity.this, R.layout.activity_signup_details, R.id.place_name, App.placeslist);
         location.setAdapter(placesAdapter);
 
-        radioGroupGender = (RadioGroup) findViewById(R.id.radioGroupGender);
-        next = (Button) findViewById(R.id.advnext);
+        radioGroupGender = findViewById(R.id.radioGroupGender);
+        next = findViewById(R.id.advnext);
 
         mobile.addTextChangedListener(new TextWatcher() {
             @Override
@@ -205,7 +205,7 @@ public class SignupDetailsActivity extends AppCompatActivity implements DatePick
                 user_location = location.getText().toString();
 
 //               find the radio button by returned id
-                RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroupGender);
+                RadioGroup radioGroup = findViewById(R.id.radioGroupGender);
                 radioGroup.check(R.id.radioButtonMale);
 
                 if (first_name.trim().isEmpty() || last_name.trim().isEmpty() || date_of_birth.isEmpty() || mobile_number.isEmpty() || user_caste.isEmpty() || user_caste.contains("Select") || user_location.trim().isEmpty()) {

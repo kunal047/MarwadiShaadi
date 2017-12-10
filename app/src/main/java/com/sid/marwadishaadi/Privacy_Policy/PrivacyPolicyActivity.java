@@ -21,7 +21,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.pp_toolbar);
+        Toolbar toolbar = findViewById(R.id.pp_toolbar);
         toolbar.setTitle("Privacy Policy");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);

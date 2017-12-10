@@ -416,7 +416,7 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public ProgressViewHolder(View v) {
             super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
+            progressBar = v.findViewById(R.id.progressBar1);
         }
     }
 
@@ -430,20 +430,20 @@ public class SuggestionDataAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public SuggestionViewHolder(View view) {
 
             super(view);
-            showTextOnPicture = (TextView) view.findViewById(R.id.textViewToUploadPicture);
-            name = (TextView) view.findViewById(R.id.name);
-            cusId = (TextView) view.findViewById(R.id.cusId);
-            imgAdd = (ImageView) view.findViewById(R.id.imgAdd);
-            highDeg = (TextView) view.findViewById(R.id.highDeg);
-            workLoc = (TextView) view.findViewById(R.id.workLoc);
-            height = (TextView) view.findViewById(R.id.height);
-            company = (TextView) view.findViewById(R.id.company);
-            annInc = (TextView) view.findViewById(R.id.annInc);
-            mariSta = (TextView) view.findViewById(R.id.mariSta);
-            hometown = (TextView) view.findViewById(R.id.hometown);
-            sparkButtonChat = (SparkButton) view.findViewById(R.id.chat);
-            sparkButtonFav = (SparkButton) view.findViewById(R.id.fav);
-            sparkButtonInterest = (SparkButton) view.findViewById(R.id.interest);
+            showTextOnPicture =  view.findViewById(R.id.textViewToUploadPicture);
+            name = view.findViewById(R.id.name);
+            cusId = view.findViewById(R.id.cusId);
+            imgAdd = view.findViewById(R.id.imgAdd);
+            highDeg = view.findViewById(R.id.highDeg);
+            workLoc = view.findViewById(R.id.workLoc);
+            height = view.findViewById(R.id.height);
+            company = view.findViewById(R.id.company);
+            annInc = view.findViewById(R.id.annInc);
+            mariSta = view.findViewById(R.id.mariSta);
+            hometown = view.findViewById(R.id.hometown);
+            sparkButtonChat = view.findViewById(R.id.chat);
+            sparkButtonFav = view.findViewById(R.id.fav);
+            sparkButtonInterest = view.findViewById(R.id.interest);
 
 
             imgAdd.setOnClickListener(new View.OnClickListener() {

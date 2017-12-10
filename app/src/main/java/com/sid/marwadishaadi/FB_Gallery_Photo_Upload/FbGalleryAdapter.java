@@ -65,8 +65,8 @@ public class FbGalleryAdapter extends RecyclerView.Adapter<FbGalleryAdapter.MyVi
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            fb_pic = (ImageView) itemView.findViewById(R.id.fb_gallery_pic);
-            selected = (ImageView) itemView.findViewById(R.id.is_selected);
+            fb_pic = itemView.findViewById(R.id.fb_gallery_pic);
+            selected = itemView.findViewById(R.id.is_selected);
             fb_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

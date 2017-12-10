@@ -176,8 +176,8 @@ public class DashboardActivity extends AppCompatActivity
 
 
         setContentView(R.layout.activity_navigation_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.dash_toolbar);
-        ImageView toolbarSearch = (ImageView) findViewById(R.id.toolbar_search);
+        Toolbar toolbar = findViewById(R.id.dash_toolbar);
+        ImageView toolbarSearch = findViewById(R.id.toolbar_search);
 
         setSupportActionBar(toolbar);
 
@@ -214,7 +214,7 @@ public class DashboardActivity extends AppCompatActivity
 
         notificationCount = 0;
         //
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         m = menu.findItem(R.id.nav_notifications);
 
@@ -249,15 +249,15 @@ public class DashboardActivity extends AppCompatActivity
         });
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         View mview = navigationView.getHeaderView(0);
-        nameDrawer = (TextView) mview.findViewById((R.id.name_drawer));
-        userdp = (ImageView) mview.findViewById(R.id.user_dp);
+        nameDrawer = mview.findViewById((R.id.name_drawer));
+        userdp = mview.findViewById(R.id.user_dp);
 
         if (userdp.getDrawable() == getResources().getDrawable(R.drawable.default_drawer)) {
 
@@ -287,7 +287,7 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
-        interest = (LinearLayout) mview.findViewById(R.id.nav_interest);
+        interest = mview.findViewById(R.id.nav_interest);
         interest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,7 +298,7 @@ public class DashboardActivity extends AppCompatActivity
         });
 
 
-        inbox = (LinearLayout) mview.findViewById(R.id.nav_inbox);
+        inbox = mview.findViewById(R.id.nav_inbox);
         inbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,7 +325,7 @@ public class DashboardActivity extends AppCompatActivity
         });
 
 
-        search = (LinearLayout) mview.findViewById(R.id.nav_search);
+        search = mview.findViewById(R.id.nav_search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,12 +340,12 @@ public class DashboardActivity extends AppCompatActivity
 
         mSectionsPagerAdapter = new DashboardSectionsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.dash_container);
+        mViewPager = findViewById(R.id.dash_container);
         mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.dash_tabs);
+        TabLayout tabLayout = findViewById(R.id.dash_tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -354,7 +354,7 @@ public class DashboardActivity extends AppCompatActivity
     public void onBackPressed() {
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -379,7 +379,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here .
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         int id = item.getItemId();
         if (id == R.id.nav_home) {
@@ -427,7 +427,7 @@ public class DashboardActivity extends AppCompatActivity
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
 

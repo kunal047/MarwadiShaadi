@@ -2,17 +2,18 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.fabiomsr.drawableoptimizer'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId 'com.sid.marwadishaadi'
         minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 10
-        versionName "3.1.6"
+        targetSdkVersion 26
+        versionCode 11
+        versionName "3.1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
     }
     lintOptions {
@@ -50,19 +51,20 @@ dependencies {
     //    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
 
     //    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
-
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
+    compile 'com.droidninja:filepicker:2.1.1'
     // for tooltip
     compile 'com.karumi:dexter:4.1.0'
-    compile 'com.google.android.gms:play-services:11.6.0'
+    compile 'com.google.android.gms:play-services:11.6.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:support-vector-drawable:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.google.firebase:firebase-core:11.6.0'
-    compile 'com.google.firebase:firebase-messaging:11.6.0'
-    compile 'com.google.firebase:firebase-invites:11.6.0'
-    compile 'com.google.firebase:firebase-database:11.6.0'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:support-vector-drawable:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.google.firebase:firebase-core:11.6.2'
+    compile 'com.google.firebase:firebase-messaging:11.6.2'
+    compile 'com.google.firebase:firebase-invites:11.6.2'
+    compile 'com.google.firebase:firebase-database:11.6.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.github.stfalcon:chatkit:0.2.1'

@@ -76,14 +76,14 @@ public class SimilarActivity extends AppCompatActivity {
         // analytics
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Similar Profiles", "button");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.similar_toolbar);
+        Toolbar toolbar = findViewById(R.id.similar_toolbar);
         toolbar.setTitle("Similar Profiles");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         similarAdapter = new SimilarAdapter(similarModelList, getApplicationContext());
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(similarAdapter);

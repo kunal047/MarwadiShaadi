@@ -186,7 +186,7 @@ public class WebViewActivity extends Activity {
                     startActivity(intent);
                 }
             }
-            final WebView webview = (WebView) findViewById(R.id.webview);
+            final WebView webview = findViewById(R.id.webview);
             webview.getSettings().setJavaScriptEnabled(true);
             webview.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
             webview.setClickable(true);

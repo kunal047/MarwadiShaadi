@@ -271,10 +271,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 contentView = View.inflate(getContext(), R.layout.bottom_sheet_education, null);
                 SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
-                editEducation = (Spinner) contentView.findViewById(R.id.edit_education);
-                eduDegree = (TextView) contentView.findViewById(R.id.edit_highest_degree);
-                updateEducation = (Button) contentView.findViewById(R.id.education_update);
-                eduInstituteLocation = (EditText) contentView.findViewById(R.id.edit_institute_name);
+                editEducation = contentView.findViewById(R.id.edit_education);
+                eduDegree = contentView.findViewById(R.id.edit_highest_degree);
+                updateEducation = contentView.findViewById(R.id.education_update);
+                eduInstituteLocation = contentView.findViewById(R.id.edit_institute_name);
 
 
 //                UPDATE tbl_user SET education="Engineer", edu_degree="B.E.", college_name="Dr. Babasaheb Ambedakar" WHERE customer_no="A1028"
@@ -306,13 +306,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
 //                count = 2;
 
 
-                designation = (Spinner) contentView.findViewById(R.id.profession);
-                annualIncome = (Spinner) contentView.findViewById(R.id.edit_annual_income);
-                companyName = (TextView) contentView.findViewById(R.id.job_company);
-                occupation = (Spinner) contentView.findViewById(R.id.occupation);
-                updateProfession = (Button) contentView.findViewById(R.id.professionUpdate);
+                designation = contentView.findViewById(R.id.profession);
+                annualIncome = contentView.findViewById(R.id.edit_annual_income);
+                companyName = contentView.findViewById(R.id.job_company);
+                occupation = contentView.findViewById(R.id.occupation);
+                updateProfession = contentView.findViewById(R.id.professionUpdate);
 
-                companyLocation = (AutoCompleteTextView) contentView.findViewById(R.id.job_location);
+                companyLocation = contentView.findViewById(R.id.job_location);
                 companyLocation.setThreshold(1);
                 placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_profession, R.id.job_location, App.placeslist);
                 companyLocation.setAdapter(placesAdapter);
@@ -352,8 +352,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
 
-                aboutMe = (EditText) contentView.findViewById(R.id.about_me);
-                aboutMe_update = (Button) contentView.findViewById(R.id.aboutMe_update);
+                aboutMe = contentView.findViewById(R.id.about_me);
+                aboutMe_update = contentView.findViewById(R.id.aboutMe_update);
 
                 new FetchAdditionalAboutMeDetails().execute();
 
@@ -379,8 +379,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
-                hobbies = (EditText) contentView.findViewById(R.id.hobbies);
-                hobbies_update = (Button) contentView.findViewById(R.id.hobbiesUpdate);
+                hobbies = contentView.findViewById(R.id.hobbies);
+                hobbies_update = contentView.findViewById(R.id.hobbiesUpdate);
 
                 new FetchAdditionalHobbiesDetails().execute();
 
@@ -409,10 +409,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
 
-                eatingHabit = (Spinner) contentView.findViewById(R.id.eating_habits);
-                drinkingHabit = (Spinner) contentView.findViewById(R.id.drinking_habit);
-                smokingHabit = (Spinner) contentView.findViewById(R.id.smoking_habits);
-                lifestyleUpdate = (Button) contentView.findViewById(R.id.lifestyle_update);
+                eatingHabit = contentView.findViewById(R.id.eating_habits);
+                drinkingHabit = contentView.findViewById(R.id.drinking_habit);
+                smokingHabit = contentView.findViewById(R.id.smoking_habits);
+                lifestyleUpdate = contentView.findViewById(R.id.lifestyle_update);
 
                 new FetchAdditionalLifeStyleDetails().execute();
 
@@ -459,7 +459,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
-                birthTime = (EditText) contentView.findViewById(R.id.birthtime);
+                birthTime = contentView.findViewById(R.id.birthtime);
                 birthTime.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -472,13 +472,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
                     }
                 });
 
-                gotra = (EditText) contentView.findViewById(R.id.gotra);
-                manglik = (Spinner) contentView.findViewById(R.id.manglik);
-                matchHoroscope = (Spinner) contentView.findViewById(R.id.match_horoscope);
-                horoscopeUpdate = (Button) contentView.findViewById(R.id.horoscope_update);
+                gotra = contentView.findViewById(R.id.gotra);
+                manglik = contentView.findViewById(R.id.manglik);
+                matchHoroscope = contentView.findViewById(R.id.match_horoscope);
+                horoscopeUpdate = contentView.findViewById(R.id.horoscope_update);
 
                 // autcomplete location field
-                birthPlace = (AutoCompleteTextView) contentView.findViewById(R.id.birth_location);
+                birthPlace = contentView.findViewById(R.id.birth_location);
                 birthPlace.setThreshold(1);
                 placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_horoscope, R.id.birth_location, App.placeslist);
                 birthPlace.setAdapter(placesAdapter);
@@ -522,14 +522,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
                 customer_id = sharedpref.getString("customer_id", null);
 
-                relation = (Spinner) contentView.findViewById(R.id.relation);
-                relativeName = (EditText) contentView.findViewById(R.id.relative_name);
-                relativeOccupation = (EditText) contentView.findViewById(R.id.relative_occupation);
-                relativeMobile = (EditText) contentView.findViewById(R.id.relative_mobile);
-                relationUpdate = (Button) contentView.findViewById(R.id.relation_update);
+                relation = contentView.findViewById(R.id.relation);
+                relativeName = contentView.findViewById(R.id.relative_name);
+                relativeOccupation = contentView.findViewById(R.id.relative_occupation);
+                relativeMobile = contentView.findViewById(R.id.relative_mobile);
+                relationUpdate = contentView.findViewById(R.id.relation_update);
 
 
-                relativeLocation = (AutoCompleteTextView) contentView.findViewById(R.id.bottom_sheet_relative_location);
+                relativeLocation = contentView.findViewById(R.id.bottom_sheet_relative_location);
                 relativeLocation.setThreshold(1);
                 placesAdapter = new PlacesAdapter(getContext(), R.layout.bottom_sheet_relatives, R.id.bottom_sheet_relative_location, App.placeslist);
                 relativeLocation.setAdapter(placesAdapter);
@@ -582,15 +582,15 @@ public class BottomSheet extends BottomSheetDialogFragment {
         if (count == 1) {
 
 
-            Button srch = (Button) contentView.findViewById(R.id.search_by_id_name_search_button);
+            Button srch = contentView.findViewById(R.id.search_by_id_name_search_button);
             srch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    fname = (EditText) contentView.findViewById(R.id.search_by_first_name);
-                    lname = (EditText) contentView.findViewById(R.id.search_by_last_name);
-                    id = (EditText) contentView.findViewById(R.id.search_by_id);
+                    fname = contentView.findViewById(R.id.search_by_first_name);
+                    lname = contentView.findViewById(R.id.search_by_last_name);
+                    id = contentView.findViewById(R.id.search_by_id);
 
 
                     String strfname, strlname, strid;
@@ -633,7 +633,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             });
         } else if (count == 2) {
             coun = 0;
-            Button btn = (Button) contentView.findViewById(R.id.tick);
+            Button btn = contentView.findViewById(R.id.tick);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -750,7 +750,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         }
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        ListView listView = view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
 
         SharedPreferences sharedpref = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
@@ -768,18 +768,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
         boolean b;
         String[] str = getResources().getStringArray(array);
         for (int i = 1; i < str.length; i++) {
-            if (Arrays.asList(arr).indexOf(str[i]) == -1) {
-                b = false;
-            } else {
-                b = true;
-            }
+            b = Arrays.asList(arr).indexOf(str[i]) != -1;
             User user = new User(str[i], "null", false);
             user.setBox(b);
             arrayOfUsers.add(user);
         }
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        ListView listView = view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         return view;
     }
@@ -795,19 +791,14 @@ public class BottomSheet extends BottomSheetDialogFragment {
         boolean b;
         String[] str = getResources().getStringArray(array);
         for (String ss : str) {
-            if (Arrays.asList(arr).indexOf(ss) == -1) {
-
-                b = false;
-            } else {
-                b = true;
-            }
+            b = Arrays.asList(arr).indexOf(ss) != -1;
             User user = new User(ss, "null", false);
             user.setBox(b);
             arrayOfUsers.add(user);
         }
         adapter = new UsersAdapter(getContext(), arrayOfUsers);
         View view = View.inflate(getContext(), R.layout.custom_list_view, null);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        ListView listView = view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         return view;
     }

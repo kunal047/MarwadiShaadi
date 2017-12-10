@@ -139,14 +139,14 @@ InterestSentAdapter extends RecyclerView.Adapter<InterestSentAdapter.MyViewHolde
 
         public MyViewHolder(View view) {
             super(view);
-            name_age = (TextView) view.findViewById(R.id.name_age);
-            location = (TextView) view.findViewById(R.id.location);
-            degree = (TextView) view.findViewById(R.id.degree);
-            req_status = (TextView) view.findViewById(R.id.req_status);
-            profilepic = (ImageView) view.findViewById(R.id.profilepic);
-            date = (TextView) view.findViewById(R.id.date);
+            name_age = view.findViewById(R.id.name_age);
+            location = view.findViewById(R.id.location);
+            degree = view.findViewById(R.id.degree);
+            req_status = view.findViewById(R.id.req_status);
+            profilepic = view.findViewById(R.id.profilepic);
+            date = view.findViewById(R.id.date);
 
-            showTextOnPhoto = (TextView) view.findViewById(R.id.showTextOnPictureOfInterestSent);
+            showTextOnPhoto = view.findViewById(R.id.showTextOnPictureOfInterestSent);
 
 
         }

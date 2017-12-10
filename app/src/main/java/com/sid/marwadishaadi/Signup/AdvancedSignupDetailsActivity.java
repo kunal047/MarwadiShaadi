@@ -36,7 +36,7 @@ public class AdvancedSignupDetailsActivity extends AppCompatActivity implements 
 
         setContentView(R.layout.activity_advanced__signup__details);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
+        mStepperLayout = findViewById(R.id.stepperLayout);
         mStepperLayout.setAdapter(new Signup_Additional_Info_StepperAdapter(getSupportFragmentManager(), this));
         mStepperLayout.setListener(this);
     }

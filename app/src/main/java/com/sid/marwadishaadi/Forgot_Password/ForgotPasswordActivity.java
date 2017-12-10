@@ -85,10 +85,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
-        call_us = (LinearLayout) findViewById(R.id.call_us);
-        email = (EditText) findViewById(R.id.user_email);
-        submit = (Button) findViewById(R.id.Submit_forgot);
-        call_us_number = (TextView) findViewById((R.id.call_us_number));
+        call_us = findViewById(R.id.call_us);
+        email = findViewById(R.id.user_email);
+        submit = findViewById(R.id.Submit_forgot);
+        call_us_number = findViewById((R.id.call_us_number));
 
         call_us_number.setOnClickListener(new View.OnClickListener() {
             @Override

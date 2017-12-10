@@ -36,12 +36,13 @@ public class Notifications_Util {
     // notification sound
     static final Uri notifsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     static final Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
-    static String api_key = "key=AAAAUe8pB3Q:APA91bGbd9V8mrZ8dtvzXqjgcbtdqlRHXVzBcZpX1mM_f2jPe1EcH6p0Ksl4MjmORMRUGM7tCQUUhH9dAxHdvGEkQpwn11D5YQ9ag5ZGRRDI1UWX_G19UirKcSSbi9eAHf8nexG5jPd9";
+    static String api_key ="key=AAAAUe8pB3Q:APA91bGbd9V8mrZ8dtvzXqjgcbtdqlRHXVzBcZpX1mM_f2jPe1EcH6p0Ksl4MjmORMRUGM7tCQUUhH9dAxHdvGEkQpwn11D5YQ9ag5ZGRRDI1UWX_G19UirKcSSbi9eAHf8nexG5jPd9";
     static DatabaseReference mDatabase;
 
     public static Notification.Builder createNotification(String type, String title, String message, Context context, int notifyid) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
 
         Notification.Builder notification = new Notification.Builder(context)
                 .setContentTitle(title)

@@ -40,17 +40,17 @@ public class FeedbackActivity extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.feedback_toolbar);
+        Toolbar toolbar = findViewById(R.id.feedback_toolbar);
         toolbar.setTitle("Feedback");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        fftext = (EditText) findViewById(R.id.edt_feedback);
+        fftext = findViewById(R.id.edt_feedback);
 
-        send = (Button) findViewById(R.id.sendFeedback);
-        email_response = (CheckBox) findViewById(R.id.email_response);
+        send = findViewById(R.id.sendFeedback);
+        email_response = findViewById(R.id.email_response);
 
 
         send.setOnClickListener(new View.OnClickListener() {

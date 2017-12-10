@@ -79,17 +79,17 @@ public class NotificationsActivity extends AppCompatActivity {
         Analytics_Util.logAnalytic(mFirebaseAnalytics, "Notifications", "view");
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.notify_toolbar);
+        Toolbar toolbar = findViewById(R.id.notify_toolbar);
 
 
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        empty_view = (LinearLayout) findViewById(R.id.empty_view_notifications);
+        empty_view = findViewById(R.id.empty_view_notifications);
         empty_view.setVisibility(View.GONE);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
         notificationsAdapter = new NotificationsAdapter(this, notificationsModelList);
         recyclerView.setHasFixedSize(true);
         FadeInLeftAnimator fadeInLeftAnimator = new FadeInLeftAnimator();

@@ -87,7 +87,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
 
         }
         ml = new ArrayList<>();
-        messagesList = (MessagesList) findViewById(R.id.messagesList);
+        messagesList = findViewById(R.id.messagesList);
         adapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesList.setAdapter(adapter);
         query = "update tbl_message set msg_read=1 where (msg_to=\"" + customer_id + "\" and msg_from=\"" + customerId + "\" ) ;";
@@ -106,7 +106,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         pgd.show();
 
 
-        toolbar = (Toolbar) findViewById(R.id.chat_msg_toolbar);
+        toolbar = findViewById(R.id.chat_msg_toolbar);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +122,7 @@ public class DefaultMessagesActivity extends DemoMessagesActivity
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        MessageInput input = (MessageInput) findViewById(R.id.input);
+        MessageInput input = findViewById(R.id.input);
         input.setInputListener(this);
         if (pgd.isShowing())
             pgd.dismiss();

@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -35,15 +37,17 @@ public class MSFirebaseMessagingService extends FirebaseMessagingService {
         SharedPreferences userinfo = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Boolean notificationStatus = userinfo.getBoolean("Notification_Status", true);
         if (notificationStatus) {
-
-            Log.d(TAG, "onMessageReceived: title is ------------------------------------------ " + remoteMessage.getNotification().getTitle());
             if (remoteMessage.getNotification().getTitle().contains("MarwadiShaadi")) {
+
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
 
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.notif_suggestion)
                                 .setContentTitle("Marwadi Shaadi")
-                                .setContentText(remoteMessage.getNotification().getBody());
+                                .setContentText(remoteMessage.getNotification().getBody())
+                                .setSound(soundUri);
 
                 Intent notificationIntent = new Intent(this, DashboardActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,

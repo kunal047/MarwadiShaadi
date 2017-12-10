@@ -179,58 +179,58 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         View view = inflater.inflate(R.layout.fragment_preferences, container, false);
 
 
-        idoctor = (ImageView) view.findViewById(R.id.doctor);
-        iengineer = (ImageView) view.findViewById(R.id.engineer);
-        icacs = (ImageView) view.findViewById(R.id.ca_cs);
-        ipg = (ImageView) view.findViewById(R.id.pg);
-        ig = (ImageView) view.findViewById(R.id.g);
-        iug = (ImageView) view.findViewById(R.id.ug);
-        imbamca = (ImageView) view.findViewById(R.id.mba_mca);
-        illb = (ImageView) view.findViewById(R.id.llb);
+        idoctor = view.findViewById(R.id.doctor);
+        iengineer = view.findViewById(R.id.engineer);
+        icacs = view.findViewById(R.id.ca_cs);
+        ipg = view.findViewById(R.id.pg);
+        ig = view.findViewById(R.id.g);
+        iug = view.findViewById(R.id.ug);
+        imbamca = view.findViewById(R.id.mba_mca);
+        illb = view.findViewById(R.id.llb);
 
-        tdoctor = (TextView) view.findViewById(R.id.text_doctor);
-        tengineer = (TextView) view.findViewById(R.id.text_engineer);
-        tmbamca = (TextView) view.findViewById(R.id.text_mba_mca);
-        tcacs = (TextView) view.findViewById(R.id.text_ca_cs);
-        tllb = (TextView) view.findViewById(R.id.text_llb);
-        tpg = (TextView) view.findViewById(R.id.text_pg);
-        tg = (TextView) view.findViewById(R.id.text_g);
-        tug = (TextView) view.findViewById(R.id.text_ug);
+        tdoctor = view.findViewById(R.id.text_doctor);
+        tengineer = view.findViewById(R.id.text_engineer);
+        tmbamca = view.findViewById(R.id.text_mba_mca);
+        tcacs = view.findViewById(R.id.text_ca_cs);
+        tllb = view.findViewById(R.id.text_llb);
+        tpg = view.findViewById(R.id.text_pg);
+        tg = view.findViewById(R.id.text_g);
+        tug = view.findViewById(R.id.text_ug);
 
-        ldoctor = (LinearLayout) view.findViewById(R.id.list_doctor);
-        lengineer = (LinearLayout) view.findViewById(R.id.list_engineer);
-        lmbamca = (LinearLayout) view.findViewById(R.id.list_mab_mca);
-        lcacs = (LinearLayout) view.findViewById(R.id.list_ca_cs);
-        lllb = (LinearLayout) view.findViewById(R.id.list_llb);
-        lpg = (LinearLayout) view.findViewById(R.id.list_pg);
-        lg = (LinearLayout) view.findViewById(R.id.list_g);
-        lug = (LinearLayout) view.findViewById(R.id.list_ug);
+        ldoctor = view.findViewById(R.id.list_doctor);
+        lengineer = view.findViewById(R.id.list_engineer);
+        lmbamca = view.findViewById(R.id.list_mab_mca);
+        lcacs = view.findViewById(R.id.list_ca_cs);
+        lllb = view.findViewById(R.id.list_llb);
+        lpg = view.findViewById(R.id.list_pg);
+        lg = view.findViewById(R.id.list_g);
+        lug = view.findViewById(R.id.list_ug);
 
-        Spinner spinnerHeightFrom = (Spinner) view.findViewById(R.id.spinnerHeightFromFP);
-        Spinner spinnerHeightTo = (Spinner) view.findViewById(R.id.spinnerHeightToFP);
-        Spinner spinnerMarritalStatus = (Spinner) view.findViewById(R.id.prefSpinnerMarital);
-        Spinner spinnerPhysicalStatus = (Spinner) view.findViewById(R.id.prefSpinnerPhysical);
+        Spinner spinnerHeightFrom = view.findViewById(R.id.spinnerHeightFromFP);
+        Spinner spinnerHeightTo = view.findViewById(R.id.spinnerHeightToFP);
+        Spinner spinnerMarritalStatus = view.findViewById(R.id.prefSpinnerMarital);
+        Spinner spinnerPhysicalStatus = view.findViewById(R.id.prefSpinnerPhysical);
 
-        CheckBox checkBoxVeryFair = (CheckBox) view.findViewById(R.id.checkVeryFairFP);
-        CheckBox checkBoxFair = (CheckBox) view.findViewById(R.id.checkFairFP);
-        CheckBox checkBoxWheatish = (CheckBox) view.findViewById(R.id.checkWheatishFP);
-        CheckBox checkBoxWheatishBrown = (CheckBox) view.findViewById(R.id.checkWheatishBrownFP);
-        CheckBox checkBoxDark = (CheckBox) view.findViewById(R.id.checkDarkFP);
+        CheckBox checkBoxVeryFair = view.findViewById(R.id.checkVeryFairFP);
+        CheckBox checkBoxFair = view.findViewById(R.id.checkFairFP);
+        CheckBox checkBoxWheatish = view.findViewById(R.id.checkWheatishFP);
+        CheckBox checkBoxWheatishBrown = view.findViewById(R.id.checkWheatishBrownFP);
+        CheckBox checkBoxDark = view.findViewById(R.id.checkDarkFP);
 
-        CheckBox checkBoxSlim = (CheckBox) view.findViewById(R.id.checkSlimFP);
-        CheckBox checkBoxAthletic = (CheckBox) view.findViewById(R.id.checkAthleticFP);
-        CheckBox checkBoxAverage = (CheckBox) view.findViewById(R.id.checkAverageFP);
-        CheckBox checkBoxHeavy = (CheckBox) view.findViewById(R.id.checkHeavyFP);
-        CheckBox checkBoxProfession = (CheckBox) view.findViewById(R.id.checkProfessionFP);
-        CheckBox checkBoxJob = (CheckBox) view.findViewById(R.id.checkJobFP);
-        CheckBox checkBoxRetired = (CheckBox) view.findViewById(R.id.checkRetiredFP);
-        CheckBox checkBoxBusiness = (CheckBox) view.findViewById(R.id.checkBusinessFP);
-        CheckBox checkBoxNotEmployed = (CheckBox) view.findViewById(R.id.checkNotEmployedFP);
-        CheckBox checkBoxStudying = (CheckBox) view.findViewById(R.id.checkStudyingNotEmployedFP);
+        CheckBox checkBoxSlim = view.findViewById(R.id.checkSlimFP);
+        CheckBox checkBoxAthletic = view.findViewById(R.id.checkAthleticFP);
+        CheckBox checkBoxAverage = view.findViewById(R.id.checkAverageFP);
+        CheckBox checkBoxHeavy = view.findViewById(R.id.checkHeavyFP);
+        CheckBox checkBoxProfession = view.findViewById(R.id.checkProfessionFP);
+        CheckBox checkBoxJob = view.findViewById(R.id.checkJobFP);
+        CheckBox checkBoxRetired = view.findViewById(R.id.checkRetiredFP);
+        CheckBox checkBoxBusiness = view.findViewById(R.id.checkBusinessFP);
+        CheckBox checkBoxNotEmployed = view.findViewById(R.id.checkNotEmployedFP);
+        CheckBox checkBoxStudying = view.findViewById(R.id.checkStudyingNotEmployedFP);
 
 
         // autocomplete location -> fetch
-        AutoCompleteTextView workLocation = (AutoCompleteTextView) view.findViewById(R.id.prefWorkLocation);
+        AutoCompleteTextView workLocation = view.findViewById(R.id.prefWorkLocation);
 
         workLocation.setThreshold(1);
         placesAdapter = new PlacesAdapter(getContext(), R.layout.fragment_partner_preferences, R.id.prefWorkLocation, App.placeslist);
@@ -486,10 +486,10 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
 
         // get seekbar from view
 
-        final CrystalRangeSeekbar rangeSeekbar = (CrystalRangeSeekbar) view.findViewById(R.id.rangeSeekbar);
+        final CrystalRangeSeekbar rangeSeekbar = view.findViewById(R.id.rangeSeekbar);
 // get min and max text view
-        final TextView tvMin = (TextView) view.findViewById(R.id.textMinFP);
-        final TextView tvMax = (TextView) view.findViewById(R.id.textMaxFP);
+        final TextView tvMin = view.findViewById(R.id.textMinFP);
+        final TextView tvMax = view.findViewById(R.id.textMaxFP);
         rangeSeekbar.setMinValue(18);
         rangeSeekbar.setMaxValue(71);
 // set listener
@@ -528,7 +528,7 @@ public class Signup_Partner_Preferences_Fragment extends Fragment implements Ste
         tug.setTextColor(colorb);
 
 
-        preferenceAnnualincome = (EditText) view.findViewById(R.id.preference_annual_income);
+        preferenceAnnualincome = view.findViewById(R.id.preference_annual_income);
         preferenceAnnualincome.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
